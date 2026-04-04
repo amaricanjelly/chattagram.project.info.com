@@ -5,305 +5,230 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Debug Point – Coding & Robotics Solution, Chittagong</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:        #0d1117;
-    --bg-2:      #161b22;
-    --bg-3:      #1c2128;
-    --bg-4:      #21262d;
-    --border:    #30363d;
-    --text:      #e6edf3;
-    --text-dim:  #8b949e;
-    --text-faint:#484f58;
-    --green:     #3fb950;
-    --cyan:      #58a6ff;
-    --orange:    #d29922;
-    --purple:    #bc8cff;
-    --syn-key:   #ff7b72;
-    --syn-fn:    #d2a8ff;
-    --syn-str:   #a5d6ff;
-    --syn-cmt:   #8b949e;
-    --syn-num:   #79c0ff;
-    --radius:    6px;
-    --radius-lg: 10px;
-    --transition: all 0.2s ease;
-    --mono: 'JetBrains Mono', monospace;
+    --bg: #ffffff;
+    --bg-soft: #F8FAFC;
+    --navy: #0A192F;
+    --navy-mid: #112240;
+    --navy-light: #1E3A5F;
+    --cyan: #64FFDA;
+    --text: #0d0d0d;
+    --text-muted: #222222;
+    --border: #E2E8F0;
+    --card-shadow: 0 2px 16px rgba(10,25,47,0.07);
+    --card-shadow-hover: 0 8px 32px rgba(10,25,47,0.13);
+    --radius: 8px;
+    --radius-lg: 12px;
+    --transition: all 0.22s ease;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-
   body {
     font-family: 'Poppins', 'Hind Siliguri', sans-serif;
-    background: var(--bg);
+    background-color: #f5f7fa;
+    background-image: radial-gradient(circle, #c9d4e0 1px, transparent 1px);
+    background-size: 24px 24px;
     color: var(--text);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    background-image:
-      linear-gradient(rgba(48,54,61,0.45) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(48,54,61,0.45) 1px, transparent 1px);
-    background-size: 40px 40px;
   }
-
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--bg-4); border-radius: 4px; }
 
   /* ── NAVBAR ─────────────────────────────────────── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    height: 56px;
+    height: 64px;
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 6%;
-    background: rgba(13,17,23,0.94);
-    backdrop-filter: blur(16px);
+    background: rgba(245,247,250,0.96);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
     transition: var(--transition);
   }
-  nav.scrolled { box-shadow: 0 1px 0 var(--border); }
+  nav.scrolled { box-shadow: 0 1px 20px rgba(10,25,47,0.09); }
 
   .nav-logo {
-    font-family: var(--mono); font-weight: 600; font-size: 0.95rem;
-    color: var(--text); text-decoration: none;
-    display: flex; align-items: center; gap: 4px;
+    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.15rem;
+    color: var(--navy); letter-spacing: -0.3px;
+    display: flex; align-items: center; gap: 8px; text-decoration: none;
   }
-  .nav-logo .kw  { color: var(--syn-key); }
-  .nav-logo .fn  { color: var(--syn-fn); }
-  .nav-logo .dim { color: var(--text-dim); }
+  .nav-logo-dot {
+    display: inline-block; width: 8px; height: 8px;
+    background: var(--cyan); border-radius: 50%; box-shadow: 0 0 6px var(--cyan);
+  }
 
-  .nav-links { display: flex; align-items: center; gap: 1.8rem; list-style: none; }
+  .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
   .nav-links a {
-    font-family: var(--mono); font-size: 0.77rem; font-weight: 500;
-    color: var(--text-dim); text-decoration: none; transition: color 0.18s;
+    font-size: 0.875rem; font-weight: 500; color: var(--text-muted);
+    text-decoration: none; transition: color 0.18s; letter-spacing: 0.2px;
   }
-  .nav-links a::before { content: './'; color: var(--text-faint); }
-  .nav-links a:hover { color: var(--cyan); }
+  .nav-links a:hover { color: var(--navy); }
 
   .nav-cta {
-    color: var(--green) !important;
-    border: 1px solid var(--green) !important;
-    padding: 5px 14px !important;
-    border-radius: var(--radius) !important;
+    font-size: 0.8rem !important; font-weight: 600 !important;
+    color: var(--navy) !important; border: 1.5px solid var(--navy);
+    padding: 6px 16px; border-radius: var(--radius); transition: var(--transition) !important;
   }
-  .nav-cta::before { content: '$ ' !important; color: var(--green) !important; opacity: 0.55; }
-  .nav-cta:hover { background: rgba(63,185,80,0.1) !important; }
+  .nav-cta:hover { background: var(--navy) !important; color: #fff !important; }
 
   .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
-  .nav-hamburger span { display: block; width: 20px; height: 1.5px; background: var(--text-dim); }
+  .nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 2px; transition: var(--transition); }
 
   /* ── HERO ────────────────────────────────────────── */
   #hero {
-    min-height: 100vh;
-    display: flex; align-items: center;
-    padding: 100px 6% 80px;
-    position: relative; overflow: hidden;
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 100px 6% 80px; position: relative; overflow: hidden;
   }
-  #hero::before {
-    content: '';
-    position: absolute; top: 10%; left: 0;
-    width: 600px; height: 500px;
-    background: radial-gradient(ellipse at left, rgba(88,166,255,0.07) 0%, transparent 65%);
+  .hero-bg-accent {
+    position: absolute; top: -80px; right: -60px; width: 520px; height: 520px;
+    background: radial-gradient(circle at 60% 40%, rgba(100,255,218,0.09) 0%, transparent 70%);
     pointer-events: none;
   }
-  #hero::after {
-    content: '';
-    position: absolute; bottom: 5%; right: 0;
-    width: 500px; height: 400px;
-    background: radial-gradient(ellipse at right, rgba(63,185,80,0.05) 0%, transparent 65%);
+  .hero-bg-accent2 {
+    position: absolute; bottom: -40px; left: -80px; width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(10,25,47,0.04) 0%, transparent 70%);
     pointer-events: none;
   }
-
-  .hero-content { max-width: 720px; position: relative; z-index: 2; }
+  .hero-content { max-width: 700px; position: relative; z-index: 2; }
 
   .hero-eyebrow {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-family: var(--mono); font-size: 0.77rem;
-    color: var(--text-dim); margin-bottom: 2rem;
-    background: var(--bg-2); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 7px 14px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #555; margin-bottom: 1.5rem; padding: 6px 14px;
+    background: var(--bg-soft); border: 1px solid var(--border); border-radius: 20px;
   }
-  .hero-eyebrow .prompt { color: var(--green); }
-  .hero-eyebrow .path   { color: var(--cyan); }
-  .hero-eyebrow .cur {
-    display: inline-block; width: 8px; height: 14px;
-    background: var(--green); border-radius: 1px;
-    animation: blink 1.1s step-end infinite;
-  }
-  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+  .hero-eyebrow-dot { width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 5px var(--cyan); }
 
   .hero-title {
     font-family: 'Poppins', sans-serif;
-    font-size: clamp(1.8rem, 4vw, 3rem);
-    font-weight: 700; line-height: 1.25;
-    color: var(--text); margin-bottom: 1.4rem; letter-spacing: -0.4px;
+    font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 700; line-height: 1.25;
+    color: var(--navy); margin-bottom: 1.4rem; letter-spacing: -0.5px;
   }
-  .hero-title em { font-style: normal; color: var(--cyan); }
+  .hero-title em { font-style: normal; color: var(--navy); }
 
   .hero-sub {
     font-family: 'Hind Siliguri', sans-serif;
-    font-size: 1rem; color: var(--text-dim);
-    line-height: 1.85; margin-bottom: 2rem; max-width: 560px;
+    font-size: 1.05rem; color: #333; line-height: 1.85; margin-bottom: 2.2rem; max-width: 560px;
   }
 
   .hero-note {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: var(--mono); font-size: 0.74rem;
-    color: var(--orange);
-    background: rgba(210,153,34,0.08);
-    border: 1px solid rgba(210,153,34,0.28);
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.8rem; color: #1a1a1a;
+    background: #FFF8E1; border: 1px solid #FFE082;
     border-radius: var(--radius); padding: 8px 14px;
+    font-family: 'Hind Siliguri', sans-serif;
   }
-  .hero-note::before { content: '// '; color: var(--text-faint); }
-
-  /* floating code card */
-  .code-float {
-    position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
-    background: var(--bg-2); border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    width: 320px; font-family: var(--mono); font-size: 0.71rem; line-height: 1.7;
-    overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-    opacity: 0; animation: floatIn 0.7s ease 0.5s forwards; z-index: 3;
-  }
-  @keyframes floatIn {
-    from { opacity:0; transform: translateY(-45%) translateX(20px); }
-    to   { opacity:1; transform: translateY(-50%) translateX(0); }
-  }
-  .cf-bar {
-    display: flex; align-items: center; gap: 6px;
-    padding: 9px 14px; background: var(--bg-3); border-bottom: 1px solid var(--border);
-  }
-  .cf-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .cf-dot.r{background:#ff5f56;} .cf-dot.y{background:#ffbd2e;} .cf-dot.g{background:#27c93f;}
-  .cf-fname { margin-left: 6px; color: var(--text-dim); font-size: 0.68rem; }
-  .cf-body { padding: 12px 14px; }
-  .cf-body div { white-space: nowrap; }
-  .ln  { color: var(--text-faint); margin-right: 12px; display: inline-block; width: 14px; text-align: right; user-select:none; }
-  .ck  { color: var(--syn-key); }
-  .cfn { color: var(--syn-fn); }
-  .cs  { color: var(--syn-str); }
-  .cn  { color: var(--syn-num); }
-  .cc  { color: var(--syn-cmt); }
-  .ct  { color: var(--text); }
-  .cp  { color: var(--text-dim); }
-
-  @media (max-width: 1024px) { .code-float { display: none; } }
 
   /* ── SECTION BASE ────────────────────────────────── */
   section { padding: 96px 6%; }
   .section-header { max-width: 560px; margin: 0 auto 56px; text-align: center; }
   .section-eyebrow {
-    display: inline-block; font-family: var(--mono); font-size: 0.69rem;
-    color: var(--green); margin-bottom: 0.75rem;
+    display: inline-block; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase; color: #555; margin-bottom: 0.75rem;
   }
-  .section-eyebrow::before { content: '// '; color: var(--text-faint); }
   .section-title {
     font-family: 'Poppins', sans-serif;
-    font-size: clamp(1.4rem, 3vw, 2rem);
-    font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.3px;
+    font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700;
+    color: var(--navy); line-height: 1.3; letter-spacing: -0.3px;
   }
-  .section-line { width: 36px; height: 2px; background: var(--cyan); margin: 14px auto 0; border-radius: 2px; }
+  .section-line { width: 40px; height: 3px; background: var(--cyan); border-radius: 2px; margin: 16px auto 0; }
 
   /* ── SERVICES ────────────────────────────────────── */
-  #services { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-
+  #services { background: rgba(255,255,255,0.6); }
   .services-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1px; max-width: 1200px; margin: 0 auto;
-    background: var(--border); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); overflow: hidden;
+    gap: 1.25rem; max-width: 1160px; margin: 0 auto;
   }
   .service-card {
-    background: var(--bg-2); padding: 1.8rem 1.6rem;
-    transition: background 0.2s; position: relative;
+    background: rgba(255,255,255,0.92); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 1.8rem 1.6rem;
+    transition: var(--transition); position: relative; overflow: hidden;
   }
-  .service-card:hover { background: var(--bg-3); }
+  .service-card::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--navy), #1E6FBF); opacity: 0; transition: opacity 0.22s;
+  }
+  .service-card:hover { box-shadow: var(--card-shadow-hover); border-color: #CBD5E1; transform: translateY(-3px); }
+  .service-card:hover::after { opacity: 1; }
 
   .card-icon-wrap {
-    width: 36px; height: 36px; background: var(--bg-4);
+    width: 44px; height: 44px; background: var(--bg-soft);
     border: 1px solid var(--border); border-radius: var(--radius);
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.1rem; margin-bottom: 1rem;
+    font-size: 1.35rem; margin-bottom: 1rem; transition: var(--transition);
   }
-  .card-num-label { font-family: var(--mono); font-size: 0.61rem; color: var(--text-faint); margin-bottom: 0.4rem; }
+  .service-card:hover .card-icon-wrap { background: var(--navy); border-color: var(--navy); }
+  .card-num-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #555; margin-bottom: 0.4rem; }
   .card-title {
-    font-family: 'Poppins', sans-serif; font-size: 0.92rem; font-weight: 600;
-    color: var(--text); margin-bottom: 0.5rem;
-    display: flex; align-items: center; gap: 8px;
+    font-family: 'Poppins', sans-serif; font-size: 0.975rem; font-weight: 600;
+    color: var(--navy); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 8px;
   }
   .ctag {
-    font-family: var(--mono); font-size: 0.57rem; font-weight: 500;
-    background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.22);
-    color: var(--cyan); padding: 1px 6px; border-radius: 3px; letter-spacing: 0.4px;
+    font-size: 0.6rem; font-weight: 600; letter-spacing: 0.8px;
+    background: var(--bg-soft); border: 1px solid var(--border); color: #555;
+    padding: 2px 7px; border-radius: 4px;
   }
-  .card-desc { font-family: 'Hind Siliguri', sans-serif; font-size: 0.85rem; color: var(--text-dim); line-height: 1.75; }
+  .card-desc { font-family: 'Hind Siliguri', sans-serif; font-size: 0.875rem; color: #333; line-height: 1.75; }
 
   /* ── PROJECTS ────────────────────────────────────── */
-  #projects { background: var(--bg); }
+  #projects { background: transparent; }
   .projects-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.1rem; max-width: 1200px; margin: 0 auto;
+    gap: 1.25rem; max-width: 1160px; margin: 0 auto;
   }
   .project-card {
     border: 1px solid var(--border); border-radius: var(--radius-lg);
-    background: var(--bg-2); padding: 1.5rem 1.4rem;
-    transition: var(--transition); opacity: 0; transform: translateY(16px);
-    position: relative; overflow: hidden;
-  }
-  .project-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--cyan), var(--purple));
-    opacity: 0; transition: opacity 0.2s;
+    background: rgba(255,255,255,0.92); padding: 1.6rem 1.5rem;
+    transition: var(--transition); opacity: 0; transform: translateY(20px);
   }
   .project-card.visible { opacity: 1; transform: translateY(0); }
-  .project-card:hover { border-color: rgba(88,166,255,0.35); background: var(--bg-3); }
-  .project-card:hover::before { opacity: 1; }
+  .project-card:hover { box-shadow: var(--card-shadow-hover); border-color: #CBD5E1; transform: translateY(-3px); }
 
-  .proj-icon { font-size: 1.7rem; display: block; margin-bottom: 0.75rem; }
+  .proj-icon { font-size: 1.9rem; display: block; margin-bottom: 0.85rem; }
   .proj-tag {
-    display: inline-block; font-family: var(--mono); font-size: 0.61rem;
-    background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.22);
-    color: var(--green); padding: 1px 8px; border-radius: 3px;
-    margin-bottom: 0.6rem; letter-spacing: 0.3px;
+    display: inline-block; font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.8px; text-transform: uppercase;
+    background: var(--bg-soft); border: 1px solid var(--border); color: #555;
+    padding: 2px 9px; border-radius: 4px; margin-bottom: 0.6rem;
   }
-  .proj-title { font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
-  .proj-desc { font-family: 'Hind Siliguri', sans-serif; font-size: 0.8rem; color: var(--text-dim); line-height: 1.7; }
+  .proj-title { font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
+  .proj-desc { font-family: 'Hind Siliguri', sans-serif; font-size: 0.82rem; color: #333; line-height: 1.7; }
 
   /* ── DIVIDER ─────────────────────────────────────── */
-  .section-divider { border: none; height: 1px; background: var(--border); }
+  .section-divider { max-width: 1160px; margin: 0 auto; border: none; height: 1px; background: var(--border); }
 
   /* ── CONTACT ─────────────────────────────────────── */
-  #contact { background: var(--bg-2); border-top: 1px solid var(--border); }
+  #contact { background: var(--navy); }
+  #contact .section-eyebrow { color: var(--cyan); opacity: 0.8; }
+  #contact .section-title { color: #fff; }
+  #contact .section-line { background: var(--cyan); }
   .contact-box {
-    max-width: 540px; margin: 0 auto;
-    background: var(--bg-3); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 2.8rem 2.2rem; text-align: center;
+    max-width: 580px; margin: 0 auto;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius-lg); padding: 3rem 2.5rem; text-align: center;
+    backdrop-filter: blur(8px);
   }
-  .contact-title { font-family: 'Hind Siliguri', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 0.8rem; line-height: 1.6; }
-  .contact-sub { font-family: 'Hind Siliguri', sans-serif; font-size: 0.88rem; color: var(--text-dim); margin-bottom: 1.8rem; line-height: 1.8; }
+  .contact-title { font-family: 'Hind Siliguri', sans-serif; font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: 0.85rem; line-height: 1.6; }
+  .contact-sub { font-family: 'Hind Siliguri', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.65); margin-bottom: 2rem; line-height: 1.8; }
   .btn-telegram {
-    display: inline-flex; align-items: center; gap: 9px;
-    padding: 11px 28px; background: #0088CC; color: #fff;
-    text-decoration: none; border-radius: var(--radius);
-    font-weight: 600; font-size: 0.9rem; font-family: 'Hind Siliguri', sans-serif;
-    transition: var(--transition);
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 13px 32px; background: #0088CC; color: #fff; text-decoration: none;
+    border-radius: var(--radius); font-weight: 600; font-size: 0.95rem;
+    font-family: 'Hind Siliguri', sans-serif; transition: var(--transition);
   }
-  .btn-telegram:hover { background: #0099DD; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,136,204,0.35); }
+  .btn-telegram:hover { background: #0099DD; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,136,204,0.4); }
 
   /* ── FOOTER ──────────────────────────────────────── */
   footer {
-    background: var(--bg); border-top: 1px solid var(--border);
-    padding: 1.4rem 6%;
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 0.5rem;
+    background: #060F1C; border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 1.75rem 6%; text-align: center; color: #8892B0; font-size: 0.8rem;
   }
-  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--text-faint); }
-  .footer-left span { color: var(--green); }
-  .footer-right { font-family: var(--mono); font-size: 0.68rem; color: var(--text-faint); }
-  .footer-right span { color: var(--cyan); }
+  footer span { color: var(--cyan); }
 
   /* ── REVEAL ──────────────────────────────────────── */
-  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.45s ease, transform 0.45s ease; }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
   .d1{transition-delay:.08s;} .d2{transition-delay:.16s;} .d3{transition-delay:.24s;} .d4{transition-delay:.32s;}
 
@@ -314,20 +239,19 @@
     .nav-hamburger { display: flex; }
     .nav-links.open {
       display: flex; flex-direction: column;
-      position: fixed; top: 56px; left: 0; right: 0;
-      background: var(--bg-2); padding: 1.5rem 5%;
+      position: fixed; top: 64px; left: 0; right: 0;
+      background: #fff; padding: 1.5rem 5%;
       border-bottom: 1px solid var(--border); gap: 1.25rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 24px rgba(10,25,47,0.09);
     }
-    section { padding: 72px 5%; }
-    #hero { padding: 88px 5% 64px; }
-    .contact-box { padding: 2rem 1.4rem; }
-    .hero-title { font-size: 1.7rem; }
-    footer { justify-content: center; text-align: center; }
+    section { padding: 64px 5%; }
+    #hero { padding: 90px 5% 64px; }
+    .contact-box { padding: 2rem 1.5rem; }
+    .hero-title { font-size: 1.75rem; }
   }
   @media (max-width: 480px) {
     .services-grid, .projects-grid { grid-template-columns: 1fr; }
-    .hero-title { font-size: 1.5rem; }
+    .hero-title { font-size: 1.55rem; }
   }
 </style>
 </head>
@@ -336,12 +260,13 @@
 <!-- NAVBAR -->
 <nav id="navbar">
   <a class="nav-logo" href="#">
-    <span class="kw">const</span>&nbsp;<span class="fn">debugPoint</span><span class="dim">() =&gt; {}</span>
+    <span class="nav-logo-dot"></span>
+    The Debug Point
   </a>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#services">services</a></li>
-    <li><a href="#projects">projects</a></li>
-    <li><a href="#contact" class="nav-cta">contact</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
   </ul>
   <div class="nav-hamburger" id="hamburger" onclick="toggleNav()">
     <span></span><span></span><span></span>
@@ -350,11 +275,12 @@
 
 <!-- HERO -->
 <section id="hero">
+  <div class="hero-bg-accent"></div>
+  <div class="hero-bg-accent2"></div>
   <div class="hero-content">
     <div class="hero-eyebrow">
-      <span class="prompt">~/debug-point</span>
-      <span class="path">git:(main) ✓</span>
-      <span class="cur"></span>
+      <span class="hero-eyebrow-dot"></span>
+      Chittagong · Since 2026
     </div>
     <h1 class="hero-title">
       চট্টগ্রামে Coding / Robotic Project<br>
@@ -366,31 +292,7 @@
       School, College, University এবং Engineering শিক্ষার্থীদের জন্য সম্পূর্ণ Support দেওয়া হয়।
     </p>
     <div class="hero-note">
-      প্রজেক্ট করতে হলে সরাসরি আমাদের ঠিকানায় আসতে হবে
-    </div>
-  </div>
-
-  <!-- floating code snippet -->
-  <div class="code-float">
-    <div class="cf-bar">
-      <span class="cf-dot r"></span><span class="cf-dot y"></span><span class="cf-dot g"></span>
-      <span class="cf-fname">project.ino</span>
-    </div>
-    <div class="cf-body">
-      <div><span class="ln">1</span><span class="cc">// Arduino Main Loop</span></div>
-      <div><span class="ln">2</span><span class="ck">#include</span> <span class="cs">&lt;DHT.h&gt;</span></div>
-      <div><span class="ln">3</span></div>
-      <div><span class="ln">4</span><span class="ck">void</span> <span class="cfn">setup</span><span class="cp">() {</span></div>
-      <div><span class="ln">5</span>&nbsp;&nbsp;<span class="cfn">Serial</span><span class="cp">.</span><span class="cfn">begin</span><span class="cp">(</span><span class="cn">9600</span><span class="cp">);</span></div>
-      <div><span class="ln">6</span>&nbsp;&nbsp;<span class="cfn">pinMode</span><span class="cp">(</span><span class="ct">LED_PIN</span><span class="cp">,</span> <span class="ck">OUTPUT</span><span class="cp">);</span></div>
-      <div><span class="ln">7</span><span class="cp">}</span></div>
-      <div><span class="ln">8</span></div>
-      <div><span class="ln">9</span><span class="ck">void</span> <span class="cfn">loop</span><span class="cp">() {</span></div>
-      <div><span class="ln">10</span>&nbsp;&nbsp;<span class="ck">float</span> <span class="ct">temp</span> <span class="cp">=</span> <span class="cfn">dht</span><span class="cp">.</span><span class="cfn">readTemp</span><span class="cp">();</span></div>
-      <div><span class="ln">11</span>&nbsp;&nbsp;<span class="ck">if</span> <span class="cp">(</span><span class="ct">temp</span> <span class="cp">&gt;</span> <span class="cn">35</span><span class="cp">) {</span></div>
-      <div><span class="ln">12</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cfn">triggerAlert</span><span class="cp">();</span></div>
-      <div><span class="ln">13</span>&nbsp;&nbsp;<span class="cp">}</span></div>
-      <div><span class="ln">14</span><span class="cp">}</span></div>
+      ⚠️ প্রজেক্ট করতে হলে সরাসরি আমাদের ঠিকানায় আসতে হবে
     </div>
   </div>
 </section>
@@ -405,31 +307,31 @@
   <div class="services-grid">
     <div class="service-card reveal">
       <div class="card-icon-wrap">💻</div>
-      <div class="card-num-label">service_01.cpp</div>
+      <div class="card-num-label">Service 01</div>
       <h3 class="card-title">C++ Programming <span class="ctag">CODE</span></h3>
       <p class="card-desc">Algorithm, Problem Solving, Academic Projects, Competitive Programming – সব ধরনের C++ সহায়তা পাওয়া যায়।</p>
     </div>
     <div class="service-card reveal d1">
       <div class="card-icon-wrap">🤖</div>
-      <div class="card-num-label">service_02.ino</div>
+      <div class="card-num-label">Service 02</div>
       <h3 class="card-title">Arduino Robotics Project <span class="ctag">HARDWARE</span></h3>
       <p class="card-desc">Complete Hardware + Software Setup with Documentation – সম্পূর্ণ রোবোটিক্স প্রজেক্ট তৈরি করা হয়।</p>
     </div>
     <div class="service-card reveal d2">
       <div class="card-icon-wrap">⚙️</div>
-      <div class="card-num-label">service_03.ino</div>
+      <div class="card-num-label">Service 03</div>
       <h3 class="card-title">Arduino Code Development <span class="ctag">CODE</span></h3>
       <p class="card-desc">শুধু কোড সার্ভিস – Fully Tested & Optimized। Arduino IDE তে পেশাদার কোড লেখা হয়।</p>
     </div>
     <div class="service-card reveal d3">
       <div class="card-icon-wrap">🔬</div>
-      <div class="card-num-label">service_04.md</div>
+      <div class="card-num-label">Service 04</div>
       <h3 class="card-title">School / College / CUET Project <span class="ctag">ACADEMIC</span></h3>
       <p class="card-desc">Professional Science Fair & Academic Project Support। BUET, CUET সহ সব বিশ্ববিদ্যালয়ের প্রজেক্ট করা হয়।</p>
     </div>
     <div class="service-card reveal d4">
       <div class="card-icon-wrap">📡</div>
-      <div class="card-num-label">service_05.py</div>
+      <div class="card-num-label">Service 05</div>
       <h3 class="card-title">Custom Embedded / IoT Project <span class="ctag">IoT</span></h3>
       <p class="card-desc">Sensor Based Automation & Smart System। কাস্টম IoT সলিউশন এবং স্মার্ট হোম প্রজেক্ট তৈরি করা হয়।</p>
     </div>
@@ -513,7 +415,7 @@
       সরাসরি মেসেজ করুন এবং আপনার প্রজেক্টের বিবরণ দিন।
     </p>
     <a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="white">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
         <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/>
       </svg>
       Telegram এ মেসেজ করুন
@@ -523,8 +425,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-left">© 2026 <span>The Debug Point</span> · চট্টগ্রাম, বাংলাদেশ</div>
-  <div class="footer-right">built with <span>&lt;/&gt;</span> &amp; ☕</div>
+  <p>© 2026 <span>The Debug Point</span> · Coding & Robotics Solution · চট্টগ্রাম, বাংলাদেশ</p>
 </footer>
 
 <script>
