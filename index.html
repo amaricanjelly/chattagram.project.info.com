@@ -3,351 +3,545 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Coding & Robotics Solution – চট্টগ্রাম</title>
+<title>The Debug Point – Coding & Robotics Solution, Chittagong</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700;900&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #020a10;
-    --blue-deep: #041426;
-    --blue-mid: #0a2540;
-    --neon: #00ff88;
-    --neon2: #00e5ff;
-    --neon-glow: rgba(0,255,136,0.4);
-    --text: #e0f4ff;
-    --text-dim: #7aa7c7;
-    --card-bg: rgba(4,20,38,0.85);
-    --border: rgba(0,255,136,0.15);
+    --bg:        #0d1117;
+    --bg-2:      #161b22;
+    --bg-3:      #1c2128;
+    --bg-4:      #21262d;
+    --border:    #30363d;
+    --text:      #e6edf3;
+    --text-dim:  #8b949e;
+    --text-faint:#484f58;
+    --green:     #3fb950;
+    --cyan:      #58a6ff;
+    --orange:    #d29922;
+    --purple:    #bc8cff;
+    --syn-key:   #ff7b72;
+    --syn-fn:    #d2a8ff;
+    --syn-str:   #a5d6ff;
+    --syn-cmt:   #8b949e;
+    --syn-num:   #79c0ff;
+    --radius:    6px;
+    --radius-lg: 10px;
+    --transition: all 0.2s ease;
+    --mono: 'JetBrains Mono', monospace;
   }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;cursor:none;}
 
-  /* CURSOR */
-  .cursor{position:fixed;width:12px;height:12px;background:var(--neon);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .3s,height .3s;box-shadow:0 0 10px var(--neon),0 0 30px var(--neon-glow);}
-  .cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(0,255,136,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s;}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
 
-  /* BG FX */
-  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,136,.012) 2px,rgba(0,255,136,.012) 4px);pointer-events:none;z-index:1;}
-  body::after{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,255,136,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.035) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0;}
+  body {
+    font-family: 'Poppins', 'Hind Siliguri', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      linear-gradient(rgba(48,54,61,0.45) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(48,54,61,0.45) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
 
-  /* NAVBAR */
-  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:68px;background:rgba(2,10,16,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:all .3s;}
-  nav.scrolled{height:58px;box-shadow:0 4px 40px rgba(0,255,136,.1);}
-  .nav-logo{font-family:'Exo 2',sans-serif;font-weight:900;font-size:1.3rem;background:linear-gradient(135deg,var(--neon),var(--neon2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  @media(max-width:680px){nav{padding:0 5%;}}
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--bg-4); border-radius: 4px; }
 
-  /* HERO */
-  #hero{position:relative;z-index:2;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 5% 70px;text-align:center;overflow:hidden;}
-  .orb{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;}
-  .orb1{width:600px;height:600px;background:radial-gradient(circle,rgba(0,255,136,.11),transparent 70%);top:-120px;left:-180px;animation:orbFloat 9s ease-in-out infinite;}
-  .orb2{width:500px;height:500px;background:radial-gradient(circle,rgba(0,229,255,.09),transparent 70%);bottom:-100px;right:-120px;animation:orbFloat 12s ease-in-out infinite reverse;}
-  @keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(25px,-25px) scale(1.05);}}
-  .hero-content{position:relative;z-index:5;max-width:860px;}
-  .badge{display:inline-block;background:linear-gradient(135deg,rgba(0,255,136,.14),rgba(0,229,255,.08));border:1px solid rgba(0,255,136,.45);padding:7px 18px;border-radius:30px;font-size:.8rem;color:var(--neon);margin-bottom:1.8rem;animation:pulseBadge 2.5s ease-in-out infinite;}
-  @keyframes pulseBadge{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,.25);}50%{box-shadow:0 0 0 8px rgba(0,255,136,0);}}
-  .hero-title{font-family:'Exo 2',sans-serif;font-size:clamp(1.9rem,4.5vw,3.4rem);font-weight:900;line-height:1.3;margin-bottom:1.6rem;background:linear-gradient(135deg,#fff 20%,var(--neon) 65%,var(--neon2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;transform:translateY(30px);animation:fadeUp 1s ease .1s forwards;}
-  .hero-sub{font-size:clamp(.95rem,2vw,1.1rem);color:var(--text-dim);line-height:1.9;opacity:0;transform:translateY(20px);animation:fadeUp 1s ease .35s forwards;}
-  @keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+  /* ── NAVBAR ─────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 6%;
+    background: rgba(13,17,23,0.94);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition);
+  }
+  nav.scrolled { box-shadow: 0 1px 0 var(--border); }
 
-  /* SECTIONS */
-  section{position:relative;z-index:2;padding:90px 5%;}
-  .section-label{text-align:center;font-family:'Exo 2',sans-serif;text-transform:uppercase;letter-spacing:4px;font-size:.72rem;color:var(--neon);margin-bottom:.9rem;}
-  .section-title{text-align:center;font-family:'Exo 2',sans-serif;font-size:clamp(1.6rem,3.5vw,2.5rem);font-weight:800;margin-bottom:.8rem;background:linear-gradient(135deg,#fff,var(--neon2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-  .section-divider{width:80px;height:3px;background:linear-gradient(90deg,var(--neon),var(--neon2));margin:0 auto 3.5rem;border-radius:2px;box-shadow:0 0 15px var(--neon-glow);}
+  .nav-logo {
+    font-family: var(--mono); font-weight: 600; font-size: 0.95rem;
+    color: var(--text); text-decoration: none;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .nav-logo .kw  { color: var(--syn-key); }
+  .nav-logo .fn  { color: var(--syn-fn); }
+  .nav-logo .dim { color: var(--text-dim); }
 
-  /* SERVICES */
-  #services{background:linear-gradient(180deg,var(--bg) 0%,var(--blue-deep) 100%);}
-  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.5rem;max-width:1200px;margin:0 auto;}
-  .service-card{background:var(--card-bg);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:all .4s cubic-bezier(.175,.885,.32,1.275);position:relative;backdrop-filter:blur(10px);}
-  .service-card::before{content:'';position:absolute;inset:0;border-radius:14px;background:linear-gradient(135deg,rgba(0,255,136,.05),transparent 60%);opacity:0;transition:opacity .4s;}
-  .service-card:hover{transform:translateY(-10px);border-color:rgba(0,255,136,.55);box-shadow:0 20px 60px rgba(0,255,136,.2),0 0 30px rgba(0,255,136,.08) inset;}
-  .service-card:hover::before{opacity:1;}
-  .card-banner{height:130px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-  .card-banner-bg{position:absolute;inset:0;}
-  .card-banner-icon{font-size:3.8rem;position:relative;z-index:2;transition:transform .4s ease;filter:drop-shadow(0 0 18px rgba(0,255,136,.6));}
-  .service-card:hover .card-banner-icon{transform:scale(1.15) rotate(-5deg);}
-  .card-num{position:absolute;bottom:8px;right:14px;font-family:'Exo 2',sans-serif;font-size:2rem;font-weight:900;color:rgba(0,255,136,.12);z-index:2;}
-  .card-body{padding:1.4rem 1.5rem 1.7rem;}
-  .card-title{font-family:'Exo 2',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:.6rem;}
-  .ctag{display:inline-block;font-size:.62rem;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.3);color:var(--neon);padding:1px 8px;border-radius:20px;vertical-align:middle;margin-left:6px;letter-spacing:.5px;}
-  .card-desc{font-size:.88rem;color:var(--text-dim);line-height:1.75;}
+  .nav-links { display: flex; align-items: center; gap: 1.8rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--mono); font-size: 0.77rem; font-weight: 500;
+    color: var(--text-dim); text-decoration: none; transition: color 0.18s;
+  }
+  .nav-links a::before { content: './'; color: var(--text-faint); }
+  .nav-links a:hover { color: var(--cyan); }
 
-  /* PROJECTS */
-  #projects{background:linear-gradient(180deg,var(--blue-deep) 0%,var(--bg) 100%);}
-  .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.4rem;max-width:1200px;margin:0 auto;}
-  .project-card{border-radius:14px;border:1px solid var(--border);background:var(--card-bg);backdrop-filter:blur(8px);transition:all .4s ease;opacity:0;transform:translateY(40px);padding:1.8rem 1.6rem;position:relative;overflow:hidden;}
-  .project-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--neon),var(--neon2));transform:scaleX(0);transform-origin:left;transition:transform .4s ease;}
-  .project-card.visible{opacity:1;transform:translateY(0);}
-  .project-card:hover{transform:translateY(-8px);border-color:rgba(0,229,255,.45);box-shadow:0 20px 50px rgba(0,229,255,.18),0 0 20px rgba(0,229,255,.08) inset;}
-  .project-card:hover::after{transform:scaleX(1);}
-  .proj-icon{font-size:2.5rem;margin-bottom:.9rem;display:block;filter:drop-shadow(0 0 12px rgba(0,229,255,.5));transition:transform .35s ease;}
-  .project-card:hover .proj-icon{transform:scale(1.2);}
-  .proj-tag{display:inline-block;background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);padding:2px 10px;border-radius:20px;font-size:.68rem;color:var(--neon2);margin-bottom:.75rem;letter-spacing:.5px;}
-  .proj-title{font-family:'Exo 2',sans-serif;font-size:1rem;font-weight:700;color:#fff;margin-bottom:.4rem;}
-  .proj-desc{font-size:.82rem;color:var(--text-dim);line-height:1.7;}
+  .nav-cta {
+    color: var(--green) !important;
+    border: 1px solid var(--green) !important;
+    padding: 5px 14px !important;
+    border-radius: var(--radius) !important;
+  }
+  .nav-cta::before { content: '$ ' !important; color: var(--green) !important; opacity: 0.55; }
+  .nav-cta:hover { background: rgba(63,185,80,0.1) !important; }
 
-  /* CONTACT */
-  #contact{background:linear-gradient(135deg,var(--bg) 0%,var(--blue-deep) 50%,var(--bg) 100%);text-align:center;}
-  .contact-box{max-width:680px;margin:0 auto;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:3.5rem 2.5rem;backdrop-filter:blur(20px);position:relative;overflow:hidden;box-shadow:0 0 60px rgba(0,255,136,.07);}
-  .contact-box::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(0,255,136,.04),transparent 60%);animation:rotateSpin 12s linear infinite;}
-  @keyframes rotateSpin{to{transform:rotate(360deg);}}
-  .contact-inner{position:relative;z-index:2;}
-  .contact-title{font-family:'Exo 2',sans-serif;font-size:clamp(1.2rem,3vw,1.85rem);font-weight:800;background:linear-gradient(135deg,#fff,var(--neon));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:1rem;line-height:1.4;}
-  .contact-sub{color:var(--text-dim);font-size:.95rem;margin-bottom:2rem;line-height:1.75;}
-  .btn-telegram{display:inline-flex;align-items:center;gap:10px;padding:15px 44px;background:linear-gradient(135deg,#0088cc,#00b0f0);color:#fff;text-decoration:none;border-radius:8px;font-weight:700;font-size:1.05rem;font-family:'Hind Siliguri',sans-serif;transition:all .3s;box-shadow:0 0 30px rgba(0,136,204,.4);position:relative;overflow:hidden;}
-  .btn-telegram::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);transform:translateX(-100%);transition:transform .5s;}
-  .btn-telegram:hover{transform:translateY(-4px);box-shadow:0 15px 40px rgba(0,136,204,.6);}
-  .btn-telegram:hover::before{transform:translateX(100%);}
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .nav-hamburger span { display: block; width: 20px; height: 1.5px; background: var(--text-dim); }
 
-  /* NEON LINE */
-  .neon-line{position:relative;z-index:2;border:none;height:1px;background:linear-gradient(90deg,transparent,var(--neon),transparent);}
+  /* ── HERO ────────────────────────────────────────── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 100px 6% 80px;
+    position: relative; overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; top: 10%; left: 0;
+    width: 600px; height: 500px;
+    background: radial-gradient(ellipse at left, rgba(88,166,255,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  #hero::after {
+    content: '';
+    position: absolute; bottom: 5%; right: 0;
+    width: 500px; height: 400px;
+    background: radial-gradient(ellipse at right, rgba(63,185,80,0.05) 0%, transparent 65%);
+    pointer-events: none;
+  }
 
-  /* FOOTER */
-  footer{position:relative;z-index:2;background:#010810;border-top:1px solid var(--border);padding:2rem 5%;text-align:center;color:var(--text-dim);font-size:.85rem;}
-  footer span{color:var(--neon);}
+  .hero-content { max-width: 720px; position: relative; z-index: 2; }
 
-  /* PARTICLES */
-  .particles{position:fixed;inset:0;z-index:1;pointer-events:none;}
-  .particle{position:absolute;border-radius:50%;animation:particleDrift linear infinite;opacity:0;}
-  @keyframes particleDrift{0%{opacity:0;transform:translateY(100vh) translateX(0);}10%{opacity:.55;}90%{opacity:.35;}100%{opacity:0;transform:translateY(-10vh) translateX(var(--drift,20px));}}
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 0.77rem;
+    color: var(--text-dim); margin-bottom: 2rem;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 7px 14px;
+  }
+  .hero-eyebrow .prompt { color: var(--green); }
+  .hero-eyebrow .path   { color: var(--cyan); }
+  .hero-eyebrow .cur {
+    display: inline-block; width: 8px; height: 14px;
+    background: var(--green); border-radius: 1px;
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
 
-  /* REVEAL */
-  .reveal{opacity:0;transform:translateY(35px);transition:all .7s cubic-bezier(.4,0,.2,1);}
-  .reveal.visible{opacity:1;transform:translateY(0);}
-  .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+  .hero-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 700; line-height: 1.25;
+    color: var(--text); margin-bottom: 1.4rem; letter-spacing: -0.4px;
+  }
+  .hero-title em { font-style: normal; color: var(--cyan); }
 
-  @media(max-width:500px){.contact-box{padding:2.5rem 1.4rem;}.btn-telegram{padding:13px 28px;font-size:.95rem;}}
+  .hero-sub {
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 1rem; color: var(--text-dim);
+    line-height: 1.85; margin-bottom: 2rem; max-width: 560px;
+  }
+
+  .hero-note {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono); font-size: 0.74rem;
+    color: var(--orange);
+    background: rgba(210,153,34,0.08);
+    border: 1px solid rgba(210,153,34,0.28);
+    border-radius: var(--radius); padding: 8px 14px;
+  }
+  .hero-note::before { content: '// '; color: var(--text-faint); }
+
+  /* floating code card */
+  .code-float {
+    position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    width: 320px; font-family: var(--mono); font-size: 0.71rem; line-height: 1.7;
+    overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    opacity: 0; animation: floatIn 0.7s ease 0.5s forwards; z-index: 3;
+  }
+  @keyframes floatIn {
+    from { opacity:0; transform: translateY(-45%) translateX(20px); }
+    to   { opacity:1; transform: translateY(-50%) translateX(0); }
+  }
+  .cf-bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 14px; background: var(--bg-3); border-bottom: 1px solid var(--border);
+  }
+  .cf-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .cf-dot.r{background:#ff5f56;} .cf-dot.y{background:#ffbd2e;} .cf-dot.g{background:#27c93f;}
+  .cf-fname { margin-left: 6px; color: var(--text-dim); font-size: 0.68rem; }
+  .cf-body { padding: 12px 14px; }
+  .cf-body div { white-space: nowrap; }
+  .ln  { color: var(--text-faint); margin-right: 12px; display: inline-block; width: 14px; text-align: right; user-select:none; }
+  .ck  { color: var(--syn-key); }
+  .cfn { color: var(--syn-fn); }
+  .cs  { color: var(--syn-str); }
+  .cn  { color: var(--syn-num); }
+  .cc  { color: var(--syn-cmt); }
+  .ct  { color: var(--text); }
+  .cp  { color: var(--text-dim); }
+
+  @media (max-width: 1024px) { .code-float { display: none; } }
+
+  /* ── SECTION BASE ────────────────────────────────── */
+  section { padding: 96px 6%; }
+  .section-header { max-width: 560px; margin: 0 auto 56px; text-align: center; }
+  .section-eyebrow {
+    display: inline-block; font-family: var(--mono); font-size: 0.69rem;
+    color: var(--green); margin-bottom: 0.75rem;
+  }
+  .section-eyebrow::before { content: '// '; color: var(--text-faint); }
+  .section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700; color: var(--text); line-height: 1.3; letter-spacing: -0.3px;
+  }
+  .section-line { width: 36px; height: 2px; background: var(--cyan); margin: 14px auto 0; border-radius: 2px; }
+
+  /* ── SERVICES ────────────────────────────────────── */
+  #services { background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+  .services-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px; max-width: 1200px; margin: 0 auto;
+    background: var(--border); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); overflow: hidden;
+  }
+  .service-card {
+    background: var(--bg-2); padding: 1.8rem 1.6rem;
+    transition: background 0.2s; position: relative;
+  }
+  .service-card:hover { background: var(--bg-3); }
+
+  .card-icon-wrap {
+    width: 36px; height: 36px; background: var(--bg-4);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; margin-bottom: 1rem;
+  }
+  .card-num-label { font-family: var(--mono); font-size: 0.61rem; color: var(--text-faint); margin-bottom: 0.4rem; }
+  .card-title {
+    font-family: 'Poppins', sans-serif; font-size: 0.92rem; font-weight: 600;
+    color: var(--text); margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ctag {
+    font-family: var(--mono); font-size: 0.57rem; font-weight: 500;
+    background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.22);
+    color: var(--cyan); padding: 1px 6px; border-radius: 3px; letter-spacing: 0.4px;
+  }
+  .card-desc { font-family: 'Hind Siliguri', sans-serif; font-size: 0.85rem; color: var(--text-dim); line-height: 1.75; }
+
+  /* ── PROJECTS ────────────────────────────────────── */
+  #projects { background: var(--bg); }
+  .projects-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.1rem; max-width: 1200px; margin: 0 auto;
+  }
+  .project-card {
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    background: var(--bg-2); padding: 1.5rem 1.4rem;
+    transition: var(--transition); opacity: 0; transform: translateY(16px);
+    position: relative; overflow: hidden;
+  }
+  .project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .project-card.visible { opacity: 1; transform: translateY(0); }
+  .project-card:hover { border-color: rgba(88,166,255,0.35); background: var(--bg-3); }
+  .project-card:hover::before { opacity: 1; }
+
+  .proj-icon { font-size: 1.7rem; display: block; margin-bottom: 0.75rem; }
+  .proj-tag {
+    display: inline-block; font-family: var(--mono); font-size: 0.61rem;
+    background: rgba(63,185,80,0.1); border: 1px solid rgba(63,185,80,0.22);
+    color: var(--green); padding: 1px 8px; border-radius: 3px;
+    margin-bottom: 0.6rem; letter-spacing: 0.3px;
+  }
+  .proj-title { font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
+  .proj-desc { font-family: 'Hind Siliguri', sans-serif; font-size: 0.8rem; color: var(--text-dim); line-height: 1.7; }
+
+  /* ── DIVIDER ─────────────────────────────────────── */
+  .section-divider { border: none; height: 1px; background: var(--border); }
+
+  /* ── CONTACT ─────────────────────────────────────── */
+  #contact { background: var(--bg-2); border-top: 1px solid var(--border); }
+  .contact-box {
+    max-width: 540px; margin: 0 auto;
+    background: var(--bg-3); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 2.8rem 2.2rem; text-align: center;
+  }
+  .contact-title { font-family: 'Hind Siliguri', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 0.8rem; line-height: 1.6; }
+  .contact-sub { font-family: 'Hind Siliguri', sans-serif; font-size: 0.88rem; color: var(--text-dim); margin-bottom: 1.8rem; line-height: 1.8; }
+  .btn-telegram {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 11px 28px; background: #0088CC; color: #fff;
+    text-decoration: none; border-radius: var(--radius);
+    font-weight: 600; font-size: 0.9rem; font-family: 'Hind Siliguri', sans-serif;
+    transition: var(--transition);
+  }
+  .btn-telegram:hover { background: #0099DD; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,136,204,0.35); }
+
+  /* ── FOOTER ──────────────────────────────────────── */
+  footer {
+    background: var(--bg); border-top: 1px solid var(--border);
+    padding: 1.4rem 6%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 0.5rem;
+  }
+  .footer-left { font-family: var(--mono); font-size: 0.7rem; color: var(--text-faint); }
+  .footer-left span { color: var(--green); }
+  .footer-right { font-family: var(--mono); font-size: 0.68rem; color: var(--text-faint); }
+  .footer-right span { color: var(--cyan); }
+
+  /* ── REVEAL ──────────────────────────────────────── */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.45s ease, transform 0.45s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .d1{transition-delay:.08s;} .d2{transition-delay:.16s;} .d3{transition-delay:.24s;} .d4{transition-delay:.32s;}
+
+  /* ── RESPONSIVE ──────────────────────────────────── */
+  @media (max-width: 768px) {
+    nav { padding: 0 5%; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: fixed; top: 56px; left: 0; right: 0;
+      background: var(--bg-2); padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--border); gap: 1.25rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    section { padding: 72px 5%; }
+    #hero { padding: 88px 5% 64px; }
+    .contact-box { padding: 2rem 1.4rem; }
+    .hero-title { font-size: 1.7rem; }
+    footer { justify-content: center; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .services-grid, .projects-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 1.5rem; }
+  }
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-<div class="particles" id="particles"></div>
-
 <!-- NAVBAR -->
 <nav id="navbar">
-  <div class="nav-logo">⚡ CRS Chittagong</div>
-
+  <a class="nav-logo" href="#">
+    <span class="kw">const</span>&nbsp;<span class="fn">debugPoint</span><span class="dim">() =&gt; {}</span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#services">services</a></li>
+    <li><a href="#projects">projects</a></li>
+    <li><a href="#contact" class="nav-cta">contact</a></li>
+  </ul>
+  <div class="nav-hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
   <div class="hero-content">
-    <div class="badge">⚡ প্রজেক্ট করতে হলে সরাসরি আমাদের ঠিকানায় আসতে হবে</div>
-    <h1 class="hero-title">চট্টগ্রামে Coding / Robotic Project ও Custom Code লাগলে আপনি সঠিক জায়গায় এসেছেন</h1>
+    <div class="hero-eyebrow">
+      <span class="prompt">~/debug-point</span>
+      <span class="path">git:(main) ✓</span>
+      <span class="cur"></span>
+    </div>
+    <h1 class="hero-title">
+      চট্টগ্রামে Coding / Robotic Project<br>
+      ও Custom Code লাগলে<br>
+      <em>আপনি সঠিক জায়গায় এসেছেন</em>
+    </h1>
     <p class="hero-sub">
-      আমরা Professional ভাবে Coding, Robotics ও Science Project তৈরি করে থাকি।<br>
+      আমরা Professional ভাবে Coding, Robotics ও Science Project তৈরি করে থাকি।
       School, College, University এবং Engineering শিক্ষার্থীদের জন্য সম্পূর্ণ Support দেওয়া হয়।
     </p>
+    <div class="hero-note">
+      প্রজেক্ট করতে হলে সরাসরি আমাদের ঠিকানায় আসতে হবে
+    </div>
+  </div>
+
+  <!-- floating code snippet -->
+  <div class="code-float">
+    <div class="cf-bar">
+      <span class="cf-dot r"></span><span class="cf-dot y"></span><span class="cf-dot g"></span>
+      <span class="cf-fname">project.ino</span>
+    </div>
+    <div class="cf-body">
+      <div><span class="ln">1</span><span class="cc">// Arduino Main Loop</span></div>
+      <div><span class="ln">2</span><span class="ck">#include</span> <span class="cs">&lt;DHT.h&gt;</span></div>
+      <div><span class="ln">3</span></div>
+      <div><span class="ln">4</span><span class="ck">void</span> <span class="cfn">setup</span><span class="cp">() {</span></div>
+      <div><span class="ln">5</span>&nbsp;&nbsp;<span class="cfn">Serial</span><span class="cp">.</span><span class="cfn">begin</span><span class="cp">(</span><span class="cn">9600</span><span class="cp">);</span></div>
+      <div><span class="ln">6</span>&nbsp;&nbsp;<span class="cfn">pinMode</span><span class="cp">(</span><span class="ct">LED_PIN</span><span class="cp">,</span> <span class="ck">OUTPUT</span><span class="cp">);</span></div>
+      <div><span class="ln">7</span><span class="cp">}</span></div>
+      <div><span class="ln">8</span></div>
+      <div><span class="ln">9</span><span class="ck">void</span> <span class="cfn">loop</span><span class="cp">() {</span></div>
+      <div><span class="ln">10</span>&nbsp;&nbsp;<span class="ck">float</span> <span class="ct">temp</span> <span class="cp">=</span> <span class="cfn">dht</span><span class="cp">.</span><span class="cfn">readTemp</span><span class="cp">();</span></div>
+      <div><span class="ln">11</span>&nbsp;&nbsp;<span class="ck">if</span> <span class="cp">(</span><span class="ct">temp</span> <span class="cp">&gt;</span> <span class="cn">35</span><span class="cp">) {</span></div>
+      <div><span class="ln">12</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cfn">triggerAlert</span><span class="cp">();</span></div>
+      <div><span class="ln">13</span>&nbsp;&nbsp;<span class="cp">}</span></div>
+      <div><span class="ln">14</span><span class="cp">}</span></div>
+    </div>
   </div>
 </section>
 
 <!-- SERVICES -->
 <section id="services">
-  <p class="section-label reveal">আমাদের কাজ</p>
-  <h2 class="section-title reveal">আমাদের সার্ভিসসমূহ</h2>
-  <div class="section-divider reveal"></div>
+  <div class="section-header">
+    <span class="section-eyebrow reveal">What We Do</span>
+    <h2 class="section-title reveal">আমাদের সার্ভিসসমূহ</h2>
+    <div class="section-line reveal"></div>
+  </div>
   <div class="services-grid">
-
     <div class="service-card reveal">
-      <div class="card-banner">
-        <div class="card-banner-bg" style="background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,10,30,.7));"></div>
-        <span class="card-banner-icon">💻</span>
-        <span class="card-num">01</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">C++ Programming <span class="ctag">CODE</span></h3>
-        <p class="card-desc">Algorithm, Problem Solving, Academic Projects, Competitive Programming – সব ধরনের C++ সহায়তা পাওয়া যায়।</p>
-      </div>
+      <div class="card-icon-wrap">💻</div>
+      <div class="card-num-label">service_01.cpp</div>
+      <h3 class="card-title">C++ Programming <span class="ctag">CODE</span></h3>
+      <p class="card-desc">Algorithm, Problem Solving, Academic Projects, Competitive Programming – সব ধরনের C++ সহায়তা পাওয়া যায়।</p>
     </div>
-
     <div class="service-card reveal d1">
-      <div class="card-banner">
-        <div class="card-banner-bg" style="background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(0,10,30,.7));"></div>
-        <span class="card-banner-icon">🤖</span>
-        <span class="card-num">02</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Arduino Robotics Project <span class="ctag">HARDWARE</span></h3>
-        <p class="card-desc">Complete Hardware + Software Setup with Documentation – সম্পূর্ণ রোবোটিক্স প্রজেক্ট তৈরি করা হয়।</p>
-      </div>
+      <div class="card-icon-wrap">🤖</div>
+      <div class="card-num-label">service_02.ino</div>
+      <h3 class="card-title">Arduino Robotics Project <span class="ctag">HARDWARE</span></h3>
+      <p class="card-desc">Complete Hardware + Software Setup with Documentation – সম্পূর্ণ রোবোটিক্স প্রজেক্ট তৈরি করা হয়।</p>
     </div>
-
     <div class="service-card reveal d2">
-      <div class="card-banner">
-        <div class="card-banner-bg" style="background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,10,30,.7));"></div>
-        <span class="card-banner-icon">⚙️</span>
-        <span class="card-num">03</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Arduino Code Development <span class="ctag">CODE</span></h3>
-        <p class="card-desc">শুধু কোড সার্ভিস – Fully Tested & Optimized। Arduino IDE তে পেশাদার কোড লেখা হয়।</p>
-      </div>
+      <div class="card-icon-wrap">⚙️</div>
+      <div class="card-num-label">service_03.ino</div>
+      <h3 class="card-title">Arduino Code Development <span class="ctag">CODE</span></h3>
+      <p class="card-desc">শুধু কোড সার্ভিস – Fully Tested & Optimized। Arduino IDE তে পেশাদার কোড লেখা হয়।</p>
     </div>
-
     <div class="service-card reveal d3">
-      <div class="card-banner">
-        <div class="card-banner-bg" style="background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(0,10,30,.7));"></div>
-        <span class="card-banner-icon">🔬</span>
-        <span class="card-num">04</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">School / College /CUET Project <span class="ctag">ACADEMIC</span></h3>
-        <p class="card-desc">Professional Science Fair & Academic Project Support। BUET, CUET সহ সব বিশ্ববিদ্যালয়ের প্রজেক্ট করা হয়।</p>
-      </div>
+      <div class="card-icon-wrap">🔬</div>
+      <div class="card-num-label">service_04.md</div>
+      <h3 class="card-title">School / College / CUET Project <span class="ctag">ACADEMIC</span></h3>
+      <p class="card-desc">Professional Science Fair & Academic Project Support। BUET, CUET সহ সব বিশ্ববিদ্যালয়ের প্রজেক্ট করা হয়।</p>
     </div>
-
     <div class="service-card reveal d4">
-      <div class="card-banner">
-        <div class="card-banner-bg" style="background:linear-gradient(135deg,rgba(0,255,136,.08),rgba(0,10,30,.7));"></div>
-        <span class="card-banner-icon">📡</span>
-        <span class="card-num">05</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Custom Embedded / IoT Project <span class="ctag">IoT</span></h3>
-        <p class="card-desc">Sensor Based Automation & Smart System। কাস্টম IoT সলিউশন এবং স্মার্ট হোম প্রজেক্ট তৈরি করা হয়।</p>
-      </div>
+      <div class="card-icon-wrap">📡</div>
+      <div class="card-num-label">service_05.py</div>
+      <h3 class="card-title">Custom Embedded / IoT Project <span class="ctag">IoT</span></h3>
+      <p class="card-desc">Sensor Based Automation & Smart System। কাস্টম IoT সলিউশন এবং স্মার্ট হোম প্রজেক্ট তৈরি করা হয়।</p>
     </div>
-
   </div>
 </section>
 
-<hr class="neon-line">
+<hr class="section-divider">
 
 <!-- PROJECTS -->
 <section id="projects">
-  <p class="section-label reveal">আমাদের কাজ</p>
-  <h2 class="section-title reveal">আমাদের সম্পন্ন কিছু প্রজেক্ট ডেমো</h2>
-  <div class="section-divider reveal"></div>
+  <div class="section-header">
+    <span class="section-eyebrow reveal">Our Work</span>
+    <h2 class="section-title reveal">সম্পন্ন প্রজেক্ট ডেমো</h2>
+    <div class="section-line reveal"></div>
+  </div>
   <div class="projects-grid">
-
     <div class="project-card">
       <span class="proj-icon">🦾</span>
       <span class="proj-tag">Robotics</span>
       <p class="proj-title">Human Following Robot</p>
       <p class="proj-desc">IR Sensor ও Ultrasonic দিয়ে মানুষ অনুসরণকারী রোবট তৈরি।</p>
     </div>
-
     <div class="project-card">
       <span class="proj-icon">🔐</span>
       <span class="proj-tag">Security</span>
       <p class="proj-title">Fingerprint Door Lock System</p>
       <p class="proj-desc">বায়োমেট্রিক ফিঙ্গারপ্রিন্ট দিয়ে স্মার্ট দরজা লক সিস্টেম।</p>
     </div>
-
     <div class="project-card">
       <span class="proj-icon">📟</span>
       <span class="proj-tag">Security</span>
       <p class="proj-title">RFID Door Lock System</p>
       <p class="proj-desc">RFID কার্ড ব্যবহার করে দরজার উন্নত নিরাপত্তা ব্যবস্থা।</p>
     </div>
-
     <div class="project-card">
       <span class="proj-icon">🏠</span>
       <span class="proj-tag">IoT</span>
       <p class="proj-title">Home Automation System</p>
       <p class="proj-desc">Bluetooth/WiFi দিয়ে ঘরের আলো, পাখা ও যন্ত্রপাতি নিয়ন্ত্রণ।</p>
     </div>
-
     <div class="project-card">
       <span class="proj-icon">🚨</span>
       <span class="proj-tag">Safety</span>
       <p class="proj-title">Emergency Room Alert System</p>
       <p class="proj-desc">বিপদের সময় স্বয়ংক্রিয় সতর্ক সংকেত ও নোটিফিকেশন পদ্ধতি।</p>
     </div>
-
     <div class="project-card">
       <span class="proj-icon">🚗</span>
       <span class="proj-tag">Robotics</span>
       <p class="proj-title">Bluetooth Control Car</p>
       <p class="proj-desc">স্মার্টফোন দিয়ে ব্লুটুথ রিমোট কন্ট্রোল গাড়ি তৈরি।</p>
     </div>
-
     <div class="project-card">
       <span class="proj-icon">🔥</span>
       <span class="proj-tag">Robotics</span>
       <p class="proj-title">Fire Fighting Robot</p>
       <p class="proj-desc">আগুন সনাক্ত করে স্বয়ংক্রিয়ভাবে নেভানোর স্মার্ট রোবট।</p>
     </div>
-
     <div class="project-card">
       <span class="proj-icon">🌡️</span>
       <span class="proj-tag">Sensor</span>
       <p class="proj-title">Humidity & Temperature Monitor</p>
       <p class="proj-desc">DHT11/DHT22 দিয়ে রিয়েল-টাইম আবহাওয়া পর্যবেক্ষণ সিস্টেম।</p>
     </div>
-
   </div>
 </section>
 
-<hr class="neon-line">
+<hr class="section-divider">
 
 <!-- CONTACT -->
 <section id="contact">
-  <p class="section-label reveal">যোগাযোগ</p>
-  <h2 class="section-title reveal">আমাদের সাথে যোগাযোগ করুন</h2>
-  <div class="section-divider reveal"></div>
+  <div class="section-header">
+    <span class="section-eyebrow reveal">Get In Touch</span>
+    <h2 class="section-title reveal">আমাদের সাথে যোগাযোগ করুন</h2>
+    <div class="section-line reveal"></div>
+  </div>
   <div class="contact-box reveal">
-    <div class="contact-inner">
-      <h3 class="contact-title">বিস্তারিত জানতে বা অর্ডার করতে Telegram এ মেসেজ দিন</h3>
-      <p class="contact-sub">
-        আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।<br>
-        সরাসরি মেসেজ করুন এবং আপনার প্রজেক্টের বিবরণ দিন।
-      </p>
-      <a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/>
-        </svg>
-        📲 Telegram এ মেসেজ করুন
-      </a>
-    </div>
+    <h3 class="contact-title">বিস্তারিত জানতে বা অর্ডার করতে<br>Telegram এ মেসেজ দিন</h3>
+    <p class="contact-sub">
+      আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।
+      সরাসরি মেসেজ করুন এবং আপনার প্রজেক্টের বিবরণ দিন।
+    </p>
+    <a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="white">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/>
+      </svg>
+      Telegram এ মেসেজ করুন
+    </a>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2026 <span>Coding & Robotics Solution</span> | All Rights Reserved | চট্টগ্রাম, বাংলাদেশ</p>
+  <div class="footer-left">© 2026 <span>The Debug Point</span> · চট্টগ্রাম, বাংলাদেশ</div>
+  <div class="footer-right">built with <span>&lt;/&gt;</span> &amp; ☕</div>
 </footer>
 
 <script>
-// CURSOR
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
-(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
-document.querySelectorAll('a,.service-card,.project-card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cursor.style.width='20px';cursor.style.height='20px';ring.style.width='55px';ring.style.height='55px';});
-  el.addEventListener('mouseleave',()=>{cursor.style.width='12px';cursor.style.height='12px';ring.style.width='36px';ring.style.height='36px';});
-});
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', scrollY > 40));
 
-// PARTICLES
-const pc = document.getElementById('particles');
-for(let i=0;i<40;i++){
-  const p=document.createElement('div');
-  p.className='particle';
-  const size=Math.random()<.3?3:2;
-  const x=Math.random()*100;
-  const dur=8+Math.random()*16;
-  const delay=Math.random()*18;
-  const drift=(Math.random()-.5)*120+'px';
-  const color=Math.random()>.5?'var(--neon2)':'var(--neon)';
-  p.style.cssText=`left:${x}%;bottom:0;width:${size}px;height:${size}px;background:${color};animation-duration:${dur}s;animation-delay:${delay}s;--drift:${drift};`;
-  pc.appendChild(p);
-}
+  function toggleNav() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+  });
 
-// NAVBAR SCROLL
-const navbar=document.getElementById('navbar');
-window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',scrollY>50));
-
-// SCROLL REVEAL
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.12});
-document.querySelectorAll('.reveal,.project-card').forEach(el=>obs.observe(el));
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal, .project-card').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
-
