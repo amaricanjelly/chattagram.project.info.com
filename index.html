@@ -36,7 +36,6 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── NAVBAR ─────────────────────────────────────── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
     height: 64px;
@@ -79,7 +78,7 @@
   /* ── HERO ────────────────────────────────────────── */
   #hero {
     min-height: 100vh; display: flex; align-items: center;
-    padding: 100px 6% 80px; position: relative; overflow: hidden;
+    padding: 140px 6% 80px; position: relative; overflow: hidden;
   }
   .hero-bg-accent {
     position: absolute; top: -80px; right: -60px; width: 520px; height: 520px;
@@ -92,6 +91,30 @@
     pointer-events: none;
   }
   .hero-content { max-width: 700px; position: relative; z-index: 2; }
+
+  .hero-warning-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+    border: 1.5px solid #FFB300;
+    border-left: 5px solid #FFB300;
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 16px rgba(255,179,0,0.12);
+    animation: pulseGlow 2.5s ease-in-out infinite;
+  }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 4px 16px rgba(255,179,0,0.12); }
+    50% { box-shadow: 0 4px 24px rgba(255,179,0,0.28); }
+  }
+  .hero-warning-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 1px; }
+  .hero-warning-text {
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 0.9rem; font-weight: 600; color: #7a4f00; line-height: 1.7;
+  }
+  .hero-warning-text span { color: #b45309; font-weight: 700; }
 
   .hero-eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
@@ -174,6 +197,28 @@
 
   /* ── PROJECTS ────────────────────────────────────── */
   #projects { background: transparent; }
+
+  .youtube-info-box {
+    max-width: 1160px; margin: 0 auto 2.5rem;
+    display: flex; align-items: flex-start; gap: 16px;
+    background: linear-gradient(135deg, #e8f4fd 0%, #dbeafe 100%);
+    border: 1.5px solid #3b82f6; border-left: 5px solid #3b82f6;
+    border-radius: var(--radius-lg); padding: 20px 24px;
+    box-shadow: 0 4px 16px rgba(59,130,246,0.1);
+  }
+  .yt-info-icon { font-size: 2rem; flex-shrink: 0; margin-top: 2px; }
+  .yt-info-content { flex: 1; }
+  .yt-info-main {
+    font-family: 'Hind Siliguri', sans-serif; font-size: 0.97rem; font-weight: 600;
+    color: #1e3a8a; line-height: 1.65; margin-bottom: 6px;
+  }
+  .yt-info-warning {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Hind Siliguri', sans-serif; font-size: 0.82rem; font-weight: 600;
+    color: #92400e; background: #fef3c7; border: 1px solid #fbbf24;
+    border-radius: 6px; padding: 5px 12px;
+  }
+
   .projects-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.25rem; max-width: 1160px; margin: 0 auto;
@@ -239,19 +284,140 @@
     .nav-hamburger { display: flex; }
     .nav-links.open {
       display: flex; flex-direction: column;
-      position: fixed; top: 64px; left: 0; right: 0;
+      position: fixed; top: 100px; left: 0; right: 0;
       background: #fff; padding: 1.5rem 5%;
       border-bottom: 1px solid var(--border); gap: 1.25rem;
       box-shadow: 0 8px 24px rgba(10,25,47,0.09);
     }
     section { padding: 64px 5%; }
-    #hero { padding: 90px 5% 64px; }
+    #hero { padding: 100px 5% 64px; }
     .contact-box { padding: 2rem 1.5rem; }
     .hero-title { font-size: 1.75rem; }
+    .youtube-info-box { flex-direction: column; gap: 10px; }
   }
   @media (max-width: 480px) {
     .services-grid, .projects-grid { grid-template-columns: 1fr; }
     .hero-title { font-size: 1.55rem; }
+  }
+
+  /* ── QUIZ SECTION ────────────────────────────────── */
+  #quiz { background: rgba(255,255,255,0.5); }
+
+  .quiz-scoreboard {
+    display: flex; align-items: center; justify-content: center; gap: 2rem;
+    max-width: 500px; margin: 0 auto 3rem;
+    background: var(--navy); border-radius: var(--radius-lg);
+    padding: 1.2rem 2rem;
+  }
+  .score-item { text-align: center; }
+  .score-num {
+    font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 700;
+    color: var(--cyan); line-height: 1;
+  }
+  .score-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-top: 4px; }
+  .score-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.15); }
+
+  .quiz-wrapper { max-width: 820px; margin: 0 auto; }
+
+  .quiz-card {
+    background: rgba(255,255,255,0.95); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 2rem 2.2rem;
+    display: none; animation: fadeInUp 0.35s ease;
+    box-shadow: var(--card-shadow);
+  }
+  .quiz-card.active { display: block; }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .quiz-progress-bar-wrap {
+    height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 1.5rem; overflow: hidden;
+  }
+  .quiz-progress-bar {
+    height: 100%; background: linear-gradient(90deg, var(--navy), #1E6FBF);
+    border-radius: 2px; transition: width 0.4s ease;
+  }
+
+  .quiz-meta {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;
+  }
+  .quiz-qnum { font-size: 0.68rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #555; }
+  .quiz-badge {
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 4px; background: var(--bg-soft); border: 1px solid var(--border); color: #555;
+  }
+
+  .quiz-question {
+    font-family: 'Hind Siliguri', sans-serif; font-size: 1.05rem; font-weight: 600;
+    color: var(--navy); line-height: 1.7; margin-bottom: 1.5rem;
+  }
+  .quiz-question code {
+    font-family: 'Courier New', monospace; background: #f1f5f9;
+    border: 1px solid #e2e8f0; padding: 2px 7px; border-radius: 4px;
+    font-size: 0.95em; color: #0f172a;
+  }
+
+  .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.4rem; }
+  .quiz-opt-btn {
+    font-family: 'Hind Siliguri', sans-serif; font-size: 0.9rem; font-weight: 500;
+    color: var(--navy); background: var(--bg-soft); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 10px 14px; cursor: pointer;
+    transition: var(--transition); text-align: left;
+  }
+  .quiz-opt-btn:hover:not(:disabled) { background: #e8f0fe; border-color: #3b82f6; color: #1e3a8a; transform: translateY(-1px); }
+  .quiz-opt-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; font-weight: 700; }
+  .quiz-opt-btn.wrong   { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+  .quiz-opt-btn:disabled { cursor: default; }
+
+  .quiz-answer-box {
+    display: none; background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1.5px solid #86efac; border-left: 4px solid #22c55e;
+    border-radius: var(--radius); padding: 1rem 1.2rem; margin-bottom: 1.2rem;
+    font-family: 'Hind Siliguri', sans-serif; font-size: 0.9rem; color: #14532d; line-height: 1.75;
+    animation: fadeInUp 0.25s ease;
+  }
+  .quiz-answer-box.visible { display: block; }
+  .quiz-answer-box strong { font-weight: 700; }
+
+  .quiz-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  .btn-show-answer {
+    font-family: 'Hind Siliguri', sans-serif; font-size: 0.85rem; font-weight: 600;
+    background: transparent; border: 1.5px solid var(--navy); color: var(--navy);
+    padding: 8px 18px; border-radius: var(--radius); cursor: pointer; transition: var(--transition);
+  }
+  .btn-show-answer:hover { background: var(--navy); color: #fff; }
+  .btn-next-q {
+    font-family: 'Hind Siliguri', sans-serif; font-size: 0.85rem; font-weight: 600;
+    background: var(--navy); color: #fff;
+    padding: 8px 22px; border-radius: var(--radius); border: none; cursor: pointer;
+    transition: var(--transition); display: none; margin-left: auto;
+  }
+  .btn-next-q:hover { background: var(--navy-light); transform: translateY(-1px); }
+  .btn-next-q.visible { display: inline-flex; align-items: center; gap: 6px; }
+
+  .quiz-result-card {
+    display: none; text-align: center;
+    background: var(--navy); border-radius: var(--radius-lg); padding: 3rem 2rem;
+    animation: fadeInUp 0.4s ease;
+  }
+  .quiz-result-card.active { display: block; }
+  .result-emoji { font-size: 3.5rem; margin-bottom: 1rem; }
+  .result-title { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--cyan); margin-bottom: 0.5rem; }
+  .result-sub { font-family: 'Hind Siliguri', sans-serif; font-size: 0.95rem; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; }
+  .result-score-big { font-family: 'Poppins', sans-serif; font-size: 3rem; font-weight: 700; color: #fff; margin-bottom: 1.5rem; }
+  .result-score-big span { color: var(--cyan); }
+  .btn-restart {
+    font-family: 'Hind Siliguri', sans-serif; font-size: 0.95rem; font-weight: 600;
+    background: var(--cyan); color: var(--navy); border: none;
+    padding: 12px 32px; border-radius: var(--radius); cursor: pointer; transition: var(--transition);
+  }
+  .btn-restart:hover { opacity: 0.88; transform: translateY(-2px); }
+
+  @media (max-width: 600px) {
+    .quiz-options { grid-template-columns: 1fr; }
+    .quiz-card { padding: 1.4rem 1.2rem; }
+    .quiz-scoreboard { gap: 1rem; padding: 1rem 1.2rem; }
   }
 </style>
 </head>
@@ -266,6 +432,7 @@
   <ul class="nav-links" id="navLinks">
     <li><a href="#services">Services</a></li>
     <li><a href="#projects">Projects</a></li>
+    <li><a href="#quiz">Quiz</a></li>
     <li><a href="#contact" class="nav-cta">Contact</a></li>
   </ul>
   <div class="nav-hamburger" id="hamburger" onclick="toggleNav()">
@@ -278,6 +445,14 @@
   <div class="hero-bg-accent"></div>
   <div class="hero-bg-accent2"></div>
   <div class="hero-content">
+    <div class="hero-warning-box">
+      <div class="hero-warning-icon">⚠️</div>
+      <div class="hero-warning-text">
+        <span>Expensive এবং Rare Project</span> বানাতে হলে অবশ্যই Project জমা দেওয়ার
+        <span>৩–৭ দিন আগে</span> আমাদের সাথে যোগাযোগ করতে হবে।
+      </div>
+    </div>
+
     <div class="hero-eyebrow">
       <span class="hero-eyebrow-dot"></span>
       Chittagong · Since 2026
@@ -347,54 +522,76 @@
     <h2 class="section-title reveal">সম্পন্ন প্রজেক্ট ডেমো</h2>
     <div class="section-line reveal"></div>
   </div>
+
+  <div class="youtube-info-box reveal">
+    <div class="yt-info-icon">🎥</div>
+    <div class="yt-info-content">
+      <p class="yt-info-main">
+        আপনি YouTube থেকে পছন্দ করে শুধু Demo দেখিয়ে আপনার Favorite Project করাতে পারেন।
+      </p>
+      <span class="yt-info-warning">
+        ⚠️ শর্ত: Project অবশ্যই Valid হতে হবে।
+      </span>
+    </div>
+  </div>
+
   <div class="projects-grid">
-    <div class="project-card">
-      <span class="proj-icon">🦾</span>
-      <span class="proj-tag">Robotics</span>
-      <p class="proj-title">Human Following Robot</p>
-      <p class="proj-desc">IR Sensor ও Ultrasonic দিয়ে মানুষ অনুসরণকারী রোবট তৈরি।</p>
+    <div class="project-card"><span class="proj-icon">🦾</span><span class="proj-tag">Robotics</span><p class="proj-title">Human Following Robot</p><p class="proj-desc">IR Sensor ও Ultrasonic দিয়ে মানুষ অনুসরণকারী রোবট তৈরি।</p></div>
+    <div class="project-card"><span class="proj-icon">🔐</span><span class="proj-tag">Security</span><p class="proj-title">Fingerprint Door Lock System</p><p class="proj-desc">বায়োমেট্রিক ফিঙ্গারপ্রিন্ট দিয়ে স্মার্ট দরজা লক সিস্টেম।</p></div>
+    <div class="project-card"><span class="proj-icon">📟</span><span class="proj-tag">Security</span><p class="proj-title">RFID Door Lock System</p><p class="proj-desc">RFID কার্ড ব্যবহার করে দরজার উন্নত নিরাপত্তা ব্যবস্থা।</p></div>
+    <div class="project-card"><span class="proj-icon">🏠</span><span class="proj-tag">IoT</span><p class="proj-title">Home Automation System</p><p class="proj-desc">Bluetooth/WiFi দিয়ে ঘরের আলো, পাখা ও যন্ত্রপাতি নিয়ন্ত্রণ।</p></div>
+    <div class="project-card"><span class="proj-icon">🚨</span><span class="proj-tag">Safety</span><p class="proj-title">Emergency Room Alert System</p><p class="proj-desc">বিপদের সময় স্বয়ংক্রিয় সতর্ক সংকেত ও নোটিফিকেশন পদ্ধতি।</p></div>
+    <div class="project-card"><span class="proj-icon">🚗</span><span class="proj-tag">Robotics</span><p class="proj-title">Bluetooth Control Car</p><p class="proj-desc">স্মার্টফোন দিয়ে ব্লুটুথ রিমোট কন্ট্রোল গাড়ি তৈরি।</p></div>
+    <div class="project-card"><span class="proj-icon">🔥</span><span class="proj-tag">Robotics</span><p class="proj-title">Fire Fighting Robot</p><p class="proj-desc">আগুন সনাক্ত করে স্বয়ংক্রিয়ভাবে নেভানোর স্মার্ট রোবট।</p></div>
+    <div class="project-card"><span class="proj-icon">🌡️</span><span class="proj-tag">Sensor</span><p class="proj-title">Humidity & Temperature Monitor</p><p class="proj-desc">DHT11/DHT22 দিয়ে রিয়েল-টাইম আবহাওয়া পর্যবেক্ষণ সিস্টেম।</p></div>
+    <div class="project-card"><span class="proj-icon">📶</span><span class="proj-tag">IoT</span><p class="proj-title">Smart Home Automation System</p><p class="proj-desc">ESP32 ব্যবহার করে WiFi/App এর মাধ্যমে ঘরের Light, Fan এবং AC control করা যাবে।</p></div>
+    <div class="project-card"><span class="proj-icon">💡</span><span class="proj-tag">Sensor</span><p class="proj-title">Automatic Light Control System</p><p class="proj-desc">LDR Sensor ব্যবহার করে পরিবেশের আলো অনুযায়ী ঘরের বাতি Automatic ON/OFF হবে।</p></div>
+    <div class="project-card"><span class="proj-icon">🔑</span><span class="proj-tag">Security</span><p class="proj-title">Smart Door Lock System</p><p class="proj-desc">Password বা Fingerprint ব্যবহার করে Smart Security Door Lock System।</p></div>
+    <div class="project-card"><span class="proj-icon">🌀</span><span class="proj-tag">Automation</span><p class="proj-title">Smart Fan Speed Controller</p><p class="proj-desc">Temperature অনুযায়ী ফ্যানের গতি স্বয়ংক্রিয়ভাবে বাড়বে বা কমবে।</p></div>
+    <div class="project-card"><span class="proj-icon">🚪</span><span class="proj-tag">Automation</span><p class="proj-title">Automatic Door Opener</p><p class="proj-desc">PIR Sensor ব্যবহার করে মানুষ আসলে দরজা Automatic খুলবে।</p></div>
+    <div class="project-card"><span class="proj-icon">❤️</span><span class="proj-tag">Health</span><p class="proj-title">Heart Rate Monitor</p><p class="proj-desc">Pulse Sensor দিয়ে Heartbeat মাপা হবে এবং OLED Display তে দেখাবে।</p></div>
+    <div class="project-card"><span class="proj-icon">🏥</span><span class="proj-tag">Health</span><p class="proj-title">Patient Health Monitoring System</p><p class="proj-desc">Temperature, Heartbeat এবং SpO2 measure করে Doctor এর কাছে Real-time data পাঠাবে।</p></div>
+    <div class="project-card"><span class="proj-icon">💨</span><span class="proj-tag">Safety</span><p class="proj-title">Gas Leakage Detection System</p><p class="proj-desc">Gas leak হলে Alarm বাজবে এবং Mobile এ SMS notification যাবে।</p></div>
+    <div class="project-card"><span class="proj-icon">🔥</span><span class="proj-tag">Safety</span><p class="proj-title">Fire Detection & Alert System</p><p class="proj-desc">Fire detect করলে Siren বাজবে এবং SMS এর মাধ্যমে alert পাঠাবে।</p></div>
+    <div class="project-card"><span class="proj-icon">🪪</span><span class="proj-tag">Security</span><p class="proj-title">RFID Based Attendance System</p><p class="proj-desc">RFID Card scan করে Student বা Employee attendance record করা হবে।</p></div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- QUIZ SECTION -->
+<section id="quiz">
+  <div class="section-header">
+    <span class="section-eyebrow reveal">Test Your Knowledge</span>
+    <h2 class="section-title reveal">💻 Coding Quiz Challenge</h2>
+    <div class="section-line reveal"></div>
+  </div>
+
+  <div class="quiz-scoreboard reveal">
+    <div class="score-item">
+      <div class="score-num" id="scoreCorrect">0</div>
+      <div class="score-label">সঠিক</div>
     </div>
-    <div class="project-card">
-      <span class="proj-icon">🔐</span>
-      <span class="proj-tag">Security</span>
-      <p class="proj-title">Fingerprint Door Lock System</p>
-      <p class="proj-desc">বায়োমেট্রিক ফিঙ্গারপ্রিন্ট দিয়ে স্মার্ট দরজা লক সিস্টেম।</p>
+    <div class="score-divider"></div>
+    <div class="score-item">
+      <div class="score-num" id="scoreWrong">0</div>
+      <div class="score-label">ভুল</div>
     </div>
-    <div class="project-card">
-      <span class="proj-icon">📟</span>
-      <span class="proj-tag">Security</span>
-      <p class="proj-title">RFID Door Lock System</p>
-      <p class="proj-desc">RFID কার্ড ব্যবহার করে দরজার উন্নত নিরাপত্তা ব্যবস্থা।</p>
+    <div class="score-divider"></div>
+    <div class="score-item">
+      <div class="score-num" id="scoreTotal">15</div>
+      <div class="score-label">মোট প্রশ্ন</div>
     </div>
-    <div class="project-card">
-      <span class="proj-icon">🏠</span>
-      <span class="proj-tag">IoT</span>
-      <p class="proj-title">Home Automation System</p>
-      <p class="proj-desc">Bluetooth/WiFi দিয়ে ঘরের আলো, পাখা ও যন্ত্রপাতি নিয়ন্ত্রণ।</p>
-    </div>
-    <div class="project-card">
-      <span class="proj-icon">🚨</span>
-      <span class="proj-tag">Safety</span>
-      <p class="proj-title">Emergency Room Alert System</p>
-      <p class="proj-desc">বিপদের সময় স্বয়ংক্রিয় সতর্ক সংকেত ও নোটিফিকেশন পদ্ধতি।</p>
-    </div>
-    <div class="project-card">
-      <span class="proj-icon">🚗</span>
-      <span class="proj-tag">Robotics</span>
-      <p class="proj-title">Bluetooth Control Car</p>
-      <p class="proj-desc">স্মার্টফোন দিয়ে ব্লুটুথ রিমোট কন্ট্রোল গাড়ি তৈরি।</p>
-    </div>
-    <div class="project-card">
-      <span class="proj-icon">🔥</span>
-      <span class="proj-tag">Robotics</span>
-      <p class="proj-title">Fire Fighting Robot</p>
-      <p class="proj-desc">আগুন সনাক্ত করে স্বয়ংক্রিয়ভাবে নেভানোর স্মার্ট রোবট।</p>
-    </div>
-    <div class="project-card">
-      <span class="proj-icon">🌡️</span>
-      <span class="proj-tag">Sensor</span>
-      <p class="proj-title">Humidity & Temperature Monitor</p>
-      <p class="proj-desc">DHT11/DHT22 দিয়ে রিয়েল-টাইম আবহাওয়া পর্যবেক্ষণ সিস্টেম।</p>
+  </div>
+
+  <div class="quiz-wrapper" id="quizWrapper">
+    <!-- Cards rendered by JS -->
+    <div class="quiz-result-card" id="quizResult">
+      <div class="result-emoji" id="resultEmoji">🏆</div>
+      <div class="result-title" id="resultTitle">Quiz সম্পন্ন!</div>
+      <div class="result-sub" id="resultSub">আপনার ফলাফল</div>
+      <div class="result-score-big"><span id="finalCorrect">0</span> / <span>15</span></div>
+      <button class="btn-restart" onclick="restartQuiz()">🔄 আবার খেলুন</button>
     </div>
   </div>
 </section>
@@ -427,6 +624,268 @@
 <footer>
   <p>© 2026 <span>The Debug Point</span> · Coding & Robotics Solution · চট্টগ্রাম, বাংলাদেশ</p>
 </footer>
+
+<script>
+// ── QUIZ DATA ─────────────────────────────────────────
+// Each question: { q, category, correct, wrong: [...], explanation }
+const QUIZ_DATA = [
+  {
+    q: '<code>cout &lt;&lt; 5*2;</code> এর output কত হবে?',
+    category: 'C++',
+    correct: '10',
+    wrong: ['8', '52', '25'],
+    explanation: '✅ সঠিক উত্তর: <strong>10</strong><br>🧠 ব্যাখ্যা: 5 × 2 = 10। গুণ অপারেটর (*) দুটি সংখ্যা গুণ করে।'
+  },
+  {
+    q: '<code>cout &lt;&lt; 10/2;</code> এর output কত?',
+    category: 'C++',
+    correct: '5',
+    wrong: ['2', '20', '102'],
+    explanation: '✅ সঠিক উত্তর: <strong>5</strong><br>🧠 ব্যাখ্যা: 10 ÷ 2 = 5। ভাগ অপারেটর (/) ব্যবহার করা হয়েছে।'
+  },
+  {
+    q: '<code>cout &lt;&lt; 3+2*2;</code> এর output কত?',
+    category: 'C++',
+    correct: '7',
+    wrong: ['10', '5', '8'],
+    explanation: '✅ সঠিক উত্তর: <strong>7</strong><br>🧠 ব্যাখ্যা: BODMAS নিয়মে আগে গুণ → 2×2=4, তারপর যোগ → 3+4=7।'
+  },
+  {
+    q: '<code>cout &lt;&lt; (3+2)*2;</code> এর output কত?',
+    category: 'C++',
+    correct: '10',
+    wrong: ['7', '32', '6'],
+    explanation: '✅ সঠিক উত্তর: <strong>10</strong><br>🧠 ব্যাখ্যা: ব্র্যাকেট সবার আগে → 3+2=5, তারপর 5×2=10।'
+  },
+  {
+    q: '<code>int x=2; cout&lt;&lt;x*x;</code> এর output কত?',
+    category: 'C++',
+    correct: '4',
+    wrong: ['2', '22', '8'],
+    explanation: '✅ সঠিক উত্তর: <strong>4</strong><br>🧠 ব্যাখ্যা: x=2, তাই x*x = 2×2 = 4।'
+  },
+  {
+    q: '<code>cout &lt;&lt; 10%3;</code> এর output কত?',
+    category: 'C++',
+    correct: '1',
+    wrong: ['3', '0', '10'],
+    explanation: '✅ সঠিক উত্তর: <strong>1</strong><br>🧠 ব্যাখ্যা: % হলো modulus অপারেটর — ভাগশেষ বের করে। 10÷3 = 3 বাকি 1।'
+  },
+  {
+    q: '<code>int x=1; x++; cout&lt;&lt;x;</code> এর output কত?',
+    category: 'C++',
+    correct: '2',
+    wrong: ['1', '0', '11'],
+    explanation: '✅ সঠিক উত্তর: <strong>2</strong><br>🧠 ব্যাখ্যা: x++ মানে increment — x এর মান 1 থেকে বেড়ে 2 হয়।'
+  },
+  {
+    q: '<code>int x=5; x+=2; cout&lt;&lt;x;</code> এর output কত?',
+    category: 'C++',
+    correct: '7',
+    wrong: ['5', '2', '52'],
+    explanation: '✅ সঠিক উত্তর: <strong>7</strong><br>🧠 ব্যাখ্যা: x+=2 মানে x = x+2 → 5+2 = 7।'
+  },
+  {
+    q: '<code>if(5&gt;2)</code> — এই condition টি কি হবে?',
+    category: 'Logic',
+    correct: 'True',
+    wrong: ['False', 'Error', '0'],
+    explanation: '✅ সঠিক উত্তর: <strong>True</strong><br>🧠 ব্যাখ্যা: 5 সত্যিই 2 এর থেকে বড়, তাই condition True এবং if block execute হবে।'
+  },
+  {
+    q: '5 সংখ্যাটির Binary রূপ কোনটি?',
+    category: 'Binary',
+    correct: '101',
+    wrong: ['110', '111', '100'],
+    explanation: '✅ সঠিক উত্তর: <strong>101</strong><br>🧠 ব্যাখ্যা: 5 = 4+1 → Binary তে 4=100, 1=001 → মিলিয়ে 101।'
+  },
+  {
+    q: 'Arduino তে LED জ্বালাতে কোন signal দিতে হয়?',
+    category: 'Arduino',
+    correct: 'HIGH',
+    wrong: ['LOW', 'MEDIUM', 'ZERO'],
+    explanation: '✅ সঠিক উত্তর: <strong>HIGH</strong><br>🧠 ব্যাখ্যা: <code>digitalWrite(pin, HIGH)</code> দিলে সেই pin এ 5V যায় এবং LED জ্বলে ওঠে।'
+  },
+  {
+    q: 'LDR Sensor কি detect করে?',
+    category: 'Sensor',
+    correct: 'আলো',
+    wrong: ['তাপমাত্রা', 'গ্যাস', 'শব্দ'],
+    explanation: '✅ সঠিক উত্তর: <strong>আলো</strong><br>🧠 ব্যাখ্যা: LDR = Light Dependent Resistor। আলোর পরিমাণ অনুযায়ী এর resistance পরিবর্তন হয়।'
+  },
+  {
+    q: 'Servo Motor কীভাবে কাজ করে?',
+    category: 'Hardware',
+    correct: 'নির্দিষ্ট কোণে ঘোরে',
+    wrong: ['অনবরত ঘোরে', 'শুধু ডানে ঘোরে', 'Speed control করে'],
+    explanation: '✅ সঠিক উত্তর: <strong>নির্দিষ্ট কোণে ঘোরে</strong><br>🧠 ব্যাখ্যা: Servo Motor 0° থেকে 180° পর্যন্ত নির্দিষ্ট angle এ ঘুরতে পারে।'
+  },
+  {
+    q: 'C++ এ প্রতিটি statement এর শেষে <code>;</code> কেন দিতে হয়?',
+    category: 'Syntax',
+    correct: 'Statement শেষ বোঝাতে',
+    wrong: ['সুন্দর দেখায় বলে', 'Loop চালাতে', 'Variable declare করতে'],
+    explanation: '✅ সঠিক উত্তর: <strong>Statement শেষ বোঝাতে</strong><br>🧠 ব্যাখ্যা: Compiler কে বলে দেয় এখানে একটি নির্দেশ শেষ হয়েছে। না দিলে Syntax Error আসে।'
+  },
+  {
+    q: 'C++ এ <code>#include</code> কেন ব্যবহার করা হয়?',
+    category: 'Syntax',
+    correct: 'Library use করতে',
+    wrong: ['Program শেষ করতে', 'Loop চালাতে', 'Output দিতে'],
+    explanation: '✅ সঠিক উত্তর: <strong>Library use করতে</strong><br>🧠 ব্যাখ্যা: <code>#include &lt;iostream&gt;</code> দিলে cout, cin এর মতো built-in function ব্যবহার করা যায়।'
+  }
+];
+
+// ── SHUFFLE HELPER ────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ── STATE ─────────────────────────────────────────────
+let scoreCorrect = 0, scoreWrong = 0;
+const TOTAL = QUIZ_DATA.length;
+
+// ── BUILD CARDS ───────────────────────────────────────
+function buildCards() {
+  const wrapper = document.getElementById('quizWrapper');
+  const resultCard = document.getElementById('quizResult');
+
+  // Remove old cards (keep result card)
+  wrapper.querySelectorAll('.quiz-card').forEach(c => c.remove());
+
+  QUIZ_DATA.forEach((qd, idx) => {
+    const progress = ((idx + 1) / TOTAL * 100).toFixed(1);
+    const isLast = idx === TOTAL - 1;
+
+    // Shuffle options: mix correct + wrong randomly
+    const options = shuffle([
+      { text: qd.correct, isCorrect: true },
+      ...qd.wrong.map(w => ({ text: w, isCorrect: false }))
+    ]);
+
+    const optBtns = options.map(opt =>
+      `<button class="quiz-opt-btn" onclick="pickAnswer(this, ${opt.isCorrect})">${opt.text}</button>`
+    ).join('');
+
+    const card = document.createElement('div');
+    card.className = 'quiz-card' + (idx === 0 ? ' active' : '');
+    card.dataset.category = qd.category;
+    card.innerHTML = `
+      <div class="quiz-progress-bar-wrap">
+        <div class="quiz-progress-bar" style="width:${progress}%"></div>
+      </div>
+      <div class="quiz-meta">
+        <span class="quiz-qnum">প্রশ্ন ${toBanglaNum(idx + 1)} / ${toBanglaNum(TOTAL)}</span>
+        <span class="quiz-badge">${qd.category}</span>
+      </div>
+      <p class="quiz-question">${qd.q}</p>
+      <div class="quiz-options">${optBtns}</div>
+      <div class="quiz-answer-box">${qd.explanation}</div>
+      <div class="quiz-actions">
+        <button class="btn-show-answer" onclick="revealAnswer(this)">Answer দেখুন</button>
+        <button class="btn-next-q" onclick="nextQuestion(this)">
+          ${isLast ? 'Quiz শেষ করুন 🏆' : 'পরের প্রশ্ন →'}
+        </button>
+      </div>
+    `;
+
+    // Insert before result card
+    wrapper.insertBefore(card, resultCard);
+  });
+}
+
+// Bengali numeral converter
+function toBanglaNum(n) {
+  const map = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
+  return String(n).replace(/[0-9]/g, d => map[d]);
+}
+
+// ── QUIZ LOGIC ────────────────────────────────────────
+function pickAnswer(btn, isCorrect) {
+  const card = btn.closest('.quiz-card');
+  const opts = card.querySelectorAll('.quiz-opt-btn');
+  opts.forEach(b => {
+    b.disabled = true;
+    if (b === btn) b.classList.add(isCorrect ? 'correct' : 'wrong');
+  });
+  // Highlight correct if wrong was picked
+  if (!isCorrect) {
+    opts.forEach(b => {
+      // check data attribute set during build
+      if (b.dataset.correct === 'true') b.classList.add('correct');
+    });
+  }
+  if (isCorrect) { scoreCorrect++; } else { scoreWrong++; }
+  document.getElementById('scoreCorrect').textContent = scoreCorrect;
+  document.getElementById('scoreWrong').textContent   = scoreWrong;
+
+  card.querySelector('.quiz-answer-box').classList.add('visible');
+  card.querySelector('.btn-next-q').classList.add('visible');
+  card.querySelector('.btn-show-answer').style.display = 'none';
+}
+
+function revealAnswer(btn) {
+  const card = btn.closest('.quiz-card');
+  card.querySelector('.quiz-answer-box').classList.add('visible');
+  card.querySelector('.btn-next-q').classList.add('visible');
+  btn.style.display = 'none';
+}
+
+function nextQuestion(btn) {
+  const cards = document.querySelectorAll('.quiz-card');
+  const current = btn.closest('.quiz-card');
+  let idx = Array.from(cards).indexOf(current);
+  current.classList.remove('active');
+  if (idx + 1 < cards.length) {
+    cards[idx + 1].classList.add('active');
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  document.getElementById('quizResult').classList.add('active');
+  document.getElementById('finalCorrect').textContent = scoreCorrect;
+  const pct = (scoreCorrect / TOTAL) * 100;
+  let emoji = '😊', title = 'ভালো চেষ্টা!', sub = 'আরও practice করুন।';
+  if (pct >= 90)      { emoji = '🏆'; title = 'অসাধারণ!';  sub = 'আপনি একজন Coding Star! 🌟'; }
+  else if (pct >= 60) { emoji = '👍'; title = 'বেশ ভালো!'; sub = 'আরেকটু পড়লেই Expert হবেন।'; }
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultSub').textContent   = sub;
+}
+
+function restartQuiz() {
+  scoreCorrect = 0; scoreWrong = 0;
+  document.getElementById('scoreCorrect').textContent = 0;
+  document.getElementById('scoreWrong').textContent   = 0;
+  document.getElementById('quizResult').classList.remove('active');
+  buildCards(); // rebuild with freshly shuffled options
+}
+
+// ── MARK CORRECT BTN FOR HIGHLIGHTING ────────────────
+// We re-patch pickAnswer to use data-correct attribute after build
+function buildCardsWithDataAttrs() {
+  buildCards();
+  // After building, tag correct buttons with data-correct="true"
+  document.querySelectorAll('.quiz-card').forEach((card, idx) => {
+    const correctText = QUIZ_DATA[idx].correct;
+    card.querySelectorAll('.quiz-opt-btn').forEach(btn => {
+      if (btn.textContent.trim() === correctText) {
+        btn.dataset.correct = 'true';
+      }
+    });
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────
+buildCardsWithDataAttrs();
+</script>
 
 <script>
   const navbar = document.getElementById('navbar');
