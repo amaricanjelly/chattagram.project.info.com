@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Debug Point – Coding & Robotics Solution, Chittagong</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 /* ========================================
    CSS VARIABLES & RESET
@@ -33,6 +33,9 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --pink:      #ff2e88;
+  --pink-glow: #ff2e8888;
+  --pink-dim:  #ff2e8840;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -46,10 +49,675 @@ body {
 }
 
 /* ========================================
+   PARTICLE SECTION (PINNED TOP) — HIDDEN
+   (original kept intact, just hidden via class)
+======================================== */
+#particle-section {
+  width: 100%;
+  background: #050508;
+  position: relative;
+  overflow: hidden;
+  /* ── NEW: hidden by default ── */
+  display: none;
+}
+#particle-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+#particle-section::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 45%, #ff2e8814 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.particle-inner {
+  position: relative; z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 20px 22px;
+}
+.monitor-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: min(820px, 92vw);
+  flex-shrink: 1;
+}
+.monitor-frame {
+  width: 100%;
+  background: #08080f;
+  border: 2px solid #ffffff1a;
+  border-radius: 14px 14px 0 0;
+  padding: 10px 10px 0;
+  box-shadow:
+    0 0 0 1px #ff2e8820,
+    0 0 40px #ff2e8822,
+    0 30px 80px #00000088,
+    inset 0 1px 0 #ffffff18;
+}
+.monitor-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 4px 8px;
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; }
+.dot.r { background: #ff5f57; }
+.dot.y { background: #febc2e; }
+.dot.g { background: #28c840; }
+.monitor-title {
+  flex: 1; text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; color: rgba(255,255,255,0.3);
+  letter-spacing: 0.2em; padding-right: 34px;
+}
+.screen {
+  position: relative; width: 100%;
+  border-radius: 6px; overflow: hidden;
+  background: #020204;
+  box-shadow: inset 0 0 60px #00000080;
+}
+.screen::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, #00000014 2px, #00000014 4px);
+  pointer-events: none; z-index: 3; border-radius: 6px;
+}
+#particleCanvas { display: block; width: 100%; border-radius: 6px; }
+.monitor-neck { width: 60px; height: 20px; background: linear-gradient(180deg, #111118, #0a0a10); border-left: 1px solid #ffffff0a; border-right: 1px solid #ffffff0a; }
+.monitor-base { width: min(200px, 40%); height: 8px; background: linear-gradient(180deg, #151520, #0c0c12); border-radius: 0 0 8px 8px; border: 1px solid #ffffff0a; border-top: none; box-shadow: 0 4px 20px #00000060; }
+
+.particle-input-section {
+  width: 100%; max-width: min(820px, 92vw);
+  margin-top: 18px;
+}
+.particle-input-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px; letter-spacing: 0.4em;
+  color: rgba(255,255,255,0.3); text-transform: uppercase;
+  margin-bottom: 8px; display: block;
+}
+.input-glass {
+  position: relative; width: 100%;
+  background: linear-gradient(135deg, #ffffff0b, #ffffff05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid #ffffff18; border-radius: 12px;
+  box-shadow: 0 0 0 1px #ff2e8818, 0 8px 32px #00000050, inset 0 1px 0 #ffffff12;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.input-glass:focus-within {
+  border-color: #ff2e8855;
+  box-shadow: 0 0 0 1px #ff2e8840, 0 0 30px #ff2e8825, 0 8px 32px #00000050, inset 0 1px 0 #ffffff18;
+}
+#particleTextInput {
+  width: 100%; background: transparent; border: none; outline: none;
+  padding: 14px 50px 14px 18px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(13px, 2vw, 17px); font-weight: 700;
+  letter-spacing: 0.08em; color: var(--pink);
+  caret-color: var(--pink);
+  text-shadow: 0 0 12px var(--pink-glow);
+  text-transform: uppercase;
+}
+#particleTextInput::placeholder {
+  color: rgba(255,255,255,0.25); text-shadow: none; font-weight: 400;
+  text-transform: none; font-family: 'Space Mono', monospace;
+  font-size: clamp(11px, 1.6vw, 13px); letter-spacing: 0.05em;
+}
+.btn-clear-particle {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.3); font-size: 18px; line-height: 1;
+  transition: color 0.2s; display: none;
+}
+.btn-clear-particle:hover { color: var(--pink); }
+.btn-clear-particle.visible { display: block; }
+.particle-hint {
+  margin-top: 7px; font-size: 10px; color: rgba(255,255,255,0.2);
+  letter-spacing: 0.12em; text-align: center; font-family: 'Space Mono', monospace;
+}
+
+/* ========================================
+   ✨ NEW — MAGICAL FRONT CARD (TOP SECTION)
+======================================== */
+#magical-front-card-section {
+  width: 100%;
+  background: #050508;
+  position: relative;
+  overflow: hidden;
+  padding: 24px 20px 20px;
+}
+#magical-front-card-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+#magical-front-card-section::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, #ff2e8810 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mf-card-inner {
+  position: relative; z-index: 1;
+  max-width: min(820px, 92vw);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* Label row above card */
+.mf-label-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  justify-content: center;
+}
+.mf-eyebrow {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+}
+.mf-dot-pulse {
+  width: 6px; height: 6px;
+  background: var(--pink);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--pink);
+  animation: mf-pulse 2s ease-in-out infinite;
+}
+@keyframes mf-pulse {
+  0%,100% { opacity:1; transform:scale(1); box-shadow: 0 0 8px var(--pink); }
+  50%      { opacity:0.5; transform:scale(0.7); box-shadow: 0 0 4px var(--pink); }
+}
+
+/* The clickable card */
+.mf-preview-card {
+  width: 100%;
+  cursor: pointer;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #08080f;
+  border: 1.5px solid rgba(255,255,255,0.1);
+  box-shadow:
+    0 0 0 1px #ff2e8820,
+    0 0 30px #ff2e8818,
+    0 20px 60px rgba(0,0,0,0.6);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+              box-shadow 0.35s cubic-bezier(0.4,0,0.2,1),
+              border-color 0.35s;
+  position: relative;
+}
+.mf-preview-card:hover {
+  transform: translateY(-6px) scale(1.012);
+  box-shadow:
+    0 0 0 1px #ff2e8855,
+    0 0 50px #ff2e8830,
+    0 30px 80px rgba(0,0,0,0.7);
+  border-color: rgba(255,46,136,0.4);
+}
+
+/* Top chrome bar */
+.mf-chrome-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #0d0d16;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.mf-chrome-dots { display: flex; gap: 5px; }
+.mf-chrome-dot { width: 9px; height: 9px; border-radius: 50%; }
+.mf-chrome-dot.r { background: #ff5f57; }
+.mf-chrome-dot.y { background: #febc2e; }
+.mf-chrome-dot.g { background: #28c840; }
+.mf-chrome-title {
+  flex: 1; text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.18em;
+  padding-right: 34px;
+}
+
+/* The preview viewport */
+.mf-preview-viewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #020204;
+}
+
+/* Scanline overlay */
+.mf-scanlines {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Scaled-down live particle canvas clone */
+.mf-canvas-scaler {
+  width: 100%;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+#magicalPreviewCanvas {
+  display: block;
+  width: 100%;
+}
+
+/* "Click to open" overlay hint */
+.mf-click-hint {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 56px;
+  background: linear-gradient(to top, rgba(2,2,4,0.9) 0%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10px;
+  z-index: 5;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+.mf-click-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mf-click-label::before, .mf-click-label::after {
+  content: '—';
+  color: rgba(255,46,136,0.5);
+}
+.mf-preview-card:hover .mf-click-label {
+  color: rgba(255,255,255,0.75);
+}
+
+/* Input preview bar below canvas */
+.mf-input-hint-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #0a0a12;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.mf-fake-input {
+  flex: 1;
+  height: 26px;
+  background: rgba(255,46,136,0.08);
+  border: 1px solid rgba(255,46,136,0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+.mf-fake-cursor {
+  width: 1.5px; height: 12px;
+  background: var(--pink);
+  box-shadow: 0 0 6px var(--pink);
+  animation: mf-blink 1s step-end infinite;
+}
+@keyframes mf-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.mf-fake-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 8px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Footer of card */
+.mf-card-footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 0 2px;
+}
+.mf-footer-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.mf-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--pink);
+  background: rgba(255,46,136,0.1);
+  border: 1px solid rgba(255,46,136,0.3);
+  border-radius: 6px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.mf-open-btn:hover {
+  background: rgba(255,46,136,0.2);
+  border-color: rgba(255,46,136,0.6);
+  box-shadow: 0 0 16px rgba(255,46,136,0.25);
+}
+.mf-open-btn svg {
+  width: 10px; height: 10px;
+  fill: none;
+  stroke: var(--pink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ========================================
+   ✨ NEW — FULLSCREEN MODAL OVERLAY
+======================================== */
+#mf-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(5,5,8,0.0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  pointer-events: none;
+  transition:
+    background 0.45s cubic-bezier(0.4,0,0.2,1),
+    backdrop-filter 0.45s,
+    -webkit-backdrop-filter 0.45s;
+}
+#mf-modal-overlay.open {
+  pointer-events: all;
+  background: rgba(5,5,8,0.92);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+}
+
+#mf-modal-content {
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+#mf-modal-overlay.open #mf-modal-content {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Modal top toolbar */
+.mf-modal-toolbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: linear-gradient(to bottom, rgba(5,5,8,0.95), transparent);
+  z-index: 10;
+}
+.mf-modal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mf-modal-title-dot {
+  width: 6px; height: 6px;
+  background: var(--pink);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--pink);
+  animation: mf-pulse 2s ease-in-out infinite;
+}
+
+.mf-modal-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Back button */
+.mf-btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 7px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mf-btn-back:hover {
+  color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.25);
+}
+.mf-btn-back svg {
+  width: 10px; height: 10px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Close button */
+.mf-btn-close {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255,46,136,0.1);
+  border: 1.5px solid rgba(255,46,136,0.3);
+  color: rgba(255,46,136,0.8);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1;
+}
+.mf-btn-close:hover {
+  background: rgba(255,46,136,0.25);
+  border-color: rgba(255,46,136,0.7);
+  color: #fff;
+  box-shadow: 0 0 18px rgba(255,46,136,0.35);
+  transform: rotate(90deg);
+}
+
+/* Full modal body — the actual particle section lives here */
+.mf-modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Wrapper that fully shows the original particle section inside modal */
+#mf-modal-particle-host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 60px 20px 24px;
+  background: #050508;
+  position: relative;
+}
+#mf-modal-particle-host::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  opacity: 0.4;
+}
+#mf-modal-particle-host::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 45%, #ff2e8814 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* The particle components are cloned into the modal — scoped wrapper */
+.mf-modal-monitor-wrap {
+  position: relative; z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: min(820px, 92vw);
+}
+.mf-modal-monitor-frame {
+  width: 100%;
+  background: #08080f;
+  border: 2px solid #ffffff1a;
+  border-radius: 14px 14px 0 0;
+  padding: 10px 10px 0;
+  box-shadow:
+    0 0 0 1px #ff2e8820,
+    0 0 40px #ff2e8822,
+    0 30px 80px #00000088,
+    inset 0 1px 0 #ffffff18;
+}
+.mf-modal-monitor-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 4px 8px;
+}
+.mf-modal-screen {
+  position: relative; width: 100%;
+  border-radius: 6px; overflow: hidden;
+  background: #020204;
+  box-shadow: inset 0 0 60px #00000080;
+}
+.mf-modal-screen::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, #00000014 2px, #00000014 4px);
+  pointer-events: none; z-index: 3; border-radius: 6px;
+}
+#modalParticleCanvas { display: block; width: 100%; border-radius: 6px; }
+.mf-modal-neck { width: 60px; height: 20px; background: linear-gradient(180deg, #111118, #0a0a10); border-left: 1px solid #ffffff0a; border-right: 1px solid #ffffff0a; }
+.mf-modal-base { width: min(200px, 40%); height: 8px; background: linear-gradient(180deg, #151520, #0c0c12); border-radius: 0 0 8px 8px; border: 1px solid #ffffff0a; border-top: none; box-shadow: 0 4px 20px #00000060; }
+
+.mf-modal-input-section {
+  position: relative; z-index: 1;
+  width: 100%; max-width: min(820px, 92vw);
+  margin-top: 18px;
+}
+.mf-modal-input-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 9px; letter-spacing: 0.4em;
+  color: rgba(255,255,255,0.3); text-transform: uppercase;
+  margin-bottom: 8px; display: block;
+}
+.mf-modal-input-glass {
+  position: relative; width: 100%;
+  background: linear-gradient(135deg, #ffffff0b, #ffffff05);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid #ffffff18; border-radius: 12px;
+  box-shadow: 0 0 0 1px #ff2e8818, 0 8px 32px #00000050, inset 0 1px 0 #ffffff12;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.mf-modal-input-glass:focus-within {
+  border-color: #ff2e8855;
+  box-shadow: 0 0 0 1px #ff2e8840, 0 0 30px #ff2e8825, 0 8px 32px #00000050, inset 0 1px 0 #ffffff18;
+}
+#modalParticleTextInput {
+  width: 100%; background: transparent; border: none; outline: none;
+  padding: 14px 50px 14px 18px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(13px, 2vw, 17px); font-weight: 700;
+  letter-spacing: 0.08em; color: var(--pink);
+  caret-color: var(--pink);
+  text-shadow: 0 0 12px var(--pink-glow);
+  text-transform: uppercase;
+}
+#modalParticleTextInput::placeholder {
+  color: rgba(255,255,255,0.25); text-shadow: none; font-weight: 400;
+  text-transform: none; font-family: 'Space Mono', monospace;
+  font-size: clamp(11px, 1.6vw, 13px); letter-spacing: 0.05em;
+}
+.btn-clear-modal {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.3); font-size: 18px; line-height: 1;
+  transition: color 0.2s; display: none;
+}
+.btn-clear-modal:hover { color: var(--pink); }
+.btn-clear-modal.visible { display: block; }
+.mf-modal-hint {
+  position: relative; z-index: 1;
+  margin-top: 7px; font-size: 10px; color: rgba(255,255,255,0.2);
+  letter-spacing: 0.12em; text-align: center; font-family: 'Space Mono', monospace;
+}
+
+/* ── END NEW MODAL STYLES ── */
+
+/* ========================================
    NAVBAR
 ======================================== */
 nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  position: sticky; top: 0; left: 0; right: 0; z-index: 1000;
   height: 68px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 6%;
@@ -113,7 +781,7 @@ nav.scrolled {
 ======================================== */
 #hero {
   min-height: 100vh; display: flex; align-items: center;
-  padding: 140px 6% 80px; position: relative; overflow: hidden;
+  padding: 100px 6% 80px; position: relative; overflow: hidden;
 }
 
 .hero-bg {
@@ -132,7 +800,6 @@ nav.scrolled {
 
 .hero-content { max-width: 680px; position: relative; z-index: 2; }
 
-/* Warning box */
 .hero-warning-box {
   display: flex; align-items: flex-start; gap: 14px;
   background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
@@ -211,12 +878,10 @@ nav.scrolled {
   box-shadow: var(--shadow-sm);
 }
 
-/* Stats row */
 .hero-stats {
   display: flex; gap: 2rem; margin-top: 2.4rem;
   padding-top: 2rem; border-top: 1px solid var(--border);
 }
-.stat-item {}
 .stat-num {
   font-family: 'Poppins', sans-serif; font-size: 1.7rem; font-weight: 800;
   color: var(--navy); line-height: 1;
@@ -235,10 +900,7 @@ nav.scrolled {
   position: relative; z-index: 2;
 }
 
-.featured-wrapper {
-  max-width: 1160px; margin: 0 auto;
-  position: relative;
-}
+.featured-wrapper { max-width: 1160px; margin: 0 auto; position: relative; }
 
 .featured-card {
   position: relative; overflow: hidden;
@@ -247,8 +909,6 @@ nav.scrolled {
   padding: 0;
   box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0,201,167,0.15);
 }
-
-/* Decorative background */
 .featured-card::before {
   content: '';
   position: absolute; top: -80px; right: -80px;
@@ -271,9 +931,7 @@ nav.scrolled {
   padding: 2.8rem 3rem;
 }
 
-.featured-badge-row {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 1.2rem; flex-wrap: wrap;
-}
+.featured-badge-row { display: flex; align-items: center; gap: 10px; margin-bottom: 1.2rem; flex-wrap: wrap; }
 .badge-exclusive {
   display: inline-flex; align-items: center; gap: 6px;
   font-family: 'Space Mono', monospace;
@@ -309,8 +967,7 @@ nav.scrolled {
 .featured-tagline {
   font-family: 'Hind Siliguri', sans-serif;
   font-size: 0.95rem; font-weight: 600;
-  color: rgba(255,255,255,0.75); line-height: 1.7;
-  margin-bottom: 1.4rem;
+  color: rgba(255,255,255,0.75); line-height: 1.7; margin-bottom: 1.4rem;
 }
 .featured-tagline .gold-text { color: var(--accent-gold); font-weight: 700; }
 
@@ -810,13 +1467,14 @@ footer span { color: var(--accent); }
     box-shadow: var(--shadow-lg);
   }
   section { padding: 64px 5%; }
-  #hero { padding: 108px 5% 64px; }
+  #hero { padding: 80px 5% 64px; }
   .contact-box { padding: 2rem 1.5rem; }
   .hero-title { font-size: 1.85rem; }
   .youtube-info-box { flex-direction: column; gap: 10px; }
   .hero-stats { gap: 1.25rem; }
   .featured-inner { padding: 2rem 1.75rem; }
   #featured { padding: 0 5% 64px; }
+  .mf-modal-toolbar { padding: 0 14px; }
 }
 
 @media (max-width: 480px) {
@@ -831,6 +1489,160 @@ footer span { color: var(--accent); }
 </style>
 </head>
 <body>
+
+<!-- ============================================================
+     ORIGINAL PARTICLE SECTION — kept intact, hidden by CSS
+     (display:none set via #particle-section rule above)
+============================================================ -->
+<div id="particle-section">
+  <div class="particle-inner">
+    <div class="monitor-wrap">
+      <div class="monitor-frame">
+        <div class="monitor-bar">
+          <div class="dot r"></div>
+          <div class="dot y"></div>
+          <div class="dot g"></div>
+          <div class="monitor-title">THE DEBUG POINT · PARTICLE UNIVERSE</div>
+        </div>
+        <div class="screen">
+          <canvas id="particleCanvas"></canvas>
+        </div>
+      </div>
+      <div class="monitor-neck"></div>
+      <div class="monitor-base"></div>
+    </div>
+    <div class="particle-input-section">
+      <label class="particle-input-label" for="particleTextInput">⬡ Type any text to sculpt the particles</label>
+      <div class="input-glass">
+        <input id="particleTextInput" type="text" placeholder="Enter a word and watch the particles come alive…" maxlength="18" autocomplete="off" spellcheck="false" />
+        <button class="btn-clear-particle" id="btnClearParticle" title="Clear">✕</button>
+      </div>
+      <div class="particle-hint">Particles form your text · Hover over them to scatter · Max 18 characters</div>
+    </div>
+  </div>
+</div>
+<!-- END ORIGINAL PARTICLE SECTION -->
+
+
+<!-- ============================================================
+     ✨ NEW — MAGICAL FRONT CARD SECTION (replaces old top section)
+============================================================ -->
+<div id="magical-front-card-section">
+  <div class="mf-card-inner">
+
+    <!-- Label row -->
+    <div class="mf-label-row">
+      <span class="mf-dot-pulse"></span>
+      <span class="mf-eyebrow">Magical Front · Particle Universe</span>
+      <span class="mf-dot-pulse"></span>
+    </div>
+
+    <!-- Clickable preview card -->
+    <div class="mf-preview-card" id="mfPreviewCard" onclick="openMagicalFront()" role="button" aria-label="Open Magical Front fullscreen" tabindex="0">
+
+      <!-- Chrome bar -->
+      <div class="mf-chrome-bar">
+        <div class="mf-chrome-dots">
+          <div class="mf-chrome-dot r"></div>
+          <div class="mf-chrome-dot y"></div>
+          <div class="mf-chrome-dot g"></div>
+        </div>
+        <div class="mf-chrome-title">THE DEBUG POINT · PARTICLE UNIVERSE</div>
+      </div>
+
+      <!-- Preview viewport with its own live canvas -->
+      <div class="mf-preview-viewport">
+        <div class="mf-canvas-scaler">
+          <canvas id="magicalPreviewCanvas"></canvas>
+        </div>
+        <div class="mf-scanlines"></div>
+        <!-- Click hint -->
+        <div class="mf-click-hint">
+          <span class="mf-click-label">Click to open full experience</span>
+        </div>
+      </div>
+
+      <!-- Fake input bar preview -->
+      <div class="mf-input-hint-bar">
+        <div class="mf-fake-input">
+          <div class="mf-fake-cursor"></div>
+        </div>
+        <span class="mf-fake-label">Type to sculpt</span>
+      </div>
+
+    </div><!-- /.mf-preview-card -->
+
+    <!-- Footer row -->
+    <div class="mf-card-footer">
+      <span class="mf-footer-label">✦ Interactive Particle Demo</span>
+      <button class="mf-open-btn" onclick="openMagicalFront()">
+        <svg viewBox="0 0 12 12"><path d="M2 2h8v8M2 10L10 2"/></svg>
+        Full Screen খুলুন
+      </button>
+    </div>
+
+  </div>
+</div>
+<!-- END NEW MAGICAL FRONT CARD SECTION -->
+
+
+<!-- ============================================================
+     ✨ NEW — FULLSCREEN MODAL OVERLAY
+============================================================ -->
+<div id="mf-modal-overlay" role="dialog" aria-modal="true" aria-label="Magical Front Fullscreen">
+  <div id="mf-modal-content">
+
+    <!-- Toolbar -->
+    <div class="mf-modal-toolbar">
+      <div class="mf-modal-title">
+        <div class="mf-modal-title-dot"></div>
+        Magical Front · Particle Universe
+      </div>
+      <div class="mf-modal-controls">
+        <button class="mf-btn-back" onclick="closeMagicalFront()" title="Go back">
+          <svg viewBox="0 0 12 12"><path d="M8 2L4 6l4 4"/></svg>
+          ফিরে যান
+        </button>
+        <button class="mf-btn-close" onclick="closeMagicalFront()" title="Close">✕</button>
+      </div>
+    </div>
+
+    <!-- Modal body — full particle experience -->
+    <div class="mf-modal-body">
+      <div id="mf-modal-particle-host">
+
+        <div class="mf-modal-monitor-wrap">
+          <div class="mf-modal-monitor-frame">
+            <div class="mf-modal-monitor-bar">
+              <div class="dot r"></div>
+              <div class="dot y"></div>
+              <div class="dot g"></div>
+              <div class="monitor-title">THE DEBUG POINT · PARTICLE UNIVERSE</div>
+            </div>
+            <div class="mf-modal-screen">
+              <canvas id="modalParticleCanvas"></canvas>
+            </div>
+          </div>
+          <div class="mf-modal-neck"></div>
+          <div class="mf-modal-base"></div>
+        </div>
+
+        <div class="mf-modal-input-section">
+          <label class="mf-modal-input-label" for="modalParticleTextInput">⬡ Type any text to sculpt the particles</label>
+          <div class="mf-modal-input-glass">
+            <input id="modalParticleTextInput" type="text" placeholder="Enter a word and watch the particles come alive…" maxlength="18" autocomplete="off" spellcheck="false" />
+            <button class="btn-clear-modal" id="btnClearModal" title="Clear">✕</button>
+          </div>
+          <div class="mf-modal-hint">Particles form your text · Hover over them to scatter · Max 18 characters</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- END FULLSCREEN MODAL -->
+
 
 <!-- NAVBAR -->
 <nav id="navbar">
@@ -876,17 +1688,11 @@ footer span { color: var(--accent); }
     </p>
 
     <div class="hero-actions">
-      <a href="#contact" class="btn-primary">
-        📩 অর্ডার করুন
-      </a>
-      <a href="#projects" class="btn-ghost">
-        🔍 প্রজেক্ট দেখুন
-      </a>
+      <a href="#contact" class="btn-primary">📩 অর্ডার করুন</a>
+      <a href="#projects" class="btn-ghost">🔍 প্রজেক্ট দেখুন</a>
     </div>
 
-    <div class="hero-note">
-      ⚠️ প্রজেক্ট করতে হলে সরাসরি আমাদের ঠিকানায় আসতে হবে
-    </div>
+    <div class="hero-note">⚠️ প্রজেক্ট করতে হলে সরাসরি আমাদের ঠিকানায় আসতে হবে</div>
 
     <div class="hero-stats">
       <div class="stat-item">
@@ -935,29 +1741,15 @@ footer span { color: var(--accent); }
             <span class="featured-pill">🔔 Instant Alert</span>
             <span class="featured-pill">📱 Mobile Notification</span>
           </div>
-          <a href="https://t.me/jellyofficer" target="_blank" class="btn-featured">
-            💬 বিস্তারিত জানুন
-          </a>
+          <a href="https://t.me/jellyofficer" target="_blank" class="btn-featured">💬 বিস্তারিত জানুন</a>
         </div>
         <div class="featured-visual">
           <div class="feat-icon-wrap">🏥</div>
           <div class="feat-stat-grid">
-            <div class="feat-stat">
-              <div class="feat-stat-num">∞</div>
-              <div class="feat-stat-label">Range</div>
-            </div>
-            <div class="feat-stat">
-              <div class="feat-stat-num">&lt;1s</div>
-              <div class="feat-stat-label">Response</div>
-            </div>
-            <div class="feat-stat">
-              <div class="feat-stat-num">IoT</div>
-              <div class="feat-stat-label">Platform</div>
-            </div>
-            <div class="feat-stat">
-              <div class="feat-stat-num">24/7</div>
-              <div class="feat-stat-label">Uptime</div>
-            </div>
+            <div class="feat-stat"><div class="feat-stat-num">∞</div><div class="feat-stat-label">Range</div></div>
+            <div class="feat-stat"><div class="feat-stat-num">&lt;1s</div><div class="feat-stat-label">Response</div></div>
+            <div class="feat-stat"><div class="feat-stat-num">IoT</div><div class="feat-stat-label">Platform</div></div>
+            <div class="feat-stat"><div class="feat-stat-num">24/7</div><div class="feat-stat-label">Uptime</div></div>
           </div>
         </div>
       </div>
@@ -1019,215 +1811,30 @@ footer span { color: var(--accent); }
   <div class="youtube-info-box reveal">
     <div class="yt-info-icon">🎥</div>
     <div class="yt-info-content">
-      <p class="yt-info-main">
-        আপনি YouTube থেকে পছন্দ করে শুধু Demo দেখিয়ে আপনার Favorite Project করাতে পারেন।
-      </p>
-      <span class="yt-info-warning">
-        ⚠️ শর্ত: Project অবশ্যই Valid হতে হবে।
-      </span>
+      <p class="yt-info-main">আপনি YouTube থেকে পছন্দ করে শুধু Demo দেখিয়ে আপনার Favorite Project করাতে পারেন।</p>
+      <span class="yt-info-warning">⚠️ শর্ত: Project অবশ্যই Valid হতে হবে।</span>
     </div>
   </div>
 
   <div class="projects-grid">
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🦾</span><span class="proj-num">#01</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-robotics">Robotics</span></div>
-      <p class="proj-title">Human Following Robot</p>
-      <p class="proj-desc">IR Sensor ও Ultrasonic Sensor একসাথে ব্যবহার করে সামনের মানুষকে চিনে সে অনুযায়ী গতিপথ নির্ধারণ করে। Robot টি বাধা এড়িয়ে মানুষের পেছনে পেছনে চলে — Warehouse বা Luggage Carrying কাজে অত্যন্ত উপযোগী।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🔐</span><span class="proj-num">#02</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-security">Security</span></div>
-      <p class="proj-title">Fingerprint Door Lock System</p>
-      <p class="proj-desc">বায়োমেট্রিক Fingerprint Sensor ব্যবহার করে Registered ব্যক্তির আঙুলের ছাপ মিললে দরজা খুলে যায়। Password বা চাবির ঝামেলা নেই — অতিরিক্ত নিরাপত্তা এবং ব্যবহারে সহজ। False match হলে Buzzer বাজে।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">📟</span><span class="proj-num">#03</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-security">Security</span></div>
-      <p class="proj-title">RFID Door Lock System</p>
-      <p class="proj-desc">RFID Card বা Keychain Tap করলে দরজা খুলে যায়। যেকোনো Card Register করা যায় এবং যেকোনো সময় Revoke করা সম্ভব। Office, Hostel বা Laboratory এর জন্য আদর্শ — LCD Display তে Access Status দেখায়।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🏠</span><span class="proj-num">#04</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-iot">IoT</span></div>
-      <p class="proj-title">Home Automation System</p>
-      <p class="proj-desc">Bluetooth বা WiFi ব্যবহার করে স্মার্টফোন থেকে ঘরের আলো, ফ্যান ও বিভিন্ন যন্ত্রপাতি ON/OFF করা যায়। Custom App বা Voice Command দিয়েও নিয়ন্ত্রণ করার সুবিধা রয়েছে — বিদ্যুৎ সাশ্রয়ী এবং আধুনিক।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🚨</span><span class="proj-num">#05</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-safety">Safety</span></div>
-      <p class="proj-title">Emergency Room Alert System</p>
-      <p class="proj-desc">বিপদে পড়লে বা রোগীর অবস্থা সংকটজনক হলে স্বয়ংক্রিয়ভাবে Buzzer বাজে এবং LED Signal দেয়। Panic Button চাপলে তাৎক্ষণিকভাবে Nurse বা Security Room এ সতর্কবার্তা পাঠায় — Hospital ও বৃদ্ধাশ্রমে বিশেষভাবে কার্যকর।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🚗</span><span class="proj-num">#06</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-robotics">Robotics</span></div>
-      <p class="proj-title">Bluetooth Control Car</p>
-      <p class="proj-desc">স্মার্টফোনের Bluetooth App দিয়ে গাড়িটি সামনে, পেছনে, বাম ও ডানে নিয়ন্ত্রণ করা যায়। Speed নিয়ন্ত্রণের সুবিধাও আছে। Robotics Basics শেখার জন্য সেরা Starter Project — Hardware ও Coding দুটোই শেখা যায়।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 6–8</span><span class="best-pill">Class 9–10</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🔥</span><span class="proj-num">#07</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-robotics">Robotics</span><span class="proj-tag tag-safety">Safety</span></div>
-      <p class="proj-title">Fire Fighting Robot</p>
-      <p class="proj-desc">Flame Sensor দিয়ে আগুনের উৎস শনাক্ত করে Robot টি স্বয়ংক্রিয়ভাবে সেদিকে এগিয়ে যায় এবং Water Pump চালু করে আগুন নেভায়। দুর্গম বা বিপজ্জনক স্থানে মানুষের বদলে কাজ করতে পারে।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🌡️</span><span class="proj-num">#08</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-sensor">Sensor</span></div>
-      <p class="proj-title">Humidity & Temperature Monitor</p>
-      <p class="proj-desc">DHT11 বা DHT22 Sensor ব্যবহার করে Real-time তাপমাত্রা এবং আর্দ্রতা পরিমাপ করা হয়। LCD Display বা Serial Monitor এ ডেটা দেখা যায়। কৃষি, গুদামঘর বা Greenhouse পর্যবেক্ষণে অত্যন্ত উপকারী।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 6–8</span><span class="best-pill">Class 9–10</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">📶</span><span class="proj-num">#09</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-iot">IoT</span></div>
-      <p class="proj-title">Smart Home Automation System</p>
-      <p class="proj-desc">ESP32 Microcontroller ব্যবহার করে WiFi ও Mobile App এর মাধ্যমে ঘরের Light, Fan এবং AC দূর থেকে নিয়ন্ত্রণ করা যায়। যেকোনো জায়গা থেকে Internet এর মাধ্যমে ঘরের সব যন্ত্রপাতি পরিচালনা সম্ভব।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">💡</span><span class="proj-num">#10</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-sensor">Sensor</span><span class="proj-tag tag-automation">Automation</span></div>
-      <p class="proj-title">Automatic Light Control System</p>
-      <p class="proj-desc">LDR (Light Dependent Resistor) Sensor পরিবেশের আলো পরিমাপ করে — বাইরে অন্ধকার হলে ঘরের বাতি Automatic ON হয় এবং আলো এলে OFF হয়। বিদ্যুৎ অপচয় রোধ করে এবং Manual switch এর ঝামেলা দূর করে।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 6–8</span><span class="best-pill">Class 9–10</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🔑</span><span class="proj-num">#11</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-security">Security</span></div>
-      <p class="proj-title">Smart Door Lock System</p>
-      <p class="proj-desc">Keypad থেকে সঠিক Password দিলে বা Fingerprint Match হলে Servo Motor দরজা খুলে দেয়। ভুল চেষ্টা করলে Buzzer বাজে এবং নির্দিষ্ট সংখ্যক ভুলের পর System Lock হয়ে যায় — অত্যন্ত নিরাপদ।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🌀</span><span class="proj-num">#12</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-automation">Automation</span><span class="proj-tag tag-sensor">Sensor</span></div>
-      <p class="proj-title">Smart Fan Speed Controller</p>
-      <p class="proj-desc">Temperature Sensor দিয়ে ঘরের তাপমাত্রা মাপা হয় — তাপমাত্রা বাড়লে ফ্যানের গতি PWM Signal দিয়ে স্বয়ংক্রিয়ভাবে বাড়ে, ঠান্ডা হলে কমে। বিদ্যুৎ সাশ্রয় করে এবং Manual Fan Regulator এর বিকল্প।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🚪</span><span class="proj-num">#13</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-automation">Automation</span></div>
-      <p class="proj-title">Automatic Door Opener</p>
-      <p class="proj-desc">PIR Sensor মানুষের উপস্থিতি ও তাপমাত্রার পার্থক্য বুঝে দরজা Automatic খুলে দেয়। হাত না লাগিয়ে দরজা খোলা যায় — Hospital, Restaurant বা Shopping Mall এর জন্য আদর্শ এবং Hygiene বজায় থাকে।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 8–10</span><span class="best-pill">HSC</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">❤️</span><span class="proj-num">#14</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-health">Health</span><span class="proj-tag tag-sensor">Sensor</span></div>
-      <p class="proj-title">Heart Rate Monitor</p>
-      <p class="proj-desc">Pulse Sensor আঙুলে লাগিয়ে হৃৎস্পন্দনের হার (BPM) নির্ণয় করা হয়। Real-time Data OLED বা LCD Display তে দেখা যায়। BPM স্বাভাবিকের বাইরে গেলে LED বা Buzzer দিয়ে সতর্কতা দেওয়া হয়।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🏥</span><span class="proj-num">#15</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-health">Health</span><span class="proj-tag tag-iot">IoT</span></div>
-      <p class="proj-title">Patient Health Monitoring System</p>
-      <p class="proj-desc">Temperature, Heartbeat এবং SpO2 (রক্তে অক্সিজেন মাত্রা) একসাথে Measure করে Real-time ডেটা Doctor বা Nurse এর কাছে পাঠানো হয়। ICU বা Remote Healthcare এ রোগীর অবস্থা সার্বক্ষণিক নজরদারির জন্য অপরিহার্য।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">💨</span><span class="proj-num">#16</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-safety">Safety</span><span class="proj-tag tag-sensor">Sensor</span></div>
-      <p class="proj-title">Gas Leakage Detection System</p>
-      <p class="proj-desc">MQ-2 Sensor দিয়ে বাতাসে Gas এর পরিমাণ পরিমাপ করা হয় — নির্দিষ্ট মাত্রার বেশি হলে তাৎক্ষণিকভাবে Alarm বাজে এবং GSM Module দিয়ে Mobile এ SMS Alert পাঠানো হয়। রান্নাঘর বা ল্যাবরেটরিতে দুর্ঘটনা রোধে কার্যকর।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 8–10</span><span class="best-pill">HSC</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🔥</span><span class="proj-num">#17</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-safety">Safety</span></div>
-      <p class="proj-title">Fire Detection & Alert System</p>
-      <p class="proj-desc">Flame Sensor এবং Smoke Sensor একসাথে কাজ করে আগুনের উপস্থিতি নিশ্চিত করে। Fire Detect হলে Siren বাজে, Red LED জ্বলে এবং GSM Module দিয়ে নির্দিষ্ট নম্বরে SMS পাঠায়। False Alarm কমাতে দুই Sensor একসাথে ব্যবহার।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">Class 8–10</span><span class="best-pill">HSC</span></div>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="proj-header"><span class="proj-icon">🪪</span><span class="proj-num">#18</span></div>
-      <div class="proj-tags"><span class="proj-tag tag-security">Security</span></div>
-      <p class="proj-title">RFID Based Attendance System</p>
-      <p class="proj-desc">RFID Card বা Tag Scan করলে Student বা Employee এর নাম এবং সময় Automatically Record হয়। ডেটা SD Card বা Computer এ সংরক্ষণ করা যায়। Manual Attendance Register এর ঝামেলা বন্ধ এবং ভুল হওয়ার সুযোগ নেই।</p>
-      <div class="proj-best-for">
-        <strong>🎓 Best For:</strong>
-        <div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div>
-      </div>
-    </div>
-
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🦾</span><span class="proj-num">#01</span></div><div class="proj-tags"><span class="proj-tag tag-robotics">Robotics</span></div><p class="proj-title">Human Following Robot</p><p class="proj-desc">IR Sensor ও Ultrasonic Sensor একসাথে ব্যবহার করে সামনের মানুষকে চিনে সে অনুযায়ী গতিপথ নির্ধারণ করে। Robot টি বাধা এড়িয়ে মানুষের পেছনে পেছনে চলে — Warehouse বা Luggage Carrying কাজে অত্যন্ত উপযোগী।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🔐</span><span class="proj-num">#02</span></div><div class="proj-tags"><span class="proj-tag tag-security">Security</span></div><p class="proj-title">Fingerprint Door Lock System</p><p class="proj-desc">বায়োমেট্রিক Fingerprint Sensor ব্যবহার করে Registered ব্যক্তির আঙুলের ছাপ মিললে দরজা খুলে যায়। Password বা চাবির ঝামেলা নেই — অতিরিক্ত নিরাপত্তা এবং ব্যবহারে সহজ।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">📟</span><span class="proj-num">#03</span></div><div class="proj-tags"><span class="proj-tag tag-security">Security</span></div><p class="proj-title">RFID Door Lock System</p><p class="proj-desc">RFID Card বা Keychain Tap করলে দরজা খুলে যায়। যেকোনো Card Register করা যায় এবং যেকোনো সময় Revoke করা সম্ভব। Office, Hostel বা Laboratory এর জন্য আদর্শ।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🏠</span><span class="proj-num">#04</span></div><div class="proj-tags"><span class="proj-tag tag-iot">IoT</span></div><p class="proj-title">Home Automation System</p><p class="proj-desc">Bluetooth বা WiFi ব্যবহার করে স্মার্টফোন থেকে ঘরের আলো, ফ্যান ও বিভিন্ন যন্ত্রপাতি ON/OFF করা যায়। Custom App বা Voice Command দিয়েও নিয়ন্ত্রণ করার সুবিধা রয়েছে।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🚨</span><span class="proj-num">#05</span></div><div class="proj-tags"><span class="proj-tag tag-safety">Safety</span></div><p class="proj-title">Emergency Room Alert System</p><p class="proj-desc">বিপদে পড়লে বা রোগীর অবস্থা সংকটজনক হলে স্বয়ংক্রিয়ভাবে Buzzer বাজে এবং LED Signal দেয়। Panic Button চাপলে তাৎক্ষণিকভাবে Nurse বা Security Room এ সতর্কবার্তা পাঠায়।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🚗</span><span class="proj-num">#06</span></div><div class="proj-tags"><span class="proj-tag tag-robotics">Robotics</span></div><p class="proj-title">Bluetooth Control Car</p><p class="proj-desc">স্মার্টফোনের Bluetooth App দিয়ে গাড়িটি সামনে, পেছনে, বাম ও ডানে নিয়ন্ত্রণ করা যায়। Robotics Basics শেখার জন্য সেরা Starter Project।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 6–8</span><span class="best-pill">Class 9–10</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🔥</span><span class="proj-num">#07</span></div><div class="proj-tags"><span class="proj-tag tag-robotics">Robotics</span><span class="proj-tag tag-safety">Safety</span></div><p class="proj-title">Fire Fighting Robot</p><p class="proj-desc">Flame Sensor দিয়ে আগুনের উৎস শনাক্ত করে Robot টি স্বয়ংক্রিয়ভাবে সেদিকে এগিয়ে যায় এবং Water Pump চালু করে আগুন নেভায়।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🌡️</span><span class="proj-num">#08</span></div><div class="proj-tags"><span class="proj-tag tag-sensor">Sensor</span></div><p class="proj-title">Humidity & Temperature Monitor</p><p class="proj-desc">DHT11 বা DHT22 Sensor ব্যবহার করে Real-time তাপমাত্রা এবং আর্দ্রতা পরিমাপ করা হয়। কৃষি, গুদামঘর বা Greenhouse পর্যবেক্ষণে অত্যন্ত উপকারী।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 6–8</span><span class="best-pill">Class 9–10</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">📶</span><span class="proj-num">#09</span></div><div class="proj-tags"><span class="proj-tag tag-iot">IoT</span></div><p class="proj-title">Smart Home Automation System</p><p class="proj-desc">ESP32 Microcontroller ব্যবহার করে WiFi ও Mobile App এর মাধ্যমে ঘরের Light, Fan এবং AC দূর থেকে নিয়ন্ত্রণ করা যায়।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">💡</span><span class="proj-num">#10</span></div><div class="proj-tags"><span class="proj-tag tag-sensor">Sensor</span><span class="proj-tag tag-automation">Automation</span></div><p class="proj-title">Automatic Light Control System</p><p class="proj-desc">LDR Sensor পরিবেশের আলো পরিমাপ করে — বাইরে অন্ধকার হলে ঘরের বাতি Automatic ON হয় এবং আলো এলে OFF হয়।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 6–8</span><span class="best-pill">Class 9–10</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🔑</span><span class="proj-num">#11</span></div><div class="proj-tags"><span class="proj-tag tag-security">Security</span></div><p class="proj-title">Smart Door Lock System</p><p class="proj-desc">Keypad থেকে সঠিক Password দিলে বা Fingerprint Match হলে Servo Motor দরজা খুলে দেয়। ভুল চেষ্টা করলে Buzzer বাজে।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🌀</span><span class="proj-num">#12</span></div><div class="proj-tags"><span class="proj-tag tag-automation">Automation</span><span class="proj-tag tag-sensor">Sensor</span></div><p class="proj-title">Smart Fan Speed Controller</p><p class="proj-desc">Temperature Sensor দিয়ে ঘরের তাপমাত্রা মাপা হয় — তাপমাত্রা বাড়লে ফ্যানের গতি PWM Signal দিয়ে স্বয়ংক্রিয়ভাবে বাড়ে।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🚪</span><span class="proj-num">#13</span></div><div class="proj-tags"><span class="proj-tag tag-automation">Automation</span></div><p class="proj-title">Automatic Door Opener</p><p class="proj-desc">PIR Sensor মানুষের উপস্থিতি বুঝে দরজা Automatic খুলে দেয়। Hospital, Restaurant বা Shopping Mall এর জন্য আদর্শ।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 8–10</span><span class="best-pill">HSC</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">❤️</span><span class="proj-num">#14</span></div><div class="proj-tags"><span class="proj-tag tag-health">Health</span><span class="proj-tag tag-sensor">Sensor</span></div><p class="proj-title">Heart Rate Monitor</p><p class="proj-desc">Pulse Sensor আঙুলে লাগিয়ে হৃৎস্পন্দনের হার (BPM) নির্ণয় করা হয়। BPM স্বাভাবিকের বাইরে গেলে LED বা Buzzer দিয়ে সতর্কতা দেওয়া হয়।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 9–10</span><span class="best-pill">HSC</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🏥</span><span class="proj-num">#15</span></div><div class="proj-tags"><span class="proj-tag tag-health">Health</span><span class="proj-tag tag-iot">IoT</span></div><p class="proj-title">Patient Health Monitoring System</p><p class="proj-desc">Temperature, Heartbeat এবং SpO2 একসাথে Measure করে Real-time ডেটা Doctor বা Nurse এর কাছে পাঠানো হয়।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">💨</span><span class="proj-num">#16</span></div><div class="proj-tags"><span class="proj-tag tag-safety">Safety</span><span class="proj-tag tag-sensor">Sensor</span></div><p class="proj-title">Gas Leakage Detection System</p><p class="proj-desc">MQ-2 Sensor দিয়ে বাতাসে Gas এর পরিমাণ পরিমাপ করা হয় — নির্দিষ্ট মাত্রার বেশি হলে Alarm বাজে এবং SMS Alert পাঠানো হয়।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 8–10</span><span class="best-pill">HSC</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🔥</span><span class="proj-num">#17</span></div><div class="proj-tags"><span class="proj-tag tag-safety">Safety</span></div><p class="proj-title">Fire Detection & Alert System</p><p class="proj-desc">Flame Sensor এবং Smoke Sensor একসাথে কাজ করে আগুনের উপস্থিতি নিশ্চিত করে। Fire Detect হলে Siren বাজে এবং SMS পাঠায়।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">Class 8–10</span><span class="best-pill">HSC</span></div></div></div>
+    <div class="project-card"><div class="proj-header"><span class="proj-icon">🪪</span><span class="proj-num">#18</span></div><div class="proj-tags"><span class="proj-tag tag-security">Security</span></div><p class="proj-title">RFID Based Attendance System</p><p class="proj-desc">RFID Card বা Tag Scan করলে Student বা Employee এর নাম এবং সময় Automatically Record হয়। ডেটা SD Card বা Computer এ সংরক্ষণ করা যায়।</p><div class="proj-best-for"><strong>🎓 Best For:</strong><div class="best-for-pills"><span class="best-pill">HSC</span><span class="best-pill">CUET</span></div></div></div>
   </div>
 </section>
 
@@ -1258,253 +1865,26 @@ footer span { color: var(--accent); }
   </div>
 
   <div class="sci-grid" id="sciGrid">
-
-    <div class="sci-card" data-cat="chemistry" data-level="school hsc">
-      <div class="sci-card-top"><span class="sci-icon">💨</span><span class="sci-serial">#C-01</span></div>
-      <div class="sci-tags">
-        <span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span>
-        <span class="sci-rec-badge">⭐ Recommended</span>
-      </div>
-      <p class="sci-title">Gas Leak Detection System (MQ2)</p>
-      <p class="sci-summary">MQ-2 Sensor বাতাসে LPG, Methane, Smoke এবং Hydrogen গ্যাসের উপস্থিতি শনাক্ত করে। নির্দিষ্ট মাত্রার বেশি গ্যাস পাওয়া গেলে সাথে সাথে Buzzer Alarm বাজে এবং LED সতর্কসংকেত দেয়। রান্নাঘর বা Lab এ গ্যাস সিলিন্ডার লিক হলে দুর্ঘটনা ঘটার আগেই সতর্ক করে দেয় — এটি একটি Practical এবং জীবন রক্ষাকারী প্রজেক্ট।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="chemistry" data-level="hsc honours">
-      <div class="sci-card-top"><span class="sci-icon">🌫️</span><span class="sci-serial">#C-02</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div>
-      <p class="sci-title">Air Quality Monitoring System (MQ135)</p>
-      <p class="sci-summary">MQ-135 Sensor ব্যবহার করে বাতাসে CO₂, NH₃, Benzene ও অন্যান্য ক্ষতিকর গ্যাসের পরিমাণ পরিমাপ করা হয়। Air Quality Index (AQI) অনুযায়ী বায়ু দূষণের মাত্রা LCD তে দেখায় এবং মাত্রা বেশি হলে Alert দেয়। শিল্পাঞ্চল বা শহরের বায়ু মান পর্যবেক্ষণে কার্যকর।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="chemistry" data-level="hsc cuet">
-      <div class="sci-card-top"><span class="sci-icon">💧</span><span class="sci-serial">#C-03</span></div>
-      <div class="sci-tags">
-        <span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span>
-        <span class="sci-rec-badge">⭐ Recommended</span>
-      </div>
-      <p class="sci-title">Water Quality Monitor (pH + TDS)</p>
-      <p class="sci-summary">pH Sensor এবং TDS Sensor একসাথে ব্যবহার করে পানির অম্লতা ও দ্রবীভূত কঠিন পদার্থের পরিমাণ মাপা হয়। পানি পানযোগ্য কিনা বা কৃষিকাজে ব্যবহারযোগ্য কিনা তা নির্ণয় করা যায়। আর্সেনিক ও দূষিত পানির সমস্যা মোকাবেলায় অত্যন্ত গুরুত্বপূর্ণ।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="chemistry" data-level="cuet">
-      <div class="sci-card-top"><span class="sci-icon">🧪</span><span class="sci-serial">#C-04</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div>
-      <p class="sci-title">Smart Lab Safety Alarm System</p>
-      <p class="sci-summary">Gas Sensor, Smoke Sensor এবং Temperature Sensor একসাথে ব্যবহার করে ল্যাবরেটরির পরিবেশ সার্বক্ষণিক পর্যবেক্ষণ করা হয়। গ্যাস লিক, আগুন বা অস্বাভাবিক তাপমাত্রার যেকোনো একটি সনাক্ত হলে Alarm বাজে এবং Exhaust Fan চালু হয়।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="chemistry" data-level="school hsc">
-      <div class="sci-card-top"><span class="sci-icon">🍺</span><span class="sci-serial">#C-05</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div>
-      <p class="sci-title">Alcohol Detection System</p>
-      <p class="sci-summary">MQ-3 Sensor শ্বাস-প্রশ্বাসে অ্যালকোহলের পরিমাণ শনাক্ত করে। নির্দিষ্ট মাত্রার বেশি Alcohol পাওয়া গেলে Buzzer বাজে এবং Red LED জ্বলে। Drunk Driving রোধে গাড়িতে বা Security Checkpoint এ ব্যবহার করা যায় — Road Safety এর জন্য গুরুত্বপূর্ণ।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="chemistry" data-level="school">
-      <div class="sci-card-top"><span class="sci-icon">🚬</span><span class="sci-serial">#C-06</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div>
-      <p class="sci-title">Smart Smoke Detection System</p>
-      <p class="sci-summary">MQ-2 Sensor বাতাসে ধোঁয়ার কণা শনাক্ত করে। ধোঁয়ার ঘনত্ব বিপদজনক মাত্রায় পৌঁছালে Siren বাজে। ঘরে আগুন লাগার প্রথম সতর্কসংকেত হিসেবে কাজ করে — সাশ্রয়ী মূল্যে একটি কার্যকর Fire Safety System।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="chemistry" data-level="hsc honours">
-      <div class="sci-card-top"><span class="sci-icon">🌊</span><span class="sci-serial">#C-07</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div>
-      <p class="sci-title">Water Pollution Alert System</p>
-      <p class="sci-summary">Turbidity Sensor ও pH Sensor দিয়ে পানির ঘোলাত্ব ও রাসায়নিক মান পরিমাপ করা হয়। দূষণের মাত্রা নির্দিষ্ট সীমা অতিক্রম করলে Alert দেওয়া হয় এবং ডেটা Log করা হয়। নদী বা খালের পানির মান পর্যবেক্ষণ করে দূষণের উৎস চিহ্নিত করতে সহায়তা করে।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div>
-      </div>
-    </div>
-
-    <!-- BIOLOGY -->
-    <div class="sci-card" data-cat="biology" data-level="school">
-      <div class="sci-card-top"><span class="sci-icon">🌱</span><span class="sci-serial">#B-01</span></div>
-      <div class="sci-tags">
-        <span class="sci-cat-tag tag-biology">🧬 Biology</span>
-        <span class="sci-rec-badge">⭐ Recommended</span>
-      </div>
-      <p class="sci-title">Smart Plant Watering System</p>
-      <p class="sci-summary">Soil Moisture Sensor মাটির আর্দ্রতা পরিমাপ করে — মাটি শুকিয়ে গেলে Water Pump চালু হয়ে Automatic পানি দেয় এবং ভেজা হলে বন্ধ হয়ে যায়। গাছে বেশি বা কম পানি দেওয়ার সমস্যা দূর হয় এবং অনুপস্থিতিতেও গাছের যত্ন নেওয়া সম্ভব।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="biology" data-level="school hsc">
-      <div class="sci-card-top"><span class="sci-icon">💓</span><span class="sci-serial">#B-02</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span></div>
-      <p class="sci-title">Heart Rate Monitor</p>
-      <p class="sci-summary">Pulse Sensor আঙুলে রক্ত প্রবাহের ছন্দ পরিমাপ করে Heartbeat Per Minute (BPM) নির্ণয় করে। OLED Display তে Real-time BPM দেখা যায়। স্বাভাবিক রেঞ্জ (60–100 BPM) এর বাইরে গেলে Alarm দেয়।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="biology" data-level="hsc cuet">
-      <div class="sci-card-top"><span class="sci-icon">🌿</span><span class="sci-serial">#B-03</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span></div>
-      <p class="sci-title">Smart Greenhouse Monitoring</p>
-      <p class="sci-summary">DHT22 Sensor দিয়ে Greenhouse এর ভেতরের তাপমাত্রা ও আর্দ্রতা পর্যবেক্ষণ করা হয়। তাপমাত্রা বেশি হলে Exhaust Fan চালু হয়, মাটি শুকালে Irrigation চালু হয়। গাছের বৃদ্ধির জন্য আদর্শ পরিবেশ স্বয়ংক্রিয়ভাবে বজায় রাখে।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="biology" data-level="school">
-      <div class="sci-card-top"><span class="sci-icon">🌡️</span><span class="sci-serial">#B-04</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span></div>
-      <p class="sci-title">Body Temperature Monitor</p>
-      <p class="sci-summary">MLX90614 Infrared Sensor স্পর্শ না করেও শরীরের তাপমাত্রা পরিমাপ করে। জ্বর আছে কিনা তাৎক্ষণিকভাবে LCD Display তে দেখা যায়। Non-contact হওয়ায় Infection ছড়ানোর ভয় নেই — COVID-19 বা অন্য সংক্রামক রোগের সময় অত্যন্ত উপযোগী।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="biology" data-level="school hsc">
-      <div class="sci-card-top"><span class="sci-icon">🐾</span><span class="sci-serial">#B-05</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span></div>
-      <p class="sci-title">Automatic Pet Feeder</p>
-      <p class="sci-summary">RTC (Real Time Clock) Module ব্যবহার করে নির্দিষ্ট সময়সূচি অনুযায়ী Servo Motor চালু হয়ে Pet এর Food Bowl এ খাবার দেয়। বাসায় না থাকলেও পোষা প্রাণীর খাওয়ার সময় মিস হয় না। LCD তে পরবর্তী Feeding Time দেখায়।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="biology" data-level="cuet">
-      <div class="sci-card-top"><span class="sci-icon">⌚</span><span class="sci-serial">#B-06</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span><span class="sci-cat-tag tag-iot">IoT</span></div>
-      <p class="sci-title">Smart Health Monitoring Band (IoT)</p>
-      <p class="sci-summary">Wearable Band এ Heart Rate Sensor, Temperature Sensor এবং Accelerometer একসাথে থাকে। সব Data Bluetooth বা WiFi দিয়ে Mobile App এ Real-time দেখা যায়। হঠাৎ অসুস্থ হলে বা অস্বাভাবিক Data পেলে Doctor বা পরিবারকে Alert পাঠায়।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div>
-      </div>
-    </div>
-
-    <!-- PHYSICS -->
-    <div class="sci-card" data-cat="physics" data-level="school">
-      <div class="sci-card-top"><span class="sci-icon">📏</span><span class="sci-serial">#P-01</span></div>
-      <div class="sci-tags">
-        <span class="sci-cat-tag tag-physics">⚡ Physics</span>
-        <span class="sci-rec-badge">⭐ Recommended</span>
-      </div>
-      <p class="sci-title">Distance Measurement System</p>
-      <p class="sci-summary">HC-SR04 Ultrasonic Sensor দিয়ে Sound Wave পাঠিয়ে এবং Echo ফিরে আসার সময় পরিমাপ করে বস্তুর দূরত্ব নির্ণয় করা হয়। Centimeter এবং Meter উভয়ে Display তে দেখায়। Physics এর তরঙ্গ ও শব্দের গতি বোঝার জন্য চমৎকার Practical Project।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="physics" data-level="school">
-      <div class="sci-card-top"><span class="sci-icon">🚶</span><span class="sci-serial">#P-02</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div>
-      <p class="sci-title">Motion Detection System (PIR)</p>
-      <p class="sci-summary">PIR Sensor মানুষ বা প্রাণীর শরীর থেকে নির্গত Infrared Radiation পরিবর্তন শনাক্ত করে গতি বোঝে। কোনো কিছু নড়াচড়া করলে Alarm বাজে এবং LED জ্বলে। Physics এর Infrared আলোর ধারণা হাতে-কলমে শেখার পাশাপাশি Security System তৈরির দারুণ সুযোগ।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="physics" data-level="hsc">
-      <div class="sci-card-top"><span class="sci-icon">🏎️</span><span class="sci-serial">#P-03</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div>
-      <p class="sci-title">Speed Measurement System</p>
-      <p class="sci-summary">দুটি IR Sensor নির্দিষ্ট দূরত্বে স্থাপন করে বস্তু কতক্ষণে পার হলো তা পরিমাপ করে গতিবেগ নির্ণয় করা হয় (v = d/t)। Physics এর গতিবিদ্যার সূত্র হাতে-কলমে প্রমাণ করা যায়। Road Safety এ Speed Gun এর মতো কাজ করে।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="physics" data-level="school">
-      <div class="sci-card-top"><span class="sci-icon">🌡️</span><span class="sci-serial">#P-04</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div>
-      <p class="sci-title">Digital Thermometer</p>
-      <p class="sci-summary">DS18B20 বা LM35 Temperature Sensor ব্যবহার করে পরিবেশের তাপমাত্রা অত্যন্ত নির্ভুলভাবে পরিমাপ করা হয়। Celsius ও Fahrenheit উভয়ে Display করে। Physics এর তাপ ও তাপমাত্রার ধারণা এবং Sensor Calibration সম্পর্কে ব্যাবহারিক জ্ঞান অর্জনের সুযোগ।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="physics" data-level="hsc cuet">
-      <div class="sci-card-top"><span class="sci-icon">☀️</span><span class="sci-serial">#P-05</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div>
-      <p class="sci-title">Solar Tracking System</p>
-      <p class="sci-summary">দুটি LDR Sensor সূর্যের অবস্থান বুঝে Servo Motor দিয়ে Solar Panel কে সূর্যের দিকে ঘুরিয়ে দেয়। সারাদিন সূর্যের সাথে সাথে Panel ঘুরে সর্বোচ্চ আলো সংগ্রহ করে — Fixed Panel এর চেয়ে ৩০–৪০% বেশি বিদ্যুৎ উৎপন্ন করতে পারে।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="physics" data-level="school hsc">
-      <div class="sci-card-top"><span class="sci-icon">🏙️</span><span class="sci-serial">#P-06</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div>
-      <p class="sci-title">Smart Street Light System</p>
-      <p class="sci-summary">LDR Sensor দিয়ে পরিবেশের আলো পরিমাপ করা হয় — সন্ধ্যায় অন্ধকার হলে Street Light Automatic ON হয় এবং ভোরে OFF হয়। PIR Sensor যুক্ত করলে রাস্তায় কেউ না থাকলে Light Dim হয় — বিদ্যুৎ সাশ্রয়ী Smart City Solution।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div>
-      </div>
-    </div>
-
-    <div class="sci-card" data-cat="physics" data-level="hsc honours cuet">
-      <div class="sci-card-top"><span class="sci-icon">🅿️</span><span class="sci-serial">#P-07</span></div>
-      <div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span><span class="sci-cat-tag tag-iot">IoT</span></div>
-      <p class="sci-title">Smart Car Parking Slot System</p>
-      <p class="sci-summary">প্রতিটি Parking Slot এ Ultrasonic বা IR Sensor লাগানো থাকে — গাড়ি থাকলে "Full", না থাকলে "Empty" দেখায়। LCD Display এ বা Mobile App এ খালি Slot এর সংখ্যা Real-time দেখা যায়। Shopping Mall বা Hospital Parking এ সময় ও জ্বালানি সাশ্রয় করে।</p>
-      <div class="sci-bestfor">
-        <div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div>
-        <div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div>
-        <div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div>
-      </div>
-    </div>
-
+    <div class="sci-card" data-cat="chemistry" data-level="school hsc"><div class="sci-card-top"><span class="sci-icon">💨</span><span class="sci-serial">#C-01</span></div><div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span><span class="sci-rec-badge">⭐ Recommended</span></div><p class="sci-title">Gas Leak Detection System (MQ2)</p><p class="sci-summary">MQ-2 Sensor বাতাসে LPG, Methane, Smoke এবং Hydrogen গ্যাসের উপস্থিতি শনাক্ত করে। নির্দিষ্ট মাত্রার বেশি গ্যাস পাওয়া গেলে সাথে সাথে Buzzer Alarm বাজে এবং LED সতর্কসংকেত দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
+    <div class="sci-card" data-cat="chemistry" data-level="hsc honours"><div class="sci-card-top"><span class="sci-icon">🌫️</span><span class="sci-serial">#C-02</span></div><div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div><p class="sci-title">Air Quality Monitoring System (MQ135)</p><p class="sci-summary">MQ-135 Sensor ব্যবহার করে বাতাসে CO₂, NH₃, Benzene ও অন্যান্য ক্ষতিকর গ্যাসের পরিমাণ পরিমাপ করা হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
+    <div class="sci-card" data-cat="chemistry" data-level="hsc cuet"><div class="sci-card-top"><span class="sci-icon">💧</span><span class="sci-serial">#C-03</span></div><div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span><span class="sci-rec-badge">⭐ Recommended</span></div><p class="sci-title">Water Quality Monitor (pH + TDS)</p><p class="sci-summary">pH Sensor এবং TDS Sensor একসাথে ব্যবহার করে পানির অম্লতা ও দ্রবীভূত কঠিন পদার্থের পরিমাণ মাপা হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+    <div class="sci-card" data-cat="chemistry" data-level="cuet"><div class="sci-card-top"><span class="sci-icon">🧪</span><span class="sci-serial">#C-04</span></div><div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div><p class="sci-title">Smart Lab Safety Alarm System</p><p class="sci-summary">Gas Sensor, Smoke Sensor এবং Temperature Sensor একসাথে ব্যবহার করে ল্যাবরেটরির পরিবেশ সার্বক্ষণিক পর্যবেক্ষণ করা হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+    <div class="sci-card" data-cat="chemistry" data-level="school hsc"><div class="sci-card-top"><span class="sci-icon">🍺</span><span class="sci-serial">#C-05</span></div><div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div><p class="sci-title">Alcohol Detection System</p><p class="sci-summary">MQ-3 Sensor শ্বাস-প্রশ্বাসে অ্যালকোহলের পরিমাণ শনাক্ত করে। নির্দিষ্ট মাত্রার বেশি Alcohol পাওয়া গেলে Buzzer বাজে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
+    <div class="sci-card" data-cat="chemistry" data-level="school"><div class="sci-card-top"><span class="sci-icon">🚬</span><span class="sci-serial">#C-06</span></div><div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div><p class="sci-title">Smart Smoke Detection System</p><p class="sci-summary">MQ-2 Sensor বাতাসে ধোঁয়ার কণা শনাক্ত করে। ধোঁয়ার ঘনত্ব বিপদজনক মাত্রায় পৌঁছালে Siren বাজে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+    <div class="sci-card" data-cat="chemistry" data-level="hsc honours"><div class="sci-card-top"><span class="sci-icon">🌊</span><span class="sci-serial">#C-07</span></div><div class="sci-tags"><span class="sci-cat-tag tag-chemistry">⚛️ Chemistry</span></div><p class="sci-title">Water Pollution Alert System</p><p class="sci-summary">Turbidity Sensor ও pH Sensor দিয়ে পানির ঘোলাত্ব ও রাসায়নিক মান পরিমাপ করা হয়। দূষণের মাত্রা সীমা অতিক্রম করলে Alert দেওয়া হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
+    <div class="sci-card" data-cat="biology" data-level="school"><div class="sci-card-top"><span class="sci-icon">🌱</span><span class="sci-serial">#B-01</span></div><div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span><span class="sci-rec-badge">⭐ Recommended</span></div><p class="sci-title">Smart Plant Watering System</p><p class="sci-summary">Soil Moisture Sensor মাটির আর্দ্রতা পরিমাপ করে — মাটি শুকিয়ে গেলে Water Pump চালু হয়ে Automatic পানি দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+    <div class="sci-card" data-cat="biology" data-level="school hsc"><div class="sci-card-top"><span class="sci-icon">💓</span><span class="sci-serial">#B-02</span></div><div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span></div><p class="sci-title">Heart Rate Monitor</p><p class="sci-summary">Pulse Sensor আঙুলে রক্ত প্রবাহের ছন্দ পরিমাপ করে Heartbeat Per Minute (BPM) নির্ণয় করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
+    <div class="sci-card" data-cat="biology" data-level="hsc cuet"><div class="sci-card-top"><span class="sci-icon">🌿</span><span class="sci-serial">#B-03</span></div><div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span></div><p class="sci-title">Smart Greenhouse Monitoring</p><p class="sci-summary">DHT22 Sensor দিয়ে Greenhouse এর ভেতরের তাপমাত্রা ও আর্দ্রতা পর্যবেক্ষণ করা হয়। গাছের বৃদ্ধির জন্য আদর্শ পরিবেশ বজায় রাখে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+    <div class="sci-card" data-cat="biology" data-level="school"><div class="sci-card-top"><span class="sci-icon">🌡️</span><span class="sci-serial">#B-04</span></div><div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span></div><p class="sci-title">Body Temperature Monitor</p><p class="sci-summary">MLX90614 Infrared Sensor স্পর্শ না করেও শরীরের তাপমাত্রা পরিমাপ করে। Non-contact হওয়ায় Infection ছড়ানোর ভয় নেই।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+    <div class="sci-card" data-cat="biology" data-level="school hsc"><div class="sci-card-top"><span class="sci-icon">🐾</span><span class="sci-serial">#B-05</span></div><div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span></div><p class="sci-title">Automatic Pet Feeder</p><p class="sci-summary">RTC Module ব্যবহার করে নির্দিষ্ট সময়সূচি অনুযায়ী Servo Motor চালু হয়ে Pet এর Food Bowl এ খাবার দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
+    <div class="sci-card" data-cat="biology" data-level="cuet"><div class="sci-card-top"><span class="sci-icon">⌚</span><span class="sci-serial">#B-06</span></div><div class="sci-tags"><span class="sci-cat-tag tag-biology">🧬 Biology</span><span class="sci-cat-tag tag-iot">IoT</span></div><p class="sci-title">Smart Health Monitoring Band (IoT)</p><p class="sci-summary">Wearable Band এ Heart Rate, Temperature এবং Accelerometer একসাথে থাকে। সব Data Bluetooth বা WiFi দিয়ে Mobile App এ দেখা যায়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+    <div class="sci-card" data-cat="physics" data-level="school"><div class="sci-card-top"><span class="sci-icon">📏</span><span class="sci-serial">#P-01</span></div><div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span><span class="sci-rec-badge">⭐ Recommended</span></div><p class="sci-title">Distance Measurement System</p><p class="sci-summary">HC-SR04 Ultrasonic Sensor দিয়ে Sound Wave পাঠিয়ে বস্তুর দূরত্ব নির্ণয় করা হয়। Physics এর তরঙ্গ ও শব্দের গতি বোঝার চমৎকার Project।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+    <div class="sci-card" data-cat="physics" data-level="school"><div class="sci-card-top"><span class="sci-icon">🚶</span><span class="sci-serial">#P-02</span></div><div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div><p class="sci-title">Motion Detection System (PIR)</p><p class="sci-summary">PIR Sensor মানুষ বা প্রাণীর শরীর থেকে নির্গত Infrared Radiation পরিবর্তন শনাক্ত করে গতি বোঝে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+    <div class="sci-card" data-cat="physics" data-level="hsc"><div class="sci-card-top"><span class="sci-icon">🏎️</span><span class="sci-serial">#P-03</span></div><div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div><p class="sci-title">Speed Measurement System</p><p class="sci-summary">দুটি IR Sensor নির্দিষ্ট দূরত্বে স্থাপন করে গতিবেগ নির্ণয় করা হয় (v = d/t)। Physics এর গতিবিদ্যার সূত্র হাতে-কলমে প্রমাণ করা যায়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div></div></div>
+    <div class="sci-card" data-cat="physics" data-level="school"><div class="sci-card-top"><span class="sci-icon">🌡️</span><span class="sci-serial">#P-04</span></div><div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div><p class="sci-title">Digital Thermometer</p><p class="sci-summary">DS18B20 বা LM35 Temperature Sensor ব্যবহার করে পরিবেশের তাপমাত্রা অত্যন্ত নির্ভুলভাবে পরিমাপ করা হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+    <div class="sci-card" data-cat="physics" data-level="hsc cuet"><div class="sci-card-top"><span class="sci-icon">☀️</span><span class="sci-serial">#P-05</span></div><div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div><p class="sci-title">Solar Tracking System</p><p class="sci-summary">দুটি LDR Sensor সূর্যের অবস্থান বুঝে Servo Motor দিয়ে Solar Panel কে সূর্যের দিকে ঘুরিয়ে দেয়। Fixed Panel এর চেয়ে ৩০–৪০% বেশি বিদ্যুৎ উৎপন্ন করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+    <div class="sci-card" data-cat="physics" data-level="school hsc"><div class="sci-card-top"><span class="sci-icon">🏙️</span><span class="sci-serial">#P-06</span></div><div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span></div><p class="sci-title">Smart Street Light System</p><p class="sci-summary">LDR Sensor দিয়ে পরিবেশের আলো পরিমাপ করা হয় — সন্ধ্যায় অন্ধকার হলে Street Light Automatic ON হয় এবং ভোরে OFF হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
+    <div class="sci-card" data-cat="physics" data-level="hsc honours cuet"><div class="sci-card-top"><span class="sci-icon">🅿️</span><span class="sci-serial">#P-07</span></div><div class="sci-tags"><span class="sci-cat-tag tag-physics">⚡ Physics</span><span class="sci-cat-tag tag-iot">IoT</span></div><p class="sci-title">Smart Car Parking Slot System</p><p class="sci-summary">প্রতিটি Parking Slot এ Sensor লাগানো থাকে — গাড়ি থাকলে "Full", না থাকলে "Empty" দেখায়। Shopping Mall বা Hospital Parking এ সময় ও জ্বালানি সাশ্রয় করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">🎓 কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
   </div>
 </section>
 
@@ -1519,20 +1899,11 @@ footer span { color: var(--accent); }
   </div>
 
   <div class="quiz-scoreboard reveal">
-    <div class="score-item">
-      <div class="score-num" id="scoreCorrect">0</div>
-      <div class="score-label">সঠিক</div>
-    </div>
+    <div class="score-item"><div class="score-num" id="scoreCorrect">0</div><div class="score-label">সঠিক</div></div>
     <div class="score-divider"></div>
-    <div class="score-item">
-      <div class="score-num" id="scoreWrong">0</div>
-      <div class="score-label">ভুল</div>
-    </div>
+    <div class="score-item"><div class="score-num" id="scoreWrong">0</div><div class="score-label">ভুল</div></div>
     <div class="score-divider"></div>
-    <div class="score-item">
-      <div class="score-num" id="scoreTotal">15</div>
-      <div class="score-label">মোট প্রশ্ন</div>
-    </div>
+    <div class="score-item"><div class="score-num" id="scoreTotal">15</div><div class="score-label">মোট প্রশ্ন</div></div>
   </div>
 
   <div class="quiz-wrapper" id="quizWrapper">
@@ -1557,14 +1928,9 @@ footer span { color: var(--accent); }
   </div>
   <div class="contact-box reveal">
     <h3 class="contact-title">বিস্তারিত জানতে বা অর্ডার করতে<br>Telegram এ মেসেজ দিন</h3>
-    <p class="contact-sub">
-      আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।
-      সরাসরি মেসেজ করুন এবং আপনার প্রজেক্টের বিবরণ দিন।
-    </p>
+    <p class="contact-sub">আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।</p>
     <a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/>
-      </svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/></svg>
       Telegram এ মেসেজ করুন
     </a>
   </div>
@@ -1575,11 +1941,336 @@ footer span { color: var(--accent); }
   © 2026 <span>The Debug Point</span> &nbsp;·&nbsp; Coding & Robotics Solution &nbsp;·&nbsp; চট্টগ্রাম, বাংলাদেশ
 </footer>
 
-<!-- ========================================
-     SCRIPTS — ALL ORIGINAL FUNCTIONALITY PRESERVED
-======================================== -->
+
+<!-- ============================================================
+     SCRIPTS
+============================================================ -->
+
+<!-- ✨ NEW — SHARED PARTICLE ENGINE FACTORY
+     Creates an independent particle engine for any canvas+input combo.
+     Used for both: preview card canvas AND modal fullscreen canvas.
+============================================================ -->
 <script>
-// SCIENCE FILTER
+'use strict';
+
+/* ── Particle Engine Factory ── */
+function createParticleEngine(canvasEl, inputEl, clearBtn) {
+  const ctx = canvasEl.getContext('2d');
+
+  const CFG = {
+    particleCount : 1800,
+    baseColor     : '#ff2e88',
+    minSize       : 1.2,
+    maxSize       : 2.8,
+    repelRadius   : 90,
+    repelStrength : 5,
+    canvasAspect  : 9 / 16,
+  };
+
+  let W = 0, H = 0;
+  let particles = [];
+  let targetPositions = [];
+  let currentText = '';
+  let mouseX = -9999, mouseY = -9999;
+  let needsUpdate = false;
+  let pendingText = '';
+  let rafId = null;
+  let active = false;
+
+  function resizeCanvas() {
+    const parent = canvasEl.parentElement;
+    W = parent.clientWidth;
+    H = Math.round(W * CFG.canvasAspect);
+    canvasEl.width  = W;
+    canvasEl.height = H;
+    canvasEl.style.height = H + 'px';
+    targetPositions = currentText === ''
+      ? getHeartPositions(W, H)
+      : getTextPositions(currentText, W, H);
+    assignTargets();
+  }
+
+  function getHeartPositions(w, h) {
+    const cx = w / 2, cy = h / 2;
+    const scale = Math.min(w, h) * 0.28;
+    const candidates = [];
+    for (let i = 0; i < CFG.particleCount * 6; i++) {
+      const t = (i / (CFG.particleCount * 6)) * Math.PI * 2;
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+      candidates.push([cx + x * scale / 17, cy + y * scale / 17]);
+    }
+    const density = CFG.particleCount * 3;
+    let filled = 0, tries = 0;
+    while (filled < density && tries < density * 8) {
+      tries++;
+      const px = cx + (Math.random() - 0.5) * scale * 2;
+      const py = cy + (Math.random() - 0.5) * scale * 2;
+      if (isInsideHeart(px - cx, py - cy, scale)) { candidates.push([px, py]); filled++; }
+    }
+    return pickN(candidates, CFG.particleCount);
+  }
+
+  function isInsideHeart(x, y, scale) {
+    const nx = x / scale * 17, ny = -y / scale * 17;
+    const t = nx*nx + ny*ny - 1;
+    return t*t*t - nx*nx*ny*ny*ny <= 0;
+  }
+
+  function getTextPositions(text, w, h) {
+    const off = document.createElement('canvas');
+    off.width = w; off.height = h;
+    const oc = off.getContext('2d');
+    const fontSize = Math.max(Math.min(h * 0.45, w / (text.length * 0.65 + 0.5)), 20);
+    oc.fillStyle = '#fff';
+    oc.font = `900 ${fontSize}px 'Orbitron', sans-serif`;
+    oc.textAlign = 'center'; oc.textBaseline = 'middle';
+    oc.fillText(text.toUpperCase(), w / 2, h / 2);
+    const imgData = oc.getImageData(0, 0, w, h).data;
+    const lit = [];
+    for (let py = 0; py < h; py += 3)
+      for (let px = 0; px < w; px += 3)
+        if (imgData[(py * w + px) * 4 + 3] > 128) lit.push([px, py]);
+    return lit.length === 0 ? getHeartPositions(w, h) : pickN(lit, CFG.particleCount);
+  }
+
+  function pickN(arr, n) {
+    if (arr.length <= n) {
+      const out = arr.slice();
+      while (out.length < n) {
+        const s = arr[Math.floor(Math.random() * arr.length)];
+        out.push([s[0] + (Math.random()-.5)*3, s[1] + (Math.random()-.5)*3]);
+      }
+      return out;
+    }
+    const step = arr.length / n, out = [];
+    for (let i = 0; i < n; i++) out.push(arr[Math.floor(i * step)]);
+    return out;
+  }
+
+  function Particle(x, y, tx, ty) {
+    this.x = x; this.y = y; this.tx = tx; this.ty = ty;
+    this.vx = 0; this.vy = 0;
+    this.size = CFG.minSize + Math.random() * (CFG.maxSize - CFG.minSize);
+    this.baseAlpha = 0.6 + Math.random() * 0.4;
+    this.alpha = this.baseAlpha;
+    this.phase = Math.random() * Math.PI * 2;
+    this.speed = 0.05 + Math.random() * 0.04;
+  }
+  Particle.prototype.update = function (t) {
+    const dx = this.x - mouseX, dy = this.y - mouseY;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist < CFG.repelRadius && dist > 0) {
+      const f = (CFG.repelRadius - dist) / CFG.repelRadius;
+      this.vx += (dx / dist) * f * CFG.repelStrength;
+      this.vy += (dy / dist) * f * CFG.repelStrength;
+    }
+    this.vx += (this.tx - this.x) * this.speed;
+    this.vy += (this.ty - this.y) * this.speed;
+    this.vx *= 0.88; this.vy *= 0.88;
+    this.x += this.vx; this.y += this.vy;
+    this.alpha = this.baseAlpha * (0.75 + 0.25 * Math.sin(t * 0.002 + this.phase));
+  };
+  Particle.prototype.draw = function () {
+    ctx.globalAlpha = this.alpha;
+    ctx.shadowBlur = 8; ctx.shadowColor = CFG.baseColor;
+    ctx.fillStyle = CFG.baseColor;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  };
+
+  function initParticles() {
+    particles = [];
+    for (let i = 0; i < CFG.particleCount; i++) {
+      const [tx, ty] = targetPositions[i] || [W/2, H/2];
+      particles.push(new Particle(Math.random()*W, Math.random()*H, tx, ty));
+    }
+  }
+
+  function assignTargets() {
+    const shuffled = targetPositions.slice().sort(() => Math.random() - 0.5);
+    for (let i = 0; i < particles.length; i++) {
+      if (shuffled[i]) { particles[i].tx = shuffled[i][0]; particles[i].ty = shuffled[i][1]; }
+    }
+  }
+
+  function render(time) {
+    if (!active) return;
+    rafId = requestAnimationFrame(render);
+    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(2,2,4,0.35)';
+    ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update(time);
+      particles[i].draw();
+    }
+    if (needsUpdate) {
+      needsUpdate = false;
+      currentText = pendingText;
+      targetPositions = currentText === ''
+        ? getHeartPositions(W, H)
+        : getTextPositions(currentText, W, H);
+      assignTargets();
+    }
+    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+  }
+
+  /* Input / clear */
+  if (inputEl) {
+    inputEl.addEventListener('input', function () {
+      pendingText = this.value.trim();
+      needsUpdate = true;
+      if (clearBtn) clearBtn.classList.toggle('visible', pendingText.length > 0);
+    });
+  }
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      if (inputEl) inputEl.value = '';
+      pendingText = ''; needsUpdate = true;
+      clearBtn.classList.remove('visible');
+      if (inputEl) inputEl.focus();
+    });
+  }
+
+  /* Mouse / touch */
+  canvasEl.addEventListener('mousemove', e => {
+    const r = canvasEl.getBoundingClientRect();
+    mouseX = (e.clientX - r.left) * (W / r.width);
+    mouseY = (e.clientY - r.top)  * (H / r.height);
+  });
+  canvasEl.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; });
+  canvasEl.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const r = canvasEl.getBoundingClientRect(), t = e.touches[0];
+    mouseX = (t.clientX - r.left) * (W / r.width);
+    mouseY = (t.clientY - r.top)  * (H / r.height);
+  }, { passive: false });
+  canvasEl.addEventListener('touchend', () => { mouseX = -9999; mouseY = -9999; });
+
+  /* Resize observer */
+  const ro = new ResizeObserver(resizeCanvas);
+  ro.observe(canvasEl.parentElement);
+
+  /* Public API */
+  return {
+    start() {
+      if (active) return;
+      active = true;
+      resizeCanvas();
+      targetPositions = getHeartPositions(W, H);
+      initParticles();
+      render(0);
+    },
+    stop() {
+      active = false;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    },
+    resize: resizeCanvas,
+    syncText(txt) {
+      pendingText = txt;
+      needsUpdate = true;
+    }
+  };
+}
+</script>
+
+<!-- ✨ NEW — PREVIEW CARD ENGINE (small canvas at top) -->
+<script>
+(function () {
+  'use strict';
+  const previewEngine = createParticleEngine(
+    document.getElementById('magicalPreviewCanvas'),
+    null, null
+  );
+
+  // start preview immediately on font ready
+  function bootPreview() { previewEngine.start(); }
+  document.fonts && document.fonts.ready
+    ? document.fonts.ready.then(bootPreview)
+    : setTimeout(bootPreview, 600);
+
+  // expose for modal sync
+  window._previewEngine = previewEngine;
+})();
+</script>
+
+<!-- ✨ NEW — MODAL FULLSCREEN ENGINE + OPEN/CLOSE LOGIC -->
+<script>
+(function () {
+  'use strict';
+
+  let modalEngine = null;
+  let isOpen = false;
+
+  const overlay    = document.getElementById('mf-modal-overlay');
+  const modalInput = document.getElementById('modalParticleTextInput');
+  const modalClear = document.getElementById('btnClearModal');
+
+  function openMagicalFront() {
+    if (isOpen) return;
+    isOpen = true;
+
+    // Prevent page scroll
+    document.body.style.overflow = 'hidden';
+
+    // Show overlay + animate in
+    overlay.classList.add('open');
+
+    // Boot modal engine if first time
+    if (!modalEngine) {
+      modalEngine = createParticleEngine(
+        document.getElementById('modalParticleCanvas'),
+        modalInput,
+        modalClear
+      );
+      document.fonts && document.fonts.ready
+        ? document.fonts.ready.then(() => modalEngine.start())
+        : setTimeout(() => modalEngine.start(), 600);
+    } else {
+      modalEngine.start();
+    }
+
+    // Focus input for immediate typing
+    setTimeout(() => { if (modalInput) modalInput.focus(); }, 450);
+  }
+
+  function closeMagicalFront() {
+    if (!isOpen) return;
+    isOpen = false;
+
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+
+    // Stop modal engine to save resources
+    if (modalEngine) {
+      setTimeout(() => { if (!isOpen && modalEngine) modalEngine.stop(); }, 450);
+    }
+  }
+
+  // Click backdrop to close
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeMagicalFront();
+  });
+
+  // Keyboard ESC to close
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen) closeMagicalFront();
+  });
+
+  // Keyboard Enter on preview card
+  document.getElementById('mfPreviewCard').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMagicalFront(); }
+  });
+
+  // Expose globally (used by onclick attributes)
+  window.openMagicalFront  = openMagicalFront;
+  window.closeMagicalFront = closeMagicalFront;
+})();
+</script>
+
+<!-- ORIGINAL SCIENCE FILTER (unchanged) -->
+<script>
 function filterSci(type, btn) {
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -1609,24 +2300,24 @@ function searchSci() {
 }
 </script>
 
+<!-- ORIGINAL QUIZ DATA (unchanged) -->
 <script>
-// QUIZ DATA — FULLY PRESERVED
 const QUIZ_DATA = [
   { q: '<code>cout &lt;&lt; 5*2;</code> এর output কত হবে?', category: 'C++', correct: '10', wrong: ['8', '52', '25'], explanation: '✅ সঠিক উত্তর: <strong>10</strong><br>🧠 ব্যাখ্যা: 5 × 2 = 10। গুণ অপারেটর (*) দুটি সংখ্যা গুণ করে।' },
-  { q: '<code>cout &lt;&lt; 10/2;</code> এর output কত?', category: 'C++', correct: '5', wrong: ['2', '20', '102'], explanation: '✅ সঠিক উত্তর: <strong>5</strong><br>🧠 ব্যাখ্যা: 10 ÷ 2 = 5। ভাগ অপারেটর (/) ব্যবহার করা হয়েছে।' },
+  { q: '<code>cout &lt;&lt; 10/2;</code> এর output কত?', category: 'C++', correct: '5', wrong: ['2', '20', '102'], explanation: '✅ সঠিক উত্তর: <strong>5</strong><br>🧠 ব্যাখ্যা: 10 ÷ 2 = 5।' },
   { q: '<code>cout &lt;&lt; 3+2*2;</code> এর output কত?', category: 'C++', correct: '7', wrong: ['10', '5', '8'], explanation: '✅ সঠিক উত্তর: <strong>7</strong><br>🧠 ব্যাখ্যা: BODMAS নিয়মে আগে গুণ → 2×2=4, তারপর যোগ → 3+4=7।' },
   { q: '<code>cout &lt;&lt; (3+2)*2;</code> এর output কত?', category: 'C++', correct: '10', wrong: ['7', '32', '6'], explanation: '✅ সঠিক উত্তর: <strong>10</strong><br>🧠 ব্যাখ্যা: ব্র্যাকেট সবার আগে → 3+2=5, তারপর 5×2=10।' },
   { q: '<code>int x=2; cout&lt;&lt;x*x;</code> এর output কত?', category: 'C++', correct: '4', wrong: ['2', '22', '8'], explanation: '✅ সঠিক উত্তর: <strong>4</strong><br>🧠 ব্যাখ্যা: x=2, তাই x*x = 2×2 = 4।' },
-  { q: '<code>cout &lt;&lt; 10%3;</code> এর output কত?', category: 'C++', correct: '1', wrong: ['3', '0', '10'], explanation: '✅ সঠিক উত্তর: <strong>1</strong><br>🧠 ব্যাখ্যা: % হলো modulus অপারেটর — ভাগশেষ বের করে। 10÷3 = 3 বাকি 1।' },
+  { q: '<code>cout &lt;&lt; 10%3;</code> এর output কত?', category: 'C++', correct: '1', wrong: ['3', '0', '10'], explanation: '✅ সঠিক উত্তর: <strong>1</strong><br>🧠 ব্যাখ্যা: % হলো modulus অপারেটর — 10÷3 = 3 বাকি 1।' },
   { q: '<code>int x=1; x++; cout&lt;&lt;x;</code> এর output কত?', category: 'C++', correct: '2', wrong: ['1', '0', '11'], explanation: '✅ সঠিক উত্তর: <strong>2</strong><br>🧠 ব্যাখ্যা: x++ মানে increment — x এর মান 1 থেকে বেড়ে 2 হয়।' },
   { q: '<code>int x=5; x+=2; cout&lt;&lt;x;</code> এর output কত?', category: 'C++', correct: '7', wrong: ['5', '2', '52'], explanation: '✅ সঠিক উত্তর: <strong>7</strong><br>🧠 ব্যাখ্যা: x+=2 মানে x = x+2 → 5+2 = 7।' },
-  { q: '<code>if(5&gt;2)</code> — এই condition টি কি হবে?', category: 'Logic', correct: 'True', wrong: ['False', 'Error', '0'], explanation: '✅ সঠিক উত্তর: <strong>True</strong><br>🧠 ব্যাখ্যা: 5 সত্যিই 2 এর থেকে বড়, তাই condition True এবং if block execute হবে।' },
-  { q: '5 সংখ্যাটির Binary রূপ কোনটি?', category: 'Binary', correct: '101', wrong: ['110', '111', '100'], explanation: '✅ সঠিক উত্তর: <strong>101</strong><br>🧠 ব্যাখ্যা: 5 = 4+1 → Binary তে 4=100, 1=001 → মিলিয়ে 101।' },
-  { q: 'Arduino তে LED জ্বালাতে কোন signal দিতে হয়?', category: 'Arduino', correct: 'HIGH', wrong: ['LOW', 'MEDIUM', 'ZERO'], explanation: '✅ সঠিক উত্তর: <strong>HIGH</strong><br>🧠 ব্যাখ্যা: <code>digitalWrite(pin, HIGH)</code> দিলে সেই pin এ 5V যায় এবং LED জ্বলে ওঠে।' },
-  { q: 'LDR Sensor কি detect করে?', category: 'Sensor', correct: 'আলো', wrong: ['তাপমাত্রা', 'গ্যাস', 'শব্দ'], explanation: '✅ সঠিক উত্তর: <strong>আলো</strong><br>🧠 ব্যাখ্যা: LDR = Light Dependent Resistor। আলোর পরিমাণ অনুযায়ী এর resistance পরিবর্তন হয়।' },
-  { q: 'Servo Motor কীভাবে কাজ করে?', category: 'Hardware', correct: 'নির্দিষ্ট কোণে ঘোরে', wrong: ['অনবরত ঘোরে', 'শুধু ডানে ঘোরে', 'Speed control করে'], explanation: '✅ সঠিক উত্তর: <strong>নির্দিষ্ট কোণে ঘোরে</strong><br>🧠 ব্যাখ্যা: Servo Motor 0° থেকে 180° পর্যন্ত নির্দিষ্ট angle এ ঘুরতে পারে।' },
-  { q: 'C++ এ প্রতিটি statement এর শেষে <code>;</code> কেন দিতে হয়?', category: 'Syntax', correct: 'Statement শেষ বোঝাতে', wrong: ['সুন্দর দেখায় বলে', 'Loop চালাতে', 'Variable declare করতে'], explanation: '✅ সঠিক উত্তর: <strong>Statement শেষ বোঝাতে</strong><br>🧠 ব্যাখ্যা: Compiler কে বলে দেয় এখানে একটি নির্দেশ শেষ হয়েছে। না দিলে Syntax Error আসে।' },
-  { q: 'C++ এ <code>#include</code> কেন ব্যবহার করা হয়?', category: 'Syntax', correct: 'Library use করতে', wrong: ['Program শেষ করতে', 'Loop চালাতে', 'Output দিতে'], explanation: '✅ সঠিক উত্তর: <strong>Library use করতে</strong><br>🧠 ব্যাখ্যা: <code>#include &lt;iostream&gt;</code> দিলে cout, cin এর মতো built-in function ব্যবহার করা যায়।' }
+  { q: '<code>if(5&gt;2)</code> — এই condition টি কি হবে?', category: 'Logic', correct: 'True', wrong: ['False', 'Error', '0'], explanation: '✅ সঠিক উত্তর: <strong>True</strong><br>🧠 ব্যাখ্যা: 5 সত্যিই 2 এর থেকে বড়।' },
+  { q: '5 সংখ্যাটির Binary রূপ কোনটি?', category: 'Binary', correct: '101', wrong: ['110', '111', '100'], explanation: '✅ সঠিক উত্তর: <strong>101</strong><br>🧠 ব্যাখ্যা: 5 = 4+1 → Binary তে 101।' },
+  { q: 'Arduino তে LED জ্বালাতে কোন signal দিতে হয়?', category: 'Arduino', correct: 'HIGH', wrong: ['LOW', 'MEDIUM', 'ZERO'], explanation: '✅ সঠিক উত্তর: <strong>HIGH</strong><br>🧠 ব্যাখ্যা: digitalWrite(pin, HIGH) দিলে সেই pin এ 5V যায় এবং LED জ্বলে।' },
+  { q: 'LDR Sensor কি detect করে?', category: 'Sensor', correct: 'আলো', wrong: ['তাপমাত্রা', 'গ্যাস', 'শব্দ'], explanation: '✅ সঠিক উত্তর: <strong>আলো</strong><br>🧠 ব্যাখ্যা: LDR = Light Dependent Resistor।' },
+  { q: 'Servo Motor কীভাবে কাজ করে?', category: 'Hardware', correct: 'নির্দিষ্ট কোণে ঘোরে', wrong: ['অনবরত ঘোরে', 'শুধু ডানে ঘোরে', 'Speed control করে'], explanation: '✅ সঠিক উত্তর: <strong>নির্দিষ্ট কোণে ঘোরে</strong><br>🧠 ব্যাখ্যা: Servo Motor 0° থেকে 180° পর্যন্ত ঘুরতে পারে।' },
+  { q: 'C++ এ প্রতিটি statement এর শেষে <code>;</code> কেন দিতে হয়?', category: 'Syntax', correct: 'Statement শেষ বোঝাতে', wrong: ['সুন্দর দেখায় বলে', 'Loop চালাতে', 'Variable declare করতে'], explanation: '✅ সঠিক উত্তর: <strong>Statement শেষ বোঝাতে</strong><br>🧠 ব্যাখ্যা: Compiler কে বলে দেয় এখানে একটি নির্দেশ শেষ হয়েছে।' },
+  { q: 'C++ এ <code>#include</code> কেন ব্যবহার করা হয়?', category: 'Syntax', correct: 'Library use করতে', wrong: ['Program শেষ করতে', 'Loop চালাতে', 'Output দিতে'], explanation: '✅ সঠিক উত্তর: <strong>Library use করতে</strong><br>🧠 ব্যাখ্যা: #include দিলে cout, cin এর মতো built-in function ব্যবহার করা যায়।' }
 ];
 
 function shuffle(arr) {
@@ -1659,10 +2350,7 @@ function buildCards() {
     card.className = 'quiz-card' + (idx === 0 ? ' active' : '');
     card.innerHTML = `
       <div class="quiz-progress-bar-wrap"><div class="quiz-progress-bar" style="width:${progress}%"></div></div>
-      <div class="quiz-meta">
-        <span class="quiz-qnum">প্রশ্ন ${idx+1} / ${TOTAL}</span>
-        <span class="quiz-badge">${qd.category}</span>
-      </div>
+      <div class="quiz-meta"><span class="quiz-qnum">প্রশ্ন ${idx+1} / ${TOTAL}</span><span class="quiz-badge">${qd.category}</span></div>
       <p class="quiz-question">${qd.q}</p>
       <div class="quiz-options">${optBtns}</div>
       <div class="quiz-answer-box">${qd.explanation}</div>
@@ -1729,12 +2417,11 @@ function restartQuiz() {
 buildCards();
 </script>
 
+<!-- ORIGINAL NAVBAR + SCROLL + REVEAL (unchanged) -->
 <script>
-  // NAVBAR SCROLL
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', scrollY > 40));
 
-  // MOBILE NAV TOGGLE
   function toggleNav() {
     document.getElementById('navLinks').classList.toggle('open');
   }
@@ -1742,11 +2429,10 @@ buildCards();
     a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
   });
 
-  // INTERSECTION OBSERVER — REVEAL ANIMATIONS
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal, .project-card').forEach(el => observer.observe(el));
 </script>
 </body>
-</html>
+</html>  
