@@ -191,527 +191,224 @@ body {
 }
 
 /* ========================================
-   ✨ NEW — MAGICAL FRONT CARD (TOP SECTION)
+   ✨ NEW — NAV MAGICAL FRONT LINK
 ======================================== */
-#magical-front-card-section {
-  width: 100%;
-  background: #050508;
+.nav-mf-link {
+  font-family: 'Space Mono', monospace !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  color: var(--pink) !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  padding: 5px 12px !important;
+  border-radius: 20px !important;
+  border: 1.5px solid rgba(255,46,136,0.25) !important;
+  background: rgba(255,46,136,0.06) !important;
+  transition: all 0.2s !important;
   position: relative;
-  overflow: hidden;
-  padding: 24px 20px 20px;
 }
-#magical-front-card-section::before {
+.nav-mf-link:hover {
+  background: rgba(255,46,136,0.14) !important;
+  border-color: rgba(255,46,136,0.55) !important;
+  color: var(--pink) !important;
+  box-shadow: 0 0 14px rgba(255,46,136,0.2) !important;
+  transform: none !important;
+}
+.nav-mf-link::before {
   content: '';
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
-}
-#magical-front-card-section::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%, #ff2e8810 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.mf-card-inner {
-  position: relative; z-index: 1;
-  max-width: min(820px, 92vw);
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-}
-
-/* Label row above card */
-.mf-label-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-  width: 100%;
-  justify-content: center;
-}
-.mf-eyebrow {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 9px;
-  letter-spacing: 0.4em;
-  color: rgba(255,255,255,0.3);
-  text-transform: uppercase;
-}
-.mf-dot-pulse {
-  width: 6px; height: 6px;
+  display: inline-block;
+  width: 5px; height: 5px;
   background: var(--pink);
   border-radius: 50%;
-  box-shadow: 0 0 8px var(--pink);
-  animation: mf-pulse 2s ease-in-out infinite;
-}
-@keyframes mf-pulse {
-  0%,100% { opacity:1; transform:scale(1); box-shadow: 0 0 8px var(--pink); }
-  50%      { opacity:0.5; transform:scale(0.7); box-shadow: 0 0 4px var(--pink); }
-}
-
-/* The clickable card */
-.mf-preview-card {
-  width: 100%;
-  cursor: pointer;
-  border-radius: 14px;
-  overflow: hidden;
-  background: #08080f;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  box-shadow:
-    0 0 0 1px #ff2e8820,
-    0 0 30px #ff2e8818,
-    0 20px 60px rgba(0,0,0,0.6);
-  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
-              box-shadow 0.35s cubic-bezier(0.4,0,0.2,1),
-              border-color 0.35s;
-  position: relative;
-}
-.mf-preview-card:hover {
-  transform: translateY(-6px) scale(1.012);
-  box-shadow:
-    0 0 0 1px #ff2e8855,
-    0 0 50px #ff2e8830,
-    0 30px 80px rgba(0,0,0,0.7);
-  border-color: rgba(255,46,136,0.4);
-}
-
-/* Top chrome bar */
-.mf-chrome-bar {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  background: #0d0d16;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.mf-chrome-dots { display: flex; gap: 5px; }
-.mf-chrome-dot { width: 9px; height: 9px; border-radius: 50%; }
-.mf-chrome-dot.r { background: #ff5f57; }
-.mf-chrome-dot.y { background: #febc2e; }
-.mf-chrome-dot.g { background: #28c840; }
-.mf-chrome-title {
-  flex: 1; text-align: center;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  color: rgba(255,255,255,0.25);
-  letter-spacing: 0.18em;
-  padding-right: 34px;
-}
-
-/* The preview viewport */
-.mf-preview-viewport {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  background: #020204;
-}
-
-/* Scanline overlay */
-.mf-scanlines {
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px);
-  pointer-events: none;
-  z-index: 4;
-}
-
-/* Scaled-down live particle canvas clone */
-.mf-canvas-scaler {
-  width: 100%;
-  display: block;
-  position: relative;
-  z-index: 1;
-}
-#magicalPreviewCanvas {
-  display: block;
-  width: 100%;
-}
-
-/* "Click to open" overlay hint */
-.mf-click-hint {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 56px;
-  background: linear-gradient(to top, rgba(2,2,4,0.9) 0%, transparent 100%);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 10px;
-  z-index: 5;
-  pointer-events: none;
-  transition: opacity 0.25s;
-}
-.mf-click-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.25em;
-  color: rgba(255,255,255,0.4);
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.mf-click-label::before, .mf-click-label::after {
-  content: '—';
-  color: rgba(255,46,136,0.5);
-}
-.mf-preview-card:hover .mf-click-label {
-  color: rgba(255,255,255,0.75);
-}
-
-/* Input preview bar below canvas */
-.mf-input-hint-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  background: #0a0a12;
-  border-top: 1px solid rgba(255,255,255,0.05);
-}
-.mf-fake-input {
-  flex: 1;
-  height: 26px;
-  background: rgba(255,46,136,0.08);
-  border: 1px solid rgba(255,46,136,0.2);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  padding: 0 10px;
-}
-.mf-fake-cursor {
-  width: 1.5px; height: 12px;
-  background: var(--pink);
   box-shadow: 0 0 6px var(--pink);
-  animation: mf-blink 1s step-end infinite;
+  animation: mf-nav-pulse 1.8s ease-in-out infinite;
+  flex-shrink: 0;
 }
-@keyframes mf-blink { 0%,100%{opacity:1} 50%{opacity:0} }
-.mf-fake-label {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 8px;
-  color: rgba(255,255,255,0.2);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-}
-
-/* Footer of card */
-.mf-card-footer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 10px;
-  padding: 0 2px;
-}
-.mf-footer-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  color: rgba(255,255,255,0.2);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
-.mf-open-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--pink);
-  background: rgba(255,46,136,0.1);
-  border: 1px solid rgba(255,46,136,0.3);
-  border-radius: 6px;
-  padding: 5px 12px;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
-}
-.mf-open-btn:hover {
-  background: rgba(255,46,136,0.2);
-  border-color: rgba(255,46,136,0.6);
-  box-shadow: 0 0 16px rgba(255,46,136,0.25);
-}
-.mf-open-btn svg {
-  width: 10px; height: 10px;
-  fill: none;
-  stroke: var(--pink);
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+@keyframes mf-nav-pulse {
+  0%,100%{opacity:1;transform:scale(1);}
+  50%{opacity:0.4;transform:scale(0.6);}
 }
 
 /* ========================================
-   ✨ NEW — FULLSCREEN MODAL OVERLAY
+   ✨ NEW — SMALL POPUP WINDOW
 ======================================== */
-#mf-modal-overlay {
+#mf-popup-overlay {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: 9998;
   background: rgba(5,5,8,0.0);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  display: flex;
-  align-items: stretch;
-  justify-content: stretch;
   pointer-events: none;
-  transition:
-    background 0.45s cubic-bezier(0.4,0,0.2,1),
-    backdrop-filter 0.45s,
-    -webkit-backdrop-filter 0.45s;
+  transition: background 0.3s ease;
 }
-#mf-modal-overlay.open {
+#mf-popup-overlay.open {
   pointer-events: all;
-  background: rgba(5,5,8,0.92);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  background: rgba(5,5,8,0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-#mf-modal-content {
-  width: 100%; height: 100%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  opacity: 0;
-  transform: scale(0.96);
-  transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
-}
-#mf-modal-overlay.open #mf-modal-content {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Modal top toolbar */
-.mf-modal-toolbar {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  background: linear-gradient(to bottom, rgba(5,5,8,0.95), transparent);
-  z-index: 10;
-}
-.mf-modal-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.35em;
-  color: rgba(255,255,255,0.4);
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.mf-modal-title-dot {
-  width: 6px; height: 6px;
-  background: var(--pink);
-  border-radius: 50%;
-  box-shadow: 0 0 8px var(--pink);
-  animation: mf-pulse 2s ease-in-out infinite;
-}
-
-.mf-modal-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Back button */
-.mf-btn-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 7px;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.mf-btn-back:hover {
-  color: rgba(255,255,255,0.8);
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.25);
-}
-.mf-btn-back svg {
-  width: 10px; height: 10px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* Close button */
-.mf-btn-close {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: rgba(255,46,136,0.1);
-  border: 1.5px solid rgba(255,46,136,0.3);
-  color: rgba(255,46,136,0.8);
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  line-height: 1;
-}
-.mf-btn-close:hover {
-  background: rgba(255,46,136,0.25);
-  border-color: rgba(255,46,136,0.7);
-  color: #fff;
-  box-shadow: 0 0 18px rgba(255,46,136,0.35);
-  transform: rotate(90deg);
-}
-
-/* Full modal body — the actual particle section lives here */
-.mf-modal-body {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-/* Wrapper that fully shows the original particle section inside modal */
-#mf-modal-particle-host {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow-y: auto;
-  padding: 60px 20px 24px;
-  background: #050508;
-  position: relative;
-}
-#mf-modal-particle-host::before {
-  content: '';
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-  background-size: 60px 60px;
-  pointer-events: none;
-  opacity: 0.4;
-}
-#mf-modal-particle-host::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 60% 50% at 50% 45%, #ff2e8814 0%, transparent 70%);
-  pointer-events: none;
-}
-
-/* The particle components are cloned into the modal — scoped wrapper */
-.mf-modal-monitor-wrap {
-  position: relative; z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: min(820px, 92vw);
-}
-.mf-modal-monitor-frame {
-  width: 100%;
-  background: #08080f;
-  border: 2px solid #ffffff1a;
-  border-radius: 14px 14px 0 0;
-  padding: 10px 10px 0;
+#mf-popup-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.88);
+  width: min(560px, 94vw);
+  max-height: 90vh;
+  background: #07070e;
+  border-radius: 16px;
+  border: 1.5px solid rgba(255,46,136,0.25);
   box-shadow:
-    0 0 0 1px #ff2e8820,
-    0 0 40px #ff2e8822,
-    0 30px 80px #00000088,
-    inset 0 1px 0 #ffffff18;
+    0 0 0 1px rgba(255,46,136,0.12),
+    0 0 60px rgba(255,46,136,0.12),
+    0 30px 80px rgba(0,0,0,0.7);
+  overflow: hidden;
+  opacity: 0;
+  z-index: 9999;
+  transition:
+    opacity 0.32s cubic-bezier(0.4,0,0.2,1),
+    transform 0.32s cubic-bezier(0.34,1.3,0.64,1);
+  display: flex;
+  flex-direction: column;
 }
-.mf-modal-monitor-bar {
+#mf-popup-window.open {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* Popup chrome bar */
+.mf-popup-chrome {
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 0 4px 8px;
+  padding: 10px 14px;
+  background: #0d0d18;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  flex-shrink: 0;
 }
-.mf-modal-screen {
-  position: relative; width: 100%;
-  border-radius: 6px; overflow: hidden;
-  background: #020204;
-  box-shadow: inset 0 0 60px #00000080;
+.mf-popup-dots { display: flex; gap: 5px; }
+.mf-popup-dot { width: 9px; height: 9px; border-radius: 50%; }
+.mf-popup-dot.r { background: #ff5f57; }
+.mf-popup-dot.y { background: #febc2e; }
+.mf-popup-dot.g { background: #28c840; }
+.mf-popup-chrome-title {
+  flex: 1; text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; color: rgba(255,255,255,0.25);
+  letter-spacing: 0.2em; text-transform: uppercase;
 }
-.mf-modal-screen::after {
+.mf-popup-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,46,136,0.1);
+  border: 1px solid rgba(255,46,136,0.3);
+  color: rgba(255,46,136,0.8);
+  font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; line-height: 1;
+  flex-shrink: 0;
+}
+.mf-popup-close:hover {
+  background: rgba(255,46,136,0.25);
+  border-color: rgba(255,46,136,0.7);
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+/* Popup body */
+.mf-popup-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 14px 16px;
+  background: #050508;
+  position: relative;
+}
+.mf-popup-body::before {
   content: '';
   position: absolute; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, #00000014 2px, #00000014 4px);
-  pointer-events: none; z-index: 3; border-radius: 6px;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
 }
-#modalParticleCanvas { display: block; width: 100%; border-radius: 6px; }
-.mf-modal-neck { width: 60px; height: 20px; background: linear-gradient(180deg, #111118, #0a0a10); border-left: 1px solid #ffffff0a; border-right: 1px solid #ffffff0a; }
-.mf-modal-base { width: min(200px, 40%); height: 8px; background: linear-gradient(180deg, #151520, #0c0c12); border-radius: 0 0 8px 8px; border: 1px solid #ffffff0a; border-top: none; box-shadow: 0 4px 20px #00000060; }
+.mf-popup-body::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(255,46,136,0.07) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
 
-.mf-modal-input-section {
+/* Canvas inside popup */
+.mf-popup-canvas-wrap {
   position: relative; z-index: 1;
-  width: 100%; max-width: min(820px, 92vw);
-  margin-top: 18px;
-}
-.mf-modal-input-label {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 9px; letter-spacing: 0.4em;
-  color: rgba(255,255,255,0.3); text-transform: uppercase;
-  margin-bottom: 8px; display: block;
-}
-.mf-modal-input-glass {
-  position: relative; width: 100%;
-  background: linear-gradient(135deg, #ffffff0b, #ffffff05);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid #ffffff18; border-radius: 12px;
-  box-shadow: 0 0 0 1px #ff2e8818, 0 8px 32px #00000050, inset 0 1px 0 #ffffff12;
+  width: 100%;
+  border-radius: 8px;
   overflow: hidden;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  background: #020204;
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
 }
-.mf-modal-input-glass:focus-within {
-  border-color: #ff2e8855;
-  box-shadow: 0 0 0 1px #ff2e8840, 0 0 30px #ff2e8825, 0 8px 32px #00000050, inset 0 1px 0 #ffffff18;
+.mf-popup-canvas-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+  pointer-events: none; z-index: 3; border-radius: 8px;
 }
-#modalParticleTextInput {
-  width: 100%; background: transparent; border: none; outline: none;
-  padding: 14px 50px 14px 18px;
+#popupParticleCanvas { display: block; width: 100%; border-radius: 8px; }
+
+/* Input inside popup */
+.mf-popup-input-wrap {
+  position: relative; z-index: 1;
+  margin-top: 12px;
+}
+.mf-popup-input-label {
   font-family: 'Orbitron', sans-serif;
-  font-size: clamp(13px, 2vw, 17px); font-weight: 700;
+  font-size: 8px; letter-spacing: 0.4em;
+  color: rgba(255,255,255,0.25); text-transform: uppercase;
+  margin-bottom: 7px; display: block;
+}
+.mf-popup-input-glass {
+  position: relative; width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 9px;
+  box-shadow: 0 0 0 1px rgba(255,46,136,0.1), inset 0 1px 0 rgba(255,255,255,0.06);
+  overflow: hidden;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.mf-popup-input-glass:focus-within {
+  border-color: rgba(255,46,136,0.45);
+  box-shadow: 0 0 0 1px rgba(255,46,136,0.3), 0 0 20px rgba(255,46,136,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+#popupParticleTextInput {
+  width: 100%; background: transparent; border: none; outline: none;
+  padding: 11px 42px 11px 14px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(12px, 2.5vw, 15px); font-weight: 700;
   letter-spacing: 0.08em; color: var(--pink);
   caret-color: var(--pink);
-  text-shadow: 0 0 12px var(--pink-glow);
+  text-shadow: 0 0 10px var(--pink-glow);
   text-transform: uppercase;
 }
-#modalParticleTextInput::placeholder {
-  color: rgba(255,255,255,0.25); text-shadow: none; font-weight: 400;
+#popupParticleTextInput::placeholder {
+  color: rgba(255,255,255,0.2); text-shadow: none; font-weight: 400;
   text-transform: none; font-family: 'Space Mono', monospace;
-  font-size: clamp(11px, 1.6vw, 13px); letter-spacing: 0.05em;
+  font-size: 10px; letter-spacing: 0.05em;
 }
-.btn-clear-modal {
-  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+.btn-clear-popup {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
   background: none; border: none; cursor: pointer;
-  color: rgba(255,255,255,0.3); font-size: 18px; line-height: 1;
+  color: rgba(255,255,255,0.3); font-size: 14px; line-height: 1;
   transition: color 0.2s; display: none;
 }
-.btn-clear-modal:hover { color: var(--pink); }
-.btn-clear-modal.visible { display: block; }
-.mf-modal-hint {
-  position: relative; z-index: 1;
-  margin-top: 7px; font-size: 10px; color: rgba(255,255,255,0.2);
+.btn-clear-popup:hover { color: var(--pink); }
+.btn-clear-popup.visible { display: block; }
+.mf-popup-hint {
+  margin-top: 6px; font-size: 9px; color: rgba(255,255,255,0.18);
   letter-spacing: 0.12em; text-align: center; font-family: 'Space Mono', monospace;
 }
 
-/* ── END NEW MODAL STYLES ── */
 
 /* ========================================
    NAVBAR
@@ -1474,7 +1171,6 @@ footer span { color: var(--accent); }
   .hero-stats { gap: 1.25rem; }
   .featured-inner { padding: 2rem 1.75rem; }
   #featured { padding: 0 5% 64px; }
-  .mf-modal-toolbar { padding: 0 14px; }
 }
 
 @media (max-width: 480px) {
@@ -1524,124 +1220,38 @@ footer span { color: var(--accent); }
 <!-- END ORIGINAL PARTICLE SECTION -->
 
 
-<!-- ============================================================
-     ✨ NEW — MAGICAL FRONT CARD SECTION (replaces old top section)
-============================================================ -->
-<div id="magical-front-card-section">
-  <div class="mf-card-inner">
 
-    <!-- Label row -->
-    <div class="mf-label-row">
-      <span class="mf-dot-pulse"></span>
-      <span class="mf-eyebrow">Magical Front · Particle Universe</span>
-      <span class="mf-dot-pulse"></span>
+
+<!-- ✨ NEW — SMALL POPUP WINDOW (backdrop) -->
+<div id="mf-popup-overlay" onclick="closeMFPopup(event)">
+  <div id="mf-popup-window" id="mfPopupWindow">
+    <!-- Chrome bar -->
+    <div class="mf-popup-chrome">
+      <div class="mf-popup-dots">
+        <div class="mf-popup-dot r"></div>
+        <div class="mf-popup-dot y"></div>
+        <div class="mf-popup-dot g"></div>
+      </div>
+      <div class="mf-popup-chrome-title">✦ Magical Front · Particle Universe</div>
+      <button class="mf-popup-close" onclick="closeMFPopup()" title="Close">✕</button>
     </div>
-
-    <!-- Clickable preview card -->
-    <div class="mf-preview-card" id="mfPreviewCard" onclick="openMagicalFront()" role="button" aria-label="Open Magical Front fullscreen" tabindex="0">
-
-      <!-- Chrome bar -->
-      <div class="mf-chrome-bar">
-        <div class="mf-chrome-dots">
-          <div class="mf-chrome-dot r"></div>
-          <div class="mf-chrome-dot y"></div>
-          <div class="mf-chrome-dot g"></div>
-        </div>
-        <div class="mf-chrome-title">THE DEBUG POINT · PARTICLE UNIVERSE</div>
+    <!-- Body -->
+    <div class="mf-popup-body">
+      <div class="mf-popup-canvas-wrap">
+        <canvas id="popupParticleCanvas"></canvas>
       </div>
-
-      <!-- Preview viewport with its own live canvas -->
-      <div class="mf-preview-viewport">
-        <div class="mf-canvas-scaler">
-          <canvas id="magicalPreviewCanvas"></canvas>
+      <div class="mf-popup-input-wrap">
+        <label class="mf-popup-input-label" for="popupParticleTextInput">⬡ Type any text to sculpt the particles</label>
+        <div class="mf-popup-input-glass">
+          <input id="popupParticleTextInput" type="text" placeholder="Enter a word…" maxlength="18" autocomplete="off" spellcheck="false" />
+          <button class="btn-clear-popup" id="btnClearPopup" title="Clear">✕</button>
         </div>
-        <div class="mf-scanlines"></div>
-        <!-- Click hint -->
-        <div class="mf-click-hint">
-          <span class="mf-click-label">Click to open full experience</span>
-        </div>
+        <div class="mf-popup-hint">Particles form your text · Hover to scatter · Max 18 chars</div>
       </div>
-
-      <!-- Fake input bar preview -->
-      <div class="mf-input-hint-bar">
-        <div class="mf-fake-input">
-          <div class="mf-fake-cursor"></div>
-        </div>
-        <span class="mf-fake-label">Type to sculpt</span>
-      </div>
-
-    </div><!-- /.mf-preview-card -->
-
-    <!-- Footer row -->
-    <div class="mf-card-footer">
-      <span class="mf-footer-label">✦ Interactive Particle Demo</span>
-      <button class="mf-open-btn" onclick="openMagicalFront()">
-        <svg viewBox="0 0 12 12"><path d="M2 2h8v8M2 10L10 2"/></svg>
-        Full Screen খুলুন
-      </button>
     </div>
-
   </div>
 </div>
-<!-- END NEW MAGICAL FRONT CARD SECTION -->
-
-
-<!-- ============================================================
-     ✨ NEW — FULLSCREEN MODAL OVERLAY
-============================================================ -->
-<div id="mf-modal-overlay" role="dialog" aria-modal="true" aria-label="Magical Front Fullscreen">
-  <div id="mf-modal-content">
-
-    <!-- Toolbar -->
-    <div class="mf-modal-toolbar">
-      <div class="mf-modal-title">
-        <div class="mf-modal-title-dot"></div>
-        Magical Front · Particle Universe
-      </div>
-      <div class="mf-modal-controls">
-        <button class="mf-btn-back" onclick="closeMagicalFront()" title="Go back">
-          <svg viewBox="0 0 12 12"><path d="M8 2L4 6l4 4"/></svg>
-          ফিরে যান
-        </button>
-        <button class="mf-btn-close" onclick="closeMagicalFront()" title="Close">✕</button>
-      </div>
-    </div>
-
-    <!-- Modal body — full particle experience -->
-    <div class="mf-modal-body">
-      <div id="mf-modal-particle-host">
-
-        <div class="mf-modal-monitor-wrap">
-          <div class="mf-modal-monitor-frame">
-            <div class="mf-modal-monitor-bar">
-              <div class="dot r"></div>
-              <div class="dot y"></div>
-              <div class="dot g"></div>
-              <div class="monitor-title">THE DEBUG POINT · PARTICLE UNIVERSE</div>
-            </div>
-            <div class="mf-modal-screen">
-              <canvas id="modalParticleCanvas"></canvas>
-            </div>
-          </div>
-          <div class="mf-modal-neck"></div>
-          <div class="mf-modal-base"></div>
-        </div>
-
-        <div class="mf-modal-input-section">
-          <label class="mf-modal-input-label" for="modalParticleTextInput">⬡ Type any text to sculpt the particles</label>
-          <div class="mf-modal-input-glass">
-            <input id="modalParticleTextInput" type="text" placeholder="Enter a word and watch the particles come alive…" maxlength="18" autocomplete="off" spellcheck="false" />
-            <button class="btn-clear-modal" id="btnClearModal" title="Clear">✕</button>
-          </div>
-          <div class="mf-modal-hint">Particles form your text · Hover over them to scatter · Max 18 characters</div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
-</div>
-<!-- END FULLSCREEN MODAL -->
+<!-- END SMALL POPUP WINDOW -->
 
 
 <!-- NAVBAR -->
@@ -1655,6 +1265,7 @@ footer span { color: var(--accent); }
     <li><a href="#projects">Projects</a></li>
     <li><a href="#science">Science Projects</a></li>
     <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#" class="nav-mf-link" id="navMFLink" onclick="openMFPopup(event)" title="Interactive Particle Experience">✦ Magical Front</a></li>
     <li><a href="#contact" class="nav-cta">যোগাযোগ</a></li>
   </ul>
   <div class="nav-hamburger" id="hamburger" onclick="toggleNav()">
@@ -2175,97 +1786,89 @@ function createParticleEngine(canvasEl, inputEl, clearBtn) {
 }
 </script>
 
-<!-- ✨ NEW — PREVIEW CARD ENGINE (small canvas at top) -->
-<script>
-(function () {
-  'use strict';
-  const previewEngine = createParticleEngine(
-    document.getElementById('magicalPreviewCanvas'),
-    null, null
-  );
 
-  // start preview immediately on font ready
-  function bootPreview() { previewEngine.start(); }
-  document.fonts && document.fonts.ready
-    ? document.fonts.ready.then(bootPreview)
-    : setTimeout(bootPreview, 600);
 
-  // expose for modal sync
-  window._previewEngine = previewEngine;
-})();
-</script>
 
-<!-- ✨ NEW — MODAL FULLSCREEN ENGINE + OPEN/CLOSE LOGIC -->
+<!-- ✨ NEW — POPUP ENGINE & OPEN/CLOSE LOGIC -->
 <script>
 (function () {
   'use strict';
 
-  let modalEngine = null;
+  let popupEngine = null;
   let isOpen = false;
 
-  const overlay    = document.getElementById('mf-modal-overlay');
-  const modalInput = document.getElementById('modalParticleTextInput');
-  const modalClear = document.getElementById('btnClearModal');
+  const overlay   = document.getElementById('mf-popup-overlay');
+  const popupWin  = document.getElementById('mf-popup-window');
+  const popupInput = document.getElementById('popupParticleTextInput');
+  const popupClear = document.getElementById('btnClearPopup');
 
-  function openMagicalFront() {
+  function openMFPopup(e) {
+    if (e) e.preventDefault();
     if (isOpen) return;
     isOpen = true;
 
-    // Prevent page scroll
-    document.body.style.overflow = 'hidden';
-
-    // Show overlay + animate in
+    // Show overlay
     overlay.classList.add('open');
+    // Slight delay so overlay appears first, then window scales in
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        popupWin.classList.add('open');
+      });
+    });
 
-    // Boot modal engine if first time
-    if (!modalEngine) {
-      modalEngine = createParticleEngine(
-        document.getElementById('modalParticleCanvas'),
-        modalInput,
-        modalClear
+    // Boot engine on first open
+    if (!popupEngine) {
+      popupEngine = createParticleEngine(
+        document.getElementById('popupParticleCanvas'),
+        popupInput,
+        popupClear
       );
+      const boot = () => popupEngine.start();
       document.fonts && document.fonts.ready
-        ? document.fonts.ready.then(() => modalEngine.start())
-        : setTimeout(() => modalEngine.start(), 600);
+        ? document.fonts.ready.then(boot)
+        : setTimeout(boot, 500);
     } else {
-      modalEngine.start();
+      popupEngine.start();
     }
 
-    // Focus input for immediate typing
-    setTimeout(() => { if (modalInput) modalInput.focus(); }, 450);
+    setTimeout(() => { if (popupInput) popupInput.focus(); }, 380);
   }
 
-  function closeMagicalFront() {
+  function closeMFPopup(e) {
+    if (e && e.target !== overlay) return; // only close if clicking backdrop
     if (!isOpen) return;
     isOpen = false;
 
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
+    popupWin.classList.remove('open');
+    setTimeout(() => { overlay.classList.remove('open'); }, 320);
 
-    // Stop modal engine to save resources
-    if (modalEngine) {
-      setTimeout(() => { if (!isOpen && modalEngine) modalEngine.stop(); }, 450);
+    if (popupEngine) {
+      setTimeout(() => { if (!isOpen && popupEngine) popupEngine.stop(); }, 370);
     }
   }
 
-  // Click backdrop to close
-  overlay.addEventListener('click', function (e) {
-    if (e.target === overlay) closeMagicalFront();
+  // Close button (direct click)
+  document.querySelector('.mf-popup-close').addEventListener('click', function() {
+    isOpen = true; // force close
+    isOpen = false;
+    popupWin.classList.remove('open');
+    setTimeout(() => { overlay.classList.remove('open'); }, 320);
+    if (popupEngine) setTimeout(() => { if (popupEngine) popupEngine.stop(); }, 370);
   });
 
-  // Keyboard ESC to close
+  // ESC key
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isOpen) closeMagicalFront();
+    if (e.key === 'Escape' && isOpen) {
+      isOpen = false;
+      popupWin.classList.remove('open');
+      setTimeout(() => { overlay.classList.remove('open'); }, 320);
+      if (popupEngine) setTimeout(() => { if (popupEngine) popupEngine.stop(); }, 370);
+    }
   });
 
-  // Keyboard Enter on preview card
-  document.getElementById('mfPreviewCard').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMagicalFront(); }
-  });
-
-  // Expose globally (used by onclick attributes)
-  window.openMagicalFront  = openMagicalFront;
-  window.closeMagicalFront = closeMagicalFront;
+  // Expose globally
+  window.openMFPopup  = openMFPopup;
+  window.closeMFPopup = closeMFPopup;
 })();
 </script>
 
@@ -2435,4 +2038,4 @@ buildCards();
   document.querySelectorAll('.reveal, .project-card').forEach(el => observer.observe(el));
 </script>
 </body>
-</html>  
+</html>
