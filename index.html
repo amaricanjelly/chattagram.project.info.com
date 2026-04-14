@@ -1501,34 +1501,6 @@ footer span { color: var(--accent); }
 
 <hr class="section-divider">
 
-<!-- QUIZ SECTION -->
-<section id="quiz">
-  <div class="section-header">
-    <span class="section-eyebrow reveal">Test Your Knowledge</span>
-    <h2 class="section-title reveal">💻 Coding Quiz Challenge</h2>
-    <div class="section-line reveal"></div>
-  </div>
-
-  <div class="quiz-scoreboard reveal">
-    <div class="score-item"><div class="score-num" id="scoreCorrect">0</div><div class="score-label">সঠিক</div></div>
-    <div class="score-divider"></div>
-    <div class="score-item"><div class="score-num" id="scoreWrong">0</div><div class="score-label">ভুল</div></div>
-    <div class="score-divider"></div>
-    <div class="score-item"><div class="score-num" id="scoreTotal">15</div><div class="score-label">মোট প্রশ্ন</div></div>
-  </div>
-
-  <div class="quiz-wrapper" id="quizWrapper">
-    <div class="quiz-result-card" id="quizResult">
-      <div class="result-emoji" id="resultEmoji">🏆</div>
-      <div class="result-title" id="resultTitle">Quiz সম্পন্ন!</div>
-      <div class="result-sub" id="resultSub">আপনার ফলাফল</div>
-      <div class="result-score-big"><span id="finalCorrect">0</span> / <span>15</span></div>
-      <button class="btn-restart" onclick="restartQuiz()">🔄 আবার খেলুন</button>
-    </div>
-  </div>
-</section>
-
-<hr class="section-divider">
 
 <!-- CONTACT -->
 <section id="contact">
@@ -1903,122 +1875,9 @@ function searchSci() {
 }
 </script>
 
-<!-- ORIGINAL QUIZ DATA (unchanged) -->
-<script>
-const QUIZ_DATA = [
-  { q: '<code>cout &lt;&lt; 5*2;</code> এর output কত হবে?', category: 'C++', correct: '10', wrong: ['8', '52', '25'], explanation: '✅ সঠিক উত্তর: <strong>10</strong><br>🧠 ব্যাখ্যা: 5 × 2 = 10। গুণ অপারেটর (*) দুটি সংখ্যা গুণ করে।' },
-  { q: '<code>cout &lt;&lt; 10/2;</code> এর output কত?', category: 'C++', correct: '5', wrong: ['2', '20', '102'], explanation: '✅ সঠিক উত্তর: <strong>5</strong><br>🧠 ব্যাখ্যা: 10 ÷ 2 = 5।' },
-  { q: '<code>cout &lt;&lt; 3+2*2;</code> এর output কত?', category: 'C++', correct: '7', wrong: ['10', '5', '8'], explanation: '✅ সঠিক উত্তর: <strong>7</strong><br>🧠 ব্যাখ্যা: BODMAS নিয়মে আগে গুণ → 2×2=4, তারপর যোগ → 3+4=7।' },
-  { q: '<code>cout &lt;&lt; (3+2)*2;</code> এর output কত?', category: 'C++', correct: '10', wrong: ['7', '32', '6'], explanation: '✅ সঠিক উত্তর: <strong>10</strong><br>🧠 ব্যাখ্যা: ব্র্যাকেট সবার আগে → 3+2=5, তারপর 5×2=10।' },
-  { q: '<code>int x=2; cout&lt;&lt;x*x;</code> এর output কত?', category: 'C++', correct: '4', wrong: ['2', '22', '8'], explanation: '✅ সঠিক উত্তর: <strong>4</strong><br>🧠 ব্যাখ্যা: x=2, তাই x*x = 2×2 = 4।' },
-  { q: '<code>cout &lt;&lt; 10%3;</code> এর output কত?', category: 'C++', correct: '1', wrong: ['3', '0', '10'], explanation: '✅ সঠিক উত্তর: <strong>1</strong><br>🧠 ব্যাখ্যা: % হলো modulus অপারেটর — 10÷3 = 3 বাকি 1।' },
-  { q: '<code>int x=1; x++; cout&lt;&lt;x;</code> এর output কত?', category: 'C++', correct: '2', wrong: ['1', '0', '11'], explanation: '✅ সঠিক উত্তর: <strong>2</strong><br>🧠 ব্যাখ্যা: x++ মানে increment — x এর মান 1 থেকে বেড়ে 2 হয়।' },
-  { q: '<code>int x=5; x+=2; cout&lt;&lt;x;</code> এর output কত?', category: 'C++', correct: '7', wrong: ['5', '2', '52'], explanation: '✅ সঠিক উত্তর: <strong>7</strong><br>🧠 ব্যাখ্যা: x+=2 মানে x = x+2 → 5+2 = 7।' },
-  { q: '<code>if(5&gt;2)</code> — এই condition টি কি হবে?', category: 'Logic', correct: 'True', wrong: ['False', 'Error', '0'], explanation: '✅ সঠিক উত্তর: <strong>True</strong><br>🧠 ব্যাখ্যা: 5 সত্যিই 2 এর থেকে বড়।' },
-  { q: '5 সংখ্যাটির Binary রূপ কোনটি?', category: 'Binary', correct: '101', wrong: ['110', '111', '100'], explanation: '✅ সঠিক উত্তর: <strong>101</strong><br>🧠 ব্যাখ্যা: 5 = 4+1 → Binary তে 101।' },
-  { q: 'Arduino তে LED জ্বালাতে কোন signal দিতে হয়?', category: 'Arduino', correct: 'HIGH', wrong: ['LOW', 'MEDIUM', 'ZERO'], explanation: '✅ সঠিক উত্তর: <strong>HIGH</strong><br>🧠 ব্যাখ্যা: digitalWrite(pin, HIGH) দিলে সেই pin এ 5V যায় এবং LED জ্বলে।' },
-  { q: 'LDR Sensor কি detect করে?', category: 'Sensor', correct: 'আলো', wrong: ['তাপমাত্রা', 'গ্যাস', 'শব্দ'], explanation: '✅ সঠিক উত্তর: <strong>আলো</strong><br>🧠 ব্যাখ্যা: LDR = Light Dependent Resistor।' },
-  { q: 'Servo Motor কীভাবে কাজ করে?', category: 'Hardware', correct: 'নির্দিষ্ট কোণে ঘোরে', wrong: ['অনবরত ঘোরে', 'শুধু ডানে ঘোরে', 'Speed control করে'], explanation: '✅ সঠিক উত্তর: <strong>নির্দিষ্ট কোণে ঘোরে</strong><br>🧠 ব্যাখ্যা: Servo Motor 0° থেকে 180° পর্যন্ত ঘুরতে পারে।' },
-  { q: 'C++ এ প্রতিটি statement এর শেষে <code>;</code> কেন দিতে হয়?', category: 'Syntax', correct: 'Statement শেষ বোঝাতে', wrong: ['সুন্দর দেখায় বলে', 'Loop চালাতে', 'Variable declare করতে'], explanation: '✅ সঠিক উত্তর: <strong>Statement শেষ বোঝাতে</strong><br>🧠 ব্যাখ্যা: Compiler কে বলে দেয় এখানে একটি নির্দেশ শেষ হয়েছে।' },
-  { q: 'C++ এ <code>#include</code> কেন ব্যবহার করা হয়?', category: 'Syntax', correct: 'Library use করতে', wrong: ['Program শেষ করতে', 'Loop চালাতে', 'Output দিতে'], explanation: '✅ সঠিক উত্তর: <strong>Library use করতে</strong><br>🧠 ব্যাখ্যা: #include দিলে cout, cin এর মতো built-in function ব্যবহার করা যায়।' }
-];
 
-function shuffle(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 
-let scoreCorrect = 0, scoreWrong = 0;
-const TOTAL = QUIZ_DATA.length;
 
-function buildCards() {
-  const wrapper = document.getElementById('quizWrapper');
-  const resultCard = document.getElementById('quizResult');
-  wrapper.querySelectorAll('.quiz-card').forEach(c => c.remove());
-  QUIZ_DATA.forEach((qd, idx) => {
-    const progress = ((idx + 1) / TOTAL * 100).toFixed(1);
-    const isLast = idx === TOTAL - 1;
-    const options = shuffle([
-      { text: qd.correct, isCorrect: true },
-      ...qd.wrong.map(w => ({ text: w, isCorrect: false }))
-    ]);
-    const optBtns = options.map(opt =>
-      `<button class="quiz-opt-btn" ${opt.isCorrect ? 'data-correct="true"' : ''} onclick="pickAnswer(this, ${opt.isCorrect})">${opt.text}</button>`
-    ).join('');
-    const card = document.createElement('div');
-    card.className = 'quiz-card' + (idx === 0 ? ' active' : '');
-    card.innerHTML = `
-      <div class="quiz-progress-bar-wrap"><div class="quiz-progress-bar" style="width:${progress}%"></div></div>
-      <div class="quiz-meta"><span class="quiz-qnum">প্রশ্ন ${idx+1} / ${TOTAL}</span><span class="quiz-badge">${qd.category}</span></div>
-      <p class="quiz-question">${qd.q}</p>
-      <div class="quiz-options">${optBtns}</div>
-      <div class="quiz-answer-box">${qd.explanation}</div>
-      <div class="quiz-actions">
-        <button class="btn-show-answer" onclick="revealAnswer(this)">Answer দেখুন</button>
-        <button class="btn-next-q" onclick="nextQuestion(this)">${isLast ? 'Quiz শেষ করুন 🏆' : 'পরের প্রশ্ন →'}</button>
-      </div>`;
-    wrapper.insertBefore(card, resultCard);
-  });
-}
-
-function pickAnswer(btn, isCorrect) {
-  const card = btn.closest('.quiz-card');
-  const opts = card.querySelectorAll('.quiz-opt-btn');
-  opts.forEach(b => {
-    b.disabled = true;
-    if (b === btn) b.classList.add(isCorrect ? 'correct' : 'wrong');
-    if (!isCorrect && b.dataset.correct === 'true') b.classList.add('correct');
-  });
-  if (isCorrect) { scoreCorrect++; } else { scoreWrong++; }
-  document.getElementById('scoreCorrect').textContent = scoreCorrect;
-  document.getElementById('scoreWrong').textContent = scoreWrong;
-  card.querySelector('.quiz-answer-box').classList.add('visible');
-  card.querySelector('.btn-next-q').classList.add('visible');
-  card.querySelector('.btn-show-answer').style.display = 'none';
-}
-
-function revealAnswer(btn) {
-  const card = btn.closest('.quiz-card');
-  card.querySelector('.quiz-answer-box').classList.add('visible');
-  card.querySelector('.btn-next-q').classList.add('visible');
-  btn.style.display = 'none';
-}
-
-function nextQuestion(btn) {
-  const cards = document.querySelectorAll('.quiz-card');
-  const current = btn.closest('.quiz-card');
-  let idx = Array.from(cards).indexOf(current);
-  current.classList.remove('active');
-  if (idx + 1 < cards.length) { cards[idx + 1].classList.add('active'); }
-  else { showResult(); }
-}
-
-function showResult() {
-  document.getElementById('quizResult').classList.add('active');
-  document.getElementById('finalCorrect').textContent = scoreCorrect;
-  const pct = (scoreCorrect / TOTAL) * 100;
-  let emoji = '😊', title = 'ভালো চেষ্টা!', sub = 'আরও practice করুন।';
-  if (pct >= 90) { emoji = '🏆'; title = 'অসাধারণ!'; sub = 'আপনি একজন Coding Star! 🌟'; }
-  else if (pct >= 60) { emoji = '👍'; title = 'বেশ ভালো!'; sub = 'আরেকটু পড়লেই Expert হবেন।'; }
-  document.getElementById('resultEmoji').textContent = emoji;
-  document.getElementById('resultTitle').textContent = title;
-  document.getElementById('resultSub').textContent = sub;
-}
-
-function restartQuiz() {
-  scoreCorrect = 0; scoreWrong = 0;
-  document.getElementById('scoreCorrect').textContent = 0;
-  document.getElementById('scoreWrong').textContent = 0;
-  document.getElementById('quizResult').classList.remove('active');
-  buildCards();
-}
-
-buildCards();
-</script>
 
 <!-- ORIGINAL NAVBAR + SCROLL + REVEAL (unchanged) -->
 <script>
