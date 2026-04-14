@@ -49,6 +49,253 @@ body {
 }
 
 /* ========================================
+   ✨ NEW — TOP STICKY PIN BAR
+======================================== */
+#pro-code-pin-bar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1001; /* Ensure it stays above the nav */
+  background: linear-gradient(135deg, #0a0f1a 0%, #1a2332 100%);
+  color: #fff;
+  text-align: center;
+  padding: 10px 20px;
+  font-family: 'Poppins', 'Hind Siliguri', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: var(--transition);
+  backdrop-filter: blur(8px);
+  background: rgba(10, 15, 26, 0.95); /* Slight transparency for modern look */
+}
+
+#pro-code-pin-bar:hover {
+  background: #1e2a3a;
+  letter-spacing: 1px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  border-bottom-color: var(--accent);
+}
+
+#pro-code-pin-bar span {
+  display: inline-block;
+  position: relative;
+}
+
+#pro-code-pin-bar span::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+#pro-code-pin-bar:hover span::after {
+  width: 100%;
+}
+
+/* ========================================
+   ✨ NEW — FULL SCREEN OVERLAY
+======================================== */
+#pro-code-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(13, 27, 42, 0.98);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
+  padding: 20px;
+}
+
+#pro-code-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.overlay-content {
+  max-width: 800px;
+  width: 100%;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  padding: 3rem 2.5rem;
+  text-align: center;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 201, 167, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  color: var(--navy);
+}
+
+#pro-code-overlay.active .overlay-content {
+  transform: scale(1) translateY(0);
+}
+
+.overlay-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--surface-2);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid var(--border);
+}
+
+.overlay-close-btn:hover {
+  background: var(--navy);
+  color: #fff;
+  transform: rotate(90deg);
+  border-color: var(--navy);
+}
+
+.overlay-content h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin-bottom: 1rem;
+}
+
+.overlay-content h2 span {
+  color: var(--accent);
+}
+
+.overlay-content p {
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.8;
+}
+
+.overlay-feature-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg);
+  padding: 1.2rem 1.8rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+
+.feature-icon {
+  font-size: 2rem;
+}
+
+.feature-text {
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.overlay-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--navy);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: var(--transition);
+  border: 1px solid var(--navy);
+  margin-top: 1rem;
+}
+
+.overlay-cta:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--navy);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ========================================
+   ✨ NEW — PRO CODE BUTTON (Same Style)
+======================================== */
+.btn-pro-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Hind Siliguri', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: var(--accent);
+  color: var(--navy);
+  padding: 13px 26px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: var(--transition);
+  border: 1.5px solid var(--accent);
+  cursor: pointer;
+}
+
+.btn-pro-code:hover {
+  background: #00b898;
+  border-color: #00b898;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  color: var(--navy);
+}
+
+/* Ensure it aligns well in the actions bar */
+.hero-actions {
+  align-items: center;
+}
+
+/* Mobile responsive adjustment for new button */
+@media (max-width: 600px) {
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-pro-code {
+    justify-content: center;
+  }
+}
+
+/* ========================================
    PARTICLE SECTION (PINNED TOP) — HIDDEN
    (original kept intact, just hidden via class)
 ======================================== */
@@ -1171,6 +1418,8 @@ footer span { color: var(--accent); }
   .hero-stats { gap: 1.25rem; }
   .featured-inner { padding: 2rem 1.75rem; }
   #featured { padding: 0 5% 64px; }
+  .overlay-content { padding: 2rem 1.5rem; }
+  .overlay-content h2 { font-size: 1.8rem; }
 }
 
 @media (max-width: 480px) {
@@ -1181,10 +1430,48 @@ footer span { color: var(--accent); }
   .quiz-scoreboard { gap: 1rem; padding: 1rem 1.2rem; }
   .feat-stat-grid { grid-template-columns: 1fr 1fr; }
   .featured-visual { flex-direction: column; align-items: flex-start; }
+  .feature-item { padding: 0.8rem 1.2rem; }
 }
 </style>
 </head>
 <body>
+
+<!-- ============================================================
+     ✨ NEW — TOP STICKY PIN BAR (ADDED)
+============================================================ -->
+<div id="pro-code-pin-bar" onclick="openProCodeOverlay()">
+  <span>এখান থেকেই প্রো কোড কিনুন</span>
+</div>
+
+<!-- ============================================================
+     ✨ NEW — FULL SCREEN OVERLAY (ADDED)
+============================================================ -->
+<div id="pro-code-overlay" onclick="closeProCodeOverlay(event)">
+  <div class="overlay-content" onclick="event.stopPropagation()">
+    <button class="overlay-close-btn" onclick="closeProCodeOverlay()">✕</button>
+    <h2><span>প্রো</span> কোড স্টোর</h2>
+    <p>প্রিমিয়াম রেডি-টু-ইউজ সোর্স কোড কিনুন। ইনস্ট্যান্ট সিকিউর ডেলিভারি।</p>
+    <div class="overlay-feature-list">
+      <div class="feature-item">
+        <span class="feature-icon">💎</span>
+        <span class="feature-text">ভেরিফায়েড কোড</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">⚡</span>
+        <span class="feature-text">ইনস্ট্যান্ট ডেলিভারি</span>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🔐</span>
+        <span class="feature-text">সিকিউর পাসওয়ার্ড</span>
+      </div>
+    </div>
+    <a href="https://t.me/jellyofficer" target="_blank" class="overlay-cta">
+      <span>✈️</span> Telegram এ অর্ডার করুন
+    </a>
+    <p style="font-size: 0.8rem; margin-top: 1.5rem; opacity: 0.7;">শীঘ্রই আসছে সম্পূর্ণ স্টোর ফ্রন্ট...</p>
+  </div>
+</div>
+
 
 <!-- ============================================================
      ORIGINAL PARTICLE SECTION — kept intact, hidden by CSS
@@ -1300,6 +1587,8 @@ footer span { color: var(--accent); }
     <div class="hero-actions">
       <a href="#contact" class="btn-primary">📩 অর্ডার করুন</a>
       <a href="#projects" class="btn-ghost">🔍 প্রজেক্ট দেখুন</a>
+      <!-- ✨ NEW BUTTON ADDED HERE -->
+      <button class="btn-pro-code" onclick="openProCodeOverlay()">💻 প্রো কোড কিনুন</button>
     </div>
 
     <div class="hero-note">⚠️ প্রজেক্ট করতে হলে সরাসরি আমাদের ঠিকানায় আসতে হবে</div>
@@ -1527,6 +1816,32 @@ footer span { color: var(--accent); }
 <!-- ============================================================
      SCRIPTS
 ============================================================ -->
+
+<!-- ✨ NEW — OVERLAY CONTROL FUNCTIONS -->
+<script>
+  function openProCodeOverlay() {
+    document.getElementById('pro-code-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+  }
+
+  function closeProCodeOverlay(event) {
+    // If clicked on the overlay background (not the content) or called directly
+    if (!event || event.target === document.getElementById('pro-code-overlay') || event.target.classList.contains('overlay-close-btn')) {
+      document.getElementById('pro-code-overlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Close on ESC key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const overlay = document.getElementById('pro-code-overlay');
+      if (overlay.classList.contains('active')) {
+        closeProCodeOverlay();
+      }
+    }
+  });
+</script>
 
 <!-- ✨ NEW — SHARED PARTICLE ENGINE FACTORY
      Creates an independent particle engine for any canvas+input combo.
@@ -1773,7 +2088,7 @@ function createParticleEngine(canvasEl, inputEl, clearBtn) {
   const popupInput = document.getElementById('popupParticleTextInput');
   const popupClear = document.getElementById('btnClearPopup');
 
-  function openMFPopup(e) {
+  window.openMFPopup = function(e) {
     if (e) e.preventDefault();
     if (isOpen) return;
     isOpen = true;
@@ -1805,7 +2120,7 @@ function createParticleEngine(canvasEl, inputEl, clearBtn) {
     setTimeout(() => { if (popupInput) popupInput.focus(); }, 380);
   }
 
-  function closeMFPopup(e) {
+  window.closeMFPopup = function(e) {
     if (e && e.target !== overlay) return; // only close if clicking backdrop
     if (!isOpen) return;
     isOpen = false;
@@ -1836,10 +2151,6 @@ function createParticleEngine(canvasEl, inputEl, clearBtn) {
       if (popupEngine) setTimeout(() => { if (popupEngine) popupEngine.stop(); }, 370);
     }
   });
-
-  // Expose globally
-  window.openMFPopup  = openMFPopup;
-  window.closeMFPopup = closeMFPopup;
 })();
 </script>
 
