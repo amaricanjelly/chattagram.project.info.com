@@ -49,250 +49,104 @@ body {
 }
 
 /* ========================================
-   ✨ NEW — TOP STICKY PIN BAR
+   ✨ UPDATED — TOP STICKY PREMIUM BAR (NO POPUP)
 ======================================== */
-#pro-code-pin-bar {
+#premium-redirect-bar {
   position: sticky;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1001; /* Ensure it stays above the nav */
+  z-index: 1001;
   background: linear-gradient(135deg, #0a0f1a 0%, #1a2332 100%);
   color: #fff;
   text-align: center;
-  padding: 10px 20px;
+  padding: 12px 20px;
   font-family: 'Poppins', 'Hind Siliguri', sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: 1.05rem;
   letter-spacing: 0.5px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
   cursor: pointer;
   transition: var(--transition);
   backdrop-filter: blur(8px);
-  background: rgba(10, 15, 26, 0.95); /* Slight transparency for modern look */
+  background: rgba(10, 15, 26, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-#pro-code-pin-bar:hover {
+#premium-redirect-bar:hover {
   background: #1e2a3a;
   letter-spacing: 1px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 22px rgba(0, 201, 167, 0.2);
   border-bottom-color: var(--accent);
 }
 
-#pro-code-pin-bar span {
-  display: inline-block;
-  position: relative;
-}
-
-#pro-code-pin-bar span::after {
-  content: '';
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--accent);
-  transition: width 0.3s ease;
-}
-
-#pro-code-pin-bar:hover span::after {
-  width: 100%;
-}
-
-/* ========================================
-   ✨ NEW — FULL SCREEN OVERLAY
-======================================== */
-#pro-code-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(13, 27, 42, 0.98);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s;
-  padding: 20px;
-}
-
-#pro-code-overlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.overlay-content {
-  max-width: 800px;
-  width: 100%;
-  background: var(--surface);
-  border-radius: var(--radius-xl);
-  padding: 3rem 2.5rem;
-  text-align: center;
-  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0, 201, 167, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transform: scale(0.9) translateY(20px);
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  position: relative;
-  color: var(--navy);
-}
-
-#pro-code-overlay.active .overlay-content {
-  transform: scale(1) translateY(0);
-}
-
-.overlay-close-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: var(--surface-2);
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: var(--transition);
-  border: 1px solid var(--border);
-}
-
-.overlay-close-btn:hover {
-  background: var(--navy);
-  color: #fff;
-  transform: rotate(90deg);
-  border-color: var(--navy);
-}
-
-.overlay-content h2 {
-  font-family: 'Poppins', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--navy);
-  margin-bottom: 1rem;
-}
-
-.overlay-content h2 span {
-  color: var(--accent);
-}
-
-.overlay-content p {
-  font-family: 'Hind Siliguri', sans-serif;
-  font-size: 1.1rem;
-  color: var(--text-muted);
-  margin-bottom: 2rem;
-  line-height: 1.8;
-}
-
-.overlay-feature-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
-  margin: 2rem 0;
-}
-
-.feature-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  background: var(--bg);
-  padding: 1.2rem 1.8rem;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  transition: var(--transition);
-}
-
-.feature-item:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--accent);
-}
-
-.feature-icon {
-  font-size: 2rem;
-}
-
-.feature-text {
-  font-weight: 600;
-  color: var(--navy);
-}
-
-.overlay-cta {
+#premium-redirect-bar .bar-text {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  background: var(--navy);
-  color: #fff;
-  padding: 14px 32px;
-  border-radius: var(--radius);
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1rem;
-  transition: var(--transition);
-  border: 1px solid var(--navy);
-  margin-top: 1rem;
+  gap: 8px;
+  position: relative;
 }
 
-.overlay-cta:hover {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--navy);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
+#premium-redirect-bar .bar-text .highlight {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+  transition: all 0.3s;
+}
+
+#premium-redirect-bar:hover .bar-text .highlight {
+  color: #fff;
+  text-shadow: 0 0 12px var(--accent);
+}
+
+#premium-redirect-bar .glow-icon {
+  font-size: 1.3rem;
+  filter: drop-shadow(0 0 6px rgba(0, 201, 167, 0.6));
 }
 
 /* ========================================
-   ✨ NEW — PRO CODE BUTTON (Same Style)
+   ✨ REMOVED — FULL SCREEN OVERLAY (PRO CODE) & POPUP WINDOW
+   (All related CSS and JS removed, no modal exists now)
 ======================================== */
-.btn-pro-code {
+
+/* ========================================
+   ✨ UPDATED — PREMIUM BUTTON IN HERO (MATCHES DESIGN)
+======================================== */
+.btn-premium-redirect {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: 'Hind Siliguri', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
-  background: var(--accent);
-  color: var(--navy);
+  background: linear-gradient(145deg, #1a2a3a, #0f1a26);
+  color: #fff;
   padding: 13px 26px;
   border-radius: var(--radius);
   text-decoration: none;
   transition: var(--transition);
   border: 1.5px solid var(--accent);
+  box-shadow: 0 4px 14px rgba(0, 201, 167, 0.15);
   cursor: pointer;
 }
 
-.btn-pro-code:hover {
-  background: #00b898;
-  border-color: #00b898;
+.btn-premium-redirect:hover {
+  background: linear-gradient(145deg, #1e3245, #142433);
+  border-color: #00e6c0;
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-  color: var(--navy);
+  box-shadow: 0 8px 24px rgba(0, 201, 167, 0.25);
+  color: #fff;
 }
 
-/* Ensure it aligns well in the actions bar */
-.hero-actions {
-  align-items: center;
-}
-
-/* Mobile responsive adjustment for new button */
-@media (max-width: 600px) {
-  .hero-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .btn-pro-code {
-    justify-content: center;
-  }
+.btn-premium-redirect i {
+  font-style: normal;
+  font-size: 1.2rem;
 }
 
 /* ========================================
@@ -304,7 +158,6 @@ body {
   background: #050508;
   position: relative;
   overflow: hidden;
-  /* ── NEW: hidden by default ── */
   display: none;
 }
 #particle-section::before {
@@ -438,7 +291,7 @@ body {
 }
 
 /* ========================================
-   ✨ NEW — NAV MAGICAL FRONT LINK
+   ✨ UPDATED — NAV MAGICAL FRONT LINK (no popup)
 ======================================== */
 .nav-mf-link {
   font-family: 'Space Mono', monospace !important;
@@ -479,183 +332,7 @@ body {
   50%{opacity:0.4;transform:scale(0.6);}
 }
 
-/* ========================================
-   ✨ NEW — SMALL POPUP WINDOW
-======================================== */
-#mf-popup-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  background: rgba(5,5,8,0.0);
-  pointer-events: none;
-  transition: background 0.3s ease;
-}
-#mf-popup-overlay.open {
-  pointer-events: all;
-  background: rgba(5,5,8,0.55);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-
-#mf-popup-window {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.88);
-  width: min(560px, 94vw);
-  max-height: 90vh;
-  background: #07070e;
-  border-radius: 16px;
-  border: 1.5px solid rgba(255,46,136,0.25);
-  box-shadow:
-    0 0 0 1px rgba(255,46,136,0.12),
-    0 0 60px rgba(255,46,136,0.12),
-    0 30px 80px rgba(0,0,0,0.7);
-  overflow: hidden;
-  opacity: 0;
-  z-index: 9999;
-  transition:
-    opacity 0.32s cubic-bezier(0.4,0,0.2,1),
-    transform 0.32s cubic-bezier(0.34,1.3,0.64,1);
-  display: flex;
-  flex-direction: column;
-}
-#mf-popup-window.open {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-/* Popup chrome bar */
-.mf-popup-chrome {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 10px 14px;
-  background: #0d0d18;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  flex-shrink: 0;
-}
-.mf-popup-dots { display: flex; gap: 5px; }
-.mf-popup-dot { width: 9px; height: 9px; border-radius: 50%; }
-.mf-popup-dot.r { background: #ff5f57; }
-.mf-popup-dot.y { background: #febc2e; }
-.mf-popup-dot.g { background: #28c840; }
-.mf-popup-chrome-title {
-  flex: 1; text-align: center;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; color: rgba(255,255,255,0.25);
-  letter-spacing: 0.2em; text-transform: uppercase;
-}
-.mf-popup-close {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: rgba(255,46,136,0.1);
-  border: 1px solid rgba(255,46,136,0.3);
-  color: rgba(255,46,136,0.8);
-  font-size: 12px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: all 0.2s; line-height: 1;
-  flex-shrink: 0;
-}
-.mf-popup-close:hover {
-  background: rgba(255,46,136,0.25);
-  border-color: rgba(255,46,136,0.7);
-  color: #fff;
-  transform: rotate(90deg);
-}
-
-/* Popup body */
-.mf-popup-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 14px 14px 16px;
-  background: #050508;
-  position: relative;
-}
-.mf-popup-body::before {
-  content: '';
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none; z-index: 0;
-}
-.mf-popup-body::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(255,46,136,0.07) 0%, transparent 70%);
-  pointer-events: none; z-index: 0;
-}
-
-/* Canvas inside popup */
-.mf-popup-canvas-wrap {
-  position: relative; z-index: 1;
-  width: 100%;
-  border-radius: 8px;
-  overflow: hidden;
-  background: #020204;
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.6);
-}
-.mf-popup-canvas-wrap::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
-  pointer-events: none; z-index: 3; border-radius: 8px;
-}
-#popupParticleCanvas { display: block; width: 100%; border-radius: 8px; }
-
-/* Input inside popup */
-.mf-popup-input-wrap {
-  position: relative; z-index: 1;
-  margin-top: 12px;
-}
-.mf-popup-input-label {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 8px; letter-spacing: 0.4em;
-  color: rgba(255,255,255,0.25); text-transform: uppercase;
-  margin-bottom: 7px; display: block;
-}
-.mf-popup-input-glass {
-  position: relative; width: 100%;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.12); border-radius: 9px;
-  box-shadow: 0 0 0 1px rgba(255,46,136,0.1), inset 0 1px 0 rgba(255,255,255,0.06);
-  overflow: hidden;
-  transition: border-color 0.25s, box-shadow 0.25s;
-}
-.mf-popup-input-glass:focus-within {
-  border-color: rgba(255,46,136,0.45);
-  box-shadow: 0 0 0 1px rgba(255,46,136,0.3), 0 0 20px rgba(255,46,136,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
-}
-#popupParticleTextInput {
-  width: 100%; background: transparent; border: none; outline: none;
-  padding: 11px 42px 11px 14px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: clamp(12px, 2.5vw, 15px); font-weight: 700;
-  letter-spacing: 0.08em; color: var(--pink);
-  caret-color: var(--pink);
-  text-shadow: 0 0 10px var(--pink-glow);
-  text-transform: uppercase;
-}
-#popupParticleTextInput::placeholder {
-  color: rgba(255,255,255,0.2); text-shadow: none; font-weight: 400;
-  text-transform: none; font-family: 'Space Mono', monospace;
-  font-size: 10px; letter-spacing: 0.05em;
-}
-.btn-clear-popup {
-  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-  background: none; border: none; cursor: pointer;
-  color: rgba(255,255,255,0.3); font-size: 14px; line-height: 1;
-  transition: color 0.2s; display: none;
-}
-.btn-clear-popup:hover { color: var(--pink); }
-.btn-clear-popup.visible { display: block; }
-.mf-popup-hint {
-  margin-top: 6px; font-size: 9px; color: rgba(255,255,255,0.18);
-  letter-spacing: 0.12em; text-align: center; font-family: 'Space Mono', monospace;
-}
-
+/* REMOVED all popup overlay / window styles */
 
 /* ========================================
    NAVBAR
@@ -1418,8 +1095,6 @@ footer span { color: var(--accent); }
   .hero-stats { gap: 1.25rem; }
   .featured-inner { padding: 2rem 1.75rem; }
   #featured { padding: 0 5% 64px; }
-  .overlay-content { padding: 2rem 1.5rem; }
-  .overlay-content h2 { font-size: 1.8rem; }
 }
 
 @media (max-width: 480px) {
@@ -1430,52 +1105,22 @@ footer span { color: var(--accent); }
   .quiz-scoreboard { gap: 1rem; padding: 1rem 1.2rem; }
   .feat-stat-grid { grid-template-columns: 1fr 1fr; }
   .featured-visual { flex-direction: column; align-items: flex-start; }
-  .feature-item { padding: 0.8rem 1.2rem; }
 }
 </style>
 </head>
 <body>
 
 <!-- ============================================================
-     ✨ NEW — TOP STICKY PIN BAR (ADDED)
+     ✨ UPDATED — TOP STICKY PREMIUM BAR (CLICK TO REDIRECT)
 ============================================================ -->
-<div id="pro-code-pin-bar" onclick="openProCodeOverlay()">
-  <span>এখান থেকেই প্রো কোড কিনুন</span>
+<div id="premium-redirect-bar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')">
+  <span class="glow-icon">💎</span>
+  <span class="bar-text">প্রিমিয়াম কোড কিনতে আমাদের ওয়েবসাইটে <span class="highlight">এখনই ভিজিট করুন</span> →</span>
+  <span class="glow-icon">✨</span>
 </div>
-
-<!-- ============================================================
-     ✨ NEW — FULL SCREEN OVERLAY (ADDED)
-============================================================ -->
-<div id="pro-code-overlay" onclick="closeProCodeOverlay(event)">
-  <div class="overlay-content" onclick="event.stopPropagation()">
-    <button class="overlay-close-btn" onclick="closeProCodeOverlay()">✕</button>
-    <h2><span>প্রো</span> কোড স্টোর</h2>
-    <p>প্রিমিয়াম রেডি-টু-ইউজ সোর্স কোড কিনুন। ইনস্ট্যান্ট সিকিউর ডেলিভারি।</p>
-    <div class="overlay-feature-list">
-      <div class="feature-item">
-        <span class="feature-icon">💎</span>
-        <span class="feature-text">ভেরিফায়েড কোড</span>
-      </div>
-      <div class="feature-item">
-        <span class="feature-icon">⚡</span>
-        <span class="feature-text">ইনস্ট্যান্ট ডেলিভারি</span>
-      </div>
-      <div class="feature-item">
-        <span class="feature-icon">🔐</span>
-        <span class="feature-text">সিকিউর পাসওয়ার্ড</span>
-      </div>
-    </div>
-    <a href="https://t.me/jellyofficer" target="_blank" class="overlay-cta">
-      <span>✈️</span> Telegram এ অর্ডার করুন
-    </a>
-    <p style="font-size: 0.8rem; margin-top: 1.5rem; opacity: 0.7;">শীঘ্রই আসছে সম্পূর্ণ স্টোর ফ্রন্ট...</p>
-  </div>
-</div>
-
 
 <!-- ============================================================
      ORIGINAL PARTICLE SECTION — kept intact, hidden by CSS
-     (display:none set via #particle-section rule above)
 ============================================================ -->
 <div id="particle-section">
   <div class="particle-inner">
@@ -1504,42 +1149,8 @@ footer span { color: var(--accent); }
     </div>
   </div>
 </div>
-<!-- END ORIGINAL PARTICLE SECTION -->
 
-
-
-
-<!-- ✨ NEW — SMALL POPUP WINDOW (backdrop) -->
-<div id="mf-popup-overlay" onclick="closeMFPopup(event)">
-  <div id="mf-popup-window" id="mfPopupWindow">
-    <!-- Chrome bar -->
-    <div class="mf-popup-chrome">
-      <div class="mf-popup-dots">
-        <div class="mf-popup-dot r"></div>
-        <div class="mf-popup-dot y"></div>
-        <div class="mf-popup-dot g"></div>
-      </div>
-      <div class="mf-popup-chrome-title">✦ Magical Front · Particle Universe</div>
-      <button class="mf-popup-close" onclick="closeMFPopup()" title="Close">✕</button>
-    </div>
-    <!-- Body -->
-    <div class="mf-popup-body">
-      <div class="mf-popup-canvas-wrap">
-        <canvas id="popupParticleCanvas"></canvas>
-      </div>
-      <div class="mf-popup-input-wrap">
-        <label class="mf-popup-input-label" for="popupParticleTextInput">⬡ Type any text to sculpt the particles</label>
-        <div class="mf-popup-input-glass">
-          <input id="popupParticleTextInput" type="text" placeholder="Enter a word…" maxlength="18" autocomplete="off" spellcheck="false" />
-          <button class="btn-clear-popup" id="btnClearPopup" title="Clear">✕</button>
-        </div>
-        <div class="mf-popup-hint">Particles form your text · Hover to scatter · Max 18 chars</div>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- END SMALL POPUP WINDOW -->
-
+<!-- ✨ REMOVED — SMALL POPUP WINDOW & OVERLAY (No longer needed) -->
 
 <!-- NAVBAR -->
 <nav id="navbar">
@@ -1551,7 +1162,8 @@ footer span { color: var(--accent); }
     <li><a href="#services">Services</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#science">Science Projects</a></li>
-    <li><a href="#" class="nav-mf-link" id="navMFLink" onclick="openMFPopup(event)" title="Interactive Particle Experience">✦ Magical Front</a></li>
+    <!-- Magical front link kept but without popup (just decorative, but can be removed if you want, kept for style) -->
+    <li><a href="#" class="nav-mf-link" id="navMFLink" onclick="return false;" style="cursor:default;">✦ Magical Front</a></li>
     <li><a href="#contact" class="nav-cta">যোগাযোগ</a></li>
   </ul>
   <div class="nav-hamburger" id="hamburger" onclick="toggleNav()">
@@ -1587,8 +1199,10 @@ footer span { color: var(--accent); }
     <div class="hero-actions">
       <a href="#contact" class="btn-primary">📩 অর্ডার করুন</a>
       <a href="#projects" class="btn-ghost">🔍 প্রজেক্ট দেখুন</a>
-      <!-- ✨ NEW BUTTON ADDED HERE -->
-      <button class="btn-pro-code" onclick="openProCodeOverlay()">💻 প্রো কোড কিনুন</button>
+      <!-- ✨ UPDATED BUTTON — Direct redirect, no popup -->
+      <button class="btn-premium-redirect" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')">
+        <i>💎</i> প্রিমিয়াম কোড কিনুন <i>→</i>
+      </button>
     </div>
 
     <div class="hero-note">⚠️ প্রজেক্ট করতে হলে সরাসরি আমাদের ঠিকানায় আসতে হবে</div>
@@ -1812,347 +1426,9 @@ footer span { color: var(--accent); }
   © 2026 <span>The Debug Point</span> &nbsp;·&nbsp; Coding & Robotics Solution &nbsp;·&nbsp; চট্টগ্রাম, বাংলাদেশ
 </footer>
 
-
 <!-- ============================================================
-     SCRIPTS
+     SCRIPTS (CLEANED — NO POPUP/OVERLAY CODE)
 ============================================================ -->
-
-<!-- ✨ NEW — OVERLAY CONTROL FUNCTIONS -->
-<script>
-  function openProCodeOverlay() {
-    document.getElementById('pro-code-overlay').classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent background scroll
-  }
-
-  function closeProCodeOverlay(event) {
-    // If clicked on the overlay background (not the content) or called directly
-    if (!event || event.target === document.getElementById('pro-code-overlay') || event.target.classList.contains('overlay-close-btn')) {
-      document.getElementById('pro-code-overlay').classList.remove('active');
-      document.body.style.overflow = '';
-    }
-  }
-
-  // Close on ESC key
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      const overlay = document.getElementById('pro-code-overlay');
-      if (overlay.classList.contains('active')) {
-        closeProCodeOverlay();
-      }
-    }
-  });
-</script>
-
-<!-- ✨ NEW — SHARED PARTICLE ENGINE FACTORY
-     Creates an independent particle engine for any canvas+input combo.
-     Used for both: preview card canvas AND modal fullscreen canvas.
-============================================================ -->
-<script>
-'use strict';
-
-/* ── Particle Engine Factory ── */
-function createParticleEngine(canvasEl, inputEl, clearBtn) {
-  const ctx = canvasEl.getContext('2d');
-
-  const CFG = {
-    particleCount : 1800,
-    baseColor     : '#ff2e88',
-    minSize       : 1.2,
-    maxSize       : 2.8,
-    repelRadius   : 90,
-    repelStrength : 5,
-    canvasAspect  : 9 / 16,
-  };
-
-  let W = 0, H = 0;
-  let particles = [];
-  let targetPositions = [];
-  let currentText = '';
-  let mouseX = -9999, mouseY = -9999;
-  let needsUpdate = false;
-  let pendingText = '';
-  let rafId = null;
-  let active = false;
-
-  function resizeCanvas() {
-    const parent = canvasEl.parentElement;
-    W = parent.clientWidth;
-    H = Math.round(W * CFG.canvasAspect);
-    canvasEl.width  = W;
-    canvasEl.height = H;
-    canvasEl.style.height = H + 'px';
-    targetPositions = currentText === ''
-      ? getHeartPositions(W, H)
-      : getTextPositions(currentText, W, H);
-    assignTargets();
-  }
-
-  function getHeartPositions(w, h) {
-    const cx = w / 2, cy = h / 2;
-    const scale = Math.min(w, h) * 0.28;
-    const candidates = [];
-    for (let i = 0; i < CFG.particleCount * 6; i++) {
-      const t = (i / (CFG.particleCount * 6)) * Math.PI * 2;
-      const x = 16 * Math.pow(Math.sin(t), 3);
-      const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-      candidates.push([cx + x * scale / 17, cy + y * scale / 17]);
-    }
-    const density = CFG.particleCount * 3;
-    let filled = 0, tries = 0;
-    while (filled < density && tries < density * 8) {
-      tries++;
-      const px = cx + (Math.random() - 0.5) * scale * 2;
-      const py = cy + (Math.random() - 0.5) * scale * 2;
-      if (isInsideHeart(px - cx, py - cy, scale)) { candidates.push([px, py]); filled++; }
-    }
-    return pickN(candidates, CFG.particleCount);
-  }
-
-  function isInsideHeart(x, y, scale) {
-    const nx = x / scale * 17, ny = -y / scale * 17;
-    const t = nx*nx + ny*ny - 1;
-    return t*t*t - nx*nx*ny*ny*ny <= 0;
-  }
-
-  function getTextPositions(text, w, h) {
-    const off = document.createElement('canvas');
-    off.width = w; off.height = h;
-    const oc = off.getContext('2d');
-    const fontSize = Math.max(Math.min(h * 0.45, w / (text.length * 0.65 + 0.5)), 20);
-    oc.fillStyle = '#fff';
-    oc.font = `900 ${fontSize}px 'Orbitron', sans-serif`;
-    oc.textAlign = 'center'; oc.textBaseline = 'middle';
-    oc.fillText(text.toUpperCase(), w / 2, h / 2);
-    const imgData = oc.getImageData(0, 0, w, h).data;
-    const lit = [];
-    for (let py = 0; py < h; py += 3)
-      for (let px = 0; px < w; px += 3)
-        if (imgData[(py * w + px) * 4 + 3] > 128) lit.push([px, py]);
-    return lit.length === 0 ? getHeartPositions(w, h) : pickN(lit, CFG.particleCount);
-  }
-
-  function pickN(arr, n) {
-    if (arr.length <= n) {
-      const out = arr.slice();
-      while (out.length < n) {
-        const s = arr[Math.floor(Math.random() * arr.length)];
-        out.push([s[0] + (Math.random()-.5)*3, s[1] + (Math.random()-.5)*3]);
-      }
-      return out;
-    }
-    const step = arr.length / n, out = [];
-    for (let i = 0; i < n; i++) out.push(arr[Math.floor(i * step)]);
-    return out;
-  }
-
-  function Particle(x, y, tx, ty) {
-    this.x = x; this.y = y; this.tx = tx; this.ty = ty;
-    this.vx = 0; this.vy = 0;
-    this.size = CFG.minSize + Math.random() * (CFG.maxSize - CFG.minSize);
-    this.baseAlpha = 0.6 + Math.random() * 0.4;
-    this.alpha = this.baseAlpha;
-    this.phase = Math.random() * Math.PI * 2;
-    this.speed = 0.05 + Math.random() * 0.04;
-  }
-  Particle.prototype.update = function (t) {
-    const dx = this.x - mouseX, dy = this.y - mouseY;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    if (dist < CFG.repelRadius && dist > 0) {
-      const f = (CFG.repelRadius - dist) / CFG.repelRadius;
-      this.vx += (dx / dist) * f * CFG.repelStrength;
-      this.vy += (dy / dist) * f * CFG.repelStrength;
-    }
-    this.vx += (this.tx - this.x) * this.speed;
-    this.vy += (this.ty - this.y) * this.speed;
-    this.vx *= 0.88; this.vy *= 0.88;
-    this.x += this.vx; this.y += this.vy;
-    this.alpha = this.baseAlpha * (0.75 + 0.25 * Math.sin(t * 0.002 + this.phase));
-  };
-  Particle.prototype.draw = function () {
-    ctx.globalAlpha = this.alpha;
-    ctx.shadowBlur = 8; ctx.shadowColor = CFG.baseColor;
-    ctx.fillStyle = CFG.baseColor;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.fill();
-  };
-
-  function initParticles() {
-    particles = [];
-    for (let i = 0; i < CFG.particleCount; i++) {
-      const [tx, ty] = targetPositions[i] || [W/2, H/2];
-      particles.push(new Particle(Math.random()*W, Math.random()*H, tx, ty));
-    }
-  }
-
-  function assignTargets() {
-    const shuffled = targetPositions.slice().sort(() => Math.random() - 0.5);
-    for (let i = 0; i < particles.length; i++) {
-      if (shuffled[i]) { particles[i].tx = shuffled[i][0]; particles[i].ty = shuffled[i][1]; }
-    }
-  }
-
-  function render(time) {
-    if (!active) return;
-    rafId = requestAnimationFrame(render);
-    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
-    ctx.fillStyle = 'rgba(2,2,4,0.35)';
-    ctx.fillRect(0, 0, W, H);
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update(time);
-      particles[i].draw();
-    }
-    if (needsUpdate) {
-      needsUpdate = false;
-      currentText = pendingText;
-      targetPositions = currentText === ''
-        ? getHeartPositions(W, H)
-        : getTextPositions(currentText, W, H);
-      assignTargets();
-    }
-    ctx.globalAlpha = 1; ctx.shadowBlur = 0;
-  }
-
-  /* Input / clear */
-  if (inputEl) {
-    inputEl.addEventListener('input', function () {
-      pendingText = this.value.trim();
-      needsUpdate = true;
-      if (clearBtn) clearBtn.classList.toggle('visible', pendingText.length > 0);
-    });
-  }
-  if (clearBtn) {
-    clearBtn.addEventListener('click', function () {
-      if (inputEl) inputEl.value = '';
-      pendingText = ''; needsUpdate = true;
-      clearBtn.classList.remove('visible');
-      if (inputEl) inputEl.focus();
-    });
-  }
-
-  /* Mouse / touch */
-  canvasEl.addEventListener('mousemove', e => {
-    const r = canvasEl.getBoundingClientRect();
-    mouseX = (e.clientX - r.left) * (W / r.width);
-    mouseY = (e.clientY - r.top)  * (H / r.height);
-  });
-  canvasEl.addEventListener('mouseleave', () => { mouseX = -9999; mouseY = -9999; });
-  canvasEl.addEventListener('touchmove', e => {
-    e.preventDefault();
-    const r = canvasEl.getBoundingClientRect(), t = e.touches[0];
-    mouseX = (t.clientX - r.left) * (W / r.width);
-    mouseY = (t.clientY - r.top)  * (H / r.height);
-  }, { passive: false });
-  canvasEl.addEventListener('touchend', () => { mouseX = -9999; mouseY = -9999; });
-
-  /* Resize observer */
-  const ro = new ResizeObserver(resizeCanvas);
-  ro.observe(canvasEl.parentElement);
-
-  /* Public API */
-  return {
-    start() {
-      if (active) return;
-      active = true;
-      resizeCanvas();
-      targetPositions = getHeartPositions(W, H);
-      initParticles();
-      render(0);
-    },
-    stop() {
-      active = false;
-      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-    },
-    resize: resizeCanvas,
-    syncText(txt) {
-      pendingText = txt;
-      needsUpdate = true;
-    }
-  };
-}
-</script>
-
-
-
-
-<!-- ✨ NEW — POPUP ENGINE & OPEN/CLOSE LOGIC -->
-<script>
-(function () {
-  'use strict';
-
-  let popupEngine = null;
-  let isOpen = false;
-
-  const overlay   = document.getElementById('mf-popup-overlay');
-  const popupWin  = document.getElementById('mf-popup-window');
-  const popupInput = document.getElementById('popupParticleTextInput');
-  const popupClear = document.getElementById('btnClearPopup');
-
-  window.openMFPopup = function(e) {
-    if (e) e.preventDefault();
-    if (isOpen) return;
-    isOpen = true;
-
-    // Show overlay
-    overlay.classList.add('open');
-    // Slight delay so overlay appears first, then window scales in
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        popupWin.classList.add('open');
-      });
-    });
-
-    // Boot engine on first open
-    if (!popupEngine) {
-      popupEngine = createParticleEngine(
-        document.getElementById('popupParticleCanvas'),
-        popupInput,
-        popupClear
-      );
-      const boot = () => popupEngine.start();
-      document.fonts && document.fonts.ready
-        ? document.fonts.ready.then(boot)
-        : setTimeout(boot, 500);
-    } else {
-      popupEngine.start();
-    }
-
-    setTimeout(() => { if (popupInput) popupInput.focus(); }, 380);
-  }
-
-  window.closeMFPopup = function(e) {
-    if (e && e.target !== overlay) return; // only close if clicking backdrop
-    if (!isOpen) return;
-    isOpen = false;
-
-    popupWin.classList.remove('open');
-    setTimeout(() => { overlay.classList.remove('open'); }, 320);
-
-    if (popupEngine) {
-      setTimeout(() => { if (!isOpen && popupEngine) popupEngine.stop(); }, 370);
-    }
-  }
-
-  // Close button (direct click)
-  document.querySelector('.mf-popup-close').addEventListener('click', function() {
-    isOpen = true; // force close
-    isOpen = false;
-    popupWin.classList.remove('open');
-    setTimeout(() => { overlay.classList.remove('open'); }, 320);
-    if (popupEngine) setTimeout(() => { if (popupEngine) popupEngine.stop(); }, 370);
-  });
-
-  // ESC key
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && isOpen) {
-      isOpen = false;
-      popupWin.classList.remove('open');
-      setTimeout(() => { overlay.classList.remove('open'); }, 320);
-      if (popupEngine) setTimeout(() => { if (popupEngine) popupEngine.stop(); }, 370);
-    }
-  });
-})();
-</script>
 
 <!-- ORIGINAL SCIENCE FILTER (unchanged) -->
 <script>
@@ -2185,10 +1461,6 @@ function searchSci() {
 }
 </script>
 
-
-
-
-
 <!-- ORIGINAL NAVBAR + SCROLL + REVEAL (unchanged) -->
 <script>
   const navbar = document.getElementById('navbar');
@@ -2206,5 +1478,7 @@ function searchSci() {
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal, .project-card').forEach(el => observer.observe(el));
 </script>
+
+<!-- REMOVED all particle engine, popup JS — site remains functional and clean -->
 </body>
 </html>
