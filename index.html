@@ -5,40 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Debug Point — Coding & Robotics Solution, Chittagong</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0B0C0E;
-            --bg-elevated: #131417;
-            --bg-surface: #1A1C20;
-            --bg-surface-hover: #1F2126;
-            --border: rgba(255, 255, 255, 0.07);
-            --border-hover: rgba(255, 255, 255, 0.14);
-            --border-accent: rgba(20, 184, 166, 0.35);
-            --text: #EDEDEF;
-            --text-secondary: #9CA3AF;
-            --text-tertiary: #6B7280;
-            --accent: #14B8A6;
-            --accent-hover: #2DD4BF;
-            --accent-muted: rgba(20, 184, 166, 0.08);
-            --accent-strong: rgba(20, 184, 166, 0.18);
-            --red-muted: rgba(239, 68, 68, 0.08);
-            --red-border: rgba(239, 68, 68, 0.2);
-            --red-text: #FCA5A5;
-            --amber-muted: rgba(245, 158, 11, 0.06);
-            --amber-border: rgba(245, 158, 11, 0.22);
-            --amber-text: #FCD34D;
-            --radius-sm: 6px;
-            --radius: 10px;
+            --bg: #ffffff;
+            --bg-alt: #f7f8fa;
+            --bg-surface: #ffffff;
+            --bg-surface-hover: #fafbfc;
+            --bg-glass: rgba(255, 255, 255, 0.72);
+            --text: #0a0a0a;
+            --text-heading: #080808;
+            --text-secondary: #4a4a4a;
+            --text-tertiary: #7a7a7a;
+            --text-muted: #999999;
+            --accent: #00d4ff;
+            --accent-hover: #00bce6;
+            --accent-subtle: rgba(0, 212, 255, 0.06);
+            --accent-glow: rgba(0, 212, 255, 0.18);
+            --accent-strong: rgba(0, 212, 255, 0.28);
+            --border: rgba(0, 0, 0, 0.06);
+            --border-hover: rgba(0, 0, 0, 0.12);
+            --border-accent: rgba(0, 212, 255, 0.25);
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
+            --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.025);
+            --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.05), 0 6px 20px rgba(0, 0, 0, 0.035);
+            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.06), 0 12px 36px rgba(0, 0, 0, 0.04);
+            --shadow-glow: 0 0 0 1px rgba(0, 212, 255, 0.2), 0 4px 20px rgba(0, 212, 255, 0.12);
+            --shadow-glow-lg: 0 0 0 2px rgba(0, 212, 255, 0.18), 0 8px 32px rgba(0, 212, 255, 0.16);
+            --radius-sm: 8px;
+            --radius: 12px;
             --radius-lg: 16px;
-            --radius-xl: 20px;
-            --transition-fast: 0.18s ease;
-            --transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
-            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.45);
-            --max-width: 1120px;
+            --radius-xl: 22px;
+            --radius-2xl: 28px;
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-spring: 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --max-width: 1140px;
+            --font-heading: 'Plus Jakarta Sans', 'Inter', 'Noto Sans Bengali', system-ui, sans-serif;
+            --font-body: 'Inter', 'Noto Sans Bengali', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Inter', monospace;
         }
 
         *,
@@ -52,64 +58,57 @@
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
         body {
-            font-family: 'Inter', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+            font-family: var(--font-body);
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            overflow-x: hidden;
             font-size: 15px;
             letter-spacing: -0.01em;
+            overflow-x: hidden;
+            position: relative;
+            cursor: default;
         }
 
-        /* ── UTILITY ── */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-        .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 5%;
+        /* ── NOISE TEXTURE OVERLAY ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 99999;
+            opacity: 0.022;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            mix-blend-mode: multiply;
         }
 
-        /* ── SCROLL REVEAL ── */
-        .reveal {
+        /* ── CURSOR GLOW TRAIL ── */
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.07) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
             opacity: 0;
-            transform: translateY(22px);
-            transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.3s;
+            will-change: left, top;
         }
-        .reveal.visible {
+        .cursor-trail.active {
             opacity: 1;
-            transform: translateY(0);
-        }
-        .reveal-d1 {
-            transition-delay: 0.06s;
-        }
-        .reveal-d2 {
-            transition-delay: 0.12s;
-        }
-        .reveal-d3 {
-            transition-delay: 0.18s;
-        }
-        .reveal-d4 {
-            transition-delay: 0.24s;
         }
 
-        /* ── TOP ANNOUNCEMENT BAR ── */
+        /* ── ANNOUNCEMENT BAR ── */
         .announcement-bar {
-            background: var(--bg-elevated);
+            background: #fafbfc;
             border-bottom: 1px solid var(--border);
             text-align: center;
             padding: 9px 20px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 500;
             color: var(--text-secondary);
             letter-spacing: 0.01em;
@@ -120,30 +119,31 @@
             z-index: 1000;
         }
         .announcement-bar:hover {
+            background: #f3f4f6;
             color: var(--text);
-            background: var(--bg-surface);
         }
         .announcement-bar span {
             color: var(--accent);
             font-weight: 600;
-            transition: var(--transition-fast);
-        }
-        .announcement-bar:hover span {
-            color: var(--accent-hover);
         }
 
         /* ── NAVBAR ── */
         .navbar {
             position: sticky;
-            top: 35px;
+            top: 34px;
             z-index: 999;
-            background: rgba(11, 12, 14, 0.82);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
-            height: 56px;
+            height: 54px;
             display: flex;
             align-items: center;
+            transition: var(--transition-fast);
+        }
+        .navbar.scrolled {
+            box-shadow: var(--shadow-sm);
+            background: rgba(255, 255, 255, 0.9);
         }
         .navbar .container {
             display: flex;
@@ -159,18 +159,19 @@
             align-items: center;
             gap: 10px;
             text-decoration: none;
-            color: var(--text);
+            color: var(--text-heading);
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             letter-spacing: -0.02em;
+            font-family: var(--font-heading);
             transition: var(--transition-fast);
         }
         .nav-brand:hover {
-            color: #fff;
+            color: #000;
         }
-        .nav-brand-icon {
-            width: 28px;
-            height: 28px;
+        .nav-brand-mark {
+            width: 30px;
+            height: 30px;
             background: var(--accent);
             border-radius: var(--radius-sm);
             display: flex;
@@ -178,24 +179,25 @@
             justify-content: center;
             flex-shrink: 0;
             transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0, 212, 255, 0.2);
         }
-        .nav-brand:hover .nav-brand-icon {
-            background: var(--accent-hover);
-            transform: scale(1.05);
+        .nav-brand:hover .nav-brand-mark {
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.35);
+            transform: scale(1.04);
         }
-        .nav-brand-icon svg {
-            width: 14px;
-            height: 14px;
-            fill: #0B0C0E;
+        .nav-brand-mark svg {
+            width: 15px;
+            height: 15px;
+            fill: #fff;
         }
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 1.6rem;
+            gap: 1.5rem;
             list-style: none;
         }
         .nav-links a {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 500;
             color: var(--text-secondary);
             text-decoration: none;
@@ -204,35 +206,38 @@
             position: relative;
         }
         .nav-links a:hover {
-            color: #fff;
+            color: #000;
         }
         .nav-links a.nav-cta {
-            color: #0B0C0E;
+            color: #fff;
             background: var(--accent);
-            padding: 7px 16px;
-            border-radius: var(--radius-sm);
+            padding: 7px 17px;
+            border-radius: 20px;
             font-weight: 600;
+            font-size: 0.76rem;
+            letter-spacing: 0.02em;
             transition: var(--transition);
+            box-shadow: 0 2px 10px rgba(0, 212, 255, 0.2);
         }
         .nav-links a.nav-cta:hover {
             background: var(--accent-hover);
-            color: #0B0C0E;
+            color: #fff;
             transform: translateY(-1px);
-            box-shadow: 0 4px 14px rgba(20, 184, 166, 0.25);
+            box-shadow: 0 6px 22px rgba(0, 212, 255, 0.3);
         }
         .nav-hamburger {
             display: none;
             flex-direction: column;
             gap: 5px;
             cursor: pointer;
-            padding: 4px;
+            padding: 6px;
             background: none;
             border: none;
         }
         .nav-hamburger span {
             display: block;
             width: 20px;
-            height: 1.5px;
+            height: 1.8px;
             background: var(--text);
             border-radius: 1px;
             transition: var(--transition-fast);
@@ -240,12 +245,13 @@
 
         /* ── HERO ── */
         .hero {
-            min-height: 88vh;
+            min-height: 90vh;
             display: flex;
             align-items: center;
             position: relative;
             overflow: hidden;
             padding: 80px 0 70px;
+            background: #fdfdfd;
         }
         .hero-bg {
             position: absolute;
@@ -257,20 +263,33 @@
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
-            background-size: 64px 64px;
-            mask-image: radial-gradient(ellipse 65% 55% at 50% 40%, black 25%, transparent 70%);
-            -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 40%, black 25%, transparent 70%);
+                linear-gradient(rgba(0, 0, 0, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.025) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black 20%, transparent 68%);
+            -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black 20%, transparent 68%);
+            will-change: transform;
         }
         .hero-bg-glow {
             position: absolute;
-            top: -30%;
-            right: -15%;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, rgba(20, 184, 166, 0.04) 0%, transparent 60%);
+            top: -25%;
+            right: -18%;
+            width: 650px;
+            height: 650px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.05) 0%, transparent 58%);
             pointer-events: none;
+            will-change: transform;
+        }
+        .hero-bg-orb {
+            position: absolute;
+            bottom: 10%;
+            left: -8%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.03) 0%, transparent 60%);
+            pointer-events: none;
+            border-radius: 50%;
+            will-change: transform;
         }
         .hero-content {
             position: relative;
@@ -280,33 +299,61 @@
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.7rem;
+            gap: 7px;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
             font-weight: 600;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 1.5rem;
-            font-family: 'JetBrains Mono', 'Inter', monospace;
+            margin-bottom: 1.6rem;
+            background: var(--accent-subtle);
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 255, 0.15);
         }
-        .hero-badge::before {
-            content: '';
-            width: 18px;
-            height: 1px;
+        .hero-badge-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
             background: var(--accent);
-            opacity: 0.6;
+            animation: pulse-dot 2.2s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.35;
+                transform: scale(0.55);
+            }
         }
         .hero-title {
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-family: var(--font-heading);
+            font-size: clamp(1.9rem, 4.2vw, 2.9rem);
             font-weight: 800;
-            line-height: 1.18;
-            color: #fff;
-            letter-spacing: -0.03em;
-            margin-bottom: 1.2rem;
+            line-height: 1.16;
+            color: var(--text-heading);
+            letter-spacing: -0.035em;
+            margin-bottom: 1.1rem;
+            position: relative;
         }
         .hero-title em {
             font-style: normal;
             color: var(--accent);
+            position: relative;
+        }
+        .hero-title-glow {
+            position: absolute;
+            top: -30px;
+            left: -40px;
+            width: 500px;
+            height: 200px;
+            background: radial-gradient(ellipse, rgba(0, 212, 255, 0.06) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: -1;
         }
         .hero-sub {
             font-size: 1rem;
@@ -314,6 +361,7 @@
             line-height: 1.75;
             margin-bottom: 2rem;
             max-width: 480px;
+            letter-spacing: 0.005em;
         }
         .hero-actions {
             display: flex;
@@ -325,12 +373,12 @@
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
-            font-family: inherit;
+            gap: 8px;
+            font-family: var(--font-body);
             font-size: 0.88rem;
             font-weight: 600;
-            padding: 11px 22px;
-            border-radius: var(--radius-sm);
+            padding: 12px 24px;
+            border-radius: 25px;
             text-decoration: none;
             cursor: pointer;
             border: none;
@@ -339,43 +387,47 @@
             white-space: nowrap;
             position: relative;
             overflow: hidden;
+            outline: none;
         }
         .btn-primary {
             background: var(--accent);
-            color: #0B0C0E;
+            color: #fff;
+            box-shadow: 0 3px 14px rgba(0, 212, 255, 0.22);
         }
         .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(20, 184, 166, 0.28);
+            background: #00b8e0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 212, 255, 0.32);
         }
         .btn-primary:active {
-            transform: scale(0.97);
+            transform: scale(0.96);
             transition: transform 0.1s;
         }
         .btn-secondary {
             background: transparent;
             color: var(--text);
-            border: 1px solid var(--border-hover);
+            border: 1.5px solid rgba(0, 0, 0, 0.15);
         }
         .btn-secondary:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            background: rgba(255, 255, 255, 0.03);
-            transform: translateY(-1px);
+            border-color: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.02);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-sm);
         }
         .btn-secondary:active {
-            transform: scale(0.97);
+            transform: scale(0.96);
         }
         .hero-note {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 9px;
             font-size: 0.78rem;
             color: var(--text-tertiary);
-            background: var(--bg-elevated);
+            background: #f9fafb;
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            padding: 9px 16px;
+            border-radius: 20px;
+            padding: 9px 17px;
+            letter-spacing: 0.01em;
         }
         .hero-note-dot {
             width: 6px;
@@ -383,6 +435,7 @@
             border-radius: 50%;
             background: var(--accent);
             flex-shrink: 0;
+            box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
         }
         .hero-stats {
             display: flex;
@@ -392,11 +445,12 @@
             border-top: 1px solid var(--border);
         }
         .hero-stat-num {
-            font-size: 1.6rem;
+            font-family: var(--font-heading);
+            font-size: 1.65rem;
             font-weight: 800;
-            color: #fff;
+            color: var(--text-heading);
             line-height: 1;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
         }
         .hero-stat-num span {
             color: var(--accent);
@@ -411,9 +465,9 @@
 
         /* ── INFO BANNER ── */
         .info-banner {
-            background: var(--amber-muted);
-            border: 1px solid var(--amber-border);
-            border-left: 3px solid #F59E0B;
+            background: #fffdf5;
+            border: 1px solid rgba(200, 160, 40, 0.2);
+            border-left: 3px solid #e0a800;
             border-radius: var(--radius);
             padding: 14px 18px;
             margin-bottom: 2rem;
@@ -421,11 +475,11 @@
             align-items: flex-start;
             gap: 12px;
             font-size: 0.85rem;
-            color: var(--amber-text);
+            color: #6b5500;
             line-height: 1.65;
         }
         .info-banner strong {
-            color: #FBBF24;
+            color: #4a3800;
             font-weight: 700;
         }
         .info-banner-icon {
@@ -433,15 +487,15 @@
             margin-top: 1px;
             width: 18px;
             height: 18px;
-            color: #F59E0B;
+            color: #d4a000;
         }
 
         /* ── SECTIONS ── */
         .section {
-            padding: 88px 0;
+            padding: 90px 0;
         }
         .section-alt {
-            background: var(--bg-elevated);
+            background: var(--bg-alt);
         }
         .section-header {
             text-align: center;
@@ -454,8 +508,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: 'JetBrains Mono', 'Inter', monospace;
-            font-size: 0.65rem;
+            font-family: var(--font-mono);
+            font-size: 0.64rem;
             font-weight: 600;
             letter-spacing: 0.08em;
             text-transform: uppercase;
@@ -467,21 +521,23 @@
             content: '';
             width: 16px;
             height: 1px;
-            background: var(--border-hover);
+            background: rgba(0, 0, 0, 0.15);
         }
         .section-title {
-            font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+            font-family: var(--font-heading);
+            font-size: clamp(1.35rem, 2.5vw, 1.85rem);
             font-weight: 800;
-            color: #fff;
+            color: var(--text-heading);
             letter-spacing: -0.025em;
             line-height: 1.25;
         }
         .section-line {
             width: 28px;
-            height: 2.5px;
+            height: 3px;
             background: var(--accent);
             border-radius: 2px;
             margin: 12px auto 0;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.25);
         }
         .section-divider {
             border: none;
@@ -489,6 +545,72 @@
             background: var(--border);
             max-width: var(--max-width);
             margin: 0 auto;
+        }
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        /* ── SCROLL REVEAL SYSTEM ── */
+        .reveal-section {
+            opacity: 0;
+            transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal-section.reveal-right {
+            transform: translateX(50px);
+        }
+        .reveal-section.reveal-left {
+            transform: translateX(-50px);
+        }
+        .reveal-section.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-card {
+            opacity: 0;
+            transform: scale(0.94) translateY(18px);
+            transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1), transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal-card.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        .reveal-card-d1 {
+            transition-delay: 0.04s;
+        }
+        .reveal-card-d2 {
+            transition-delay: 0.09s;
+        }
+        .reveal-card-d3 {
+            transition-delay: 0.14s;
+        }
+        .reveal-card-d4 {
+            transition-delay: 0.19s;
+        }
+        .reveal-card-d5 {
+            transition-delay: 0.24s;
+        }
+        .hero-reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.65s cubic-bezier(0.4, 0, 0.2, 1), transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hero-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hr-d1 {
+            transition-delay: 0.06s;
+        }
+        .hr-d2 {
+            transition-delay: 0.14s;
+        }
+        .hr-d3 {
+            transition-delay: 0.22s;
+        }
+        .hr-d4 {
+            transition-delay: 0.30s;
         }
 
         /* ── SERVICES GRID ── */
@@ -503,19 +625,21 @@
             border-radius: var(--radius-lg);
             padding: 1.6rem 1.5rem;
             transition: var(--transition);
+            cursor: default;
             position: relative;
+            box-shadow: var(--shadow-xs);
         }
         .service-card:hover {
-            border-color: var(--border-hover);
-            background: var(--bg-surface-hover);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-glow), var(--shadow-md);
+            transform: translateY(-4px) scale(1.02);
+            background: #fff;
         }
         .service-card-icon {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: var(--radius-sm);
-            background: var(--accent-muted);
+            background: var(--accent-subtle);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -525,82 +649,87 @@
         }
         .service-card:hover .service-card-icon {
             background: var(--accent);
-            color: #0B0C0E;
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(0, 212, 255, 0.28);
         }
         .service-card-icon svg {
             width: 18px;
             height: 18px;
         }
         .service-card-num {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.6rem;
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
             font-weight: 600;
             letter-spacing: 0.06em;
             text-transform: uppercase;
-            color: var(--text-tertiary);
-            margin-bottom: 0.35rem;
+            color: var(--text-muted);
+            margin-bottom: 0.3rem;
         }
         .service-card-title {
-            font-size: 0.92rem;
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-heading);
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
             gap: 8px;
             flex-wrap: wrap;
+            letter-spacing: -0.01em;
         }
         .service-card-tag {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.55rem;
+            font-family: var(--font-mono);
+            font-size: 0.53rem;
             font-weight: 600;
             letter-spacing: 0.04em;
-            background: var(--accent-muted);
+            background: var(--accent-subtle);
             color: var(--accent);
-            border: 1px solid var(--border-accent);
+            border: 1px solid rgba(0, 212, 255, 0.2);
             padding: 2px 7px;
-            border-radius: 3px;
+            border-radius: 4px;
         }
         .service-card-desc {
-            font-size: 0.84rem;
+            font-size: 0.83rem;
             color: var(--text-secondary);
             line-height: 1.7;
         }
 
         /* ── FEATURED CARD ── */
         .featured-card {
-            background: var(--bg-surface);
+            background: #fff;
             border: 1px solid var(--border-accent);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-2xl);
             overflow: hidden;
             position: relative;
             transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
         .featured-card:hover {
-            border-color: rgba(20, 184, 166, 0.5);
-            box-shadow: var(--shadow-lg), 0 0 0 1px rgba(20, 184, 166, 0.15);
+            box-shadow: var(--shadow-glow-lg), var(--shadow-lg);
+            border-color: rgba(0, 212, 255, 0.4);
+            transform: translateY(-2px);
         }
         .featured-inner {
             display: grid;
             grid-template-columns: 1fr auto;
-            gap: 2rem;
+            gap: 2.2rem;
             align-items: center;
-            padding: 2.5rem 2.8rem;
+            padding: 2.6rem 2.8rem;
         }
         .featured-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.58rem;
+            font-family: var(--font-mono);
+            font-size: 0.56rem;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            background: var(--accent-muted);
+            background: var(--accent-subtle);
             color: var(--accent);
-            border: 1px solid var(--border-accent);
-            padding: 5px 10px;
-            border-radius: 4px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 5px 11px;
+            border-radius: 20px;
             margin-bottom: 1rem;
         }
         .featured-badge-dot {
@@ -610,12 +739,13 @@
             background: var(--accent);
         }
         .featured-title {
+            font-family: var(--font-heading);
             font-size: clamp(1.2rem, 2vw, 1.55rem);
             font-weight: 800;
-            color: #fff;
+            color: var(--text-heading);
             letter-spacing: -0.025em;
-            line-height: 1.25;
-            margin-bottom: 0.7rem;
+            line-height: 1.22;
+            margin-bottom: 0.65rem;
         }
         .featured-title em {
             font-style: normal;
@@ -624,16 +754,16 @@
         .featured-tagline {
             font-size: 0.9rem;
             font-weight: 600;
-            color: #E8C158;
-            margin-bottom: 0.65rem;
-            line-height: 1.6;
+            color: #8a6d00;
+            margin-bottom: 0.6rem;
+            line-height: 1.55;
         }
         .featured-desc {
-            font-size: 0.84rem;
+            font-size: 0.83rem;
             color: var(--text-secondary);
             line-height: 1.7;
-            margin-bottom: 1.2rem;
-            max-width: 480px;
+            margin-bottom: 1.1rem;
+            max-width: 470px;
         }
         .featured-pills {
             display: flex;
@@ -642,13 +772,13 @@
             margin-bottom: 1.5rem;
         }
         .featured-pill {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 500;
-            background: rgba(255, 255, 255, 0.03);
+            background: #f8f9fb;
             color: var(--text-secondary);
             border: 1px solid var(--border);
             padding: 4px 10px;
-            border-radius: 4px;
+            border-radius: 6px;
             letter-spacing: 0.01em;
         }
         .featured-visual {
@@ -659,22 +789,23 @@
             flex-shrink: 0;
         }
         .featured-icon-box {
-            width: 96px;
-            height: 96px;
-            border-radius: var(--radius-lg);
-            background: var(--accent-muted);
-            border: 1px solid var(--border-accent);
+            width: 100px;
+            height: 100px;
+            border-radius: var(--radius-xl);
+            background: var(--accent-subtle);
+            border: 1px solid rgba(0, 212, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: var(--transition);
+            box-shadow: 0 2px 12px rgba(0, 212, 255, 0.06);
         }
         .featured-card:hover .featured-icon-box {
-            background: var(--accent-strong);
+            box-shadow: 0 6px 24px rgba(0, 212, 255, 0.15);
         }
         .featured-icon-box svg {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             color: var(--accent);
         }
         .featured-stat-row {
@@ -684,66 +815,62 @@
             width: 100%;
         }
         .featured-stat {
-            background: rgba(255, 255, 255, 0.02);
+            background: #fafbfc;
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
-            padding: 8px 10px;
+            padding: 9px 10px;
             text-align: center;
+            transition: var(--transition-fast);
+        }
+        .featured-card:hover .featured-stat {
+            border-color: rgba(0, 212, 255, 0.12);
         }
         .featured-stat-num {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.78rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
             font-weight: 700;
             color: var(--accent);
         }
         .featured-stat-label {
-            font-size: 0.58rem;
-            color: var(--text-tertiary);
+            font-size: 0.56rem;
+            color: var(--text-muted);
             margin-top: 2px;
             letter-spacing: 0.02em;
         }
 
-        /* ── PROJECTS / SCIENCE GRID ── */
+        /* ── PROJECT CARDS ── */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 1rem;
         }
         .project-card {
-            background: var(--bg-surface);
+            background: #fff;
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             padding: 1.5rem 1.4rem;
             transition: var(--transition);
-            opacity: 0;
-            transform: translateY(16px);
-        }
-        .project-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-xs);
+            cursor: default;
         }
         .project-card:hover {
-            border-color: var(--border-hover);
-            background: var(--bg-surface-hover);
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
-        }
-        .project-card.visible:hover {
-            transform: translateY(-3px);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-glow), var(--shadow-md);
+            transform: translateY(-4px) scale(1.02);
+            background: #fff;
         }
         .project-card-header {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
             gap: 8px;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.55rem;
         }
         .project-card-icon {
             width: 36px;
             height: 36px;
             border-radius: var(--radius-sm);
-            background: var(--accent-muted);
+            background: var(--accent-subtle);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -753,45 +880,47 @@
         }
         .project-card:hover .project-card-icon {
             background: var(--accent);
-            color: #0B0C0E;
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(0, 212, 255, 0.22);
         }
         .project-card-icon svg {
             width: 16px;
             height: 16px;
         }
         .project-card-num {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.58rem;
+            font-family: var(--font-mono);
+            font-size: 0.56rem;
             font-weight: 600;
-            color: var(--text-tertiary);
+            color: var(--text-muted);
             letter-spacing: 0.04em;
         }
         .project-card-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
-            margin-bottom: 0.55rem;
+            margin-bottom: 0.5rem;
         }
         .tag {
-            font-size: 0.6rem;
+            font-size: 0.58rem;
             font-weight: 600;
             letter-spacing: 0.03em;
             text-transform: uppercase;
             padding: 3px 8px;
-            border-radius: 3px;
-            background: var(--accent-muted);
+            border-radius: 4px;
+            background: var(--accent-subtle);
             color: var(--accent);
-            border: 1px solid var(--border-accent);
+            border: 1px solid rgba(0, 212, 255, 0.18);
         }
         .project-card-title {
-            font-size: 0.88rem;
+            font-family: var(--font-heading);
+            font-size: 0.87rem;
             font-weight: 700;
-            color: #fff;
-            margin-bottom: 0.4rem;
+            color: var(--text-heading);
+            margin-bottom: 0.35rem;
             letter-spacing: -0.01em;
         }
         .project-card-desc {
-            font-size: 0.82rem;
+            font-size: 0.81rem;
             color: var(--text-secondary);
             line-height: 1.7;
         }
@@ -799,7 +928,7 @@
             margin-top: 0.9rem;
             padding-top: 0.75rem;
             border-top: 1px solid var(--border);
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             color: var(--text-tertiary);
         }
         .project-card-bestfor strong {
@@ -810,105 +939,32 @@
             display: flex;
             flex-wrap: wrap;
             gap: 4px;
-            margin-top: 6px;
+            margin-top: 5px;
         }
         .bestfor-pill {
-            font-size: 0.62rem;
-            font-weight: 600;
-            background: rgba(255, 255, 255, 0.04);
-            color: var(--text-secondary);
-            padding: 2px 8px;
-            border-radius: 3px;
-            letter-spacing: 0.02em;
-        }
-
-        /* ── SCIENCE FILTER ── */
-        .filter-bar {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 7px;
-            margin-bottom: 1.25rem;
-        }
-        .filter-label {
-            font-family: 'JetBrains Mono', monospace;
             font-size: 0.6rem;
             font-weight: 600;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--text-tertiary);
-            margin-right: 4px;
-        }
-        .filter-btn {
-            font-family: inherit;
-            font-size: 0.73rem;
-            font-weight: 500;
-            padding: 6px 13px;
-            border-radius: 20px;
-            cursor: pointer;
-            border: 1px solid var(--border);
-            background: transparent;
+            background: #f8f9fb;
             color: var(--text-secondary);
-            transition: var(--transition-fast);
-            letter-spacing: 0.01em;
-        }
-        .filter-btn:hover {
-            border-color: var(--border-hover);
-            color: #fff;
-        }
-        .filter-btn.active {
-            background: var(--accent);
-            color: #0B0C0E;
-            border-color: var(--accent);
-            font-weight: 600;
-        }
-        .search-wrap {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-        .search-wrap input {
-            width: 100%;
-            padding: 10px 14px 10px 38px;
-            font-family: inherit;
-            font-size: 0.85rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.02em;
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: var(--bg-surface);
-            color: #fff;
-            outline: none;
-            transition: var(--transition-fast);
-        }
-        .search-wrap input:focus {
-            border-color: var(--border-accent);
-            background: var(--bg-surface-hover);
-        }
-        .search-wrap input::placeholder {
-            color: var(--text-tertiary);
-        }
-        .search-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-tertiary);
-            pointer-events: none;
-            width: 16px;
-            height: 16px;
         }
 
-        /* ── SCIENCE CARD EXTRAS ── */
+        /* ── SCIENCE EXTRAS ── */
         .sci-card[data-hidden="true"] {
             display: none;
         }
         .sci-rec-badge {
-            font-size: 0.58rem;
+            font-size: 0.56rem;
             font-weight: 600;
             letter-spacing: 0.03em;
-            background: rgba(232, 193, 88, 0.08);
-            color: #E8C158;
-            border: 1px solid rgba(232, 193, 88, 0.2);
+            background: #fffef5;
+            color: #8a6d00;
+            border: 1px solid rgba(200, 160, 40, 0.25);
             padding: 2px 7px;
-            border-radius: 3px;
+            border-radius: 4px;
         }
         .sci-bestfor {
             margin-top: 0.9rem;
@@ -916,10 +972,10 @@
             border-top: 1px solid var(--border);
         }
         .sci-bestfor-label {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--text-tertiary);
             font-weight: 500;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
         .sci-level-row {
             display: flex;
@@ -928,15 +984,15 @@
             margin-bottom: 3px;
         }
         .sci-level-name {
-            font-size: 0.68rem;
-            color: #fff;
+            font-size: 0.66rem;
+            color: var(--text);
             font-weight: 600;
-            min-width: 72px;
+            min-width: 68px;
         }
         .sci-pct-track {
             flex: 1;
             height: 3px;
-            background: var(--border);
+            background: #e8eaed;
             border-radius: 2px;
             overflow: hidden;
         }
@@ -944,15 +1000,91 @@
             height: 100%;
             border-radius: 2px;
             background: var(--accent);
-            transition: width 0.4s ease;
+            transition: width 0.45s ease;
         }
         .sci-pct-num {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.62rem;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
             font-weight: 600;
-            color: var(--text-tertiary);
-            min-width: 30px;
+            color: var(--text-muted);
+            min-width: 28px;
             text-align: right;
+        }
+
+        /* ── FILTER BAR ── */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 1.25rem;
+        }
+        .filter-label {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            margin-right: 4px;
+        }
+        .filter-btn {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 500;
+            padding: 6px 13px;
+            border-radius: 20px;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text-secondary);
+            transition: var(--transition-fast);
+            letter-spacing: 0.01em;
+        }
+        .filter-btn:hover {
+            border-color: rgba(0, 0, 0, 0.2);
+            color: #000;
+        }
+        .filter-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0, 212, 255, 0.2);
+        }
+        .search-wrap {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .search-wrap input {
+            width: 100%;
+            padding: 11px 14px 11px 40px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            transition: var(--transition-fast);
+            letter-spacing: 0.01em;
+        }
+        .search-wrap input:focus {
+            border-color: var(--border-accent);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.06);
+        }
+        .search-wrap input::placeholder {
+            color: var(--text-muted);
+        }
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            width: 16px;
+            height: 16px;
         }
 
         /* ── YOUTUBE NOTE ── */
@@ -960,33 +1092,33 @@
             display: flex;
             align-items: flex-start;
             gap: 14px;
-            background: rgba(59, 130, 246, 0.05);
-            border: 1px solid rgba(147, 197, 253, 0.2);
-            border-left: 3px solid #3B82F6;
+            background: #f6faff;
+            border: 1px solid rgba(60, 130, 220, 0.2);
+            border-left: 3px solid #4a90d9;
             border-radius: var(--radius);
             padding: 16px 20px;
             margin-bottom: 2rem;
             font-size: 0.85rem;
-            color: #BFDBFE;
+            color: #3a5070;
             line-height: 1.65;
         }
         .youtube-note-icon {
             flex-shrink: 0;
             width: 20px;
             height: 20px;
-            color: #60A5FA;
+            color: #4a90d9;
             margin-top: 1px;
         }
         .youtube-note-warning {
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             font-weight: 600;
-            color: #FCD34D;
-            background: rgba(245, 158, 11, 0.06);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            border-radius: 4px;
+            color: #6b5500;
+            background: #fffef5;
+            border: 1px solid rgba(200, 160, 40, 0.25);
+            border-radius: 6px;
             padding: 4px 10px;
             margin-top: 6px;
         }
@@ -995,21 +1127,23 @@
         .contact-card {
             max-width: 500px;
             margin: 0 auto;
-            background: var(--bg-surface);
+            background: #fff;
             border: 1px solid var(--border);
-            border-radius: var(--radius-xl);
+            border-radius: var(--radius-2xl);
             padding: 2.8rem 2.5rem;
             text-align: center;
             transition: var(--transition);
+            box-shadow: var(--shadow-sm);
         }
         .contact-card:hover {
-            border-color: var(--border-hover);
-            box-shadow: var(--shadow-md);
+            box-shadow: var(--shadow-glow), var(--shadow-md);
+            border-color: var(--border-accent);
         }
         .contact-title {
-            font-size: 1.05rem;
+            font-family: var(--font-heading);
+            font-size: 1.08rem;
             font-weight: 700;
-            color: #fff;
+            color: var(--text-heading);
             margin-bottom: 0.6rem;
             letter-spacing: -0.01em;
             line-height: 1.55;
@@ -1024,24 +1158,25 @@
             display: inline-flex;
             align-items: center;
             gap: 9px;
-            padding: 11px 26px;
+            padding: 12px 28px;
             background: #0088CC;
             color: #fff;
             text-decoration: none;
-            border-radius: var(--radius-sm);
+            border-radius: 25px;
             font-weight: 600;
             font-size: 0.9rem;
-            font-family: inherit;
+            font-family: var(--font-body);
             transition: var(--transition);
             letter-spacing: 0.01em;
+            box-shadow: 0 3px 14px rgba(0, 136, 204, 0.22);
         }
         .btn-telegram:hover {
             background: #0099DD;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 136, 204, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 26px rgba(0, 136, 204, 0.32);
         }
         .btn-telegram:active {
-            transform: scale(0.97);
+            transform: scale(0.96);
         }
         .btn-telegram svg {
             width: 17px;
@@ -1055,40 +1190,40 @@
             bottom: 22px;
             right: 22px;
             z-index: 998;
-            width: 46px;
-            height: 46px;
+            width: 48px;
+            height: 48px;
             background: #25D366;
             color: #fff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 18px rgba(37, 211, 102, 0.3);
-            transition: var(--transition);
+            box-shadow: 0 4px 18px rgba(37, 211, 102, 0.28);
+            transition: var(--transition-spring);
             text-decoration: none;
             border: none;
             cursor: pointer;
         }
         .whatsapp-float:hover {
-            transform: scale(1.08);
-            box-shadow: 0 8px 28px rgba(37, 211, 102, 0.45);
+            transform: scale(1.1);
+            box-shadow: 0 8px 28px rgba(37, 211, 102, 0.4);
             background: #20BD5C;
         }
         .whatsapp-float svg {
-            width: 22px;
-            height: 22px;
+            width: 23px;
+            height: 23px;
             fill: #fff;
         }
 
         /* ── FOOTER ── */
         .footer {
-            background: #08090A;
+            background: #fafbfc;
             border-top: 1px solid var(--border);
-            padding: 1.5rem 0;
+            padding: 1.6rem 0;
             text-align: center;
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             color: var(--text-tertiary);
-            font-family: 'JetBrains Mono', 'Inter', monospace;
+            font-family: var(--font-mono);
             letter-spacing: 0.03em;
         }
         .footer span {
@@ -1112,11 +1247,18 @@
                 width: auto;
             }
             .featured-icon-box {
-                width: 70px;
-                height: 70px;
+                width: 72px;
+                height: 72px;
             }
             .hero-stats {
                 gap: 1.5rem;
+            }
+            .reveal-section.reveal-right,
+            .reveal-section.reveal-left {
+                transform: translateY(30px);
+            }
+            .reveal-section.visible {
+                transform: translateY(0);
             }
         }
         @media (max-width: 768px) {
@@ -1128,10 +1270,10 @@
                 flex-direction: column;
                 align-items: flex-start;
                 position: fixed;
-                top: 91px;
+                top: 88px;
                 left: 0;
                 right: 0;
-                background: rgba(11, 12, 14, 0.97);
+                background: rgba(255, 255, 255, 0.97);
                 backdrop-filter: blur(20px);
                 -webkit-backdrop-filter: blur(20px);
                 padding: 1.5rem 5%;
@@ -1154,7 +1296,7 @@
                 padding: 2rem 1.5rem;
             }
             .hero-title {
-                font-size: 1.6rem;
+                font-size: 1.55rem;
             }
             .youtube-note {
                 flex-direction: column;
@@ -1173,10 +1315,20 @@
             .services-grid {
                 grid-template-columns: 1fr;
             }
+            .reveal-section.reveal-right,
+            .reveal-section.reveal-left {
+                transform: translateY(30px);
+            }
+            .reveal-section.visible {
+                transform: translateY(0);
+            }
+            .cursor-trail {
+                display: none !important;
+            }
         }
         @media (max-width: 480px) {
             .hero-title {
-                font-size: 1.4rem;
+                font-size: 1.35rem;
             }
             .hero-stats {
                 flex-wrap: wrap;
@@ -1195,10 +1347,16 @@
             .contact-card {
                 padding: 1.5rem 1rem;
             }
+            .cursor-trail {
+                display: none !important;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- ═══════════ CURSOR TRAIL ═══════════ -->
+    <div class="cursor-trail" id="cursorTrail"></div>
 
     <!-- ═══════════ ANNOUNCEMENT BAR ═══════════ -->
     <div class="announcement-bar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')" role="button" tabindex="0" aria-label="Visit premium code website">
@@ -1209,8 +1367,8 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <a href="#" class="nav-brand" aria-label="The Debug Point Home">
-                <div class="nav-brand-icon">
-                    <svg viewBox="0 0 24 24"><path d="M8 3l-2 2 6 6-6 6 2 2 8-8-8-8z"/><path d="M16 3l-2 2 6 6-6 6 2 2 8-8-8-8z" opacity="0.5"/></svg>
+                <div class="nav-brand-mark">
+                    <svg viewBox="0 0 24 24"><polygon points="12,3 22,21 2,21"/></svg>
                 </div>
                 The Debug Point
             </a>
@@ -1230,33 +1388,37 @@
     <!-- ═══════════ HERO ═══════════ -->
     <section class="hero" id="hero">
         <div class="hero-bg">
-            <div class="hero-bg-grid"></div>
-            <div class="hero-bg-glow"></div>
+            <div class="hero-bg-grid" id="heroGrid"></div>
+            <div class="hero-bg-glow" id="heroGlow"></div>
+            <div class="hero-bg-orb" id="heroOrb"></div>
         </div>
         <div class="container">
             <div class="hero-content">
-                <div class="info-banner reveal">
+                <div class="info-banner hero-reveal">
                     <svg class="info-banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     <span><strong>Expensive এবং Rare Project</strong> বানাতে হলে অবশ্যই Project জমা দেওয়ার <strong>৩–৭ দিন আগে</strong> আমাদের সাথে যোগাযোগ করতে হবে।</span>
                 </div>
-                <div class="hero-badge reveal">Chittagong · Established 2026</div>
-                <h1 class="hero-title reveal reveal-d1">
+                <div class="hero-badge hero-reveal hr-d1">
+                    <span class="hero-badge-dot"></span> Chittagong · Established 2026
+                </div>
+                <h1 class="hero-title hero-reveal hr-d2">
                     চট্টগ্রামে Coding ও Robotic Project<br>
                     এবং Custom Code এর জন্য<br>
                     <em>সঠিক জায়গা</em>
+                    <span class="hero-title-glow"></span>
                 </h1>
-                <p class="hero-sub reveal reveal-d2">
+                <p class="hero-sub hero-reveal hr-d3">
                     Professional ভাবে Coding, Robotics ও Science Project তৈরি করে থাকি।
                     School, College, University এবং Engineering শিক্ষার্থীদের জন্য সম্পূর্ণ Support প্রদান করি।
                 </p>
-                <div class="hero-actions reveal reveal-d3">
+                <div class="hero-actions hero-reveal hr-d4">
                     <a href="#contact" class="btn btn-primary">অর্ডার করুন</a>
                     <a href="#projects" class="btn btn-secondary">প্রজেক্ট দেখুন</a>
                 </div>
-                <div class="hero-note reveal reveal-d4">
+                <div class="hero-note hero-reveal hr-d4">
                     <span class="hero-note-dot"></span> প্রজেক্ট করতে সরাসরি আমাদের ঠিকানায় আসতে হবে
                 </div>
-                <div class="hero-stats reveal reveal-d4">
+                <div class="hero-stats hero-reveal hr-d4">
                     <div>
                         <div class="hero-stat-num">18<span>+</span></div>
                         <div class="hero-stat-label">Robotics Projects</div>
@@ -1275,39 +1437,39 @@
     </section>
 
     <!-- ═══════════ SERVICES ═══════════ -->
-    <section class="section section-alt" id="services">
+    <section class="section section-alt reveal-section reveal-right" id="services">
         <div class="container">
             <div class="section-header">
-                <div class="section-eyebrow reveal">What We Do</div>
-                <h2 class="section-title reveal">আমাদের সার্ভিসসমূহ</h2>
-                <div class="section-line reveal"></div>
+                <div class="section-eyebrow">What We Do</div>
+                <h2 class="section-title">আমাদের সার্ভিসসমূহ</h2>
+                <div class="section-line"></div>
             </div>
             <div class="services-grid">
-                <div class="service-card reveal">
+                <div class="service-card reveal-card">
                     <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
                     <div class="service-card-num">Service 01</div>
                     <h3 class="service-card-title">C++ Programming <span class="service-card-tag">CODE</span></h3>
                     <p class="service-card-desc">Algorithm, Problem Solving, Academic Projects, Competitive Programming — সব ধরনের C++ সহায়তা।</p>
                 </div>
-                <div class="service-card reveal reveal-d1">
+                <div class="service-card reveal-card reveal-card-d1">
                     <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="12" r="4"/></svg></div>
                     <div class="service-card-num">Service 02</div>
                     <h3 class="service-card-title">Arduino Robotics <span class="service-card-tag">HARDWARE</span></h3>
                     <p class="service-card-desc">Complete Hardware + Software Setup with Documentation — সম্পূর্ণ রোবোটিক্স প্রজেক্ট তৈরি করা হয়।</p>
                 </div>
-                <div class="service-card reveal reveal-d2">
+                <div class="service-card reveal-card reveal-card-d2">
                     <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
                     <div class="service-card-num">Service 03</div>
                     <h3 class="service-card-title">Arduino Code <span class="service-card-tag">CODE</span></h3>
                     <p class="service-card-desc">শুধু কোড সার্ভিস — Fully Tested &amp; Optimized। Arduino IDE তে পেশাদার কোড লেখা হয়।</p>
                 </div>
-                <div class="service-card reveal reveal-d3">
+                <div class="service-card reveal-card reveal-card-d3">
                     <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-7 10 7-10 7z"/><path d="M6 12v6a2 2 0 002 2h8a2 2 0 002-2v-6"/></svg></div>
                     <div class="service-card-num">Service 04</div>
                     <h3 class="service-card-title">Academic Projects <span class="service-card-tag">ACADEMIC</span></h3>
                     <p class="service-card-desc">Science Fair ও Academic Project Support। CUET সহ সব বিশ্ববিদ্যালয়ের প্রজেক্ট করা হয়।</p>
                 </div>
-                <div class="service-card reveal reveal-d4">
+                <div class="service-card reveal-card reveal-card-d4">
                     <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/><path d="M2 12a10 10 0 0110-10"/></svg></div>
                     <div class="service-card-num">Service 05</div>
                     <h3 class="service-card-title">Custom IoT Projects <span class="service-card-tag">IoT</span></h3>
@@ -1320,9 +1482,9 @@
     <hr class="section-divider">
 
     <!-- ═══════════ FEATURED ═══════════ -->
-    <section class="section" id="featured">
+    <section class="section reveal-section reveal-left" id="featured">
         <div class="container">
-            <div class="featured-card reveal">
+            <div class="featured-card reveal-card">
                 <div class="featured-inner">
                     <div>
                         <div class="featured-badge"><span class="featured-badge-dot"></span> Premium Service</div>
@@ -1357,14 +1519,14 @@
     <hr class="section-divider">
 
     <!-- ═══════════ PROJECTS ═══════════ -->
-    <section class="section section-alt" id="projects">
+    <section class="section section-alt reveal-section reveal-right" id="projects">
         <div class="container">
             <div class="section-header">
-                <div class="section-eyebrow reveal">Our Work</div>
-                <h2 class="section-title reveal">Robotics &amp; IoT প্রজেক্ট</h2>
-                <div class="section-line reveal"></div>
+                <div class="section-eyebrow">Our Work</div>
+                <h2 class="section-title">Robotics &amp; IoT প্রজেক্ট</h2>
+                <div class="section-line"></div>
             </div>
-            <div class="youtube-note reveal">
+            <div class="youtube-note">
                 <svg class="youtube-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
                 <div>
                     <p>YouTube থেকে পছন্দ করে শুধু Demo দেখিয়ে আপনার Favorite Project করাতে পারেন।</p>
@@ -1372,25 +1534,24 @@
                 </div>
             </div>
             <div class="card-grid" id="projectsGrid">
-                <!-- Project cards populated below via JS for brevity but kept inline for direct usability -->
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#01</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Human Following Robot</p><p class="project-card-desc">IR Sensor ও Ultrasonic Sensor ব্যবহার করে সামনের মানুষকে চিনে গতিপথ নির্ধারণ করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#02</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Fingerprint Door Lock System</p><p class="project-card-desc">বায়োমেট্রিক Fingerprint Sensor — Registered আঙুলের ছাপ মিললে দরজা খুলে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#03</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">RFID Door Lock System</p><p class="project-card-desc">RFID Card বা Keychain Tap করলে দরজা খুলে যায়। Office, Hostel, Lab এর জন্য আদর্শ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><span class="project-card-num">#04</span></div><div class="project-card-tags"><span class="tag">IoT</span></div><p class="project-card-title">Home Automation System</p><p class="project-card-desc">Bluetooth/WiFi ব্যবহার করে স্মার্টফোন থেকে ঘরের আলো, ফ্যান ও যন্ত্রপাতি নিয়ন্ত্রণ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><span class="project-card-num">#05</span></div><div class="project-card-tags"><span class="tag">Safety</span></div><p class="project-card-title">Emergency Room Alert System</p><p class="project-card-desc">রোগীর অবস্থা সংকটজনক হলে স্বয়ংক্রিয়ভাবে Buzzer বাজে এবং LED Signal দেয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="22" height="12" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></svg></div><span class="project-card-num">#06</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Bluetooth Control Car</p><p class="project-card-desc">স্মার্টফোনের Bluetooth App দিয়ে গাড়িটি সামনে, পেছনে, বাম ও ডানে নিয়ন্ত্রণ করা যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 4 6 4 10c0 5 8 12 8 12s8-7 8-12c0-4-4-8-8-8z"/></svg></div><span class="project-card-num">#07</span></div><div class="project-card-tags"><span class="tag">Robotics</span><span class="tag">Safety</span></div><p class="project-card-title">Fire Fighting Robot</p><p class="project-card-desc">Flame Sensor দিয়ে আগুনের উৎস শনাক্ত করে Robot স্বয়ংক্রিয়ভাবে সেদিকে এগিয়ে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></div><span class="project-card-num">#08</span></div><div class="project-card-tags"><span class="tag">Sensor</span></div><p class="project-card-title">Humidity &amp; Temperature Monitor</p><p class="project-card-desc">DHT11/DHT22 Sensor ব্যবহার করে Real-time তাপমাত্রা এবং আর্দ্রতা পরিমাপ করা হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/></svg></div><span class="project-card-num">#09</span></div><div class="project-card-tags"><span class="tag">IoT</span></div><p class="project-card-title">Smart Home Automation (ESP32)</p><p class="project-card-desc">ESP32 ও WiFi ব্যবহার করে Mobile App এর মাধ্যমে Light, Fan দূর থেকে নিয়ন্ত্রণ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#10</span></div><div class="project-card-tags"><span class="tag">Sensor</span><span class="tag">Automation</span></div><p class="project-card-title">Automatic Light Control System</p><p class="project-card-desc">LDR Sensor পরিবেশের আলো পরিমাপ করে — অন্ধকার হলে বাতি Automatic ON হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg></div><span class="project-card-num">#11</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Smart Door Lock System</p><p class="project-card-desc">Keypad বা Fingerprint Match হলে Servo Motor দরজা খুলে দেয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/></svg></div><span class="project-card-num">#12</span></div><div class="project-card-tags"><span class="tag">Automation</span><span class="tag">Sensor</span></div><p class="project-card-title">Smart Fan Speed Controller</p><p class="project-card-desc">Temperature Sensor — তাপমাত্রা বাড়লে ফ্যানের গতি স্বয়ংক্রিয়ভাবে বেড়ে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18"/></svg></div><span class="project-card-num">#13</span></div><div class="project-card-tags"><span class="tag">Automation</span></div><p class="project-card-title">Automatic Door Opener</p><p class="project-card-desc">PIR Sensor মানুষের উপস্থিতি বুঝে দরজা Automatic খুলে দেয়। Hospital ও Restaurant উপযোগী।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 8–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><span class="project-card-num">#14</span></div><div class="project-card-tags"><span class="tag">Health</span><span class="tag">Sensor</span></div><p class="project-card-title">Heart Rate Monitor</p><p class="project-card-desc">Pulse Sensor আঙুলে লাগিয়ে হৃৎস্পন্দনের হার (BPM) নির্ণয় করা হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12h6M12 9v6"/></svg></div><span class="project-card-num">#15</span></div><div class="project-card-tags"><span class="tag">Health</span><span class="tag">IoT</span></div><p class="project-card-title">Patient Health Monitoring System</p><p class="project-card-desc">Temperature, Heartbeat এবং SpO2 Measure করে Real-time ডেটা Doctor/Nurse এর কাছে পাঠায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div><span class="project-card-num">#16</span></div><div class="project-card-tags"><span class="tag">Safety</span><span class="tag">Sensor</span></div><p class="project-card-title">Gas Leakage Detection System</p><p class="project-card-desc">MQ-2 Sensor দিয়ে বাতাসে Gas এর পরিমাণ পরিমাপ — বেশি হলে Alarm বাজে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 8–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 4 6 4 10c0 5 8 12 8 12s8-7 8-12c0-4-4-8-8-8z"/></svg></div><span class="project-card-num">#17</span></div><div class="project-card-tags"><span class="tag">Safety</span></div><p class="project-card-title">Fire Detection &amp; Alert System</p><p class="project-card-desc">Flame Sensor এবং Smoke Sensor একসাথে আগুনের উপস্থিতি নিশ্চিত করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 8–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#18</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">RFID Based Attendance System</p><p class="project-card-desc">RFID Card Scan করলে Student/Employee এর নাম ও সময় Automatically Record হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#01</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Human Following Robot</p><p class="project-card-desc">IR Sensor ও Ultrasonic Sensor ব্যবহার করে সামনের মানুষকে চিনে গতিপথ নির্ধারণ করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#02</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Fingerprint Door Lock System</p><p class="project-card-desc">বায়োমেট্রিক Fingerprint Sensor — Registered আঙুলের ছাপ মিললে দরজা খুলে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d2"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#03</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">RFID Door Lock System</p><p class="project-card-desc">RFID Card বা Keychain Tap করলে দরজা খুলে যায়। Office, Hostel, Lab এর জন্য আদর্শ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d3"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><span class="project-card-num">#04</span></div><div class="project-card-tags"><span class="tag">IoT</span></div><p class="project-card-title">Home Automation System</p><p class="project-card-desc">Bluetooth/WiFi ব্যবহার করে স্মার্টফোন থেকে ঘরের আলো, ফ্যান ও যন্ত্রপাতি নিয়ন্ত্রণ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d4"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><span class="project-card-num">#05</span></div><div class="project-card-tags"><span class="tag">Safety</span></div><p class="project-card-title">Emergency Room Alert System</p><p class="project-card-desc">রোগীর অবস্থা সংকটজনক হলে স্বয়ংক্রিয়ভাবে Buzzer বাজে এবং LED Signal দেয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d5"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="22" height="12" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></svg></div><span class="project-card-num">#06</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Bluetooth Control Car</p><p class="project-card-desc">স্মার্টফোনের Bluetooth App দিয়ে গাড়িটি সামনে, পেছনে, বাম ও ডানে নিয়ন্ত্রণ করা যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
+                <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 4 6 4 10c0 5 8 12 8 12s8-7 8-12c0-4-4-8-8-8z"/></svg></div><span class="project-card-num">#07</span></div><div class="project-card-tags"><span class="tag">Robotics</span><span class="tag">Safety</span></div><p class="project-card-title">Fire Fighting Robot</p><p class="project-card-desc">Flame Sensor দিয়ে আগুনের উৎস শনাক্ত করে Robot স্বয়ংক্রিয়ভাবে সেদিকে এগিয়ে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></div><span class="project-card-num">#08</span></div><div class="project-card-tags"><span class="tag">Sensor</span></div><p class="project-card-title">Humidity &amp; Temperature Monitor</p><p class="project-card-desc">DHT11/DHT22 Sensor ব্যবহার করে Real-time তাপমাত্রা এবং আর্দ্রতা পরিমাপ করা হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d2"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/></svg></div><span class="project-card-num">#09</span></div><div class="project-card-tags"><span class="tag">IoT</span></div><p class="project-card-title">Smart Home Automation (ESP32)</p><p class="project-card-desc">ESP32 ও WiFi ব্যবহার করে Mobile App এর মাধ্যমে Light, Fan দূর থেকে নিয়ন্ত্রণ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d3"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#10</span></div><div class="project-card-tags"><span class="tag">Sensor</span><span class="tag">Automation</span></div><p class="project-card-title">Automatic Light Control System</p><p class="project-card-desc">LDR Sensor পরিবেশের আলো পরিমাপ করে — অন্ধকার হলে বাতি Automatic ON হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d4"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg></div><span class="project-card-num">#11</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Smart Door Lock System</p><p class="project-card-desc">Keypad বা Fingerprint Match হলে Servo Motor দরজা খুলে দেয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d5"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/></svg></div><span class="project-card-num">#12</span></div><div class="project-card-tags"><span class="tag">Automation</span><span class="tag">Sensor</span></div><p class="project-card-title">Smart Fan Speed Controller</p><p class="project-card-desc">Temperature Sensor — তাপমাত্রা বাড়লে ফ্যানের গতি স্বয়ংক্রিয়ভাবে বেড়ে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
+                <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18"/></svg></div><span class="project-card-num">#13</span></div><div class="project-card-tags"><span class="tag">Automation</span></div><p class="project-card-title">Automatic Door Opener</p><p class="project-card-desc">PIR Sensor মানুষের উপস্থিতি বুঝে দরজা Automatic খুলে দেয়। Hospital ও Restaurant উপযোগী।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 8–10</span><span class="bestfor-pill">HSC</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><span class="project-card-num">#14</span></div><div class="project-card-tags"><span class="tag">Health</span><span class="tag">Sensor</span></div><p class="project-card-title">Heart Rate Monitor</p><p class="project-card-desc">Pulse Sensor আঙুলে লাগিয়ে হৃৎস্পন্দনের হার (BPM) নির্ণয় করা হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d2"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12h6M12 9v6"/></svg></div><span class="project-card-num">#15</span></div><div class="project-card-tags"><span class="tag">Health</span><span class="tag">IoT</span></div><p class="project-card-title">Patient Health Monitoring System</p><p class="project-card-desc">Temperature, Heartbeat এবং SpO2 Measure করে Real-time ডেটা Doctor/Nurse এর কাছে পাঠায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d3"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg></div><span class="project-card-num">#16</span></div><div class="project-card-tags"><span class="tag">Safety</span><span class="tag">Sensor</span></div><p class="project-card-title">Gas Leakage Detection System</p><p class="project-card-desc">MQ-2 Sensor দিয়ে বাতাসে Gas এর পরিমাণ পরিমাপ — বেশি হলে Alarm বাজে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 8–10</span><span class="bestfor-pill">HSC</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d4"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 4 6 4 10c0 5 8 12 8 12s8-7 8-12c0-4-4-8-8-8z"/></svg></div><span class="project-card-num">#17</span></div><div class="project-card-tags"><span class="tag">Safety</span></div><p class="project-card-title">Fire Detection &amp; Alert System</p><p class="project-card-desc">Flame Sensor এবং Smoke Sensor একসাথে আগুনের উপস্থিতি নিশ্চিত করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 8–10</span><span class="bestfor-pill">HSC</span></div></div></div>
+                <div class="project-card reveal-card reveal-card-d5"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#18</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">RFID Based Attendance System</p><p class="project-card-desc">RFID Card Scan করলে Student/Employee এর নাম ও সময় Automatically Record হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
             </div>
         </div>
     </section>
@@ -1398,14 +1559,14 @@
     <hr class="section-divider">
 
     <!-- ═══════════ SCIENCE PROJECTS ═══════════ -->
-    <section class="section" id="science">
+    <section class="section reveal-section reveal-left" id="science">
         <div class="container">
             <div class="section-header">
-                <div class="section-eyebrow reveal">Science Projects</div>
-                <h2 class="section-title reveal">Chemistry &middot; Biology &middot; Physics</h2>
-                <div class="section-line reveal"></div>
+                <div class="section-eyebrow">Science Projects</div>
+                <h2 class="section-title">Chemistry &middot; Biology &middot; Physics</h2>
+                <div class="section-line"></div>
             </div>
-            <div class="filter-bar reveal">
+            <div class="filter-bar">
                 <span class="filter-label">Filter:</span>
                 <button class="filter-btn active" onclick="filterSci('all', this)">সব</button>
                 <button class="filter-btn" onclick="filterSci('chemistry', this)">Chemistry</button>
@@ -1415,31 +1576,31 @@
                 <button class="filter-btn" onclick="filterSci('hsc', this)">HSC</button>
                 <button class="filter-btn" onclick="filterSci('cuet', this)">CUET</button>
             </div>
-            <div class="search-wrap reveal">
+            <div class="search-wrap">
                 <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 <input type="text" id="sciSearch" placeholder="প্রজেক্ট খুঁজুন... যেমন: gas, water, temperature" oninput="searchSci()" />
             </div>
             <div class="card-grid" id="sciGrid">
-                <div class="project-card sci-card" data-cat="chemistry" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg></div><span class="project-card-num">#C-01</span></div><div class="project-card-tags"><span class="tag">Chemistry</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Gas Leak Detection (MQ2)</p><p class="project-card-desc">MQ-2 Sensor বাতাসে LPG, Methane, Smoke এবং Hydrogen গ্যাসের উপস্থিতি শনাক্ত করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="chemistry" data-level="hsc honours"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#C-02</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Air Quality Monitor (MQ135)</p><p class="project-card-desc">MQ-135 Sensor — বাতাসে CO₂, NH₃, Benzene ও ক্ষতিকর গ্যাসের পরিমাণ পরিমাপ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="chemistry" data-level="hsc cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#C-03</span></div><div class="project-card-tags"><span class="tag">Chemistry</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Water Quality Monitor (pH + TDS)</p><p class="project-card-desc">pH Sensor ও TDS Sensor — পানির অম্লতা ও দ্রবীভূত কঠিন পদার্থের পরিমাণ মাপা হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="chemistry" data-level="cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></div><span class="project-card-num">#C-04</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Smart Lab Safety Alarm System</p><p class="project-card-desc">Gas, Smoke ও Temperature Sensor — ল্যাবরেটরির পরিবেশ পর্যবেক্ষণ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="chemistry" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div><span class="project-card-num">#C-05</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Alcohol Detection System</p><p class="project-card-desc">MQ-3 Sensor শ্বাস-প্রশ্বাসে অ্যালকোহলের পরিমাণ শনাক্ত করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="chemistry" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4"/></svg></div><span class="project-card-num">#C-06</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Smart Smoke Detection System</p><p class="project-card-desc">MQ-2 Sensor বাতাসে ধোঁয়ার কণা শনাক্ত করে — বিপদজনক মাত্রায় Siren বাজে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="chemistry" data-level="hsc honours"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#C-07</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Water Pollution Alert System</p><p class="project-card-desc">Turbidity Sensor ও pH Sensor দিয়ে পানির ঘোলাত্ব ও রাসায়নিক মান পরিমাপ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="biology" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#B-01</span></div><div class="project-card-tags"><span class="tag">Biology</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Smart Plant Watering System</p><p class="project-card-desc">Soil Moisture Sensor — মাটি শুকিয়ে গেলে Water Pump চালু হয়ে Automatic পানি দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="biology" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><span class="project-card-num">#B-02</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Heart Rate Monitor</p><p class="project-card-desc">Pulse Sensor আঙুলে রক্ত প্রবাহের ছন্দ পরিমাপ করে BPM নির্ণয় করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="biology" data-level="hsc cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></div><span class="project-card-num">#B-03</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Smart Greenhouse Monitoring</p><p class="project-card-desc">DHT22 Sensor দিয়ে Greenhouse এর ভেতরের তাপমাত্রা ও আর্দ্রতা পর্যবেক্ষণ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="biology" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></div><span class="project-card-num">#B-04</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Body Temperature Monitor</p><p class="project-card-desc">MLX90614 Infrared Sensor স্পর্শ না করেও শরীরের তাপমাত্রা পরিমাপ করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="biology" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#B-05</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Automatic Pet Feeder</p><p class="project-card-desc">RTC Module — নির্দিষ্ট সময়সূচি অনুযায়ী Servo Motor চালু হয়ে Pet এর Food Bowl এ খাবার দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="biology" data-level="cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/></svg></div><span class="project-card-num">#B-06</span></div><div class="project-card-tags"><span class="tag">Biology</span><span class="tag">IoT</span></div><p class="project-card-title">Smart Health Monitoring Band (IoT)</p><p class="project-card-desc">Wearable Band — Heart Rate, Temperature এবং Accelerometer একসাথে কাজ করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="physics" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></div><span class="project-card-num">#P-01</span></div><div class="project-card-tags"><span class="tag">Physics</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Distance Measurement System</p><p class="project-card-desc">HC-SR04 Ultrasonic Sensor — Sound Wave পাঠিয়ে বস্তুর দূরত্ব নির্ণয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="physics" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#P-02</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Motion Detection System (PIR)</p><p class="project-card-desc">PIR Sensor — মানুষ বা প্রাণীর শরীর থেকে নির্গত Infrared Radiation শনাক্ত করে গতি বোঝে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="physics" data-level="hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#P-03</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Speed Measurement System</p><p class="project-card-desc">দুটি IR Sensor নির্দিষ্ট দূরত্বে স্থাপন করে গতিবেগ নির্ণয় (v = d/t)।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="physics" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></div><span class="project-card-num">#P-04</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Digital Thermometer</p><p class="project-card-desc">DS18B20/LM35 Sensor ব্যবহার করে পরিবেশের তাপমাত্রা নির্ভুলভাবে পরিমাপ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="physics" data-level="hsc cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#P-05</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Solar Tracking System</p><p class="project-card-desc">দুটি LDR Sensor — সূর্যের অবস্থান বুঝে Servo Motor Solar Panel ঘুরিয়ে দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="physics" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#P-06</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Smart Street Light System</p><p class="project-card-desc">LDR Sensor — সন্ধ্যায় অন্ধকার হলে Street Light Automatic ON হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
-                <div class="project-card sci-card" data-cat="physics" data-level="hsc honours cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></div><span class="project-card-num">#P-07</span></div><div class="project-card-tags"><span class="tag">Physics</span><span class="tag">IoT</span></div><p class="project-card-title">Smart Car Parking Slot System</p><p class="project-card-desc">প্রতিটি Parking Slot এ Sensor — গাড়ি থাকলে "Full", না থাকলে "Empty" দেখায়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+                <div class="project-card sci-card reveal-card" data-cat="chemistry" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg></div><span class="project-card-num">#C-01</span></div><div class="project-card-tags"><span class="tag">Chemistry</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Gas Leak Detection (MQ2)</p><p class="project-card-desc">MQ-2 Sensor বাতাসে LPG, Methane, Smoke এবং Hydrogen গ্যাসের উপস্থিতি শনাক্ত করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="chemistry" data-level="hsc honours"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#C-02</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Air Quality Monitor (MQ135)</p><p class="project-card-desc">MQ-135 Sensor — বাতাসে CO₂, NH₃, Benzene ও ক্ষতিকর গ্যাসের পরিমাণ পরিমাপ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d2" data-cat="chemistry" data-level="hsc cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#C-03</span></div><div class="project-card-tags"><span class="tag">Chemistry</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Water Quality Monitor (pH + TDS)</p><p class="project-card-desc">pH Sensor ও TDS Sensor — পানির অম্লতা ও দ্রবীভূত কঠিন পদার্থের পরিমাণ মাপা হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d3" data-cat="chemistry" data-level="cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></div><span class="project-card-num">#C-04</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Smart Lab Safety Alarm System</p><p class="project-card-desc">Gas, Smoke ও Temperature Sensor — ল্যাবরেটরির পরিবেশ পর্যবেক্ষণ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d4" data-cat="chemistry" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div><span class="project-card-num">#C-05</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Alcohol Detection System</p><p class="project-card-desc">MQ-3 Sensor শ্বাস-প্রশ্বাসে অ্যালকোহলের পরিমাণ শনাক্ত করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d5" data-cat="chemistry" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4"/></svg></div><span class="project-card-num">#C-06</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Smart Smoke Detection System</p><p class="project-card-desc">MQ-2 Sensor বাতাসে ধোঁয়ার কণা শনাক্ত করে — বিপদজনক মাত্রায় Siren বাজে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+                <div class="project-card sci-card reveal-card" data-cat="chemistry" data-level="hsc honours"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#C-07</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Water Pollution Alert System</p><p class="project-card-desc">Turbidity Sensor ও pH Sensor দিয়ে পানির ঘোলাত্ব ও রাসায়নিক মান পরিমাপ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="biology" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#B-01</span></div><div class="project-card-tags"><span class="tag">Biology</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Smart Plant Watering System</p><p class="project-card-desc">Soil Moisture Sensor — মাটি শুকিয়ে গেলে Water Pump চালু হয়ে Automatic পানি দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d2" data-cat="biology" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><span class="project-card-num">#B-02</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Heart Rate Monitor</p><p class="project-card-desc">Pulse Sensor আঙুলে রক্ত প্রবাহের ছন্দ পরিমাপ করে BPM নির্ণয় করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d3" data-cat="biology" data-level="hsc cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></div><span class="project-card-num">#B-03</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Smart Greenhouse Monitoring</p><p class="project-card-desc">DHT22 Sensor দিয়ে Greenhouse এর ভেতরের তাপমাত্রা ও আর্দ্রতা পর্যবেক্ষণ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d4" data-cat="biology" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></div><span class="project-card-num">#B-04</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Body Temperature Monitor</p><p class="project-card-desc">MLX90614 Infrared Sensor স্পর্শ না করেও শরীরের তাপমাত্রা পরিমাপ করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d5" data-cat="biology" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#B-05</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Automatic Pet Feeder</p><p class="project-card-desc">RTC Module — নির্দিষ্ট সময়সূচি অনুযায়ী Servo Motor চালু হয়ে Pet এর Food Bowl এ খাবার দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
+                <div class="project-card sci-card reveal-card" data-cat="biology" data-level="cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/></svg></div><span class="project-card-num">#B-06</span></div><div class="project-card-tags"><span class="tag">Biology</span><span class="tag">IoT</span></div><p class="project-card-title">Smart Health Monitoring Band (IoT)</p><p class="project-card-desc">Wearable Band — Heart Rate, Temperature এবং Accelerometer একসাথে কাজ করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="physics" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></div><span class="project-card-num">#P-01</span></div><div class="project-card-tags"><span class="tag">Physics</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Distance Measurement System</p><p class="project-card-desc">HC-SR04 Ultrasonic Sensor — Sound Wave পাঠিয়ে বস্তুর দূরত্ব নির্ণয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d2" data-cat="physics" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#P-02</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Motion Detection System (PIR)</p><p class="project-card-desc">PIR Sensor — মানুষ বা প্রাণীর শরীর থেকে নির্গত Infrared Radiation শনাক্ত করে গতি বোঝে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d3" data-cat="physics" data-level="hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#P-03</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Speed Measurement System</p><p class="project-card-desc">দুটি IR Sensor নির্দিষ্ট দূরত্বে স্থাপন করে গতিবেগ নির্ণয় (v = d/t)।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d4" data-cat="physics" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></div><span class="project-card-num">#P-04</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Digital Thermometer</p><p class="project-card-desc">DS18B20/LM35 Sensor ব্যবহার করে পরিবেশের তাপমাত্রা নির্ভুলভাবে পরিমাপ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d5" data-cat="physics" data-level="hsc cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#P-05</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Solar Tracking System</p><p class="project-card-desc">দুটি LDR Sensor — সূর্যের অবস্থান বুঝে Servo Motor Solar Panel ঘুরিয়ে দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
+                <div class="project-card sci-card reveal-card" data-cat="physics" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#P-06</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Smart Street Light System</p><p class="project-card-desc">LDR Sensor — সন্ধ্যায় অন্ধকার হলে Street Light Automatic ON হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
+                <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="physics" data-level="hsc honours cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></div><span class="project-card-num">#P-07</span></div><div class="project-card-tags"><span class="tag">Physics</span><span class="tag">IoT</span></div><p class="project-card-title">Smart Car Parking Slot System</p><p class="project-card-desc">প্রতিটি Parking Slot এ Sensor — গাড়ি থাকলে "Full", না থাকলে "Empty" দেখায়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
             </div>
         </div>
     </section>
@@ -1447,14 +1608,14 @@
     <hr class="section-divider">
 
     <!-- ═══════════ CONTACT ═══════════ -->
-    <section class="section section-alt" id="contact">
+    <section class="section section-alt reveal-section reveal-right" id="contact">
         <div class="container">
             <div class="section-header">
-                <div class="section-eyebrow reveal">Get In Touch</div>
-                <h2 class="section-title reveal">যোগাযোগ করুন</h2>
-                <div class="section-line reveal"></div>
+                <div class="section-eyebrow">Get In Touch</div>
+                <h2 class="section-title">যোগাযোগ করুন</h2>
+                <div class="section-line"></div>
             </div>
-            <div class="contact-card reveal">
+            <div class="contact-card reveal-card">
                 <h3 class="contact-title">বিস্তারিত জানতে বা অর্ডার করতে<br>Telegram এ মেসেজ দিন</h3>
                 <p class="contact-sub">আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।</p>
                 <a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram">
@@ -1490,44 +1651,125 @@
                 });
             });
 
-            // ── SCROLL REVEAL ──
-            var revealObserver = new IntersectionObserver(function(entries) {
+            // ── NAVBAR SCROLL SHADOW ──
+            var navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', function() {
+                navbar.classList.toggle('scrolled', window.scrollY > 30);
+            });
+
+            // ── CURSOR TRAIL (DESKTOP ONLY) ──
+            var cursorTrail = document.getElementById('cursorTrail');
+            var isMobile = window.innerWidth <= 768;
+            if (!isMobile && cursorTrail) {
+                var trailX = -200,
+                    trailY = -200;
+                var curX = -200,
+                    curY = -200;
+                document.addEventListener('mousemove', function(e) {
+                    curX = e.clientX;
+                    curY = e.clientY;
+                });
+                function updateTrail() {
+                    trailX += (curX - trailX) * 0.06;
+                    trailY += (curY - trailY) * 0.06;
+                    if (cursorTrail) {
+                        cursorTrail.style.left = trailX + 'px';
+                        cursorTrail.style.top = trailY + 'px';
+                    }
+                    requestAnimationFrame(updateTrail);
+                }
+                cursorTrail.classList.add('active');
+                updateTrail();
+
+                // Hide on touch devices
+                window.addEventListener('touchstart', function() {
+                    if (cursorTrail) cursorTrail.style.opacity = '0';
+                }, { once: true });
+            }
+
+            // ── PARALLAX ON HERO BACKGROUND ──
+            var heroGrid = document.getElementById('heroGrid');
+            var heroGlow = document.getElementById('heroGlow');
+            var heroOrb = document.getElementById('heroOrb');
+            var ticking = false;
+
+            function updateParallax() {
+                var scrollY = window.scrollY;
+                var heroSection = document.getElementById('hero');
+                var heroRect = heroSection.getBoundingClientRect();
+                var heroHeight = heroSection.offsetHeight;
+                // Only apply parallax when hero is visible
+                if (heroRect.bottom > 0 && heroRect.top < window.innerHeight) {
+                    var progress = (window.innerHeight - heroRect.top) / (window.innerHeight + heroHeight);
+                    progress = Math.max(0, Math.min(1, progress));
+                    var offsetY = progress * 60;
+                    if (heroGrid) heroGrid.style.transform = 'translateY(' + (offsetY * 0.3) + 'px)';
+                    if (heroGlow) heroGlow.style.transform = 'translateY(' + (offsetY * 0.5) + 'px) translateX(' + (offsetY *
+                        0.15) + 'px)';
+                    if (heroOrb) heroOrb.style.transform = 'translateY(' + (offsetY * 0.35) + 'px) translateX(' + (-offsetY *
+                        0.2) + 'px)';
+                }
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            });
+
+            // ── SCROLL REVEAL SYSTEM ──
+            var sectionObserver = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                     }
                 });
-            }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-            document.querySelectorAll('.reveal').forEach(function(el) {
-                revealObserver.observe(el);
+            // Observe sections with alternating directions
+            document.querySelectorAll('.reveal-section').forEach(function(section) {
+                sectionObserver.observe(section);
             });
 
-            // Also observe project cards for reveal
+            // Observe cards
             var cardObserver = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                     }
                 });
-            }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+            }, { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
 
-            document.querySelectorAll('.project-card').forEach(function(el) {
-                cardObserver.observe(el);
+            document.querySelectorAll('.reveal-card').forEach(function(card) {
+                cardObserver.observe(card);
+            });
+
+            // Observe hero elements
+            var heroObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            document.querySelectorAll('.hero-reveal').forEach(function(el) {
+                heroObserver.observe(el);
             });
 
             // ── SCIENCE FILTER ──
             window.filterSci = function(type, btn) {
-                document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove(
-                        'active'); });
+                document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
                 btn.classList.add('active');
                 document.querySelectorAll('.sci-card').forEach(function(card) {
                     var cat = card.dataset.cat || '';
                     var level = card.dataset.level || '';
                     var show = false;
                     if (type === 'all') show = true;
-                    else if (type === 'chemistry' || type === 'biology' || type === 'physics')
-                        show = cat === type;
+                    else if (type === 'chemistry' || type === 'biology' || type === 'physics') show = cat ===
+                        type;
                     else if (type === 'school') show = level.includes('school');
                     else if (type === 'hsc') show = level.includes('hsc');
                     else if (type === 'cuet') show = level.includes('cuet');
@@ -1543,18 +1785,18 @@
                     var text = card.innerText.toLowerCase();
                     card.style.display = text.includes(q) ? '' : 'none';
                 });
-                document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove(
-                        'active'); });
+                document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
                 var firstBtn = document.querySelector('.filter-btn');
                 if (firstBtn) firstBtn.classList.add('active');
             };
 
-            // ── RIPPLE ON BUTTONS ──
-            document.querySelectorAll('.btn, .btn-telegram, .filter-btn').forEach(function(btn) {
+            // ── RIPPLE EFFECT ON BUTTONS ──
+            document.querySelectorAll('.btn, .btn-telegram, .filter-btn, .btn-primary, .btn-secondary').forEach(function(
+            btn) {
                 btn.addEventListener('click', function(e) {
                     var ripple = document.createElement('span');
                     ripple.style.cssText =
-                        'position:absolute;border-radius:50%;background:rgba(255,255,255,0.2);transform:scale(0);animation:ripple 0.5s ease-out;pointer-events:none;left:' +
+                        'position:absolute;border-radius:50%;background:rgba(0,212,255,0.25);transform:scale(0);animation:ripple 0.5s ease-out;pointer-events:none;left:' +
                         e.offsetX + 'px;top:' + e.offsetY +
                         'px;width:20px;height:20px;margin-left:-10px;margin-top:-10px;';
                     btn.style.position = btn.style.position || 'relative';
@@ -1565,13 +1807,14 @@
             });
 
             var rippleKeyframes = document.createElement('style');
-            rippleKeyframes.textContent =
-                '@keyframes ripple{to{transform:scale(20);opacity:0;}}';
+            rippleKeyframes.textContent = '@keyframes ripple{to{transform:scale(22);opacity:0;}}';
             document.head.appendChild(rippleKeyframes);
 
-            console.log('%cThe Debug Point %c— Premium Experience',
-                'color:#14B8A6;font-weight:700;font-size:1em;',
-                'color:#9CA3AF;font-size:0.85em;');
+            console.log('%cThe Debug Point %c— White Luxury Edition',
+                'color:#00d4ff;font-weight:700;font-size:1em;',
+                'color:#555;font-size:0.85em;');
+            console.log('%cCinematic · Parallax · Alternating Scroll Reveal · GPU-Optimized',
+                'color:#999;font-size:0.75em;');
         })();
     </script>
 </body>
