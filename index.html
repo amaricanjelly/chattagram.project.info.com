@@ -6,6 +6,109 @@
     <title>The Debug Point — Coding & Robotics Solution, Chittagong</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- ═══════════ INTRO OVERLAY STYLES ═══════════ -->
+    <style>
+        #intro-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: opacity;
+        }
+        #intro-overlay.fading-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #intro-overlay.removed {
+            display: none;
+        }
+        #intro-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: filter;
+        }
+        #intro-canvas.blurring {
+            filter: blur(6px);
+        }
+        #skip-intro {
+            position: fixed;
+            top: 20px;
+            right: 24px;
+            z-index: 100001;
+            font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 7px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            opacity: 0;
+            pointer-events: none;
+        }
+        #skip-intro.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #skip-intro:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 180, 255, 0.2);
+        }
+        #skip-intro .skip-dot {
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #00d4ff;
+            margin-right: 6px;
+            animation: skip-pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes skip-pulse {
+            0%,
+            100% {
+                opacity: 0.4;
+                box-shadow: 0 0 4px #00d4ff;
+            }
+            50% {
+                opacity: 1;
+                box-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0, 180, 255, 0.5);
+            }
+        }
+
+        /* Main site initially hidden during intro */
+        #main-site {
+            opacity: 0;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #main-site.visible {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            #skip-intro {
+                top: 12px;
+                right: 12px;
+                font-size: 0.65rem;
+                padding: 5px 12px;
+            }
+        }
+    </style>
+
+    <!-- ═══════════ MAIN SITE STYLES ═══════════ -->
     <style>
         :root {
             --bg: #ffffff;
@@ -46,7 +149,6 @@
             --font-body: 'Inter', 'Noto Sans Bengali', system-ui, sans-serif;
             --font-mono: 'JetBrains Mono', 'Inter', monospace;
         }
-
         *,
         *::before,
         *::after {
@@ -71,8 +173,6 @@
             position: relative;
             cursor: default;
         }
-
-        /* ── NOISE TEXTURE OVERLAY ── */
         body::before {
             content: '';
             position: fixed;
@@ -83,8 +183,6 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
             mix-blend-mode: multiply;
         }
-
-        /* ── CURSOR GLOW TRAIL ── */
         .cursor-trail {
             position: fixed;
             pointer-events: none;
@@ -101,8 +199,6 @@
         .cursor-trail.active {
             opacity: 1;
         }
-
-        /* ── ANNOUNCEMENT BAR ── */
         .announcement-bar {
             background: #fafbfc;
             border-bottom: 1px solid var(--border);
@@ -126,8 +222,6 @@
             color: var(--accent);
             font-weight: 600;
         }
-
-        /* ── NAVBAR ── */
         .navbar {
             position: sticky;
             top: 34px;
@@ -242,8 +336,6 @@
             border-radius: 1px;
             transition: var(--transition-fast);
         }
-
-        /* ── HERO ── */
         .hero {
             min-height: 90vh;
             display: flex;
@@ -262,8 +354,7 @@
         .hero-bg-grid {
             position: absolute;
             inset: 0;
-            background-image:
-                linear-gradient(rgba(0, 0, 0, 0.025) 1px, transparent 1px),
+            background-image: linear-gradient(rgba(0, 0, 0, 0.025) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 0, 0, 0.025) 1px, transparent 1px);
             background-size: 60px 60px;
             mask-image: radial-gradient(ellipse 60% 50% at 50% 40%, black 20%, transparent 68%);
@@ -462,8 +553,6 @@
             margin-top: 4px;
             letter-spacing: 0.02em;
         }
-
-        /* ── INFO BANNER ── */
         .info-banner {
             background: #fffdf5;
             border: 1px solid rgba(200, 160, 40, 0.2);
@@ -489,8 +578,6 @@
             height: 18px;
             color: #d4a000;
         }
-
-        /* ── SECTIONS ── */
         .section {
             padding: 90px 0;
         }
@@ -551,8 +638,6 @@
             margin: 0 auto;
             padding: 0 5%;
         }
-
-        /* ── SCROLL REVEAL SYSTEM ── */
         .reveal-section {
             opacity: 0;
             transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
@@ -612,8 +697,6 @@
         .hr-d4 {
             transition-delay: 0.30s;
         }
-
-        /* ── SERVICES GRID ── */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -693,8 +776,6 @@
             color: var(--text-secondary);
             line-height: 1.7;
         }
-
-        /* ── FEATURED CARD ── */
         .featured-card {
             background: #fff;
             border: 1px solid var(--border-accent);
@@ -837,8 +918,6 @@
             margin-top: 2px;
             letter-spacing: 0.02em;
         }
-
-        /* ── PROJECT CARDS ── */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -951,8 +1030,6 @@
             letter-spacing: 0.02em;
             border: 1px solid var(--border);
         }
-
-        /* ── SCIENCE EXTRAS ── */
         .sci-card[data-hidden="true"] {
             display: none;
         }
@@ -1010,8 +1087,6 @@
             min-width: 28px;
             text-align: right;
         }
-
-        /* ── FILTER BAR ── */
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -1086,8 +1161,6 @@
             width: 16px;
             height: 16px;
         }
-
-        /* ── YOUTUBE NOTE ── */
         .youtube-note {
             display: flex;
             align-items: flex-start;
@@ -1122,8 +1195,6 @@
             padding: 4px 10px;
             margin-top: 6px;
         }
-
-        /* ── CONTACT ── */
         .contact-card {
             max-width: 500px;
             margin: 0 auto;
@@ -1183,8 +1254,6 @@
             height: 17px;
             fill: #fff;
         }
-
-        /* ── WHATSAPP FLOAT ── */
         .whatsapp-float {
             position: fixed;
             bottom: 22px;
@@ -1214,8 +1283,6 @@
             height: 23px;
             fill: #fff;
         }
-
-        /* ── FOOTER ── */
         .footer {
             background: #fafbfc;
             border-top: 1px solid var(--border);
@@ -1230,8 +1297,6 @@
             color: var(--accent);
             font-weight: 600;
         }
-
-        /* ── RESPONSIVE ── */
         @media (max-width: 900px) {
             .featured-inner {
                 grid-template-columns: 1fr;
@@ -1355,466 +1420,838 @@
 </head>
 <body>
 
-    <!-- ═══════════ CURSOR TRAIL ═══════════ -->
-    <div class="cursor-trail" id="cursorTrail"></div>
+    <!-- ═══════════ INTRO OVERLAY ═══════════ -->
+    <div id="intro-overlay">
+        <canvas id="intro-canvas"></canvas>
+    </div>
+    <button id="skip-intro"><span class="skip-dot"></span>Skip Intro</button>
 
-    <!-- ═══════════ ANNOUNCEMENT BAR ═══════════ -->
-    <div class="announcement-bar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')" role="button" tabindex="0" aria-label="Visit premium code website">
-        প্রিমিয়াম কোড কিনতে আমাদের ওয়েবসাইটে <span>এখনই ভিজিট করুন</span> →
+    <!-- ═══════════ MAIN SITE ═══════════ -->
+    <div id="main-site">
+        <div class="cursor-trail" id="cursorTrail"></div>
+        <div class="announcement-bar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')" role="button" tabindex="0" aria-label="Visit premium code website">
+            প্রিমিয়াম কোড কিনতে আমাদের ওয়েবসাইটে <span>এখনই ভিজিট করুন</span> →
+        </div>
+        <nav class="navbar" id="navbar">
+            <div class="container">
+                <a href="#" class="nav-brand" aria-label="The Debug Point Home">
+                    <div class="nav-brand-mark">
+                        <svg viewBox="0 0 24 24"><polygon points="12,3 22,21 2,21"/></svg>
+                    </div>
+                    The Debug Point
+                </a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#science">Science</a></li>
+                    <li><a href="https://amaricanjelly.github.io/bokaxuda/" target="_blank">Magical Front</a></li>
+                    <li><a href="#contact" class="nav-cta">যোগাযোগ</a></li>
+                </ul>
+                <button class="nav-hamburger" id="hamburger" onclick="toggleNav()" aria-label="Toggle navigation menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+        <section class="hero" id="hero">
+            <div class="hero-bg">
+                <div class="hero-bg-grid" id="heroGrid"></div>
+                <div class="hero-bg-glow" id="heroGlow"></div>
+                <div class="hero-bg-orb" id="heroOrb"></div>
+            </div>
+            <div class="container">
+                <div class="hero-content">
+                    <div class="info-banner hero-reveal">
+                        <svg class="info-banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <span><strong>Expensive এবং Rare Project</strong> বানাতে হলে অবশ্যই Project জমা দেওয়ার <strong>৩–৭ দিন আগে</strong> আমাদের সাথে যোগাযোগ করতে হবে।</span>
+                    </div>
+                    <div class="hero-badge hero-reveal hr-d1">
+                        <span class="hero-badge-dot"></span> Chittagong · Established 2026
+                    </div>
+                    <h1 class="hero-title hero-reveal hr-d2">
+                        চট্টগ্রামে Coding ও Robotic Project<br>এবং Custom Code এর জন্য<br><em>সঠিক জায়গা</em>
+                        <span class="hero-title-glow"></span>
+                    </h1>
+                    <p class="hero-sub hero-reveal hr-d3">
+                        Professional ভাবে Coding, Robotics ও Science Project তৈরি করে থাকি। School, College, University এবং Engineering শিক্ষার্থীদের জন্য সম্পূর্ণ Support প্রদান করি।
+                    </p>
+                    <div class="hero-actions hero-reveal hr-d4">
+                        <a href="#contact" class="btn btn-primary">অর্ডার করুন</a>
+                        <a href="#projects" class="btn btn-secondary">প্রজেক্ট দেখুন</a>
+                    </div>
+                    <div class="hero-note hero-reveal hr-d4">
+                        <span class="hero-note-dot"></span> প্রজেক্ট করতে সরাসরি আমাদের ঠিকানায় আসতে হবে
+                    </div>
+                    <div class="hero-stats hero-reveal hr-d4">
+                        <div><div class="hero-stat-num">18<span>+</span></div><div class="hero-stat-label">Robotics Projects</div></div>
+                        <div><div class="hero-stat-num">20<span>+</span></div><div class="hero-stat-label">Science Projects</div></div>
+                        <div><div class="hero-stat-num">5<span>+</span></div><div class="hero-stat-label">Services</div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section section-alt reveal-section reveal-right" id="services">
+            <div class="container">
+                <div class="section-header"><div class="section-eyebrow">What We Do</div><h2 class="section-title">আমাদের সার্ভিসসমূহ</h2><div class="section-line"></div></div>
+                <div class="services-grid">
+                    <div class="service-card reveal-card"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div class="service-card-num">Service 01</div><h3 class="service-card-title">C++ Programming <span class="service-card-tag">CODE</span></h3><p class="service-card-desc">Algorithm, Problem Solving, Academic Projects, Competitive Programming — সব ধরনের C++ সহায়তা।</p></div>
+                    <div class="service-card reveal-card reveal-card-d1"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="12" r="4"/></svg></div><div class="service-card-num">Service 02</div><h3 class="service-card-title">Arduino Robotics <span class="service-card-tag">HARDWARE</span></h3><p class="service-card-desc">Complete Hardware + Software Setup with Documentation — সম্পূর্ণ রোবোটিক্স প্রজেক্ট তৈরি করা হয়।</p></div>
+                    <div class="service-card reveal-card reveal-card-d2"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="service-card-num">Service 03</div><h3 class="service-card-title">Arduino Code <span class="service-card-tag">CODE</span></h3><p class="service-card-desc">শুধু কোড সার্ভিস — Fully Tested &amp; Optimized। Arduino IDE তে পেশাদার কোড লেখা হয়।</p></div>
+                    <div class="service-card reveal-card reveal-card-d3"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-7 10 7-10 7z"/><path d="M6 12v6a2 2 0 002 2h8a2 2 0 002-2v-6"/></svg></div><div class="service-card-num">Service 04</div><h3 class="service-card-title">Academic Projects <span class="service-card-tag">ACADEMIC</span></h3><p class="service-card-desc">Science Fair ও Academic Project Support। CUET সহ সব বিশ্ববিদ্যালয়ের প্রজেক্ট করা হয়।</p></div>
+                    <div class="service-card reveal-card reveal-card-d4"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/><path d="M2 12a10 10 0 0110-10"/></svg></div><div class="service-card-num">Service 05</div><h3 class="service-card-title">Custom IoT Projects <span class="service-card-tag">IoT</span></h3><p class="service-card-desc">Sensor Based Automation ও Smart System। কাস্টম IoT সলিউশন এবং স্মার্ট প্রজেক্ট।</p></div>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider">
+        <section class="section reveal-section reveal-left" id="featured">
+            <div class="container">
+                <div class="featured-card reveal-card">
+                    <div class="featured-inner">
+                        <div>
+                            <div class="featured-badge"><span class="featured-badge-dot"></span> Premium Service</div>
+                            <h2 class="featured-title">Unlimited Range<br><em>Nursing Calling System</em></h2>
+                            <p class="featured-tagline">বিশ্বের বাজারে ও বাংলাদেশের সবচেয়ে বিরল প্রজেক্ট — শুধুমাত্র বিশেষ ব্যবহারের জন্য</p>
+                            <p class="featured-desc">Hospital, Clinic বা বৃদ্ধাশ্রমে ব্যবহারের জন্য বিশেষভাবে তৈরি একটি Exclusive IoT System। রোগী যেকোনো জায়গা থেকে Wireless ভাবে Nurse কে Call করতে পারবেন — কোনো Range Limitation ছাড়াই।</p>
+                            <div class="featured-pills"><span class="featured-pill">Unlimited Range</span><span class="featured-pill">IoT Based</span><span class="featured-pill">Hospital Grade</span><span class="featured-pill">Instant Alert</span><span class="featured-pill">Mobile Notification</span></div>
+                            <a href="https://t.me/jellyofficer" target="_blank" class="btn btn-primary">বিস্তারিত জানুন</a>
+                        </div>
+                        <div class="featured-visual">
+                            <div class="featured-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12h6M12 9v6"/><circle cx="12" cy="12" r="1"/></svg></div>
+                            <div class="featured-stat-row"><div class="featured-stat"><div class="featured-stat-num">&infin;</div><div class="featured-stat-label">Range</div></div><div class="featured-stat"><div class="featured-stat-num">&lt;1s</div><div class="featured-stat-label">Response</div></div><div class="featured-stat"><div class="featured-stat-num">IoT</div><div class="featured-stat-label">Platform</div></div><div class="featured-stat"><div class="featured-stat-num">24/7</div><div class="featured-stat-label">Uptime</div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider">
+        <section class="section section-alt reveal-section reveal-right" id="projects">
+            <div class="container">
+                <div class="section-header"><div class="section-eyebrow">Our Work</div><h2 class="section-title">Robotics &amp; IoT প্রজেক্ট</h2><div class="section-line"></div></div>
+                <div class="youtube-note"><svg class="youtube-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><div><p>YouTube থেকে পছন্দ করে শুধু Demo দেখিয়ে আপনার Favorite Project করাতে পারেন।</p><span class="youtube-note-warning">শর্ত: Project অবশ্যই Valid হতে হবে</span></div></div>
+                <div class="card-grid" id="projectsGrid">
+                    <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#01</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Human Following Robot</p><p class="project-card-desc">IR Sensor ও Ultrasonic Sensor ব্যবহার করে সামনের মানুষকে চিনে গতিপথ নির্ধারণ করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#02</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Fingerprint Door Lock System</p><p class="project-card-desc">বায়োমেট্রিক Fingerprint Sensor — Registered আঙুলের ছাপ মিললে দরজা খুলে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d2"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#03</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">RFID Door Lock System</p><p class="project-card-desc">RFID Card বা Keychain Tap করলে দরজা খুলে যায়। Office, Hostel, Lab এর জন্য আদর্শ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d3"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><span class="project-card-num">#04</span></div><div class="project-card-tags"><span class="tag">IoT</span></div><p class="project-card-title">Home Automation System</p><p class="project-card-desc">Bluetooth/WiFi ব্যবহার করে স্মার্টফোন থেকে ঘরের আলো, ফ্যান ও যন্ত্রপাতি নিয়ন্ত্রণ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d4"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><span class="project-card-num">#05</span></div><div class="project-card-tags"><span class="tag">Safety</span></div><p class="project-card-title">Emergency Room Alert System</p><p class="project-card-desc">রোগীর অবস্থা সংকটজনক হলে স্বয়ংক্রিয়ভাবে Buzzer বাজে এবং LED Signal দেয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d5"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="22" height="12" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></svg></div><span class="project-card-num">#06</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Bluetooth Control Car</p><p class="project-card-desc">স্মার্টফোনের Bluetooth App দিয়ে গাড়িটি সামনে, পেছনে, বাম ও ডানে নিয়ন্ত্রণ করা যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider">
+        <section class="section reveal-section reveal-left" id="science">
+            <div class="container">
+                <div class="section-header"><div class="section-eyebrow">Science Projects</div><h2 class="section-title">Chemistry &middot; Biology &middot; Physics</h2><div class="section-line"></div></div>
+                <div class="filter-bar"><span class="filter-label">Filter:</span><button class="filter-btn active" onclick="filterSci('all', this)">সব</button><button class="filter-btn" onclick="filterSci('chemistry', this)">Chemistry</button><button class="filter-btn" onclick="filterSci('biology', this)">Biology</button><button class="filter-btn" onclick="filterSci('physics', this)">Physics</button></div>
+                <div class="card-grid" id="sciGrid">
+                    <div class="project-card sci-card reveal-card" data-cat="chemistry"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg></div><span class="project-card-num">#C-01</span></div><div class="project-card-tags"><span class="tag">Chemistry</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Gas Leak Detection (MQ2)</p><p class="project-card-desc">MQ-2 Sensor বাতাসে LPG, Methane, Smoke এবং Hydrogen গ্যাসের উপস্থিতি শনাক্ত করে।</p></div>
+                    <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="biology"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#B-01</span></div><div class="project-card-tags"><span class="tag">Biology</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Smart Plant Watering System</p><p class="project-card-desc">Soil Moisture Sensor — মাটি শুকিয়ে গেলে Water Pump চালু হয়ে Automatic পানি দেয়।</p></div>
+                    <div class="project-card sci-card reveal-card reveal-card-d2" data-cat="physics"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></div><span class="project-card-num">#P-01</span></div><div class="project-card-tags"><span class="tag">Physics</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Distance Measurement System</p><p class="project-card-desc">HC-SR04 Ultrasonic Sensor — Sound Wave পাঠিয়ে বস্তুর দূরত্ব নির্ণয়।</p></div>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider">
+        <section class="section section-alt reveal-section reveal-right" id="contact">
+            <div class="container">
+                <div class="section-header"><div class="section-eyebrow">Get In Touch</div><h2 class="section-title">যোগাযোগ করুন</h2><div class="section-line"></div></div>
+                <div class="contact-card reveal-card"><h3 class="contact-title">বিস্তারিত জানতে বা অর্ডার করতে<br>Telegram এ মেসেজ দিন</h3><p class="contact-sub">আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।</p><a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram"><svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/></svg>Telegram এ মেসেজ করুন</a></div>
+            </div>
+        </section>
+        <a href="https://wa.me/qr/MYNYVDWC2VAJJ1" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.66.74 5.14 2.02 7.24L2.5 29.5l6.44-1.68C10.84 29.24 13.34 30 16 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm0 25.45c-2.3 0-4.54-.6-6.48-1.74l-.46-.27-3.82 1 .98-3.72-.3-.48C4.8 20.44 4.18 18.26 4.18 16c0-6.52 5.3-11.82 11.82-11.82S27.82 9.48 27.82 16 22.52 27.45 16 27.45z"/><path d="M22.98 19.08c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.34.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.34.45-.51.15-.17.2-.29.3-.48.1-.19.05-.36-.03-.5-.07-.15-.67-1.62-.92-2.22-.24-.58-.48-.5-.67-.51-.17-.01-.37-.01-.57-.01s-.52.07-.79.36c-.27.29-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.18 5.06 4.46.71.31 1.26.49 1.69.63.71.22 1.35.19 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.08-.12-.28-.19-.58-.34z"/></svg></a>
+        <footer class="footer"><div class="container">&copy; 2026 <span>The Debug Point</span> &nbsp;&middot;&nbsp; Coding &amp; Robotics Solution &nbsp;&middot;&nbsp; চট্টগ্রাম, বাংলাদেশ</div></footer>
     </div>
 
-    <!-- ═══════════ NAVBAR ═══════════ -->
-    <nav class="navbar" id="navbar">
-        <div class="container">
-            <a href="#" class="nav-brand" aria-label="The Debug Point Home">
-                <div class="nav-brand-mark">
-                    <svg viewBox="0 0 24 24"><polygon points="12,3 22,21 2,21"/></svg>
-                </div>
-                The Debug Point
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#services">Services</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#science">Science</a></li>
-                <li><a href="https://amaricanjelly.github.io/bokaxuda/" target="_blank">Magical Front</a></li>
-                <li><a href="#contact" class="nav-cta">যোগাযোগ</a></li>
-            </ul>
-            <button class="nav-hamburger" id="hamburger" onclick="toggleNav()" aria-label="Toggle navigation menu">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </nav>
+    <!-- ═══════════ THREE.JS + GSAP CDN ═══════════ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js">
+    </script>
 
-    <!-- ═══════════ HERO ═══════════ -->
-    <section class="hero" id="hero">
-        <div class="hero-bg">
-            <div class="hero-bg-grid" id="heroGrid"></div>
-            <div class="hero-bg-glow" id="heroGlow"></div>
-            <div class="hero-bg-orb" id="heroOrb"></div>
-        </div>
-        <div class="container">
-            <div class="hero-content">
-                <div class="info-banner hero-reveal">
-                    <svg class="info-banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                    <span><strong>Expensive এবং Rare Project</strong> বানাতে হলে অবশ্যই Project জমা দেওয়ার <strong>৩–৭ দিন আগে</strong> আমাদের সাথে যোগাযোগ করতে হবে।</span>
-                </div>
-                <div class="hero-badge hero-reveal hr-d1">
-                    <span class="hero-badge-dot"></span> Chittagong · Established 2026
-                </div>
-                <h1 class="hero-title hero-reveal hr-d2">
-                    চট্টগ্রামে Coding ও Robotic Project<br>
-                    এবং Custom Code এর জন্য<br>
-                    <em>সঠিক জায়গা</em>
-                    <span class="hero-title-glow"></span>
-                </h1>
-                <p class="hero-sub hero-reveal hr-d3">
-                    Professional ভাবে Coding, Robotics ও Science Project তৈরি করে থাকি।
-                    School, College, University এবং Engineering শিক্ষার্থীদের জন্য সম্পূর্ণ Support প্রদান করি।
-                </p>
-                <div class="hero-actions hero-reveal hr-d4">
-                    <a href="#contact" class="btn btn-primary">অর্ডার করুন</a>
-                    <a href="#projects" class="btn btn-secondary">প্রজেক্ট দেখুন</a>
-                </div>
-                <div class="hero-note hero-reveal hr-d4">
-                    <span class="hero-note-dot"></span> প্রজেক্ট করতে সরাসরি আমাদের ঠিকানায় আসতে হবে
-                </div>
-                <div class="hero-stats hero-reveal hr-d4">
-                    <div>
-                        <div class="hero-stat-num">18<span>+</span></div>
-                        <div class="hero-stat-label">Robotics Projects</div>
-                    </div>
-                    <div>
-                        <div class="hero-stat-num">20<span>+</span></div>
-                        <div class="hero-stat-label">Science Projects</div>
-                    </div>
-                    <div>
-                        <div class="hero-stat-num">5<span>+</span></div>
-                        <div class="hero-stat-label">Services</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ SERVICES ═══════════ -->
-    <section class="section section-alt reveal-section reveal-right" id="services">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-eyebrow">What We Do</div>
-                <h2 class="section-title">আমাদের সার্ভিসসমূহ</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="services-grid">
-                <div class="service-card reveal-card">
-                    <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-                    <div class="service-card-num">Service 01</div>
-                    <h3 class="service-card-title">C++ Programming <span class="service-card-tag">CODE</span></h3>
-                    <p class="service-card-desc">Algorithm, Problem Solving, Academic Projects, Competitive Programming — সব ধরনের C++ সহায়তা।</p>
-                </div>
-                <div class="service-card reveal-card reveal-card-d1">
-                    <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="12" r="4"/></svg></div>
-                    <div class="service-card-num">Service 02</div>
-                    <h3 class="service-card-title">Arduino Robotics <span class="service-card-tag">HARDWARE</span></h3>
-                    <p class="service-card-desc">Complete Hardware + Software Setup with Documentation — সম্পূর্ণ রোবোটিক্স প্রজেক্ট তৈরি করা হয়।</p>
-                </div>
-                <div class="service-card reveal-card reveal-card-d2">
-                    <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-                    <div class="service-card-num">Service 03</div>
-                    <h3 class="service-card-title">Arduino Code <span class="service-card-tag">CODE</span></h3>
-                    <p class="service-card-desc">শুধু কোড সার্ভিস — Fully Tested &amp; Optimized। Arduino IDE তে পেশাদার কোড লেখা হয়।</p>
-                </div>
-                <div class="service-card reveal-card reveal-card-d3">
-                    <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-7 10 7-10 7z"/><path d="M6 12v6a2 2 0 002 2h8a2 2 0 002-2v-6"/></svg></div>
-                    <div class="service-card-num">Service 04</div>
-                    <h3 class="service-card-title">Academic Projects <span class="service-card-tag">ACADEMIC</span></h3>
-                    <p class="service-card-desc">Science Fair ও Academic Project Support। CUET সহ সব বিশ্ববিদ্যালয়ের প্রজেক্ট করা হয়।</p>
-                </div>
-                <div class="service-card reveal-card reveal-card-d4">
-                    <div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/><path d="M2 12a10 10 0 0110-10"/></svg></div>
-                    <div class="service-card-num">Service 05</div>
-                    <h3 class="service-card-title">Custom IoT Projects <span class="service-card-tag">IoT</span></h3>
-                    <p class="service-card-desc">Sensor Based Automation ও Smart System। কাস্টম IoT সলিউশন এবং স্মার্ট প্রজেক্ট।</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <hr class="section-divider">
-
-    <!-- ═══════════ FEATURED ═══════════ -->
-    <section class="section reveal-section reveal-left" id="featured">
-        <div class="container">
-            <div class="featured-card reveal-card">
-                <div class="featured-inner">
-                    <div>
-                        <div class="featured-badge"><span class="featured-badge-dot"></span> Premium Service</div>
-                        <h2 class="featured-title">Unlimited Range<br><em>Nursing Calling System</em></h2>
-                        <p class="featured-tagline">বিশ্বের বাজারে ও বাংলাদেশের সবচেয়ে বিরল প্রজেক্ট — শুধুমাত্র বিশেষ ব্যবহারের জন্য</p>
-                        <p class="featured-desc">Hospital, Clinic বা বৃদ্ধাশ্রমে ব্যবহারের জন্য বিশেষভাবে তৈরি একটি Exclusive IoT System। রোগী যেকোনো জায়গা থেকে Wireless ভাবে Nurse কে Call করতে পারবেন — কোনো Range Limitation ছাড়াই।</p>
-                        <div class="featured-pills">
-                            <span class="featured-pill">Unlimited Range</span>
-                            <span class="featured-pill">IoT Based</span>
-                            <span class="featured-pill">Hospital Grade</span>
-                            <span class="featured-pill">Instant Alert</span>
-                            <span class="featured-pill">Mobile Notification</span>
-                        </div>
-                        <a href="https://t.me/jellyofficer" target="_blank" class="btn btn-primary">বিস্তারিত জানুন</a>
-                    </div>
-                    <div class="featured-visual">
-                        <div class="featured-icon-box">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12h6M12 9v6"/><circle cx="12" cy="12" r="1"/></svg>
-                        </div>
-                        <div class="featured-stat-row">
-                            <div class="featured-stat"><div class="featured-stat-num">&infin;</div><div class="featured-stat-label">Range</div></div>
-                            <div class="featured-stat"><div class="featured-stat-num">&lt;1s</div><div class="featured-stat-label">Response</div></div>
-                            <div class="featured-stat"><div class="featured-stat-num">IoT</div><div class="featured-stat-label">Platform</div></div>
-                            <div class="featured-stat"><div class="featured-stat-num">24/7</div><div class="featured-stat-label">Uptime</div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <hr class="section-divider">
-
-    <!-- ═══════════ PROJECTS ═══════════ -->
-    <section class="section section-alt reveal-section reveal-right" id="projects">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-eyebrow">Our Work</div>
-                <h2 class="section-title">Robotics &amp; IoT প্রজেক্ট</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="youtube-note">
-                <svg class="youtube-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
-                <div>
-                    <p>YouTube থেকে পছন্দ করে শুধু Demo দেখিয়ে আপনার Favorite Project করাতে পারেন।</p>
-                    <span class="youtube-note-warning">শর্ত: Project অবশ্যই Valid হতে হবে</span>
-                </div>
-            </div>
-            <div class="card-grid" id="projectsGrid">
-                <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#01</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Human Following Robot</p><p class="project-card-desc">IR Sensor ও Ultrasonic Sensor ব্যবহার করে সামনের মানুষকে চিনে গতিপথ নির্ধারণ করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#02</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Fingerprint Door Lock System</p><p class="project-card-desc">বায়োমেট্রিক Fingerprint Sensor — Registered আঙুলের ছাপ মিললে দরজা খুলে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d2"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#03</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">RFID Door Lock System</p><p class="project-card-desc">RFID Card বা Keychain Tap করলে দরজা খুলে যায়। Office, Hostel, Lab এর জন্য আদর্শ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d3"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><span class="project-card-num">#04</span></div><div class="project-card-tags"><span class="tag">IoT</span></div><p class="project-card-title">Home Automation System</p><p class="project-card-desc">Bluetooth/WiFi ব্যবহার করে স্মার্টফোন থেকে ঘরের আলো, ফ্যান ও যন্ত্রপাতি নিয়ন্ত্রণ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d4"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><span class="project-card-num">#05</span></div><div class="project-card-tags"><span class="tag">Safety</span></div><p class="project-card-title">Emergency Room Alert System</p><p class="project-card-desc">রোগীর অবস্থা সংকটজনক হলে স্বয়ংক্রিয়ভাবে Buzzer বাজে এবং LED Signal দেয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d5"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="22" height="12" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></svg></div><span class="project-card-num">#06</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Bluetooth Control Car</p><p class="project-card-desc">স্মার্টফোনের Bluetooth App দিয়ে গাড়িটি সামনে, পেছনে, বাম ও ডানে নিয়ন্ত্রণ করা যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
-                <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 4 6 4 10c0 5 8 12 8 12s8-7 8-12c0-4-4-8-8-8z"/></svg></div><span class="project-card-num">#07</span></div><div class="project-card-tags"><span class="tag">Robotics</span><span class="tag">Safety</span></div><p class="project-card-title">Fire Fighting Robot</p><p class="project-card-desc">Flame Sensor দিয়ে আগুনের উৎস শনাক্ত করে Robot স্বয়ংক্রিয়ভাবে সেদিকে এগিয়ে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></div><span class="project-card-num">#08</span></div><div class="project-card-tags"><span class="tag">Sensor</span></div><p class="project-card-title">Humidity &amp; Temperature Monitor</p><p class="project-card-desc">DHT11/DHT22 Sensor ব্যবহার করে Real-time তাপমাত্রা এবং আর্দ্রতা পরিমাপ করা হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d2"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/></svg></div><span class="project-card-num">#09</span></div><div class="project-card-tags"><span class="tag">IoT</span></div><p class="project-card-title">Smart Home Automation (ESP32)</p><p class="project-card-desc">ESP32 ও WiFi ব্যবহার করে Mobile App এর মাধ্যমে Light, Fan দূর থেকে নিয়ন্ত্রণ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d3"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#10</span></div><div class="project-card-tags"><span class="tag">Sensor</span><span class="tag">Automation</span></div><p class="project-card-title">Automatic Light Control System</p><p class="project-card-desc">LDR Sensor পরিবেশের আলো পরিমাপ করে — অন্ধকার হলে বাতি Automatic ON হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d4"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/></svg></div><span class="project-card-num">#11</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Smart Door Lock System</p><p class="project-card-desc">Keypad বা Fingerprint Match হলে Servo Motor দরজা খুলে দেয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d5"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/></svg></div><span class="project-card-num">#12</span></div><div class="project-card-tags"><span class="tag">Automation</span><span class="tag">Sensor</span></div><p class="project-card-title">Smart Fan Speed Controller</p><p class="project-card-desc">Temperature Sensor — তাপমাত্রা বাড়লে ফ্যানের গতি স্বয়ংক্রিয়ভাবে বেড়ে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18"/></svg></div><span class="project-card-num">#13</span></div><div class="project-card-tags"><span class="tag">Automation</span></div><p class="project-card-title">Automatic Door Opener</p><p class="project-card-desc">PIR Sensor মানুষের উপস্থিতি বুঝে দরজা Automatic খুলে দেয়। Hospital ও Restaurant উপযোগী।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 8–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><span class="project-card-num">#14</span></div><div class="project-card-tags"><span class="tag">Health</span><span class="tag">Sensor</span></div><p class="project-card-title">Heart Rate Monitor</p><p class="project-card-desc">Pulse Sensor আঙুলে লাগিয়ে হৃৎস্পন্দনের হার (BPM) নির্ণয় করা হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d2"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12h6M12 9v6"/></svg></div><span class="project-card-num">#15</span></div><div class="project-card-tags"><span class="tag">Health</span><span class="tag">IoT</span></div><p class="project-card-title">Patient Health Monitoring System</p><p class="project-card-desc">Temperature, Heartbeat এবং SpO2 Measure করে Real-time ডেটা Doctor/Nurse এর কাছে পাঠায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d3"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg></div><span class="project-card-num">#16</span></div><div class="project-card-tags"><span class="tag">Safety</span><span class="tag">Sensor</span></div><p class="project-card-title">Gas Leakage Detection System</p><p class="project-card-desc">MQ-2 Sensor দিয়ে বাতাসে Gas এর পরিমাণ পরিমাপ — বেশি হলে Alarm বাজে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 8–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d4"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 4 6 4 10c0 5 8 12 8 12s8-7 8-12c0-4-4-8-8-8z"/></svg></div><span class="project-card-num">#17</span></div><div class="project-card-tags"><span class="tag">Safety</span></div><p class="project-card-title">Fire Detection &amp; Alert System</p><p class="project-card-desc">Flame Sensor এবং Smoke Sensor একসাথে আগুনের উপস্থিতি নিশ্চিত করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 8–10</span><span class="bestfor-pill">HSC</span></div></div></div>
-                <div class="project-card reveal-card reveal-card-d5"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#18</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">RFID Based Attendance System</p><p class="project-card-desc">RFID Card Scan করলে Student/Employee এর নাম ও সময় Automatically Record হয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
-            </div>
-        </div>
-    </section>
-
-    <hr class="section-divider">
-
-    <!-- ═══════════ SCIENCE PROJECTS ═══════════ -->
-    <section class="section reveal-section reveal-left" id="science">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-eyebrow">Science Projects</div>
-                <h2 class="section-title">Chemistry &middot; Biology &middot; Physics</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="filter-bar">
-                <span class="filter-label">Filter:</span>
-                <button class="filter-btn active" onclick="filterSci('all', this)">সব</button>
-                <button class="filter-btn" onclick="filterSci('chemistry', this)">Chemistry</button>
-                <button class="filter-btn" onclick="filterSci('biology', this)">Biology</button>
-                <button class="filter-btn" onclick="filterSci('physics', this)">Physics</button>
-                <button class="filter-btn" onclick="filterSci('school', this)">School</button>
-                <button class="filter-btn" onclick="filterSci('hsc', this)">HSC</button>
-                <button class="filter-btn" onclick="filterSci('cuet', this)">CUET</button>
-            </div>
-            <div class="search-wrap">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" id="sciSearch" placeholder="প্রজেক্ট খুঁজুন... যেমন: gas, water, temperature" oninput="searchSci()" />
-            </div>
-            <div class="card-grid" id="sciGrid">
-                <div class="project-card sci-card reveal-card" data-cat="chemistry" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg></div><span class="project-card-num">#C-01</span></div><div class="project-card-tags"><span class="tag">Chemistry</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Gas Leak Detection (MQ2)</p><p class="project-card-desc">MQ-2 Sensor বাতাসে LPG, Methane, Smoke এবং Hydrogen গ্যাসের উপস্থিতি শনাক্ত করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="chemistry" data-level="hsc honours"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#C-02</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Air Quality Monitor (MQ135)</p><p class="project-card-desc">MQ-135 Sensor — বাতাসে CO₂, NH₃, Benzene ও ক্ষতিকর গ্যাসের পরিমাণ পরিমাপ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d2" data-cat="chemistry" data-level="hsc cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#C-03</span></div><div class="project-card-tags"><span class="tag">Chemistry</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Water Quality Monitor (pH + TDS)</p><p class="project-card-desc">pH Sensor ও TDS Sensor — পানির অম্লতা ও দ্রবীভূত কঠিন পদার্থের পরিমাণ মাপা হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d3" data-cat="chemistry" data-level="cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></div><span class="project-card-num">#C-04</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Smart Lab Safety Alarm System</p><p class="project-card-desc">Gas, Smoke ও Temperature Sensor — ল্যাবরেটরির পরিবেশ পর্যবেক্ষণ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d4" data-cat="chemistry" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div><span class="project-card-num">#C-05</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Alcohol Detection System</p><p class="project-card-desc">MQ-3 Sensor শ্বাস-প্রশ্বাসে অ্যালকোহলের পরিমাণ শনাক্ত করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d5" data-cat="chemistry" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4"/></svg></div><span class="project-card-num">#C-06</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Smart Smoke Detection System</p><p class="project-card-desc">MQ-2 Sensor বাতাসে ধোঁয়ার কণা শনাক্ত করে — বিপদজনক মাত্রায় Siren বাজে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card reveal-card" data-cat="chemistry" data-level="hsc honours"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#C-07</span></div><div class="project-card-tags"><span class="tag">Chemistry</span></div><p class="project-card-title">Water Pollution Alert System</p><p class="project-card-desc">Turbidity Sensor ও pH Sensor দিয়ে পানির ঘোলাত্ব ও রাসায়নিক মান পরিমাপ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="biology" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#B-01</span></div><div class="project-card-tags"><span class="tag">Biology</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Smart Plant Watering System</p><p class="project-card-desc">Soil Moisture Sensor — মাটি শুকিয়ে গেলে Water Pump চালু হয়ে Automatic পানি দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d2" data-cat="biology" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><span class="project-card-num">#B-02</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Heart Rate Monitor</p><p class="project-card-desc">Pulse Sensor আঙুলে রক্ত প্রবাহের ছন্দ পরিমাপ করে BPM নির্ণয় করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 9–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d3" data-cat="biology" data-level="hsc cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></div><span class="project-card-num">#B-03</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Smart Greenhouse Monitoring</p><p class="project-card-desc">DHT22 Sensor দিয়ে Greenhouse এর ভেতরের তাপমাত্রা ও আর্দ্রতা পর্যবেক্ষণ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d4" data-cat="biology" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></div><span class="project-card-num">#B-04</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Body Temperature Monitor</p><p class="project-card-desc">MLX90614 Infrared Sensor স্পর্শ না করেও শরীরের তাপমাত্রা পরিমাপ করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d5" data-cat="biology" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#B-05</span></div><div class="project-card-tags"><span class="tag">Biology</span></div><p class="project-card-title">Automatic Pet Feeder</p><p class="project-card-desc">RTC Module — নির্দিষ্ট সময়সূচি অনুযায়ী Servo Motor চালু হয়ে Pet এর Food Bowl এ খাবার দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:75%"></div></div><span class="sci-pct-num">75%</span></div></div></div>
-                <div class="project-card sci-card reveal-card" data-cat="biology" data-level="cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/></svg></div><span class="project-card-num">#B-06</span></div><div class="project-card-tags"><span class="tag">Biology</span><span class="tag">IoT</span></div><p class="project-card-title">Smart Health Monitoring Band (IoT)</p><p class="project-card-desc">Wearable Band — Heart Rate, Temperature এবং Accelerometer একসাথে কাজ করে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="physics" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></div><span class="project-card-num">#P-01</span></div><div class="project-card-tags"><span class="tag">Physics</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Distance Measurement System</p><p class="project-card-desc">HC-SR04 Ultrasonic Sensor — Sound Wave পাঠিয়ে বস্তুর দূরত্ব নির্ণয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d2" data-cat="physics" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#P-02</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Motion Detection System (PIR)</p><p class="project-card-desc">PIR Sensor — মানুষ বা প্রাণীর শরীর থেকে নির্গত Infrared Radiation শনাক্ত করে গতি বোঝে।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d3" data-cat="physics" data-level="hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#P-03</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Speed Measurement System</p><p class="project-card-desc">দুটি IR Sensor নির্দিষ্ট দূরত্বে স্থাপন করে গতিবেগ নির্ণয় (v = d/t)।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d4" data-cat="physics" data-level="school"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg></div><span class="project-card-num">#P-04</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Digital Thermometer</p><p class="project-card-desc">DS18B20/LM35 Sensor ব্যবহার করে পরিবেশের তাপমাত্রা নির্ভুলভাবে পরিমাপ।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 6–8</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d5" data-cat="physics" data-level="hsc cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#P-05</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Solar Tracking System</p><p class="project-card-desc">দুটি LDR Sensor — সূর্যের অবস্থান বুঝে Servo Motor Solar Panel ঘুরিয়ে দেয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-                <div class="project-card sci-card reveal-card" data-cat="physics" data-level="school hsc"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg></div><span class="project-card-num">#P-06</span></div><div class="project-card-tags"><span class="tag">Physics</span></div><p class="project-card-title">Smart Street Light System</p><p class="project-card-desc">LDR Sensor — সন্ধ্যায় অন্ধকার হলে Street Light Automatic ON হয়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">Class 8–10</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:80%"></div></div><span class="sci-pct-num">80%</span></div></div></div>
-                <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="physics" data-level="hsc honours cuet"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg></div><span class="project-card-num">#P-07</span></div><div class="project-card-tags"><span class="tag">Physics</span><span class="tag">IoT</span></div><p class="project-card-title">Smart Car Parking Slot System</p><p class="project-card-desc">প্রতিটি Parking Slot এ Sensor — গাড়ি থাকলে "Full", না থাকলে "Empty" দেখায়।</p><div class="sci-bestfor"><div class="sci-bestfor-label">কোন Class এর জন্য কতটা উপযুক্ত:</div><div class="sci-level-row"><span class="sci-level-name">HSC</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:85%"></div></div><span class="sci-pct-num">85%</span></div><div class="sci-level-row"><span class="sci-level-name">Honours</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:90%"></div></div><span class="sci-pct-num">90%</span></div><div class="sci-level-row"><span class="sci-level-name">CUET</span><div class="sci-pct-track"><div class="sci-pct-fill" style="width:95%"></div></div><span class="sci-pct-num">95%</span></div></div></div>
-            </div>
-        </div>
-    </section>
-
-    <hr class="section-divider">
-
-    <!-- ═══════════ CONTACT ═══════════ -->
-    <section class="section section-alt reveal-section reveal-right" id="contact">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-eyebrow">Get In Touch</div>
-                <h2 class="section-title">যোগাযোগ করুন</h2>
-                <div class="section-line"></div>
-            </div>
-            <div class="contact-card reveal-card">
-                <h3 class="contact-title">বিস্তারিত জানতে বা অর্ডার করতে<br>Telegram এ মেসেজ দিন</h3>
-                <p class="contact-sub">আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।</p>
-                <a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram">
-                    <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/></svg>
-                    Telegram এ মেসেজ করুন
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ═══════════ WHATSAPP FLOAT ═══════════ -->
-    <a href="https://wa.me/qr/MYNYVDWC2VAJJ1" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
-        <svg viewBox="0 0 32 32"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.66.74 5.14 2.02 7.24L2.5 29.5l6.44-1.68C10.84 29.24 13.34 30 16 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm0 25.45c-2.3 0-4.54-.6-6.48-1.74l-.46-.27-3.82 1 .98-3.72-.3-.48C4.8 20.44 4.18 18.26 4.18 16c0-6.52 5.3-11.82 11.82-11.82S27.82 9.48 27.82 16 22.52 27.45 16 27.45z"/><path d="M22.98 19.08c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.34.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.34.45-.51.15-.17.2-.29.3-.48.1-.19.05-.36-.03-.5-.07-.15-.67-1.62-.92-2.22-.24-.58-.48-.5-.67-.51-.17-.01-.37-.01-.57-.01s-.52.07-.79.36c-.27.29-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.18 5.06 4.46.71.31 1.26.49 1.69.63.71.22 1.35.19 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.08-.12-.28-.19-.58-.34z"/></svg>
-    </a>
-
-    <!-- ═══════════ FOOTER ═══════════ -->
-    <footer class="footer">
-        <div class="container">
-            &copy; 2026 <span>The Debug Point</span> &nbsp;&middot;&nbsp; Coding &amp; Robotics Solution &nbsp;&middot;&nbsp; চট্টগ্রাম, বাংলাদেশ
-        </div>
-    </footer>
-
-    <!-- ═══════════ SCRIPTS ═══════════ -->
+    <!-- ═══════════ INTRO ANIMATION SCRIPT ═══════════ -->
     <script>
         (function() {
-            // ── NAV TOGGLE ──
-            window.toggleNav = function() {
-                document.getElementById('navLinks').classList.toggle('open');
-            };
-            document.querySelectorAll('.nav-links a').forEach(function(a) {
-                a.addEventListener('click', function() {
-                    document.getElementById('navLinks').classList.remove('open');
-                });
-            });
+            // ── Session check
+            const INTRO_KEY = 'tdp_intro_played_v2';
+            const introPlayed = sessionStorage.getItem(INTRO_KEY);
+            const overlay = document.getElementById('intro-overlay');
+            const canvas = document.getElementById('intro-canvas');
+            const skipBtn = document.getElementById('skip-intro');
+            const mainSite = document.getElementById('main-site');
 
-            // ── NAVBAR SCROLL SHADOW ──
-            var navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', function() {
-                navbar.classList.toggle('scrolled', window.scrollY > 30);
-            });
-
-            // ── CURSOR TRAIL (DESKTOP ONLY) ──
-            var cursorTrail = document.getElementById('cursorTrail');
-            var isMobile = window.innerWidth <= 768;
-            if (!isMobile && cursorTrail) {
-                var trailX = -200,
-                    trailY = -200;
-                var curX = -200,
-                    curY = -200;
-                document.addEventListener('mousemove', function(e) {
-                    curX = e.clientX;
-                    curY = e.clientY;
-                });
-                function updateTrail() {
-                    trailX += (curX - trailX) * 0.06;
-                    trailY += (curY - trailY) * 0.06;
-                    if (cursorTrail) {
-                        cursorTrail.style.left = trailX + 'px';
-                        cursorTrail.style.top = trailY + 'px';
-                    }
-                    requestAnimationFrame(updateTrail);
-                }
-                cursorTrail.classList.add('active');
-                updateTrail();
-
-                // Hide on touch devices
-                window.addEventListener('touchstart', function() {
-                    if (cursorTrail) cursorTrail.style.opacity = '0';
-                }, { once: true });
+            // If already played this session, skip immediately
+            if (introPlayed) {
+                overlay.classList.add('removed');
+                overlay.style.display = 'none';
+                if (skipBtn) skipBtn.style.display = 'none';
+                mainSite.classList.add('visible');
+                initMainSite();
+                return;
             }
 
-            // ── PARALLAX ON HERO BACKGROUND ──
-            var heroGrid = document.getElementById('heroGrid');
-            var heroGlow = document.getElementById('heroGlow');
-            var heroOrb = document.getElementById('heroOrb');
-            var ticking = false;
+            // ── Prevent scroll during intro
+            document.body.style.overflow = 'hidden';
 
-            function updateParallax() {
-                var scrollY = window.scrollY;
-                var heroSection = document.getElementById('hero');
-                var heroRect = heroSection.getBoundingClientRect();
-                var heroHeight = heroSection.offsetHeight;
-                // Only apply parallax when hero is visible
-                if (heroRect.bottom > 0 && heroRect.top < window.innerHeight) {
-                    var progress = (window.innerHeight - heroRect.top) / (window.innerHeight + heroHeight);
-                    progress = Math.max(0, Math.min(1, progress));
-                    var offsetY = progress * 60;
-                    if (heroGrid) heroGrid.style.transform = 'translateY(' + (offsetY * 0.3) + 'px)';
-                    if (heroGlow) heroGlow.style.transform = 'translateY(' + (offsetY * 0.5) + 'px) translateX(' + (offsetY *
-                        0.15) + 'px)';
-                    if (heroOrb) heroOrb.style.transform = 'translateY(' + (offsetY * 0.35) + 'px) translateX(' + (-offsetY *
-                        0.2) + 'px)';
-                }
-                ticking = false;
+            // ── Three.js Setup
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.0;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+            scene.fog = new THREE.Fog(0x000000, 3, 15);
+
+            const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 30);
+            camera.position.set(0, 0.2, 5.2);
+            camera.lookAt(0, 0.1, 0.8);
+
+            // ── Lighting
+            const ambientLight = new THREE.AmbientLight(0x0a0a20, 0);
+            scene.add(ambientLight);
+
+            const keyLight = new THREE.PointLight(0x4488cc, 0, 8, 2);
+            keyLight.position.set(2, 1.8, 2.5);
+            keyLight.castShadow = true;
+            keyLight.shadow.mapSize.width = 512;
+            keyLight.shadow.mapSize.height = 512;
+            keyLight.shadow.camera.near = 0.3;
+            keyLight.shadow.camera.far = 15;
+            keyLight.shadow.bias = -0.0003;
+            scene.add(keyLight);
+
+            const rimLight = new THREE.PointLight(0x8844cc, 0, 6, 1.5);
+            rimLight.position.set(-1.5, 1.2, -0.5);
+            scene.add(rimLight);
+
+            const panelGlow = new THREE.PointLight(0x0088ff, 0, 5, 0.8);
+            panelGlow.position.set(0, 0.15, 1.1);
+            scene.add(panelGlow);
+
+            // ── Floor
+            const floorGeo = new THREE.PlaneGeometry(12, 12);
+            const floorMat = new THREE.MeshStandardMaterial({
+                color: 0x111118,
+                roughness: 0.55,
+                metalness: 0.3,
+            });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -1.9;
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            // Subtle grid on floor
+            const gridHelper = new THREE.PolarGridHelper(5, 32, 24, 64, 0x222233, 0x222233);
+            gridHelper.position.y = -1.89;
+            scene.add(gridHelper);
+
+            // ── Character Construction
+            const characterGroup = new THREE.Group();
+            scene.add(characterGroup);
+
+            const bodyMaterial = new THREE.MeshStandardMaterial({
+                color: 0x2a2d38,
+                roughness: 0.35,
+                metalness: 0.15,
+            });
+
+            const glowEdgeMaterial = new THREE.MeshBasicMaterial({
+                color: 0x4477bb,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.08,
+            });
+
+            // Head
+            const headGroup = new THREE.Group();
+            headGroup.position.set(0, 0.55, 0);
+            characterGroup.add(headGroup);
+
+            const headGeo = new THREE.SphereGeometry(0.32, 36, 36);
+            const headMesh = new THREE.Mesh(headGeo, bodyMaterial);
+            headMesh.scale.set(1, 0.88, 1);
+            headMesh.castShadow = true;
+            headGroup.add(headMesh);
+
+            const headGlow = new THREE.Mesh(
+                new THREE.SphereGeometry(0.34, 24, 24),
+                new THREE.MeshBasicMaterial({ color: 0x4488cc, wireframe: true, transparent: true, opacity: 0.1 })
+            );
+            headGlow.scale.set(1, 0.88, 1);
+            headGroup.add(headGlow);
+
+            // Eyes
+            const eyeGeo = new THREE.SphereGeometry(0.048, 16, 16);
+            const eyeMat = new THREE.MeshBasicMaterial({ color: 0x00d4ff });
+            const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+            leftEye.position.set(-0.12, 0.04, 0.28);
+            headGroup.add(leftEye);
+            const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+            rightEye.position.set(0.12, 0.04, 0.28);
+            headGroup.add(rightEye);
+
+            // Eye glow rings
+            const eyeGlowGeo = new THREE.RingGeometry(0.05, 0.08, 24);
+            const eyeGlowMat = new THREE.MeshBasicMaterial({ color: 0x00ccff, side: THREE.DoubleSide,
+            transparent: true, opacity: 0.5 });
+            const leftEyeGlow = new THREE.Mesh(eyeGlowGeo, eyeGlowMat);
+            leftEyeGlow.position.copy(leftEye.position);
+            leftEyeGlow.position.z += 0.005;
+            headGroup.add(leftEyeGlow);
+            const rightEyeGlow = new THREE.Mesh(eyeGlowGeo, eyeGlowMat);
+            rightEyeGlow.position.copy(rightEye.position);
+            rightEyeGlow.position.z += 0.005;
+            headGroup.add(rightEyeGlow);
+
+            // Body
+            const bodyGroup = new THREE.Group();
+            bodyGroup.position.set(0, -0.05, 0);
+            characterGroup.add(bodyGroup);
+
+            const upperBodyGeo = new THREE.CylinderGeometry(0.17, 0.21, 0.55, 32);
+            const upperBody = new THREE.Mesh(upperBodyGeo, bodyMaterial);
+            upperBody.position.y = 0.05;
+            upperBody.castShadow = true;
+            bodyGroup.add(upperBody);
+
+            const lowerBodyGeo = new THREE.CylinderGeometry(0.2, 0.22, 0.35, 32);
+            const lowerBody = new THREE.Mesh(lowerBodyGeo, bodyMaterial);
+            lowerBody.position.y = -0.35;
+            lowerBody.castShadow = true;
+            bodyGroup.add(lowerBody);
+
+            // Left Arm (static, relaxed)
+            const leftArmGroup = new THREE.Group();
+            leftArmGroup.position.set(-0.22, 0.28, 0);
+            characterGroup.add(leftArmGroup);
+
+            const leftUpperArmGeo = new THREE.CylinderGeometry(0.055, 0.065, 0.38, 20);
+            const leftUpperArm = new THREE.Mesh(leftUpperArmGeo, bodyMaterial);
+            leftUpperArm.position.y = -0.16;
+            leftUpperArm.rotation.z = 0.3;
+            leftUpperArm.castShadow = true;
+            leftArmGroup.add(leftUpperArm);
+
+            const leftForearmGeo = new THREE.CylinderGeometry(0.045, 0.055, 0.32, 20);
+            const leftForearm = new THREE.Mesh(leftForearmGeo, bodyMaterial);
+            leftForearm.position.y = -0.48;
+            leftForearm.rotation.z = 0.25;
+            leftForearm.castShadow = true;
+            leftArmGroup.add(leftForearm);
+
+            const leftHandGeo = new THREE.SphereGeometry(0.055, 16, 16);
+            const leftHand = new THREE.Mesh(leftHandGeo, bodyMaterial);
+            leftHand.position.y = -0.65;
+            leftHand.position.z = 0.04;
+            leftArmGroup.add(leftHand);
+
+            // Right Arm (animated - will reach toward panel)
+            const rightArmGroup = new THREE.Group();
+            rightArmGroup.position.set(0.22, 0.28, 0);
+            characterGroup.add(rightArmGroup);
+
+            const rightShoulderPivot = new THREE.Group();
+            rightArmGroup.add(rightShoulderPivot);
+
+            const rightUpperArmGeo = new THREE.CylinderGeometry(0.055, 0.065, 0.38, 20);
+            const rightUpperArm = new THREE.Mesh(rightUpperArmGeo, bodyMaterial);
+            rightUpperArm.position.y = -0.16;
+            rightUpperArm.castShadow = true;
+            rightShoulderPivot.add(rightUpperArm);
+
+            const rightElbowPivot = new THREE.Group();
+            rightElbowPivot.position.y = -0.35;
+            rightShoulderPivot.add(rightElbowPivot);
+
+            const rightForearmGeo = new THREE.CylinderGeometry(0.045, 0.055, 0.32, 20);
+            const rightForearm = new THREE.Mesh(rightForearmGeo, bodyMaterial);
+            rightForearm.position.y = -0.14;
+            rightForearm.castShadow = true;
+            rightElbowPivot.add(rightForearm);
+
+            const rightHandGeo = new THREE.SphereGeometry(0.055, 16, 16);
+            const rightHand = new THREE.Mesh(rightHandGeo, new THREE.MeshStandardMaterial({
+                color: 0x2a2d38,
+                roughness: 0.3,
+                metalness: 0.2,
+                emissive: 0x111133,
+                emissiveIntensity: 0.1,
+            }));
+            rightHand.position.y = -0.31;
+            rightHand.position.z = 0.02;
+            rightElbowPivot.add(rightHand);
+
+            // ── Holographic Panel
+            const panelGroup = new THREE.Group();
+            panelGroup.position.set(0, 0.1, 1.15);
+            panelGroup.rotation.x = -0.25;
+            scene.add(panelGroup);
+
+            const panelGeo = new THREE.PlaneGeometry(2.2, 1.5);
+            const panelMat = new THREE.MeshBasicMaterial({
+                color: 0x004488,
+                transparent: true,
+                opacity: 0.18,
+                side: THREE.DoubleSide,
+            });
+            const panelPlane = new THREE.Mesh(panelGeo, panelMat);
+            panelGroup.add(panelPlane);
+
+            // Panel border
+            const panelEdgeGeo = new THREE.EdgesGeometry(panelGeo);
+            const panelEdgeMat = new THREE.LineBasicMaterial({ color: 0x2299dd, transparent: true, opacity: 0.6,
+                linewidth: 1 });
+            const panelBorder = new THREE.LineSegments(panelEdgeGeo, panelEdgeMat);
+            panelGroup.add(panelBorder);
+
+            // Outer glow border
+            const panelOuterGeo = new THREE.PlaneGeometry(2.35, 1.65);
+            const panelOuterEdge = new THREE.EdgesGeometry(panelOuterGeo);
+            const panelOuterLine = new THREE.LineSegments(panelOuterEdge,
+                new THREE.LineBasicMaterial({ color: 0x00aaff, transparent: true, opacity: 0.25 }));
+            panelGroup.add(panelOuterLine);
+
+            // Grid lines on panel
+            for (let i = -0.9; i <= 0.9; i += 0.3) {
+                const hLineGeo = new THREE.BoxGeometry(2.1, 0.003, 0.003);
+                const hLine = new THREE.Mesh(hLineGeo,
+                    new THREE.MeshBasicMaterial({ color: 0x3388bb, transparent: true, opacity: 0.3 }));
+                hLine.position.set(0, i, 0.005);
+                panelGroup.add(hLine);
+            }
+            for (let i = -0.6; i <= 0.6; i += 0.3) {
+                const vLineGeo = new THREE.BoxGeometry(0.003, 1.4, 0.003);
+                const vLine = new THREE.Mesh(vLineGeo,
+                    new THREE.MeshBasicMaterial({ color: 0x3388bb, transparent: true, opacity: 0.22 }));
+                vLine.position.set(i, 0, 0.005);
+                panelGroup.add(vLine);
             }
 
-            window.addEventListener('scroll', function() {
-                if (!ticking) {
-                    requestAnimationFrame(updateParallax);
-                    ticking = true;
+            // ── Mini Website UI (the hologram that gets pulled)
+            const miniUIGroup = new THREE.Group();
+            miniUIGroup.position.set(0, 0.35, 1.05);
+            miniUIGroup.scale.set(0.01, 0.01, 0.01); // start tiny
+            scene.add(miniUIGroup);
+
+            const uiGlowMaterial = new THREE.MeshBasicMaterial({ color: 0x2299ee, transparent: true, opacity: 0.7 });
+            const uiAccentMaterial = new THREE.MeshBasicMaterial({ color: 0x00ccff, transparent: true, opacity: 0.85 });
+            const uiPurpleMaterial = new THREE.MeshBasicMaterial({ color: 0x7755dd, transparent: true, opacity: 0.7 });
+
+            // Main screen block
+            const screenGeo = new THREE.BoxGeometry(0.7, 0.48, 0.04);
+            const screenBlock = new THREE.Mesh(screenGeo, uiGlowMaterial);
+            miniUIGroup.add(screenBlock);
+
+            // Screen border glow
+            const screenEdgeGeo = new THREE.EdgesGeometry(screenGeo);
+            const screenEdge = new THREE.LineSegments(screenEdgeGeo,
+                new THREE.LineBasicMaterial({ color: 0x44bbff, transparent: true, opacity: 0.8 }));
+            miniUIGroup.add(screenEdge);
+
+            // Header bar
+            const headerGeo = new THREE.BoxGeometry(0.64, 0.06, 0.045);
+            const headerBlock = new THREE.Mesh(headerGeo, uiAccentMaterial);
+            headerBlock.position.y = 0.18;
+            headerBlock.position.z = 0.01;
+            miniUIGroup.add(headerBlock);
+
+            // Content blocks
+            const contentGeo1 = new THREE.BoxGeometry(0.28, 0.1, 0.045);
+            const content1 = new THREE.Mesh(contentGeo1, uiPurpleMaterial);
+            content1.position.set(-0.16, 0.04, 0.01);
+            miniUIGroup.add(content1);
+
+            const contentGeo2 = new THREE.BoxGeometry(0.28, 0.18, 0.045);
+            const content2 = new THREE.Mesh(contentGeo2, uiGlowMaterial);
+            content2.position.set(0.16, 0.0, 0.01);
+            miniUIGroup.add(content2);
+
+            const contentGeo3 = new THREE.BoxGeometry(0.6, 0.07, 0.045);
+            const content3 = new THREE.Mesh(contentGeo3, uiAccentMaterial);
+            content3.position.set(0, -0.14, 0.01);
+            miniUIGroup.add(content3);
+
+            // Button dots
+            for (let i = 0; i < 3; i++) {
+                const dotGeo = new THREE.SphereGeometry(0.018, 8, 8);
+                const dot = new THREE.Mesh(dotGeo,
+                    new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.7 }));
+                dot.position.set(-0.25 + i * 0.08, -0.06, 0.03);
+                miniUIGroup.add(dot);
+            }
+
+            // ── Particles
+            const particlesGroup = new THREE.Group();
+            scene.add(particlesGroup);
+            const particleGeom = new THREE.SphereGeometry(0.012, 6, 6);
+            const particleMaterials = [
+                new THREE.MeshBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.6 }),
+                new THREE.MeshBasicMaterial({ color: 0xaa88ff, transparent: true, opacity: 0.5 }),
+                new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 }),
+            ];
+            const particles = [];
+            for (let i = 0; i < 80; i++) {
+                const mat = particleMaterials[Math.floor(Math.random() * 3)];
+                const particle = new THREE.Mesh(particleGeom, mat);
+                particle.position.set(
+                    (Math.random() - 0.5) * 5,
+                    (Math.random() - 0.5) * 3.5,
+                    (Math.random() - 0.5) * 4 + 1
+                );
+                particle.userData = {
+                    baseX: particle.position.x,
+                    baseY: particle.position.y,
+                    baseZ: particle.position.z,
+                    speed: 0.3 + Math.random() * 1.2,
+                    amplitude: 0.1 + Math.random() * 0.5,
+                    phase: Math.random() * Math.PI * 2,
+                };
+                particlesGroup.add(particle);
+                particles.push(particle);
+            }
+
+            // ── Touch ripple rings (for panel interaction)
+            const rippleRings = [];
+            for (let i = 0; i < 5; i++) {
+                const ringGeo = new THREE.TorusGeometry(0.06, 0.008, 8, 24);
+                const ring = new THREE.Mesh(ringGeo,
+                    new THREE.MeshBasicMaterial({ color: 0x44aaff, transparent: true, opacity: 0 }));
+                ring.visible = false;
+                panelGroup.add(ring);
+                rippleRings.push({ mesh: ring, timer: 0, active: false });
+            }
+
+            // ── Window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // ── Render loop
+            let clock = new THREE.Clock();
+            let introRunning = true;
+
+            function animate() {
+                if (!introRunning) return;
+                requestAnimationFrame(animate);
+
+                const dt = Math.min(clock.getDelta(), 0.1);
+                const time = performance.now() * 0.001;
+
+                // Animate particles
+                particles.forEach(p => {
+                    p.position.y = p.userData.baseY + Math.sin(time * p.userData.speed + p.userData.phase) * p
+                        .userData.amplitude;
+                    p.position.x = p.userData.baseX + Math.cos(time * p.userData.speed * 0.7 + p.userData.phase) *
+                        p.userData.amplitude * 0.6;
+                });
+
+                // Animate ripple rings
+                rippleRings.forEach(r => {
+                    if (r.active) {
+                        r.timer += dt;
+                        const progress = r.timer / 1.2;
+                        if (progress >= 1) {
+                            r.active = false;
+                            r.mesh.visible = false;
+                            r.mesh.material.opacity = 0;
+                            r.mesh.scale.set(1, 1, 1);
+                        } else {
+                            r.mesh.visible = true;
+                            r.mesh.scale.set(1 + progress * 3, 1 + progress * 3, 1);
+                            r.mesh.material.opacity = 0.6 * (1 - progress);
+                        }
+                    }
+                });
+
+                // Subtle panel glow pulse
+                const pulse = 1 + Math.sin(time * 2.5) * 0.08;
+                panelGlow.intensity = panelGlow.intensity * 0.95 + (panelGlow.userData?.targetIntensity || 0) * 0.05;
+                panelGlow.intensity *= pulse;
+
+                renderer.render(scene, camera);
+            }
+
+            // Start render loop
+            animate();
+
+            // ── GSAP Animation Timeline
+            const tl = gsap.timeline({
+                onComplete: finishIntro,
+                onUpdate: function() {
+                    // Update panel glow target based on animation phase
+                    const prog = tl.progress();
+                    if (prog > 0.35 && prog < 0.8) {
+                        panelGlow.userData = panelGlow.userData || {};
+                        panelGlow.userData.targetIntensity = 1.5 + Math.sin(prog * 15) * 0.6;
+                    }
                 }
             });
 
-            // ── SCROLL REVEAL SYSTEM ──
-            var sectionObserver = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            // Phase 1: Black → reveal (0 - 0.8s)
+            tl.to(ambientLight, { intensity: 0.35, duration: 0.55, ease: 'power2.in' }, 0.15);
+            tl.to(keyLight, { intensity: 2.2, duration: 0.6, ease: 'power2.in' }, 0.2);
+            tl.to(rimLight, { intensity: 0.9, duration: 0.55, ease: 'power2.in' }, 0.3);
+            tl.to(panelGlow, { intensity: 0.7, duration: 0.5, ease: 'power2.in' }, 0.35);
+            tl.to('#intro-canvas', { opacity: 1, duration: 0.35 }, 0.15);
 
-            // Observe sections with alternating directions
-            document.querySelectorAll('.reveal-section').forEach(function(section) {
-                sectionObserver.observe(section);
+            // Phase 2: Panel lights up (0.6 - 1.2s)
+            tl.to(panelMat, { opacity: 0.22, duration: 0.5, ease: 'power2.out' }, 0.6);
+            tl.to(panelEdgeMat, { opacity: 0.7, duration: 0.45 }, 0.65);
+            tl.to(panelGlow, { intensity: 1.1, duration: 0.5, ease: 'power2.out' }, 0.7);
+
+            // Phase 3: Mini UI appears (1.0 - 1.5s)
+            tl.to(miniUIGroup.scale, { x: 1, y: 1, z: 1, duration: 0.5, ease: 'back.out(1.6)' }, 1.0);
+            tl.to(miniUIGroup.position, { y: 0.3, duration: 0.5, ease: 'power2.out' }, 1.0);
+            tl.to(panelGlow, { intensity: 1.8, duration: 0.35, ease: 'power2.out' }, 1.05);
+
+            // Phase 4: Character arm reaches toward panel (1.4 - 2.2s)
+            tl.to(rightShoulderPivot.rotation, { x: -0.7, duration: 0.55, ease: 'power2.inOut' }, 1.4);
+            tl.to(rightElbowPivot.rotation, { x: 0.9, duration: 0.5, ease: 'power2.inOut' }, 1.5);
+
+            // Phase 5: Tapping gesture (2.0 - 2.6s)
+            for (let tap = 0; tap < 3; tap++) {
+                const tStart = 2.0 + tap * 0.2;
+                tl.to(rightElbowPivot.rotation, { x: 1.05, duration: 0.08, ease: 'power3.out' }, tStart);
+                tl.to(rightElbowPivot.rotation, { x: 0.85, duration: 0.1, ease: 'power3.in' }, tStart + 0.09);
+                // Trigger ripple
+                tl.call(() => triggerRipple(tap * 0.25), null, tStart + 0.04);
+            }
+
+            // Phase 6: Swipe gesture then grab (2.5 - 3.0s)
+            tl.to(rightShoulderPivot.rotation, { x: -1.0, z: -0.15, duration: 0.35, ease: 'power2.inOut' }, 2.55);
+            tl.to(rightElbowPivot.rotation, { x: 1.2, duration: 0.3, ease: 'power2.inOut' }, 2.6);
+            tl.to(miniUIGroup.position, { y: 0.15, z: 0.8, duration: 0.3, ease: 'power2.in' }, 2.65);
+
+            // Phase 7: Pull UI toward camera + zoom (2.8 - 3.8s)
+            tl.to(miniUIGroup.position, { z: 0.2, duration: 0.7, ease: 'power2.in' }, 2.85);
+            tl.to(miniUIGroup.scale, { x: 5.5, y: 5.5, z: 5.5, duration: 0.7, ease: 'power2.in' }, 2.85);
+            tl.to(camera.position, { z: 3.6, duration: 0.65, ease: 'power2.in' }, 2.9);
+            tl.to(panelGlow, { intensity: 3.5, duration: 0.5, ease: 'power2.in' }, 3.0);
+
+            // Phase 8: Blur background, UI fills screen (3.6 - 4.3s)
+            tl.to('#intro-canvas', { filter: 'blur(5px)', duration: 0.45, ease: 'power2.in' }, 3.5);
+            tl.to(ambientLight, { intensity: 1.5, duration: 0.35, ease: 'power2.in' }, 3.6);
+            tl.to(keyLight, { intensity: 6, duration: 0.35 }, 3.6);
+            tl.to(miniUIGroup.scale, { x: 12, y: 12, z: 12, duration: 0.5, ease: 'power3.in' }, 3.7);
+            tl.to(miniUIGroup.position, { z: 0.05, duration: 0.5, ease: 'power3.in' }, 3.7);
+
+            // Phase 9: Peak glow + transition trigger (4.1 - 4.5s)
+            tl.to(panelGlow, { intensity: 8, duration: 0.25, ease: 'power2.in' }, 4.0);
+            tl.call(triggerTransition, null, 4.2);
+
+            // Show skip button after intro starts
+            tl.call(() => {
+                skipBtn.classList.add('visible');
+            }, null, 0.9);
+
+            // ── Skip button
+            let skipped = false;
+            skipBtn.addEventListener('click', () => {
+                if (skipped) return;
+                skipped = true;
+                tl.progress(0.88);
+                tl.pause();
+                triggerTransition();
             });
 
-            // Observe cards
-            var cardObserver = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
+            // ── Helper: Trigger ripple on panel
+            function triggerRipple(offsetX) {
+                const available = rippleRings.find(r => !r.active);
+                if (!available) return;
+                available.active = true;
+                available.timer = 0;
+                available.mesh.position.set(offsetX - 0.25, Math.random() * 0.3 - 0.15, 0.02);
+                available.mesh.scale.set(1, 1, 1);
+                available.mesh.visible = true;
+                available.mesh.material.opacity = 0.6;
+            }
+
+            // ── Transition to main site
+            function triggerTransition() {
+                if (skipped && tl.progress() < 0.85) {
+                    tl.progress(0.88);
+                }
+
+                // Flash effect
+                const flashEl = document.createElement('div');
+                flashEl.style.cssText =
+                    'position:fixed;inset:0;z-index:100002;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.15s ease;';
+                document.body.appendChild(flashEl);
+                requestAnimationFrame(() => {
+                    flashEl.style.opacity = '0.7';
+                    setTimeout(() => {
+                        flashEl.style.opacity = '0';
+                        setTimeout(() => flashEl.remove(), 200);
+                    }, 120);
                 });
-            }, { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
 
-            document.querySelectorAll('.reveal-card').forEach(function(card) {
-                cardObserver.observe(card);
-            });
+                // Fade overlay
+                setTimeout(() => {
+                    overlay.classList.add('fading-out');
+                    mainSite.classList.add('visible');
+                    document.body.style.overflow = '';
 
-            // Observe hero elements
-            var heroObserver = new IntersectionObserver(function(entries) {
-                entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.3 });
+                    // Remove overlay after transition
+                    setTimeout(() => {
+                        overlay.classList.add('removed');
+                        overlay.style.display = 'none';
+                        if (skipBtn) skipBtn.style.display = 'none';
+                        introRunning = false;
+                        // Clean up Three.js
+                        scene.traverse(obj => {
+                            if (obj.geometry && obj !== floor && !obj.userData?.keepAlive) obj.geometry
+                                .dispose();
+                            if (obj.material) {
+                                if (Array.isArray(obj.material)) {
+                                    obj.material.forEach(m => m.dispose());
+                                } else {
+                                    obj.material.dispose();
+                                }
+                            }
+                        });
+                        renderer.dispose();
+                    }, 600);
+                }, 150);
+            }
 
-            document.querySelectorAll('.hero-reveal').forEach(function(el) {
-                heroObserver.observe(el);
-            });
+            // ── Finish intro
+            function finishIntro() {
+                sessionStorage.setItem(INTRO_KEY, '1');
+                if (!skipped && tl.progress() >= 0.9) {
+                    triggerTransition();
+                }
+            }
 
-            // ── SCIENCE FILTER ──
-            window.filterSci = function(type, btn) {
-                document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
-                btn.classList.add('active');
-                document.querySelectorAll('.sci-card').forEach(function(card) {
-                    var cat = card.dataset.cat || '';
-                    var level = card.dataset.level || '';
-                    var show = false;
-                    if (type === 'all') show = true;
-                    else if (type === 'chemistry' || type === 'biology' || type === 'physics') show = cat ===
-                        type;
-                    else if (type === 'school') show = level.includes('school');
-                    else if (type === 'hsc') show = level.includes('hsc');
-                    else if (type === 'cuet') show = level.includes('cuet');
-                    card.dataset.hidden = show ? 'false' : 'true';
-                    card.style.display = show ? '' : 'none';
-                });
-                document.getElementById('sciSearch').value = '';
+            // ── Initialize main site after intro
+            function initMainSite() {
+                // This is called immediately if intro was already played
+                document.body.style.overflow = '';
+                initMainSiteScripts();
+            }
+
+            // Override finish to also init main site scripts
+            const origFinishIntro = finishIntro;
+            finishIntro = function() {
+                origFinishIntro();
+                setTimeout(initMainSiteScripts, 700);
             };
 
-            window.searchSci = function() {
-                var q = document.getElementById('sciSearch').value.toLowerCase();
-                document.querySelectorAll('.sci-card').forEach(function(card) {
-                    var text = card.innerText.toLowerCase();
-                    card.style.display = text.includes(q) ? '' : 'none';
-                });
-                document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
-                var firstBtn = document.querySelector('.filter-btn');
-                if (firstBtn) firstBtn.classList.add('active');
+            // Trigger transition also calls init
+            const origTriggerTransition = triggerTransition;
+            triggerTransition = function() {
+                origTriggerTransition();
+                setTimeout(initMainSiteScripts, 700);
             };
 
-            // ── RIPPLE EFFECT ON BUTTONS ──
-            document.querySelectorAll('.btn, .btn-telegram, .filter-btn, .btn-primary, .btn-secondary').forEach(function(
-            btn) {
-                btn.addEventListener('click', function(e) {
-                    var ripple = document.createElement('span');
-                    ripple.style.cssText =
-                        'position:absolute;border-radius:50%;background:rgba(0,212,255,0.25);transform:scale(0);animation:ripple 0.5s ease-out;pointer-events:none;left:' +
-                        e.offsetX + 'px;top:' + e.offsetY +
-                        'px;width:20px;height:20px;margin-left:-10px;margin-top:-10px;';
-                    btn.style.position = btn.style.position || 'relative';
-                    btn.style.overflow = 'hidden';
-                    btn.appendChild(ripple);
-                    setTimeout(function() { ripple.remove(); }, 500);
+            function initMainSiteScripts() {
+                // ── NAV TOGGLE ──
+                window.toggleNav = window.toggleNav || function() {
+                    document.getElementById('navLinks').classList.toggle('open');
+                };
+                document.querySelectorAll('.nav-links a').forEach(function(a) {
+                    a.addEventListener('click', function() {
+                        document.getElementById('navLinks').classList.remove('open');
+                    });
                 });
-            });
 
-            var rippleKeyframes = document.createElement('style');
-            rippleKeyframes.textContent = '@keyframes ripple{to{transform:scale(22);opacity:0;}}';
-            document.head.appendChild(rippleKeyframes);
+                // ── NAVBAR SCROLL ──
+                var navbar = document.getElementById('navbar');
+                window.addEventListener('scroll', function() {
+                    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 30);
+                });
 
-            console.log('%cThe Debug Point %c— White Luxury Edition',
-                'color:#00d4ff;font-weight:700;font-size:1em;',
-                'color:#555;font-size:0.85em;');
-            console.log('%cCinematic · Parallax · Alternating Scroll Reveal · GPU-Optimized',
-                'color:#999;font-size:0.75em;');
+                // ── CURSOR TRAIL ──
+                var cursorTrail = document.getElementById('cursorTrail');
+                var isMobile = window.innerWidth <= 768;
+                if (!isMobile && cursorTrail && !cursorTrail._initialized) {
+                    cursorTrail._initialized = true;
+                    var trailX = -200,
+                        trailY = -200;
+                    var curX = -200,
+                        curY = -200;
+                    document.addEventListener('mousemove', function(e) { curX = e.clientX;
+                        curY = e.clientY; });
+
+                    function updateTrail() {
+                        trailX += (curX - trailX) * 0.06;
+                        trailY += (curY - trailY) * 0.06;
+                        if (cursorTrail) {
+                            cursorTrail.style.left = trailX + 'px';
+                            cursorTrail.style.top = trailY + 'px';
+                        }
+                        requestAnimationFrame(updateTrail);
+                    }
+                    cursorTrail.classList.add('active');
+                    updateTrail();
+                    window.addEventListener('touchstart', function() { if (cursorTrail) cursorTrail.style.opacity =
+                            '0'; }, { once: true });
+                }
+
+                // ── PARALLAX ──
+                var heroGrid = document.getElementById('heroGrid');
+                var heroGlow = document.getElementById('heroGlow');
+                var heroOrb = document.getElementById('heroOrb');
+                var ticking = false;
+
+                function updateParallax() {
+                    var heroSection = document.getElementById('hero');
+                    if (!heroSection) return;
+                    var heroRect = heroSection.getBoundingClientRect();
+                    var heroHeight = heroSection.offsetHeight;
+                    if (heroRect.bottom > 0 && heroRect.top < window.innerHeight) {
+                        var progress = (window.innerHeight - heroRect.top) / (window.innerHeight + heroHeight);
+                        progress = Math.max(0, Math.min(1, progress));
+                        var offsetY = progress * 60;
+                        if (heroGrid) heroGrid.style.transform = 'translateY(' + (offsetY * 0.3) + 'px)';
+                        if (heroGlow) heroGlow.style.transform = 'translateY(' + (offsetY * 0.5) +
+                            'px) translateX(' + (offsetY * 0.15) + 'px)';
+                        if (heroOrb) heroOrb.style.transform = 'translateY(' + (offsetY * 0.35) +
+                            'px) translateX(' + (-offsetY * 0.2) + 'px)';
+                    }
+                    ticking = false;
+                }
+                window.addEventListener('scroll', function() {
+                    if (!ticking) { requestAnimationFrame(updateParallax);
+                        ticking = true; }
+                });
+
+                // ── SCROLL REVEAL ──
+                var sectionObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add(
+                            'visible'); });
+                }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+                document.querySelectorAll('.reveal-section').forEach(function(s) { sectionObserver.observe(s); });
+
+                var cardObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add(
+                            'visible'); });
+                }, { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
+                document.querySelectorAll('.reveal-card').forEach(function(c) { cardObserver.observe(c); });
+
+                var heroObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add(
+                            'visible'); });
+                }, { threshold: 0.3 });
+                document.querySelectorAll('.hero-reveal').forEach(function(e) { heroObserver.observe(e); });
+
+                // ── SCIENCE FILTER ──
+                window.filterSci = function(type, btn) {
+                    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove(
+                        'active'); });
+                    if (btn) btn.classList.add('active');
+                    document.querySelectorAll('.sci-card').forEach(function(card) {
+                        var cat = card.dataset.cat || '';
+                        var show = (type === 'all' || cat === type);
+                        card.dataset.hidden = show ? 'false' : 'true';
+                        card.style.display = show ? '' : 'none';
+                    });
+                };
+            }
         })();
     </script>
 </body>
