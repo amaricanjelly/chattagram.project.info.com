@@ -7,8 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- ═══════════ INTRO OVERLAY STYLES ═══════════ -->
     <style>
+        /* ── INTRO OVERLAY ── */
         #intro-overlay {
             position: fixed;
             inset: 0;
@@ -34,62 +34,59 @@
             transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             will-change: filter;
         }
-        #intro-canvas.blurring {
-            filter: blur(6px);
-        }
-        #skip-intro {
+
+        /* GLASS UI OVERLAY (no skip button) */
+        .ui-overlay {
             position: fixed;
-            top: 20px;
-            right: 24px;
-            z-index: 100001;
-            font-family: 'Inter', 'Plus Jakarta Sans', system-ui, sans-serif;
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.04em;
-            color: rgba(255, 255, 255, 0.55);
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 7px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            opacity: 0;
+            inset: 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
         }
-        #skip-intro.visible {
+        .ui-overlay.active {
             opacity: 1;
-            pointer-events: auto;
         }
-        #skip-intro:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 20px rgba(0, 180, 255, 0.2);
+        .ui-card {
+            background: rgba(10, 15, 25, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 24px;
+            padding: 2rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0, 180, 255, 0.15);
         }
-        #skip-intro .skip-dot {
-            display: inline-block;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: #00d4ff;
-            margin-right: 6px;
-            animation: skip-pulse 1.6s ease-in-out infinite;
+        .ui-title {
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: rgba(220, 240, 255, 0.9);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
         }
-        @keyframes skip-pulse {
-            0%,
-            100% {
-                opacity: 0.4;
-                box-shadow: 0 0 4px #00d4ff;
-            }
-            50% {
-                opacity: 1;
-                box-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0, 180, 255, 0.5);
-            }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-bg {
+            stroke: rgba(0, 212, 255, 0.15);
+            fill: none;
+            stroke-width: 3;
+        }
+        .progress-ring-fill {
+            stroke: #00d4ff;
+            stroke-linecap: round;
+            fill: none;
+            stroke-width: 3;
+            filter: drop-shadow(0 0 8px #00d4ff);
+            transition: stroke-dashoffset 0.2s linear;
         }
 
-        /* Main site initially hidden during intro */
+        /* MAIN SITE (hidden until intro ends) */
         #main-site {
             opacity: 0;
             transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -98,23 +95,11 @@
             opacity: 1;
         }
 
-        @media (max-width: 768px) {
-            #skip-intro {
-                top: 12px;
-                right: 12px;
-                font-size: 0.65rem;
-                padding: 5px 12px;
-            }
-        }
-    </style>
-
-    <!-- ═══════════ MAIN SITE STYLES ═══════════ -->
-    <style>
+        /* ═══ MAIN WEBSITE STYLES (unchanged) ═══ */
         :root {
             --bg: #ffffff;
             --bg-alt: #f7f8fa;
             --bg-surface: #ffffff;
-            --bg-surface-hover: #fafbfc;
             --bg-glass: rgba(255, 255, 255, 0.72);
             --text: #0a0a0a;
             --text-heading: #080808;
@@ -125,7 +110,6 @@
             --accent-hover: #00bce6;
             --accent-subtle: rgba(0, 212, 255, 0.06);
             --accent-glow: rgba(0, 212, 255, 0.18);
-            --accent-strong: rgba(0, 212, 255, 0.28);
             --border: rgba(0, 0, 0, 0.06);
             --border-hover: rgba(0, 0, 0, 0.12);
             --border-accent: rgba(0, 212, 255, 0.25);
@@ -1297,6 +1281,8 @@
             color: var(--accent);
             font-weight: 600;
         }
+
+        /* RESPONSIVE */
         @media (max-width: 900px) {
             .featured-inner {
                 grid-template-columns: 1fr;
@@ -1424,7 +1410,18 @@
     <div id="intro-overlay">
         <canvas id="intro-canvas"></canvas>
     </div>
-    <button id="skip-intro"><span class="skip-dot"></span>Skip Intro</button>
+
+    <!-- UI OVERLAY (no skip button) -->
+    <div class="ui-overlay" id="uiOverlay">
+        <div class="ui-card">
+            <div class="ui-title">Initializing AI System...</div>
+            <svg width="80" height="80" class="progress-ring">
+                <circle class="progress-ring-bg" cx="40" cy="40" r="34"></circle>
+                <circle class="progress-ring-fill" id="progressFill" cx="40" cy="40" r="34"
+                stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
+            </svg>
+        </div>
+    </div>
 
     <!-- ═══════════ MAIN SITE ═══════════ -->
     <div id="main-site">
@@ -1570,31 +1567,19 @@
     </script>
 
     <script type="module">
-        // ================== INTRO ANIMATION SCRIPT ==================
         import * as THREE from 'three';
         import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
         import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         import gsap from 'https://esm.sh/gsap@3.12.5';
 
-        // ── Session check
-        const INTRO_KEY = 'tdp_intro_ai_v3';
-        const introPlayed = sessionStorage.getItem(INTRO_KEY);
+        // ── DOM elements
         const overlay = document.getElementById('intro-overlay');
         const canvas = document.getElementById('intro-canvas');
-        const skipBtn = document.getElementById('skip-intro');
         const mainSite = document.getElementById('main-site');
-
-        // If already played this session, skip immediately
-        if (introPlayed) {
-            overlay.classList.add('removed');
-            overlay.style.display = 'none';
-            if (skipBtn) skipBtn.style.display = 'none';
-            mainSite.classList.add('visible');
-            initMainSiteScripts();
-            // Prevent further execution of intro script
-            throw new Error('Intro already played'); // stop module execution
-        }
+        const uiOverlay = document.getElementById('uiOverlay');
+        const progressFill = document.getElementById('progressFill');
+        const progressCircleLength = 213.6;
 
         document.body.style.overflow = 'hidden';
 
@@ -1753,7 +1738,7 @@
             waveRings.push(wave);
         }
 
-        // Glitch effect
+        // Glitch effect (subtle, still used for transition)
         function triggerMicroGlitch() {
             gsap.to(coreGroup.position, {
                 x: 'random(-0.04, 0.04)',
@@ -1763,12 +1748,6 @@
                 repeat: 1,
                 ease: 'power3.inOut',
                 onComplete: () => { coreGroup.position.set(0, 0.6, 0); }
-            });
-            gsap.to(document.getElementById('glitchFlash') || { style: { opacity: 0 } }, {
-                opacity: 0.15,
-                duration: 0.03,
-                yoyo: true,
-                repeat: 1
             });
         }
 
@@ -1799,9 +1778,7 @@
         }
         animate();
 
-        // ── GSAP TIMELINE
-        const progressFill = document.getElementById('progressFill');
-        const progressCircleLength = 213.6;
+        // ── GSAP TIMELINE (EXACTLY 4 SECONDS)
         progressFill.style.strokeDashoffset = progressCircleLength;
 
         const tl = gsap.timeline({
@@ -1812,43 +1789,49 @@
             onComplete: transitionToMain
         });
 
+        // Initial black
         tl.set(scene.background, { color: '#000000' });
         tl.set(floorMat, { opacity: 0 });
         tl.set(gridGlow.material, { opacity: 0 });
         tl.set(particlesMat, { opacity: 0 });
 
-        tl.to(scene.background, { color: '#050505', duration: 0.6 }, 0.4);
-        tl.to(floorMat, { opacity: 0.85, duration: 0.7 }, 0.5);
-        tl.to(gridGlow.material, { opacity: 0.55, duration: 0.7 }, 0.5);
-        tl.to(particlesMat, { opacity: 0.7, duration: 0.8 }, 0.6);
-        tl.to(ambient, { intensity: 0.4, duration: 0.8 }, 0.4);
-        tl.to(keyLight, { intensity: 3.2, duration: 0.7 }, 0.5);
-        tl.to(rimLight, { intensity: 2, duration: 0.7 }, 0.5);
-        tl.to(coreInnerLight, { intensity: 6, duration: 0.15, yoyo: true, repeat: 1 }, 1.1);
-        tl.fromTo(coreGroup.scale, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1, duration: 0.7, ease: 'back.out(1.5)' }, 1.2);
-        tl.to(wireframeMat, { opacity: 0.35, duration: 0.5 }, 1.3);
+        // 0.0 → 0.7s : environment fades in
+        tl.to(scene.background, { color: '#050505', duration: 0.4 }, 0.2);
+        tl.to(floorMat, { opacity: 0.85, duration: 0.5 }, 0.3);
+        tl.to(gridGlow.material, { opacity: 0.55, duration: 0.5 }, 0.3);
+        tl.to(particlesMat, { opacity: 0.7, duration: 0.6 }, 0.4);
+        tl.to(ambient, { intensity: 0.4, duration: 0.6 }, 0.2);
+        tl.to(keyLight, { intensity: 3.2, duration: 0.5 }, 0.3);
+        tl.to(rimLight, { intensity: 2, duration: 0.5 }, 0.3);
 
+        // 0.8s : light pulse → core appears
+        tl.to(coreInnerLight, { intensity: 6, duration: 0.1, yoyo: true, repeat: 1 }, 0.8);
+        tl.fromTo(coreGroup.scale, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1, duration: 0.6, ease: 'back.out(1.5)' }, 0.9);
+        tl.to(wireframeMat, { opacity: 0.35, duration: 0.4 }, 1.0);
+
+        // 1.2s : wave rings
         waveRings.forEach((wave, i) => {
-            tl.set(wave, { visible: true, scale: 0.7, material: { opacity: 0.7 } }, 1.5 + i * 0.15);
-            tl.to(wave.scale, { x: 1.6, y: 1.6, duration: 1.2, ease: 'power2.out' }, 1.5 + i * 0.15);
-            tl.to(wave.material, { opacity: 0, duration: 0.8 }, 2.0 + i * 0.15);
+            tl.set(wave, { visible: true, scale: 0.7, material: { opacity: 0.7 } }, 1.2 + i * 0.12);
+            tl.to(wave.scale, { x: 1.6, y: 1.6, duration: 1.0, ease: 'power2.out' }, 1.2 + i * 0.12);
+            tl.to(wave.material, { opacity: 0, duration: 0.6 }, 1.6 + i * 0.12);
         });
 
-        tl.call(triggerMicroGlitch, null, 1.8);
-        tl.call(triggerMicroGlitch, null, 2.1);
+        // 1.5s : micro-glitch
+        tl.call(triggerMicroGlitch, null, 1.5);
 
-        // UI overlay
-        const uiOverlay = document.getElementById('uiOverlay');
-        tl.call(() => uiOverlay.classList.add('active'), null, 2.2);
-        tl.to(uiOverlay, { opacity: 1, duration: 0.6 }, 2.2);
+        // 1.8s : UI overlay fades in
+        tl.call(() => uiOverlay.classList.add('active'), null, 1.8);
+        tl.to(uiOverlay, { opacity: 1, duration: 0.5 }, 1.8);
 
-        tl.to(camera.position, { z: 3.6, x: 0.35, duration: 2.4, ease: 'power2.inOut' }, 2.0);
-        tl.to(camera.position, { y: 0.5, duration: 2.4, ease: 'power2.inOut' }, 2.0);
-        tl.call(() => skipBtn.classList.add('visible'), null, 2.5);
+        // 1.6s → 3.6s : camera dolly in
+        tl.to(camera.position, { z: 3.6, x: 0.35, duration: 2.0, ease: 'power2.inOut' }, 1.6);
+        tl.to(camera.position, { y: 0.5, duration: 2.0, ease: 'power2.inOut' }, 1.6);
 
-        tl.to(coreInnerLight, { intensity: 8, duration: 0.25, yoyo: true, repeat: 1 }, 3.8);
-        tl.call(triggerMicroGlitch, null, 4.0);
-        tl.to({}, { duration: 0.5 }); // wait
+        // 3.2s : final energy pulse
+        tl.to(coreInnerLight, { intensity: 8, duration: 0.2, yoyo: true, repeat: 1 }, 3.2);
+        tl.call(triggerMicroGlitch, null, 3.4);
+
+        // 4.0s : timeline ends → transition triggers automatically
 
         // Audio (subtle hum)
         let audioCtx, humGain, humOsc;
@@ -1862,25 +1845,16 @@
             humOsc.connect(humGain);
             humGain.connect(audioCtx.destination);
             humOsc.start();
-            tl.to(humGain.gain, { value: 0.08, duration: 0.8 }, 0.8);
-            tl.to(humGain.gain, { value: 0.15, duration: 0.5 }, 1.5);
-            tl.to(humGain.gain, { value: 0, duration: 0.7 }, 4.0);
+            tl.to(humGain.gain, { value: 0.08, duration: 0.6 }, 0.3);
+            tl.to(humGain.gain, { value: 0.15, duration: 0.4 }, 1.0);
+            tl.to(humGain.gain, { value: 0, duration: 0.5 }, 3.5);
         } catch (e) { /* no audio */ }
 
-        // Skip button
-        let skipped = false;
-        skipBtn.addEventListener('click', () => {
-            if (skipped || introComplete) return;
-            skipped = true;
-            tl.progress(0.95);
-            transitionToMain();
-        });
-
+        // ── TRANSITION TO MAIN SITE
         function transitionToMain() {
             if (introComplete) return;
             introComplete = true;
-            sessionStorage.setItem(INTRO_KEY, '1');
-            // Flash + glitch
+            // Quick flash
             const flash = document.createElement('div');
             flash.style.cssText = 'position:fixed;inset:0;z-index:100002;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.15s';
             document.body.appendChild(flash);
@@ -1893,16 +1867,16 @@
             gsap.to(uiOverlay, { opacity: 0, duration: 0.3, delay: 0.1 });
             document.body.style.overflow = '';
             mainSite.classList.add('visible');
-            // Remove overlay
+            // Remove overlay after fade
             setTimeout(() => {
                 overlay.classList.add('removed');
                 overlay.style.display = 'none';
-                if (skipBtn) skipBtn.style.display = 'none';
                 initMainSiteScripts();
             }, 600);
             if (humOsc) humOsc.stop();
         }
 
+        // ── RESIZE
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -1911,10 +1885,9 @@
         });
     </script>
 
-    <!-- ═══════════ MAIN SITE SCRIPTS (will be called after intro) ═══════════ -->
+    <!-- ═══════════ MAIN WEBSITE SCRIPTS ═══════════ -->
     <script>
         function initMainSiteScripts() {
-            // NAV TOGGLE
             window.toggleNav = function() {
                 document.getElementById('navLinks').classList.toggle('open');
             };
@@ -1923,14 +1896,10 @@
                     document.getElementById('navLinks').classList.remove('open');
                 });
             });
-
-            // NAV SCROLL
             const navbar = document.getElementById('navbar');
             window.addEventListener('scroll', () => {
                 if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 30);
             });
-
-            // CURSOR TRAIL
             const cursorTrail = document.getElementById('cursorTrail');
             if (window.innerWidth > 768 && cursorTrail) {
                 let trailX = -200,
@@ -1950,8 +1919,6 @@
                 updateTrail();
                 window.addEventListener('touchstart', () => { if (cursorTrail) cursorTrail.style.opacity = '0'; }, { once: true });
             }
-
-            // PARALLAX
             const heroGrid = document.getElementById('heroGrid'),
                 heroGlow = document.getElementById('heroGlow'),
                 heroOrb = document.getElementById('heroOrb');
@@ -1972,8 +1939,6 @@
             }
             window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(updateParallax);
                     ticking = true; } });
-
-            // SCROLL REVEAL
             const sectionObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e
                     .target.classList.add('visible'); }), { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
             document.querySelectorAll('.reveal-section').forEach(s => sectionObserver.observe(s));
@@ -1983,8 +1948,6 @@
             const heroObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
                     .classList.add('visible'); }), { threshold: 0.3 });
             document.querySelectorAll('.hero-reveal').forEach(el => heroObserver.observe(el));
-
-            // SCIENCE FILTER
             window.filterSci = function(type, btn) {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 if (btn) btn.classList.add('active');
