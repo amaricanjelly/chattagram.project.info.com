@@ -1526,7 +1526,6 @@
         <section class="section section-alt reveal-section reveal-right" id="projects">
             <div class="container">
                 <div class="section-header"><div class="section-eyebrow">Our Work</div><h2 class="section-title">Robotics &amp; IoT প্রজেক্ট</h2><div class="section-line"></div></div>
-                <div class="youtube-note"><svg class="youtube-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg><div><p>YouTube থেকে পছন্দ করে শুধু Demo দেখিয়ে আপনার Favorite Project করাতে পারেন।</p><span class="youtube-note-warning">শর্ত: Project অবশ্যই Valid হতে হবে</span></div></div>
                 <div class="card-grid" id="projectsGrid">
                     <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#01</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Human Following Robot</p><p class="project-card-desc">IR Sensor ও Ultrasonic Sensor ব্যবহার করে সামনের মানুষকে চিনে গতিপথ নির্ধারণ করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
                     <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#02</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Fingerprint Door Lock System</p><p class="project-card-desc">বায়োমেট্রিক Fingerprint Sensor — Registered আঙুলের ছাপ মিললে দরজা খুলে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
@@ -1560,699 +1559,442 @@
         <footer class="footer"><div class="container">&copy; 2026 <span>The Debug Point</span> &nbsp;&middot;&nbsp; Coding &amp; Robotics Solution &nbsp;&middot;&nbsp; চট্টগ্রাম, বাংলাদেশ</div></footer>
     </div>
 
-    <!-- ═══════════ THREE.JS + GSAP CDN ═══════════ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js">
+    <!-- ═══════════ THREE.JS + GSAP (module imports) ═══════════ -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://esm.sh/three@0.157.0",
+                "three/addons/": "https://esm.sh/three@0.157.0/examples/jsm/"
+            }
+        }
     </script>
 
-    <!-- ═══════════ INTRO ANIMATION SCRIPT ═══════════ -->
-    <script>
-        (function() {
-            // ── Session check
-            const INTRO_KEY = 'tdp_intro_played_v2';
-            const introPlayed = sessionStorage.getItem(INTRO_KEY);
-            const overlay = document.getElementById('intro-overlay');
-            const canvas = document.getElementById('intro-canvas');
-            const skipBtn = document.getElementById('skip-intro');
-            const mainSite = document.getElementById('main-site');
+    <script type="module">
+        // ================== INTRO ANIMATION SCRIPT ==================
+        import * as THREE from 'three';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+        import gsap from 'https://esm.sh/gsap@3.12.5';
 
-            // If already played this session, skip immediately
-            if (introPlayed) {
+        // ── Session check
+        const INTRO_KEY = 'tdp_intro_ai_v3';
+        const introPlayed = sessionStorage.getItem(INTRO_KEY);
+        const overlay = document.getElementById('intro-overlay');
+        const canvas = document.getElementById('intro-canvas');
+        const skipBtn = document.getElementById('skip-intro');
+        const mainSite = document.getElementById('main-site');
+
+        // If already played this session, skip immediately
+        if (introPlayed) {
+            overlay.classList.add('removed');
+            overlay.style.display = 'none';
+            if (skipBtn) skipBtn.style.display = 'none';
+            mainSite.classList.add('visible');
+            initMainSiteScripts();
+            // Prevent further execution of intro script
+            throw new Error('Intro already played'); // stop module execution
+        }
+
+        document.body.style.overflow = 'hidden';
+
+        // ── THREE.JS SETUP
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 0.9;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color('#050505');
+        scene.fog = new THREE.Fog('#050505', 3, 15);
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 30);
+        camera.position.set(0, 0.8, 7.5);
+        camera.lookAt(0, 0.2, 0);
+
+        // ── POST PROCESSING (BLOOM)
+        const composer = new EffectComposer(renderer);
+        const renderPass = new RenderPass(scene, camera);
+        composer.addPass(renderPass);
+        const bloomPass = new UnrealBloomPass(
+            new THREE.Vector2(window.innerWidth, window.innerHeight),
+            1.2, 0.4, 0.1
+        );
+        composer.addPass(bloomPass);
+
+        // ── LIGHTING
+        const ambient = new THREE.AmbientLight('#111133', 0.3);
+        scene.add(ambient);
+        const keyLight = new THREE.PointLight('#00ccff', 3.5, 12, 1.5);
+        keyLight.position.set(2, 2, 4);
+        scene.add(keyLight);
+        const rimLight = new THREE.PointLight('#8844ff', 2.2, 10, 1.2);
+        rimLight.position.set(-2, 1.5, -1);
+        scene.add(rimLight);
+        const coreInnerLight = new THREE.PointLight('#00eeff', 5, 4, 1.8);
+        coreInnerLight.position.set(0, 0.5, 0);
+        scene.add(coreInnerLight);
+
+        // ── FLOOR & GRID
+        const floorMat = new THREE.MeshStandardMaterial({
+            color: '#0a0a14',
+            roughness: 0.7,
+            metalness: 0.4,
+            transparent: true,
+            opacity: 0.85
+        });
+        const floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.y = -2.2;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        const gridHelper = new THREE.PolarGridHelper(6, 64, 48, 128, '#001122', '#001122');
+        gridHelper.position.y = -2.19;
+        scene.add(gridHelper);
+        const gridGlow = new THREE.PolarGridHelper(6, 64, 48, 128, '#003344', '#003344');
+        gridGlow.position.y = -2.19;
+        gridGlow.material.transparent = true;
+        gridGlow.material.opacity = 0.6;
+        gridGlow.material.blending = THREE.AdditiveBlending;
+        scene.add(gridGlow);
+
+        // ── PARTICLES
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 200;
+        const positions = new Float32Array(particlesCount * 3);
+        const colors = new Float32Array(particlesCount * 3);
+        const colorOptions = [new THREE.Color('#88ccff'), new THREE.Color('#aa88ff'), new THREE.Color('#ffffff')];
+        for (let i = 0; i < particlesCount; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 7;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 4 + 0.5;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 5 + 1;
+            const col = colorOptions[Math.floor(Math.random() * 3)];
+            colors[i * 3] = col.r;
+            colors[i * 3 + 1] = col.g;
+            colors[i * 3 + 2] = col.b;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        const particlesMat = new THREE.PointsMaterial({
+            size: 0.03,
+            vertexColors: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            transparent: true,
+            opacity: 0.7
+        });
+        const particles = new THREE.Points(particlesGeometry, particlesMat);
+        scene.add(particles);
+
+        // ── AI CORE (holographic sphere + wireframe)
+        const coreGroup = new THREE.Group();
+        coreGroup.position.set(0, 0.6, 0);
+        scene.add(coreGroup);
+        const coreInnerGeo = new THREE.SphereGeometry(0.45, 64, 64);
+        const coreInnerMat = new THREE.MeshStandardMaterial({
+            color: '#00aaff',
+            emissive: '#004488',
+            roughness: 0.25,
+            metalness: 0.2,
+            transparent: true,
+            opacity: 0.95
+        });
+        const coreInner = new THREE.Mesh(coreInnerGeo, coreInnerMat);
+        coreGroup.add(coreInner);
+        const wireframeGeo = new THREE.IcosahedronGeometry(0.55, 1);
+        const wireframeMat = new THREE.MeshBasicMaterial({
+            color: '#00eeff',
+            wireframe: true,
+            transparent: true,
+            opacity: 0.25,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+        const wireframeMesh = new THREE.Mesh(wireframeGeo, wireframeMat);
+        coreGroup.add(wireframeMesh);
+
+        // Orbiting rings
+        const rings = [];
+        const ringColors = ['#00ccff', '#8844ff', '#00ffcc'];
+        for (let i = 0; i < 3; i++) {
+            const ringGeo = new THREE.TorusGeometry(0.7 + i * 0.18, 0.02, 16, 100);
+            const ringMat = new THREE.MeshStandardMaterial({
+                color: ringColors[i],
+                emissive: ringColors[i],
+                roughness: 0.3,
+                metalness: 0.7,
+                transparent: true,
+                opacity: 0.8
+            });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.rotation.x = Math.PI / 2 + (i - 1) * 0.4;
+            ring.rotation.y = i * 0.7;
+            coreGroup.add(ring);
+            rings.push(ring);
+        }
+
+        // Energy wave rings
+        const waveRings = [];
+        for (let i = 0; i < 4; i++) {
+            const waveGeo = new THREE.TorusGeometry(0.75, 0.008, 8, 80);
+            const waveMat = new THREE.MeshBasicMaterial({
+                color: '#00eeff',
+                transparent: true,
+                opacity: 0.5,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+            const wave = new THREE.Mesh(waveGeo, waveMat);
+            wave.visible = false;
+            coreGroup.add(wave);
+            waveRings.push(wave);
+        }
+
+        // Glitch effect
+        function triggerMicroGlitch() {
+            gsap.to(coreGroup.position, {
+                x: 'random(-0.04, 0.04)',
+                y: 'random(-0.04, 0.04)',
+                duration: 0.06,
+                yoyo: true,
+                repeat: 1,
+                ease: 'power3.inOut',
+                onComplete: () => { coreGroup.position.set(0, 0.6, 0); }
+            });
+            gsap.to(document.getElementById('glitchFlash') || { style: { opacity: 0 } }, {
+                opacity: 0.15,
+                duration: 0.03,
+                yoyo: true,
+                repeat: 1
+            });
+        }
+
+        // ── ANIMATION LOOP
+        let clock = new THREE.Clock();
+        let introComplete = false;
+        function animate() {
+            if (introComplete) return;
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+            const time = performance.now() * 0.001;
+            wireframeMesh.rotation.y += 0.002;
+            wireframeMesh.rotation.x = Math.sin(time * 0.5) * 0.1;
+            rings.forEach((r, i) => {
+                r.rotation.z += 0.003 * (i + 1);
+                r.rotation.x += 0.001 * (i + 1);
+            });
+            particles.rotation.y += 0.0002;
+            const posArray = particlesGeometry.attributes.position.array;
+            for (let i = 0; i < particlesCount; i++) {
+                const i3 = i * 3;
+                posArray[i3 + 1] += Math.sin(time * 2 + i) * 0.0005;
+                posArray[i3] += Math.cos(time * 1.5 + i) * 0.0004;
+            }
+            particlesGeometry.attributes.position.needsUpdate = true;
+            coreInnerLight.intensity = 5 + Math.sin(time * 3) * 0.8;
+            composer.render();
+        }
+        animate();
+
+        // ── GSAP TIMELINE
+        const progressFill = document.getElementById('progressFill');
+        const progressCircleLength = 213.6;
+        progressFill.style.strokeDashoffset = progressCircleLength;
+
+        const tl = gsap.timeline({
+            onUpdate: function() {
+                const progress = Math.min(tl.progress(), 1);
+                progressFill.style.strokeDashoffset = progressCircleLength * (1 - progress);
+            },
+            onComplete: transitionToMain
+        });
+
+        tl.set(scene.background, { color: '#000000' });
+        tl.set(floorMat, { opacity: 0 });
+        tl.set(gridGlow.material, { opacity: 0 });
+        tl.set(particlesMat, { opacity: 0 });
+
+        tl.to(scene.background, { color: '#050505', duration: 0.6 }, 0.4);
+        tl.to(floorMat, { opacity: 0.85, duration: 0.7 }, 0.5);
+        tl.to(gridGlow.material, { opacity: 0.55, duration: 0.7 }, 0.5);
+        tl.to(particlesMat, { opacity: 0.7, duration: 0.8 }, 0.6);
+        tl.to(ambient, { intensity: 0.4, duration: 0.8 }, 0.4);
+        tl.to(keyLight, { intensity: 3.2, duration: 0.7 }, 0.5);
+        tl.to(rimLight, { intensity: 2, duration: 0.7 }, 0.5);
+        tl.to(coreInnerLight, { intensity: 6, duration: 0.15, yoyo: true, repeat: 1 }, 1.1);
+        tl.fromTo(coreGroup.scale, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1, duration: 0.7, ease: 'back.out(1.5)' }, 1.2);
+        tl.to(wireframeMat, { opacity: 0.35, duration: 0.5 }, 1.3);
+
+        waveRings.forEach((wave, i) => {
+            tl.set(wave, { visible: true, scale: 0.7, material: { opacity: 0.7 } }, 1.5 + i * 0.15);
+            tl.to(wave.scale, { x: 1.6, y: 1.6, duration: 1.2, ease: 'power2.out' }, 1.5 + i * 0.15);
+            tl.to(wave.material, { opacity: 0, duration: 0.8 }, 2.0 + i * 0.15);
+        });
+
+        tl.call(triggerMicroGlitch, null, 1.8);
+        tl.call(triggerMicroGlitch, null, 2.1);
+
+        // UI overlay
+        const uiOverlay = document.getElementById('uiOverlay');
+        tl.call(() => uiOverlay.classList.add('active'), null, 2.2);
+        tl.to(uiOverlay, { opacity: 1, duration: 0.6 }, 2.2);
+
+        tl.to(camera.position, { z: 3.6, x: 0.35, duration: 2.4, ease: 'power2.inOut' }, 2.0);
+        tl.to(camera.position, { y: 0.5, duration: 2.4, ease: 'power2.inOut' }, 2.0);
+        tl.call(() => skipBtn.classList.add('visible'), null, 2.5);
+
+        tl.to(coreInnerLight, { intensity: 8, duration: 0.25, yoyo: true, repeat: 1 }, 3.8);
+        tl.call(triggerMicroGlitch, null, 4.0);
+        tl.to({}, { duration: 0.5 }); // wait
+
+        // Audio (subtle hum)
+        let audioCtx, humGain, humOsc;
+        try {
+            audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+            humGain = audioCtx.createGain();
+            humGain.gain.value = 0;
+            humOsc = audioCtx.createOscillator();
+            humOsc.type = 'sine';
+            humOsc.frequency.value = 58;
+            humOsc.connect(humGain);
+            humGain.connect(audioCtx.destination);
+            humOsc.start();
+            tl.to(humGain.gain, { value: 0.08, duration: 0.8 }, 0.8);
+            tl.to(humGain.gain, { value: 0.15, duration: 0.5 }, 1.5);
+            tl.to(humGain.gain, { value: 0, duration: 0.7 }, 4.0);
+        } catch (e) { /* no audio */ }
+
+        // Skip button
+        let skipped = false;
+        skipBtn.addEventListener('click', () => {
+            if (skipped || introComplete) return;
+            skipped = true;
+            tl.progress(0.95);
+            transitionToMain();
+        });
+
+        function transitionToMain() {
+            if (introComplete) return;
+            introComplete = true;
+            sessionStorage.setItem(INTRO_KEY, '1');
+            // Flash + glitch
+            const flash = document.createElement('div');
+            flash.style.cssText = 'position:fixed;inset:0;z-index:100002;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.15s';
+            document.body.appendChild(flash);
+            requestAnimationFrame(() => {
+                flash.style.opacity = '0.8';
+                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 200); }, 100);
+            });
+            // Fade canvas & UI
+            gsap.to('#intro-canvas', { opacity: 0, duration: 0.4, delay: 0.1 });
+            gsap.to(uiOverlay, { opacity: 0, duration: 0.3, delay: 0.1 });
+            document.body.style.overflow = '';
+            mainSite.classList.add('visible');
+            // Remove overlay
+            setTimeout(() => {
                 overlay.classList.add('removed');
                 overlay.style.display = 'none';
                 if (skipBtn) skipBtn.style.display = 'none';
-                mainSite.classList.add('visible');
-                initMainSite();
-                return;
-            }
-
-            // ── Prevent scroll during intro
-            document.body.style.overflow = 'hidden';
-
-            // ── Three.js Setup
-            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.0;
-            renderer.outputEncoding = THREE.sRGBEncoding;
-
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x000000);
-            scene.fog = new THREE.Fog(0x000000, 3, 15);
-
-            const camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.1, 30);
-            camera.position.set(0, 0.2, 5.2);
-            camera.lookAt(0, 0.1, 0.8);
-
-            // ── Lighting
-            const ambientLight = new THREE.AmbientLight(0x0a0a20, 0);
-            scene.add(ambientLight);
-
-            const keyLight = new THREE.PointLight(0x4488cc, 0, 8, 2);
-            keyLight.position.set(2, 1.8, 2.5);
-            keyLight.castShadow = true;
-            keyLight.shadow.mapSize.width = 512;
-            keyLight.shadow.mapSize.height = 512;
-            keyLight.shadow.camera.near = 0.3;
-            keyLight.shadow.camera.far = 15;
-            keyLight.shadow.bias = -0.0003;
-            scene.add(keyLight);
-
-            const rimLight = new THREE.PointLight(0x8844cc, 0, 6, 1.5);
-            rimLight.position.set(-1.5, 1.2, -0.5);
-            scene.add(rimLight);
-
-            const panelGlow = new THREE.PointLight(0x0088ff, 0, 5, 0.8);
-            panelGlow.position.set(0, 0.15, 1.1);
-            scene.add(panelGlow);
-
-            // ── Floor
-            const floorGeo = new THREE.PlaneGeometry(12, 12);
-            const floorMat = new THREE.MeshStandardMaterial({
-                color: 0x111118,
-                roughness: 0.55,
-                metalness: 0.3,
-            });
-            const floor = new THREE.Mesh(floorGeo, floorMat);
-            floor.rotation.x = -Math.PI / 2;
-            floor.position.y = -1.9;
-            floor.receiveShadow = true;
-            scene.add(floor);
-
-            // Subtle grid on floor
-            const gridHelper = new THREE.PolarGridHelper(5, 32, 24, 64, 0x222233, 0x222233);
-            gridHelper.position.y = -1.89;
-            scene.add(gridHelper);
-
-            // ── Character Construction
-            const characterGroup = new THREE.Group();
-            scene.add(characterGroup);
-
-            const bodyMaterial = new THREE.MeshStandardMaterial({
-                color: 0x2a2d38,
-                roughness: 0.35,
-                metalness: 0.15,
-            });
-
-            const glowEdgeMaterial = new THREE.MeshBasicMaterial({
-                color: 0x4477bb,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.08,
-            });
-
-            // Head
-            const headGroup = new THREE.Group();
-            headGroup.position.set(0, 0.55, 0);
-            characterGroup.add(headGroup);
-
-            const headGeo = new THREE.SphereGeometry(0.32, 36, 36);
-            const headMesh = new THREE.Mesh(headGeo, bodyMaterial);
-            headMesh.scale.set(1, 0.88, 1);
-            headMesh.castShadow = true;
-            headGroup.add(headMesh);
-
-            const headGlow = new THREE.Mesh(
-                new THREE.SphereGeometry(0.34, 24, 24),
-                new THREE.MeshBasicMaterial({ color: 0x4488cc, wireframe: true, transparent: true, opacity: 0.1 })
-            );
-            headGlow.scale.set(1, 0.88, 1);
-            headGroup.add(headGlow);
-
-            // Eyes
-            const eyeGeo = new THREE.SphereGeometry(0.048, 16, 16);
-            const eyeMat = new THREE.MeshBasicMaterial({ color: 0x00d4ff });
-            const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
-            leftEye.position.set(-0.12, 0.04, 0.28);
-            headGroup.add(leftEye);
-            const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
-            rightEye.position.set(0.12, 0.04, 0.28);
-            headGroup.add(rightEye);
-
-            // Eye glow rings
-            const eyeGlowGeo = new THREE.RingGeometry(0.05, 0.08, 24);
-            const eyeGlowMat = new THREE.MeshBasicMaterial({ color: 0x00ccff, side: THREE.DoubleSide,
-            transparent: true, opacity: 0.5 });
-            const leftEyeGlow = new THREE.Mesh(eyeGlowGeo, eyeGlowMat);
-            leftEyeGlow.position.copy(leftEye.position);
-            leftEyeGlow.position.z += 0.005;
-            headGroup.add(leftEyeGlow);
-            const rightEyeGlow = new THREE.Mesh(eyeGlowGeo, eyeGlowMat);
-            rightEyeGlow.position.copy(rightEye.position);
-            rightEyeGlow.position.z += 0.005;
-            headGroup.add(rightEyeGlow);
-
-            // Body
-            const bodyGroup = new THREE.Group();
-            bodyGroup.position.set(0, -0.05, 0);
-            characterGroup.add(bodyGroup);
-
-            const upperBodyGeo = new THREE.CylinderGeometry(0.17, 0.21, 0.55, 32);
-            const upperBody = new THREE.Mesh(upperBodyGeo, bodyMaterial);
-            upperBody.position.y = 0.05;
-            upperBody.castShadow = true;
-            bodyGroup.add(upperBody);
-
-            const lowerBodyGeo = new THREE.CylinderGeometry(0.2, 0.22, 0.35, 32);
-            const lowerBody = new THREE.Mesh(lowerBodyGeo, bodyMaterial);
-            lowerBody.position.y = -0.35;
-            lowerBody.castShadow = true;
-            bodyGroup.add(lowerBody);
-
-            // Left Arm (static, relaxed)
-            const leftArmGroup = new THREE.Group();
-            leftArmGroup.position.set(-0.22, 0.28, 0);
-            characterGroup.add(leftArmGroup);
-
-            const leftUpperArmGeo = new THREE.CylinderGeometry(0.055, 0.065, 0.38, 20);
-            const leftUpperArm = new THREE.Mesh(leftUpperArmGeo, bodyMaterial);
-            leftUpperArm.position.y = -0.16;
-            leftUpperArm.rotation.z = 0.3;
-            leftUpperArm.castShadow = true;
-            leftArmGroup.add(leftUpperArm);
-
-            const leftForearmGeo = new THREE.CylinderGeometry(0.045, 0.055, 0.32, 20);
-            const leftForearm = new THREE.Mesh(leftForearmGeo, bodyMaterial);
-            leftForearm.position.y = -0.48;
-            leftForearm.rotation.z = 0.25;
-            leftForearm.castShadow = true;
-            leftArmGroup.add(leftForearm);
-
-            const leftHandGeo = new THREE.SphereGeometry(0.055, 16, 16);
-            const leftHand = new THREE.Mesh(leftHandGeo, bodyMaterial);
-            leftHand.position.y = -0.65;
-            leftHand.position.z = 0.04;
-            leftArmGroup.add(leftHand);
-
-            // Right Arm (animated - will reach toward panel)
-            const rightArmGroup = new THREE.Group();
-            rightArmGroup.position.set(0.22, 0.28, 0);
-            characterGroup.add(rightArmGroup);
-
-            const rightShoulderPivot = new THREE.Group();
-            rightArmGroup.add(rightShoulderPivot);
-
-            const rightUpperArmGeo = new THREE.CylinderGeometry(0.055, 0.065, 0.38, 20);
-            const rightUpperArm = new THREE.Mesh(rightUpperArmGeo, bodyMaterial);
-            rightUpperArm.position.y = -0.16;
-            rightUpperArm.castShadow = true;
-            rightShoulderPivot.add(rightUpperArm);
-
-            const rightElbowPivot = new THREE.Group();
-            rightElbowPivot.position.y = -0.35;
-            rightShoulderPivot.add(rightElbowPivot);
-
-            const rightForearmGeo = new THREE.CylinderGeometry(0.045, 0.055, 0.32, 20);
-            const rightForearm = new THREE.Mesh(rightForearmGeo, bodyMaterial);
-            rightForearm.position.y = -0.14;
-            rightForearm.castShadow = true;
-            rightElbowPivot.add(rightForearm);
-
-            const rightHandGeo = new THREE.SphereGeometry(0.055, 16, 16);
-            const rightHand = new THREE.Mesh(rightHandGeo, new THREE.MeshStandardMaterial({
-                color: 0x2a2d38,
-                roughness: 0.3,
-                metalness: 0.2,
-                emissive: 0x111133,
-                emissiveIntensity: 0.1,
-            }));
-            rightHand.position.y = -0.31;
-            rightHand.position.z = 0.02;
-            rightElbowPivot.add(rightHand);
-
-            // ── Holographic Panel
-            const panelGroup = new THREE.Group();
-            panelGroup.position.set(0, 0.1, 1.15);
-            panelGroup.rotation.x = -0.25;
-            scene.add(panelGroup);
-
-            const panelGeo = new THREE.PlaneGeometry(2.2, 1.5);
-            const panelMat = new THREE.MeshBasicMaterial({
-                color: 0x004488,
-                transparent: true,
-                opacity: 0.18,
-                side: THREE.DoubleSide,
-            });
-            const panelPlane = new THREE.Mesh(panelGeo, panelMat);
-            panelGroup.add(panelPlane);
-
-            // Panel border
-            const panelEdgeGeo = new THREE.EdgesGeometry(panelGeo);
-            const panelEdgeMat = new THREE.LineBasicMaterial({ color: 0x2299dd, transparent: true, opacity: 0.6,
-                linewidth: 1 });
-            const panelBorder = new THREE.LineSegments(panelEdgeGeo, panelEdgeMat);
-            panelGroup.add(panelBorder);
-
-            // Outer glow border
-            const panelOuterGeo = new THREE.PlaneGeometry(2.35, 1.65);
-            const panelOuterEdge = new THREE.EdgesGeometry(panelOuterGeo);
-            const panelOuterLine = new THREE.LineSegments(panelOuterEdge,
-                new THREE.LineBasicMaterial({ color: 0x00aaff, transparent: true, opacity: 0.25 }));
-            panelGroup.add(panelOuterLine);
-
-            // Grid lines on panel
-            for (let i = -0.9; i <= 0.9; i += 0.3) {
-                const hLineGeo = new THREE.BoxGeometry(2.1, 0.003, 0.003);
-                const hLine = new THREE.Mesh(hLineGeo,
-                    new THREE.MeshBasicMaterial({ color: 0x3388bb, transparent: true, opacity: 0.3 }));
-                hLine.position.set(0, i, 0.005);
-                panelGroup.add(hLine);
-            }
-            for (let i = -0.6; i <= 0.6; i += 0.3) {
-                const vLineGeo = new THREE.BoxGeometry(0.003, 1.4, 0.003);
-                const vLine = new THREE.Mesh(vLineGeo,
-                    new THREE.MeshBasicMaterial({ color: 0x3388bb, transparent: true, opacity: 0.22 }));
-                vLine.position.set(i, 0, 0.005);
-                panelGroup.add(vLine);
-            }
-
-            // ── Mini Website UI (the hologram that gets pulled)
-            const miniUIGroup = new THREE.Group();
-            miniUIGroup.position.set(0, 0.35, 1.05);
-            miniUIGroup.scale.set(0.01, 0.01, 0.01); // start tiny
-            scene.add(miniUIGroup);
-
-            const uiGlowMaterial = new THREE.MeshBasicMaterial({ color: 0x2299ee, transparent: true, opacity: 0.7 });
-            const uiAccentMaterial = new THREE.MeshBasicMaterial({ color: 0x00ccff, transparent: true, opacity: 0.85 });
-            const uiPurpleMaterial = new THREE.MeshBasicMaterial({ color: 0x7755dd, transparent: true, opacity: 0.7 });
-
-            // Main screen block
-            const screenGeo = new THREE.BoxGeometry(0.7, 0.48, 0.04);
-            const screenBlock = new THREE.Mesh(screenGeo, uiGlowMaterial);
-            miniUIGroup.add(screenBlock);
-
-            // Screen border glow
-            const screenEdgeGeo = new THREE.EdgesGeometry(screenGeo);
-            const screenEdge = new THREE.LineSegments(screenEdgeGeo,
-                new THREE.LineBasicMaterial({ color: 0x44bbff, transparent: true, opacity: 0.8 }));
-            miniUIGroup.add(screenEdge);
-
-            // Header bar
-            const headerGeo = new THREE.BoxGeometry(0.64, 0.06, 0.045);
-            const headerBlock = new THREE.Mesh(headerGeo, uiAccentMaterial);
-            headerBlock.position.y = 0.18;
-            headerBlock.position.z = 0.01;
-            miniUIGroup.add(headerBlock);
-
-            // Content blocks
-            const contentGeo1 = new THREE.BoxGeometry(0.28, 0.1, 0.045);
-            const content1 = new THREE.Mesh(contentGeo1, uiPurpleMaterial);
-            content1.position.set(-0.16, 0.04, 0.01);
-            miniUIGroup.add(content1);
-
-            const contentGeo2 = new THREE.BoxGeometry(0.28, 0.18, 0.045);
-            const content2 = new THREE.Mesh(contentGeo2, uiGlowMaterial);
-            content2.position.set(0.16, 0.0, 0.01);
-            miniUIGroup.add(content2);
-
-            const contentGeo3 = new THREE.BoxGeometry(0.6, 0.07, 0.045);
-            const content3 = new THREE.Mesh(contentGeo3, uiAccentMaterial);
-            content3.position.set(0, -0.14, 0.01);
-            miniUIGroup.add(content3);
-
-            // Button dots
-            for (let i = 0; i < 3; i++) {
-                const dotGeo = new THREE.SphereGeometry(0.018, 8, 8);
-                const dot = new THREE.Mesh(dotGeo,
-                    new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.7 }));
-                dot.position.set(-0.25 + i * 0.08, -0.06, 0.03);
-                miniUIGroup.add(dot);
-            }
-
-            // ── Particles
-            const particlesGroup = new THREE.Group();
-            scene.add(particlesGroup);
-            const particleGeom = new THREE.SphereGeometry(0.012, 6, 6);
-            const particleMaterials = [
-                new THREE.MeshBasicMaterial({ color: 0x88ccff, transparent: true, opacity: 0.6 }),
-                new THREE.MeshBasicMaterial({ color: 0xaa88ff, transparent: true, opacity: 0.5 }),
-                new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.4 }),
-            ];
-            const particles = [];
-            for (let i = 0; i < 80; i++) {
-                const mat = particleMaterials[Math.floor(Math.random() * 3)];
-                const particle = new THREE.Mesh(particleGeom, mat);
-                particle.position.set(
-                    (Math.random() - 0.5) * 5,
-                    (Math.random() - 0.5) * 3.5,
-                    (Math.random() - 0.5) * 4 + 1
-                );
-                particle.userData = {
-                    baseX: particle.position.x,
-                    baseY: particle.position.y,
-                    baseZ: particle.position.z,
-                    speed: 0.3 + Math.random() * 1.2,
-                    amplitude: 0.1 + Math.random() * 0.5,
-                    phase: Math.random() * Math.PI * 2,
-                };
-                particlesGroup.add(particle);
-                particles.push(particle);
-            }
-
-            // ── Touch ripple rings (for panel interaction)
-            const rippleRings = [];
-            for (let i = 0; i < 5; i++) {
-                const ringGeo = new THREE.TorusGeometry(0.06, 0.008, 8, 24);
-                const ring = new THREE.Mesh(ringGeo,
-                    new THREE.MeshBasicMaterial({ color: 0x44aaff, transparent: true, opacity: 0 }));
-                ring.visible = false;
-                panelGroup.add(ring);
-                rippleRings.push({ mesh: ring, timer: 0, active: false });
-            }
-
-            // ── Window resize
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-
-            // ── Render loop
-            let clock = new THREE.Clock();
-            let introRunning = true;
-
-            function animate() {
-                if (!introRunning) return;
-                requestAnimationFrame(animate);
-
-                const dt = Math.min(clock.getDelta(), 0.1);
-                const time = performance.now() * 0.001;
-
-                // Animate particles
-                particles.forEach(p => {
-                    p.position.y = p.userData.baseY + Math.sin(time * p.userData.speed + p.userData.phase) * p
-                        .userData.amplitude;
-                    p.position.x = p.userData.baseX + Math.cos(time * p.userData.speed * 0.7 + p.userData.phase) *
-                        p.userData.amplitude * 0.6;
-                });
-
-                // Animate ripple rings
-                rippleRings.forEach(r => {
-                    if (r.active) {
-                        r.timer += dt;
-                        const progress = r.timer / 1.2;
-                        if (progress >= 1) {
-                            r.active = false;
-                            r.mesh.visible = false;
-                            r.mesh.material.opacity = 0;
-                            r.mesh.scale.set(1, 1, 1);
-                        } else {
-                            r.mesh.visible = true;
-                            r.mesh.scale.set(1 + progress * 3, 1 + progress * 3, 1);
-                            r.mesh.material.opacity = 0.6 * (1 - progress);
-                        }
-                    }
-                });
-
-                // Subtle panel glow pulse
-                const pulse = 1 + Math.sin(time * 2.5) * 0.08;
-                panelGlow.intensity = panelGlow.intensity * 0.95 + (panelGlow.userData?.targetIntensity || 0) * 0.05;
-                panelGlow.intensity *= pulse;
-
-                renderer.render(scene, camera);
-            }
-
-            // Start render loop
-            animate();
-
-            // ── GSAP Animation Timeline
-            const tl = gsap.timeline({
-                onComplete: finishIntro,
-                onUpdate: function() {
-                    // Update panel glow target based on animation phase
-                    const prog = tl.progress();
-                    if (prog > 0.35 && prog < 0.8) {
-                        panelGlow.userData = panelGlow.userData || {};
-                        panelGlow.userData.targetIntensity = 1.5 + Math.sin(prog * 15) * 0.6;
-                    }
-                }
-            });
-
-            // Phase 1: Black → reveal (0 - 0.8s)
-            tl.to(ambientLight, { intensity: 0.35, duration: 0.55, ease: 'power2.in' }, 0.15);
-            tl.to(keyLight, { intensity: 2.2, duration: 0.6, ease: 'power2.in' }, 0.2);
-            tl.to(rimLight, { intensity: 0.9, duration: 0.55, ease: 'power2.in' }, 0.3);
-            tl.to(panelGlow, { intensity: 0.7, duration: 0.5, ease: 'power2.in' }, 0.35);
-            tl.to('#intro-canvas', { opacity: 1, duration: 0.35 }, 0.15);
-
-            // Phase 2: Panel lights up (0.6 - 1.2s)
-            tl.to(panelMat, { opacity: 0.22, duration: 0.5, ease: 'power2.out' }, 0.6);
-            tl.to(panelEdgeMat, { opacity: 0.7, duration: 0.45 }, 0.65);
-            tl.to(panelGlow, { intensity: 1.1, duration: 0.5, ease: 'power2.out' }, 0.7);
-
-            // Phase 3: Mini UI appears (1.0 - 1.5s)
-            tl.to(miniUIGroup.scale, { x: 1, y: 1, z: 1, duration: 0.5, ease: 'back.out(1.6)' }, 1.0);
-            tl.to(miniUIGroup.position, { y: 0.3, duration: 0.5, ease: 'power2.out' }, 1.0);
-            tl.to(panelGlow, { intensity: 1.8, duration: 0.35, ease: 'power2.out' }, 1.05);
-
-            // Phase 4: Character arm reaches toward panel (1.4 - 2.2s)
-            tl.to(rightShoulderPivot.rotation, { x: -0.7, duration: 0.55, ease: 'power2.inOut' }, 1.4);
-            tl.to(rightElbowPivot.rotation, { x: 0.9, duration: 0.5, ease: 'power2.inOut' }, 1.5);
-
-            // Phase 5: Tapping gesture (2.0 - 2.6s)
-            for (let tap = 0; tap < 3; tap++) {
-                const tStart = 2.0 + tap * 0.2;
-                tl.to(rightElbowPivot.rotation, { x: 1.05, duration: 0.08, ease: 'power3.out' }, tStart);
-                tl.to(rightElbowPivot.rotation, { x: 0.85, duration: 0.1, ease: 'power3.in' }, tStart + 0.09);
-                // Trigger ripple
-                tl.call(() => triggerRipple(tap * 0.25), null, tStart + 0.04);
-            }
-
-            // Phase 6: Swipe gesture then grab (2.5 - 3.0s)
-            tl.to(rightShoulderPivot.rotation, { x: -1.0, z: -0.15, duration: 0.35, ease: 'power2.inOut' }, 2.55);
-            tl.to(rightElbowPivot.rotation, { x: 1.2, duration: 0.3, ease: 'power2.inOut' }, 2.6);
-            tl.to(miniUIGroup.position, { y: 0.15, z: 0.8, duration: 0.3, ease: 'power2.in' }, 2.65);
-
-            // Phase 7: Pull UI toward camera + zoom (2.8 - 3.8s)
-            tl.to(miniUIGroup.position, { z: 0.2, duration: 0.7, ease: 'power2.in' }, 2.85);
-            tl.to(miniUIGroup.scale, { x: 5.5, y: 5.5, z: 5.5, duration: 0.7, ease: 'power2.in' }, 2.85);
-            tl.to(camera.position, { z: 3.6, duration: 0.65, ease: 'power2.in' }, 2.9);
-            tl.to(panelGlow, { intensity: 3.5, duration: 0.5, ease: 'power2.in' }, 3.0);
-
-            // Phase 8: Blur background, UI fills screen (3.6 - 4.3s)
-            tl.to('#intro-canvas', { filter: 'blur(5px)', duration: 0.45, ease: 'power2.in' }, 3.5);
-            tl.to(ambientLight, { intensity: 1.5, duration: 0.35, ease: 'power2.in' }, 3.6);
-            tl.to(keyLight, { intensity: 6, duration: 0.35 }, 3.6);
-            tl.to(miniUIGroup.scale, { x: 12, y: 12, z: 12, duration: 0.5, ease: 'power3.in' }, 3.7);
-            tl.to(miniUIGroup.position, { z: 0.05, duration: 0.5, ease: 'power3.in' }, 3.7);
-
-            // Phase 9: Peak glow + transition trigger (4.1 - 4.5s)
-            tl.to(panelGlow, { intensity: 8, duration: 0.25, ease: 'power2.in' }, 4.0);
-            tl.call(triggerTransition, null, 4.2);
-
-            // Show skip button after intro starts
-            tl.call(() => {
-                skipBtn.classList.add('visible');
-            }, null, 0.9);
-
-            // ── Skip button
-            let skipped = false;
-            skipBtn.addEventListener('click', () => {
-                if (skipped) return;
-                skipped = true;
-                tl.progress(0.88);
-                tl.pause();
-                triggerTransition();
-            });
-
-            // ── Helper: Trigger ripple on panel
-            function triggerRipple(offsetX) {
-                const available = rippleRings.find(r => !r.active);
-                if (!available) return;
-                available.active = true;
-                available.timer = 0;
-                available.mesh.position.set(offsetX - 0.25, Math.random() * 0.3 - 0.15, 0.02);
-                available.mesh.scale.set(1, 1, 1);
-                available.mesh.visible = true;
-                available.mesh.material.opacity = 0.6;
-            }
-
-            // ── Transition to main site
-            function triggerTransition() {
-                if (skipped && tl.progress() < 0.85) {
-                    tl.progress(0.88);
-                }
-
-                // Flash effect
-                const flashEl = document.createElement('div');
-                flashEl.style.cssText =
-                    'position:fixed;inset:0;z-index:100002;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.15s ease;';
-                document.body.appendChild(flashEl);
-                requestAnimationFrame(() => {
-                    flashEl.style.opacity = '0.7';
-                    setTimeout(() => {
-                        flashEl.style.opacity = '0';
-                        setTimeout(() => flashEl.remove(), 200);
-                    }, 120);
-                });
-
-                // Fade overlay
-                setTimeout(() => {
-                    overlay.classList.add('fading-out');
-                    mainSite.classList.add('visible');
-                    document.body.style.overflow = '';
-
-                    // Remove overlay after transition
-                    setTimeout(() => {
-                        overlay.classList.add('removed');
-                        overlay.style.display = 'none';
-                        if (skipBtn) skipBtn.style.display = 'none';
-                        introRunning = false;
-                        // Clean up Three.js
-                        scene.traverse(obj => {
-                            if (obj.geometry && obj !== floor && !obj.userData?.keepAlive) obj.geometry
-                                .dispose();
-                            if (obj.material) {
-                                if (Array.isArray(obj.material)) {
-                                    obj.material.forEach(m => m.dispose());
-                                } else {
-                                    obj.material.dispose();
-                                }
-                            }
-                        });
-                        renderer.dispose();
-                    }, 600);
-                }, 150);
-            }
-
-            // ── Finish intro
-            function finishIntro() {
-                sessionStorage.setItem(INTRO_KEY, '1');
-                if (!skipped && tl.progress() >= 0.9) {
-                    triggerTransition();
-                }
-            }
-
-            // ── Initialize main site after intro
-            function initMainSite() {
-                // This is called immediately if intro was already played
-                document.body.style.overflow = '';
                 initMainSiteScripts();
+            }, 600);
+            if (humOsc) humOsc.stop();
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+
+    <!-- ═══════════ MAIN SITE SCRIPTS (will be called after intro) ═══════════ -->
+    <script>
+        function initMainSiteScripts() {
+            // NAV TOGGLE
+            window.toggleNav = function() {
+                document.getElementById('navLinks').classList.toggle('open');
+            };
+            document.querySelectorAll('.nav-links a').forEach(a => {
+                a.addEventListener('click', () => {
+                    document.getElementById('navLinks').classList.remove('open');
+                });
+            });
+
+            // NAV SCROLL
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 30);
+            });
+
+            // CURSOR TRAIL
+            const cursorTrail = document.getElementById('cursorTrail');
+            if (window.innerWidth > 768 && cursorTrail) {
+                let trailX = -200,
+                    trailY = -200,
+                    curX = -200,
+                    curY = -200;
+                document.addEventListener('mousemove', e => { curX = e.clientX;
+                    curY = e.clientY; });
+                function updateTrail() {
+                    trailX += (curX - trailX) * 0.06;
+                    trailY += (curY - trailY) * 0.06;
+                    cursorTrail.style.left = trailX + 'px';
+                    cursorTrail.style.top = trailY + 'px';
+                    requestAnimationFrame(updateTrail);
+                }
+                cursorTrail.classList.add('active');
+                updateTrail();
+                window.addEventListener('touchstart', () => { if (cursorTrail) cursorTrail.style.opacity = '0'; }, { once: true });
             }
 
-            // Override finish to also init main site scripts
-            const origFinishIntro = finishIntro;
-            finishIntro = function() {
-                origFinishIntro();
-                setTimeout(initMainSiteScripts, 700);
-            };
-
-            // Trigger transition also calls init
-            const origTriggerTransition = triggerTransition;
-            triggerTransition = function() {
-                origTriggerTransition();
-                setTimeout(initMainSiteScripts, 700);
-            };
-
-            function initMainSiteScripts() {
-                // ── NAV TOGGLE ──
-                window.toggleNav = window.toggleNav || function() {
-                    document.getElementById('navLinks').classList.toggle('open');
-                };
-                document.querySelectorAll('.nav-links a').forEach(function(a) {
-                    a.addEventListener('click', function() {
-                        document.getElementById('navLinks').classList.remove('open');
-                    });
-                });
-
-                // ── NAVBAR SCROLL ──
-                var navbar = document.getElementById('navbar');
-                window.addEventListener('scroll', function() {
-                    if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 30);
-                });
-
-                // ── CURSOR TRAIL ──
-                var cursorTrail = document.getElementById('cursorTrail');
-                var isMobile = window.innerWidth <= 768;
-                if (!isMobile && cursorTrail && !cursorTrail._initialized) {
-                    cursorTrail._initialized = true;
-                    var trailX = -200,
-                        trailY = -200;
-                    var curX = -200,
-                        curY = -200;
-                    document.addEventListener('mousemove', function(e) { curX = e.clientX;
-                        curY = e.clientY; });
-
-                    function updateTrail() {
-                        trailX += (curX - trailX) * 0.06;
-                        trailY += (curY - trailY) * 0.06;
-                        if (cursorTrail) {
-                            cursorTrail.style.left = trailX + 'px';
-                            cursorTrail.style.top = trailY + 'px';
-                        }
-                        requestAnimationFrame(updateTrail);
-                    }
-                    cursorTrail.classList.add('active');
-                    updateTrail();
-                    window.addEventListener('touchstart', function() { if (cursorTrail) cursorTrail.style.opacity =
-                            '0'; }, { once: true });
+            // PARALLAX
+            const heroGrid = document.getElementById('heroGrid'),
+                heroGlow = document.getElementById('heroGlow'),
+                heroOrb = document.getElementById('heroOrb');
+            let ticking = false;
+            function updateParallax() {
+                const heroSection = document.getElementById('hero');
+                if (!heroSection) return;
+                const rect = heroSection.getBoundingClientRect();
+                const heroHeight = heroSection.offsetHeight;
+                if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                    const progress = (window.innerHeight - rect.top) / (window.innerHeight + heroHeight);
+                    const offsetY = Math.max(0, Math.min(1, progress)) * 60;
+                    if (heroGrid) heroGrid.style.transform = `translateY(${offsetY * 0.3}px)`;
+                    if (heroGlow) heroGlow.style.transform = `translateY(${offsetY * 0.5}px) translateX(${offsetY * 0.15}px)`;
+                    if (heroOrb) heroOrb.style.transform = `translateY(${offsetY * 0.35}px) translateX(${-offsetY * 0.2}px)`;
                 }
-
-                // ── PARALLAX ──
-                var heroGrid = document.getElementById('heroGrid');
-                var heroGlow = document.getElementById('heroGlow');
-                var heroOrb = document.getElementById('heroOrb');
-                var ticking = false;
-
-                function updateParallax() {
-                    var heroSection = document.getElementById('hero');
-                    if (!heroSection) return;
-                    var heroRect = heroSection.getBoundingClientRect();
-                    var heroHeight = heroSection.offsetHeight;
-                    if (heroRect.bottom > 0 && heroRect.top < window.innerHeight) {
-                        var progress = (window.innerHeight - heroRect.top) / (window.innerHeight + heroHeight);
-                        progress = Math.max(0, Math.min(1, progress));
-                        var offsetY = progress * 60;
-                        if (heroGrid) heroGrid.style.transform = 'translateY(' + (offsetY * 0.3) + 'px)';
-                        if (heroGlow) heroGlow.style.transform = 'translateY(' + (offsetY * 0.5) +
-                            'px) translateX(' + (offsetY * 0.15) + 'px)';
-                        if (heroOrb) heroOrb.style.transform = 'translateY(' + (offsetY * 0.35) +
-                            'px) translateX(' + (-offsetY * 0.2) + 'px)';
-                    }
-                    ticking = false;
-                }
-                window.addEventListener('scroll', function() {
-                    if (!ticking) { requestAnimationFrame(updateParallax);
-                        ticking = true; }
-                });
-
-                // ── SCROLL REVEAL ──
-                var sectionObserver = new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add(
-                            'visible'); });
-                }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-                document.querySelectorAll('.reveal-section').forEach(function(s) { sectionObserver.observe(s); });
-
-                var cardObserver = new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add(
-                            'visible'); });
-                }, { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
-                document.querySelectorAll('.reveal-card').forEach(function(c) { cardObserver.observe(c); });
-
-                var heroObserver = new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add(
-                            'visible'); });
-                }, { threshold: 0.3 });
-                document.querySelectorAll('.hero-reveal').forEach(function(e) { heroObserver.observe(e); });
-
-                // ── SCIENCE FILTER ──
-                window.filterSci = function(type, btn) {
-                    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove(
-                        'active'); });
-                    if (btn) btn.classList.add('active');
-                    document.querySelectorAll('.sci-card').forEach(function(card) {
-                        var cat = card.dataset.cat || '';
-                        var show = (type === 'all' || cat === type);
-                        card.dataset.hidden = show ? 'false' : 'true';
-                        card.style.display = show ? '' : 'none';
-                    });
-                };
+                ticking = false;
             }
-        })();
+            window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(updateParallax);
+                    ticking = true; } });
+
+            // SCROLL REVEAL
+            const sectionObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e
+                    .target.classList.add('visible'); }), { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.reveal-section').forEach(s => sectionObserver.observe(s));
+            const cardObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
+                    .classList.add('visible'); }), { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
+            document.querySelectorAll('.reveal-card').forEach(c => cardObserver.observe(c));
+            const heroObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
+                    .classList.add('visible'); }), { threshold: 0.3 });
+            document.querySelectorAll('.hero-reveal').forEach(el => heroObserver.observe(el));
+
+            // SCIENCE FILTER
+            window.filterSci = function(type, btn) {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                if (btn) btn.classList.add('active');
+                document.querySelectorAll('.sci-card').forEach(card => {
+                    const cat = card.dataset.cat || '';
+                    card.style.display = (type === 'all' || cat === type) ? '' : 'none';
+                    card.dataset.hidden = (type === 'all' || cat === type) ? 'false' : 'true';
+                });
+            };
+        }
     </script>
 </body>
 </html>
