@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Debug Point — Coding & Robotics Solution, Chittagong</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Share+Tech+Mono&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* ── INTRO OVERLAY ── */
+        /* ═══════════ INTRO OVERLAY — CYBERPUNK CINEMATIC ═══════════ */
         #intro-overlay {
             position: fixed;
             inset: 0;
@@ -17,8 +17,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             will-change: opacity;
+            overflow: hidden;
         }
         #intro-overlay.fading-out {
             opacity: 0;
@@ -31,62 +32,50 @@
             display: block;
             width: 100%;
             height: 100%;
-            transition: filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            will-change: filter;
+            position: absolute;
+            inset: 0;
+            image-rendering: auto;
         }
-
-        /* GLASS UI OVERLAY (no skip button) */
-        .ui-overlay {
+        .intro-scanlines {
             position: fixed;
             inset: 0;
-            z-index: 20;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            z-index: 100001;
+            pointer-events: none;
+            opacity: 0.06;
+            background: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0, 0, 0, 0.3) 2px,
+                    rgba(0, 0, 0, 0.3) 4px);
+        }
+        .intro-crt-curve {
+            position: fixed;
+            inset: 0;
+            z-index: 100002;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.5s;
+            box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.7), inset 0 0 60px rgba(0, 0, 0, 0.5);
+            border-radius: 0;
         }
-        .ui-overlay.active {
+        .intro-crt-curve.active {
             opacity: 1;
         }
-        .ui-card {
-            background: rgba(10, 15, 25, 0.5);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 212, 255, 0.25);
-            border-radius: 24px;
-            padding: 2rem 2.5rem;
-            text-align: center;
-            box-shadow: 0 0 60px rgba(0, 180, 255, 0.15);
+        .intro-glitch-flash {
+            position: fixed;
+            inset: 0;
+            z-index: 100003;
+            pointer-events: none;
+            background: rgba(0, 255, 255, 0.08);
+            opacity: 0;
+            transition: opacity 0.05s;
         }
-        .ui-title {
-            font-size: 1rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            color: rgba(220, 240, 255, 0.9);
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-        }
-        .progress-ring {
-            transform: rotate(-90deg);
-        }
-        .progress-ring-bg {
-            stroke: rgba(0, 212, 255, 0.15);
-            fill: none;
-            stroke-width: 3;
-        }
-        .progress-ring-fill {
-            stroke: #00d4ff;
-            stroke-linecap: round;
-            fill: none;
-            stroke-width: 3;
-            filter: drop-shadow(0 0 8px #00d4ff);
-            transition: stroke-dashoffset 0.2s linear;
+        .intro-glitch-flash.active {
+            opacity: 1;
+            transition: opacity 0.02s;
         }
 
-        /* MAIN SITE (hidden until intro ends) */
+        /* ═══════ MAIN SITE (hidden until intro ends) ═══════ */
         #main-site {
             opacity: 0;
             transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -95,7 +84,496 @@
             opacity: 1;
         }
 
-        /* ═══ MAIN WEBSITE STYLES (unchanged) ═══ */
+        /* ═══════ ADMIN PANEL STYLES ═══════ */
+        .admin-panel-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99990;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .admin-panel-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            right: -480px;
+            width: 460px;
+            max-width: 92vw;
+            height: 100vh;
+            z-index: 99991;
+            background: rgba(10, 14, 20, 0.96);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-left: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: -8px 0 40px rgba(0, 0, 0, 0.6), -2px 0 20px rgba(0, 180, 255, 0.1);
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .admin-panel.active {
+            right: 0;
+        }
+        .admin-panel-header {
+            padding: 1.2rem 1.4rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .admin-panel-title {
+            font-family: 'Orbitron', 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #00d4ff;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .admin-panel-title-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #00d4ff;
+            box-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0, 212, 255, 0.5);
+            animation: admin-dot-pulse 1.8s ease-in-out infinite;
+        }
+        @keyframes admin-dot-pulse {
+            0%,
+            100% {
+                box-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0, 212, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px #00d4ff, 0 0 40px rgba(0, 212, 255, 0.8);
+            }
+        }
+        .admin-close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #aaa;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .admin-close-btn:hover {
+            background: rgba(255, 60, 60, 0.2);
+            border-color: rgba(255, 60, 60, 0.4);
+            color: #ff5555;
+        }
+        .admin-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+            flex-shrink: 0;
+        }
+        .admin-tab {
+            flex: 1;
+            padding: 10px 12px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: #777;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            transition: all 0.25s;
+            text-transform: uppercase;
+            border-bottom: 2px solid transparent;
+        }
+        .admin-tab:hover {
+            color: #aaa;
+            background: rgba(0, 212, 255, 0.03);
+        }
+        .admin-tab.active {
+            color: #00d4ff;
+            border-bottom-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.05);
+        }
+        .admin-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.2rem;
+            scroll-behavior: smooth;
+        }
+        .admin-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .admin-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .admin-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.25);
+            border-radius: 2px;
+        }
+        .admin-section-title {
+            font-family: 'Orbitron', 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            color: #888;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+        .admin-input-group {
+            margin-bottom: 0.8rem;
+        }
+        .admin-input-group label {
+            display: block;
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: #aaa;
+            margin-bottom: 4px;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .admin-input-group input,
+        .admin-input-group textarea,
+        .admin-input-group select {
+            width: 100%;
+            padding: 9px 12px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            color: #ddd;
+            font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+            font-size: 0.8rem;
+            outline: none;
+            transition: all 0.25s;
+            resize: vertical;
+        }
+        .admin-input-group input:focus,
+        .admin-input-group textarea:focus,
+        .admin-input-group select:focus {
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.06);
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .admin-input-group textarea {
+            min-height: 70px;
+            font-size: 0.75rem;
+        }
+        .admin-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.25s;
+            text-transform: uppercase;
+        }
+        .admin-btn-primary {
+            background: #00d4ff;
+            color: #000;
+            border-color: #00d4ff;
+            font-weight: 700;
+        }
+        .admin-btn-primary:hover {
+            background: #00bce6;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        .admin-btn-danger {
+            background: transparent;
+            color: #ff5555;
+            border-color: rgba(255, 85, 85, 0.35);
+        }
+        .admin-btn-danger:hover {
+            background: rgba(255, 85, 85, 0.1);
+            border-color: #ff5555;
+        }
+        .admin-btn-sm {
+            padding: 5px 10px;
+            font-size: 0.55rem;
+            border-radius: 4px;
+        }
+        .admin-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+        .admin-item:hover {
+            border-color: rgba(0, 212, 255, 0.25);
+            background: rgba(0, 212, 255, 0.03);
+        }
+        .admin-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .admin-item-title {
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: #eee;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .admin-item-sub {
+            font-size: 0.6rem;
+            color: #777;
+            margin-top: 2px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .admin-item-actions {
+            display: flex;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+        .admin-empty {
+            text-align: center;
+            padding: 2rem;
+            color: #555;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+        }
+        .admin-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            z-index: 99999;
+            background: rgba(0, 200, 100, 0.9);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        .admin-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        .admin-toast.error {
+            background: rgba(220, 50, 50, 0.9);
+        }
+
+        /* ═══════ PROFILE DROPDOWN ═══════ */
+        .nav-profile-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .nav-profile-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(0, 212, 255, 0.15);
+            border: 1.5px solid rgba(0, 212, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #00d4ff;
+            transition: all 0.25s;
+            flex-shrink: 0;
+        }
+        .nav-profile-icon:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 0 14px rgba(0, 212, 255, 0.25);
+        }
+        .nav-profile-name {
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: #ccc;
+            max-width: 80px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.2s;
+            font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+        }
+        .nav-profile-dropdown {
+            position: absolute;
+            top: 110%;
+            right: 0;
+            background: rgba(15, 20, 30, 0.97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            border-radius: 12px;
+            padding: 0.5rem 0;
+            min-width: 170px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-8px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+        .nav-profile-dropdown.open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        .nav-profile-dropdown-item {
+            padding: 8px 16px;
+            font-size: 0.7rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+        }
+        .nav-profile-dropdown-item:hover {
+            background: rgba(0, 212, 255, 0.08);
+            color: #00d4ff;
+        }
+        .nav-profile-dropdown-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 4px 0;
+        }
+
+        /* ═══════ MODAL ═══════ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 99995;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: rgba(15, 20, 30, 0.97);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 16px;
+            padding: 1.8rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+        .modal-title {
+            font-family: 'Orbitron', 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #00d4ff;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        .modal-input {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #ddd;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+            margin-bottom: 0.8rem;
+            transition: all 0.25s;
+        }
+        .modal-input:focus {
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.05);
+        }
+        .modal-btn-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .modal-btn {
+            padding: 9px 20px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.25s;
+            text-transform: uppercase;
+        }
+        .modal-btn-confirm {
+            background: #00d4ff;
+            color: #000;
+            font-weight: 700;
+        }
+        .modal-btn-confirm:hover {
+            background: #00bce6;
+            box-shadow: 0 0 16px rgba(0, 212, 255, 0.3);
+        }
+        .modal-btn-cancel {
+            background: transparent;
+            color: #999;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .modal-btn-cancel:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* ═══════ RESPONSIVE ADMIN ═══════ */
+        @media (max-width: 500px) {
+            .admin-panel {
+                width: 100%;
+                max-width: 100%;
+                right: -105%;
+            }
+            .admin-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .admin-item-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        /* ═══ MAIN WEBSITE STYLES (preserved & extended) ═══ */
         :root {
             --bg: #ffffff;
             --bg-alt: #f7f8fa;
@@ -1281,8 +1759,21 @@
             color: var(--accent);
             font-weight: 600;
         }
+        .footer-admin-link {
+            display: inline-block;
+            margin-left: 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 0.6rem;
+            transition: color 0.2s;
+            opacity: 0.5;
+        }
+        .footer-admin-link:hover {
+            color: var(--accent);
+            opacity: 1;
+        }
 
-        /* RESPONSIVE */
+        /* ═══════ RESPONSIVE ═══════ */
         @media (max-width: 900px) {
             .featured-inner {
                 grid-template-columns: 1fr;
@@ -1376,6 +1867,9 @@
             .cursor-trail {
                 display: none !important;
             }
+            .nav-profile-name {
+                display: none;
+            }
         }
         @media (max-width: 480px) {
             .hero-title {
@@ -1406,27 +1900,18 @@
 </head>
 <body>
 
-    <!-- ═══════════ INTRO OVERLAY ═══════════ -->
+    <!-- ═══════════ INTRO OVERLAY — CYBERPUNK CINEMATIC ═══════════ -->
     <div id="intro-overlay">
         <canvas id="intro-canvas"></canvas>
-    </div>
-
-    <!-- UI OVERLAY (no skip button) -->
-    <div class="ui-overlay" id="uiOverlay">
-        <div class="ui-card">
-            <div class="ui-title">Initializing AI System...</div>
-            <svg width="80" height="80" class="progress-ring">
-                <circle class="progress-ring-bg" cx="40" cy="40" r="34"></circle>
-                <circle class="progress-ring-fill" id="progressFill" cx="40" cy="40" r="34"
-                stroke-dasharray="213.6" stroke-dashoffset="213.6"></circle>
-            </svg>
-        </div>
+        <div class="intro-scanlines" id="introScanlines"></div>
+        <div class="intro-crt-curve" id="introCrt"></div>
+        <div class="intro-glitch-flash" id="introGlitchFlash"></div>
     </div>
 
     <!-- ═══════════ MAIN SITE ═══════════ -->
     <div id="main-site">
         <div class="cursor-trail" id="cursorTrail"></div>
-        <div class="announcement-bar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')" role="button" tabindex="0" aria-label="Visit premium code website">
+        <div class="announcement-bar" id="announcementBar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')" role="button" tabindex="0" aria-label="Visit premium code website">
             প্রিমিয়াম কোড কিনতে আমাদের ওয়েবসাইটে <span>এখনই ভিজিট করুন</span> →
         </div>
         <nav class="navbar" id="navbar">
@@ -1444,6 +1929,16 @@
                     <li><a href="https://amaricanjelly.github.io/bokaxuda/" target="_blank">Magical Front</a></li>
                     <li><a href="#contact" class="nav-cta">যোগাযোগ</a></li>
                 </ul>
+                <!-- USER PROFILE IN NAV -->
+                <div class="nav-profile-wrap" id="navProfileWrap" style="display:none;">
+                    <div class="nav-profile-icon" id="navProfileIcon">?</div>
+                    <span class="nav-profile-name" id="navProfileName">User</span>
+                    <div class="nav-profile-dropdown" id="navProfileDropdown">
+                        <div class="nav-profile-dropdown-item" id="profileEditUsername">✎ Username Edit</div>
+                        <div class="nav-profile-dropdown-divider"></div>
+                        <div class="nav-profile-dropdown-item" id="profileAdminPanel" style="display:none;">⚙ Admin Panel</div>
+                    </div>
+                </div>
                 <button class="nav-hamburger" id="hamburger" onclick="toggleNav()" aria-label="Toggle navigation menu">
                     <span></span><span></span><span></span>
                 </button>
@@ -1553,340 +2048,1037 @@
             </div>
         </section>
         <a href="https://wa.me/qr/MYNYVDWC2VAJJ1" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.66.74 5.14 2.02 7.24L2.5 29.5l6.44-1.68C10.84 29.24 13.34 30 16 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm0 25.45c-2.3 0-4.54-.6-6.48-1.74l-.46-.27-3.82 1 .98-3.72-.3-.48C4.8 20.44 4.18 18.26 4.18 16c0-6.52 5.3-11.82 11.82-11.82S27.82 9.48 27.82 16 22.52 27.45 16 27.45z"/><path d="M22.98 19.08c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.34.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.34.45-.51.15-.17.2-.29.3-.48.1-.19.05-.36-.03-.5-.07-.15-.67-1.62-.92-2.22-.24-.58-.48-.5-.67-.51-.17-.01-.37-.01-.57-.01s-.52.07-.79.36c-.27.29-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.18 5.06 4.46.71.31 1.26.49 1.69.63.71.22 1.35.19 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.08-.12-.28-.19-.58-.34z"/></svg></a>
-        <footer class="footer"><div class="container">&copy; 2026 <span>The Debug Point</span> &nbsp;&middot;&nbsp; Coding &amp; Robotics Solution &nbsp;&middot;&nbsp; চট্টগ্রাম, বাংলাদেশ</div></footer>
+        <footer class="footer"><div class="container">&copy; 2026 <span>The Debug Point</span> &nbsp;&middot;&nbsp; Coding &amp; Robotics Solution &nbsp;&middot;&nbsp; চট্টগ্রাম, বাংলাদেশ <span class="footer-admin-link" id="footerAdminLink" title="Admin Access">⚙</span></div></footer>
     </div>
 
-    <!-- ═══════════ THREE.JS + GSAP (module imports) ═══════════ -->
-    <script type="importmap">
-        {
-            "imports": {
-                "three": "https://esm.sh/three@0.157.0",
-                "three/addons/": "https://esm.sh/three@0.157.0/examples/jsm/"
-            }
-        }
+    <!-- ═══════════ ADMIN PANEL ═══════════ -->
+    <div class="admin-panel-overlay" id="adminPanelOverlay"></div>
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-panel-header">
+            <div class="admin-panel-title"><span class="admin-panel-title-dot"></span> Admin Panel</div>
+            <button class="admin-close-btn" id="adminCloseBtn">✕</button>
+        </div>
+        <div class="admin-tabs">
+            <button class="admin-tab active" data-tab="projects">Projects</button>
+            <button class="admin-tab" data-tab="users">Users</button>
+            <button class="admin-tab" data-tab="settings">Settings</button>
+        </div>
+        <div class="admin-content" id="adminContent">
+            <!-- Tab: Projects -->
+            <div id="adminTabProjects">
+                <div class="admin-section-title">📦 Project Management</div>
+                <div class="admin-input-group"><label>Project Title</label><input type="text" id="adminProjTitle" placeholder="Enter project title"></div>
+                <div class="admin-input-group"><label>Category</label><select id="adminProjCat"><option value="Robotics">Robotics</option><option value="Security">Security</option><option value="IoT">IoT</option><option value="Safety">Safety</option><option value="Chemistry">Chemistry</option><option value="Biology">Biology</option><option value="Physics">Physics</option></select></div>
+                <div class="admin-input-group"><label>Description</label><textarea id="adminProjDesc" placeholder="Project description..."></textarea></div>
+                <div class="admin-input-group"><label>Tags (comma-separated)</label><input type="text" id="adminProjTags" placeholder="e.g. Robotics, IoT"></div>
+                <div class="admin-input-group"><label>Best For (comma-separated)</label><input type="text" id="adminProjBestFor" placeholder="e.g. Class 9–10, HSC"></div>
+                <input type="hidden" id="adminProjEditId">
+                <button class="admin-btn admin-btn-primary" id="adminProjSaveBtn">➕ Add Project</button>
+                <button class="admin-btn admin-btn-danger admin-btn-sm" id="adminProjCancelEdit" style="display:none;margin-left:6px;">Cancel Edit</button>
+                <hr style="border-color:rgba(255,255,255,0.08);margin:1rem 0;">
+                <div id="adminProjectsList"></div>
+            </div>
+            <!-- Tab: Users -->
+            <div id="adminTabUsers" style="display:none;">
+                <div class="admin-section-title">👥 User Management</div>
+                <div id="adminUsersList"></div>
+            </div>
+            <!-- Tab: Settings -->
+            <div id="adminTabSettings" style="display:none;">
+                <div class="admin-section-title">⚙ Site Settings</div>
+                <div class="admin-input-group"><label>Announcement Bar Text</label><input type="text" id="adminSettingAnnouncement" placeholder="Announcement text..."></div>
+                <div class="admin-input-group"><label>Site Name</label><input type="text" id="adminSettingSiteName" placeholder="The Debug Point"></div>
+                <button class="admin-btn admin-btn-primary" id="adminSettingsSaveBtn">💾 Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ USERNAME EDIT MODAL ═══════════ -->
+    <div class="modal-overlay" id="usernameModalOverlay">
+        <div class="modal-box">
+            <div class="modal-title">Edit Username</div>
+            <input type="text" class="modal-input" id="usernameModalInput" placeholder="Enter new username" maxlength="24">
+            <div class="modal-btn-row">
+                <button class="modal-btn modal-btn-confirm" id="usernameModalSave">Save</button>
+                <button class="modal-btn modal-btn-cancel" id="usernameModalCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ ADMIN LOGIN MODAL ═══════════ -->
+    <div class="modal-overlay" id="adminLoginModalOverlay">
+        <div class="modal-box">
+            <div class="modal-title">🔐 Admin Access</div>
+            <input type="password" class="modal-input" id="adminLoginInput" placeholder="Enter admin PIN" maxlength="16">
+            <div class="modal-btn-row">
+                <button class="modal-btn modal-btn-confirm" id="adminLoginConfirm">Unlock</button>
+                <button class="modal-btn modal-btn-cancel" id="adminLoginCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ TOAST ═══════════ -->
+    <div class="admin-toast" id="adminToast"></div>
+
+    <!-- ═══════════ FIREBASE SDK ═══════════ -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js">
     </script>
 
-    <script type="module">
-        import * as THREE from 'three';
-        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-        import gsap from 'https://esm.sh/gsap@3.12.5';
-
-        // ── DOM elements
-        const overlay = document.getElementById('intro-overlay');
-        const canvas = document.getElementById('intro-canvas');
-        const mainSite = document.getElementById('main-site');
-        const uiOverlay = document.getElementById('uiOverlay');
-        const progressFill = document.getElementById('progressFill');
-        const progressCircleLength = 213.6;
-
-        document.body.style.overflow = 'hidden';
-
-        // ── THREE.JS SETUP
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 0.9;
-        renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color('#050505');
-        scene.fog = new THREE.Fog('#050505', 3, 15);
-
-        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 30);
-        camera.position.set(0, 0.8, 7.5);
-        camera.lookAt(0, 0.2, 0);
-
-        // ── POST PROCESSING (BLOOM)
-        const composer = new EffectComposer(renderer);
-        const renderPass = new RenderPass(scene, camera);
-        composer.addPass(renderPass);
-        const bloomPass = new UnrealBloomPass(
-            new THREE.Vector2(window.innerWidth, window.innerHeight),
-            1.2, 0.4, 0.1
-        );
-        composer.addPass(bloomPass);
-
-        // ── LIGHTING
-        const ambient = new THREE.AmbientLight('#111133', 0.3);
-        scene.add(ambient);
-        const keyLight = new THREE.PointLight('#00ccff', 3.5, 12, 1.5);
-        keyLight.position.set(2, 2, 4);
-        scene.add(keyLight);
-        const rimLight = new THREE.PointLight('#8844ff', 2.2, 10, 1.2);
-        rimLight.position.set(-2, 1.5, -1);
-        scene.add(rimLight);
-        const coreInnerLight = new THREE.PointLight('#00eeff', 5, 4, 1.8);
-        coreInnerLight.position.set(0, 0.5, 0);
-        scene.add(coreInnerLight);
-
-        // ── FLOOR & GRID
-        const floorMat = new THREE.MeshStandardMaterial({
-            color: '#0a0a14',
-            roughness: 0.7,
-            metalness: 0.4,
-            transparent: true,
-            opacity: 0.85
-        });
-        const floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), floorMat);
-        floor.rotation.x = -Math.PI / 2;
-        floor.position.y = -2.2;
-        floor.receiveShadow = true;
-        scene.add(floor);
-
-        const gridHelper = new THREE.PolarGridHelper(6, 64, 48, 128, '#001122', '#001122');
-        gridHelper.position.y = -2.19;
-        scene.add(gridHelper);
-        const gridGlow = new THREE.PolarGridHelper(6, 64, 48, 128, '#003344', '#003344');
-        gridGlow.position.y = -2.19;
-        gridGlow.material.transparent = true;
-        gridGlow.material.opacity = 0.6;
-        gridGlow.material.blending = THREE.AdditiveBlending;
-        scene.add(gridGlow);
-
-        // ── PARTICLES
-        const particlesGeometry = new THREE.BufferGeometry();
-        const particlesCount = 200;
-        const positions = new Float32Array(particlesCount * 3);
-        const colors = new Float32Array(particlesCount * 3);
-        const colorOptions = [new THREE.Color('#88ccff'), new THREE.Color('#aa88ff'), new THREE.Color('#ffffff')];
-        for (let i = 0; i < particlesCount; i++) {
-            positions[i * 3] = (Math.random() - 0.5) * 7;
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 4 + 0.5;
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 5 + 1;
-            const col = colorOptions[Math.floor(Math.random() * 3)];
-            colors[i * 3] = col.r;
-            colors[i * 3 + 1] = col.g;
-            colors[i * 3 + 2] = col.b;
-        }
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        const particlesMat = new THREE.PointsMaterial({
-            size: 0.03,
-            vertexColors: true,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-            transparent: true,
-            opacity: 0.7
-        });
-        const particles = new THREE.Points(particlesGeometry, particlesMat);
-        scene.add(particles);
-
-        // ── AI CORE (holographic sphere + wireframe)
-        const coreGroup = new THREE.Group();
-        coreGroup.position.set(0, 0.6, 0);
-        scene.add(coreGroup);
-        const coreInnerGeo = new THREE.SphereGeometry(0.45, 64, 64);
-        const coreInnerMat = new THREE.MeshStandardMaterial({
-            color: '#00aaff',
-            emissive: '#004488',
-            roughness: 0.25,
-            metalness: 0.2,
-            transparent: true,
-            opacity: 0.95
-        });
-        const coreInner = new THREE.Mesh(coreInnerGeo, coreInnerMat);
-        coreGroup.add(coreInner);
-        const wireframeGeo = new THREE.IcosahedronGeometry(0.55, 1);
-        const wireframeMat = new THREE.MeshBasicMaterial({
-            color: '#00eeff',
-            wireframe: true,
-            transparent: true,
-            opacity: 0.25,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
-        });
-        const wireframeMesh = new THREE.Mesh(wireframeGeo, wireframeMat);
-        coreGroup.add(wireframeMesh);
-
-        // Orbiting rings
-        const rings = [];
-        const ringColors = ['#00ccff', '#8844ff', '#00ffcc'];
-        for (let i = 0; i < 3; i++) {
-            const ringGeo = new THREE.TorusGeometry(0.7 + i * 0.18, 0.02, 16, 100);
-            const ringMat = new THREE.MeshStandardMaterial({
-                color: ringColors[i],
-                emissive: ringColors[i],
-                roughness: 0.3,
-                metalness: 0.7,
-                transparent: true,
-                opacity: 0.8
-            });
-            const ring = new THREE.Mesh(ringGeo, ringMat);
-            ring.rotation.x = Math.PI / 2 + (i - 1) * 0.4;
-            ring.rotation.y = i * 0.7;
-            coreGroup.add(ring);
-            rings.push(ring);
-        }
-
-        // Energy wave rings
-        const waveRings = [];
-        for (let i = 0; i < 4; i++) {
-            const waveGeo = new THREE.TorusGeometry(0.75, 0.008, 8, 80);
-            const waveMat = new THREE.MeshBasicMaterial({
-                color: '#00eeff',
-                transparent: true,
-                opacity: 0.5,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false
-            });
-            const wave = new THREE.Mesh(waveGeo, waveMat);
-            wave.visible = false;
-            coreGroup.add(wave);
-            waveRings.push(wave);
-        }
-
-        // Glitch effect (subtle, still used for transition)
-        function triggerMicroGlitch() {
-            gsap.to(coreGroup.position, {
-                x: 'random(-0.04, 0.04)',
-                y: 'random(-0.04, 0.04)',
-                duration: 0.06,
-                yoyo: true,
-                repeat: 1,
-                ease: 'power3.inOut',
-                onComplete: () => { coreGroup.position.set(0, 0.6, 0); }
-            });
-        }
-
-        // ── ANIMATION LOOP
-        let clock = new THREE.Clock();
-        let introComplete = false;
-        function animate() {
-            if (introComplete) return;
-            requestAnimationFrame(animate);
-            const delta = clock.getDelta();
-            const time = performance.now() * 0.001;
-            wireframeMesh.rotation.y += 0.002;
-            wireframeMesh.rotation.x = Math.sin(time * 0.5) * 0.1;
-            rings.forEach((r, i) => {
-                r.rotation.z += 0.003 * (i + 1);
-                r.rotation.x += 0.001 * (i + 1);
-            });
-            particles.rotation.y += 0.0002;
-            const posArray = particlesGeometry.attributes.position.array;
-            for (let i = 0; i < particlesCount; i++) {
-                const i3 = i * 3;
-                posArray[i3 + 1] += Math.sin(time * 2 + i) * 0.0005;
-                posArray[i3] += Math.cos(time * 1.5 + i) * 0.0004;
-            }
-            particlesGeometry.attributes.position.needsUpdate = true;
-            coreInnerLight.intensity = 5 + Math.sin(time * 3) * 0.8;
-            composer.render();
-        }
-        animate();
-
-        // ── GSAP TIMELINE (EXACTLY 4 SECONDS)
-        progressFill.style.strokeDashoffset = progressCircleLength;
-
-        const tl = gsap.timeline({
-            onUpdate: function() {
-                const progress = Math.min(tl.progress(), 1);
-                progressFill.style.strokeDashoffset = progressCircleLength * (1 - progress);
-            },
-            onComplete: transitionToMain
-        });
-
-        // Initial black
-        tl.set(scene.background, { color: '#000000' });
-        tl.set(floorMat, { opacity: 0 });
-        tl.set(gridGlow.material, { opacity: 0 });
-        tl.set(particlesMat, { opacity: 0 });
-
-        // 0.0 → 0.7s : environment fades in
-        tl.to(scene.background, { color: '#050505', duration: 0.4 }, 0.2);
-        tl.to(floorMat, { opacity: 0.85, duration: 0.5 }, 0.3);
-        tl.to(gridGlow.material, { opacity: 0.55, duration: 0.5 }, 0.3);
-        tl.to(particlesMat, { opacity: 0.7, duration: 0.6 }, 0.4);
-        tl.to(ambient, { intensity: 0.4, duration: 0.6 }, 0.2);
-        tl.to(keyLight, { intensity: 3.2, duration: 0.5 }, 0.3);
-        tl.to(rimLight, { intensity: 2, duration: 0.5 }, 0.3);
-
-        // 0.8s : light pulse → core appears
-        tl.to(coreInnerLight, { intensity: 6, duration: 0.1, yoyo: true, repeat: 1 }, 0.8);
-        tl.fromTo(coreGroup.scale, { x: 0, y: 0, z: 0 }, { x: 1, y: 1, z: 1, duration: 0.6, ease: 'back.out(1.5)' }, 0.9);
-        tl.to(wireframeMat, { opacity: 0.35, duration: 0.4 }, 1.0);
-
-        // 1.2s : wave rings
-        waveRings.forEach((wave, i) => {
-            tl.set(wave, { visible: true, scale: 0.7, material: { opacity: 0.7 } }, 1.2 + i * 0.12);
-            tl.to(wave.scale, { x: 1.6, y: 1.6, duration: 1.0, ease: 'power2.out' }, 1.2 + i * 0.12);
-            tl.to(wave.material, { opacity: 0, duration: 0.6 }, 1.6 + i * 0.12);
-        });
-
-        // 1.5s : micro-glitch
-        tl.call(triggerMicroGlitch, null, 1.5);
-
-        // 1.8s : UI overlay fades in
-        tl.call(() => uiOverlay.classList.add('active'), null, 1.8);
-        tl.to(uiOverlay, { opacity: 1, duration: 0.5 }, 1.8);
-
-        // 1.6s → 3.6s : camera dolly in
-        tl.to(camera.position, { z: 3.6, x: 0.35, duration: 2.0, ease: 'power2.inOut' }, 1.6);
-        tl.to(camera.position, { y: 0.5, duration: 2.0, ease: 'power2.inOut' }, 1.6);
-
-        // 3.2s : final energy pulse
-        tl.to(coreInnerLight, { intensity: 8, duration: 0.2, yoyo: true, repeat: 1 }, 3.2);
-        tl.call(triggerMicroGlitch, null, 3.4);
-
-        // 4.0s : timeline ends → transition triggers automatically
-
-        // Audio (subtle hum)
-        let audioCtx, humGain, humOsc;
-        try {
-            audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-            humGain = audioCtx.createGain();
-            humGain.gain.value = 0;
-            humOsc = audioCtx.createOscillator();
-            humOsc.type = 'sine';
-            humOsc.frequency.value = 58;
-            humOsc.connect(humGain);
-            humGain.connect(audioCtx.destination);
-            humOsc.start();
-            tl.to(humGain.gain, { value: 0.08, duration: 0.6 }, 0.3);
-            tl.to(humGain.gain, { value: 0.15, duration: 0.4 }, 1.0);
-            tl.to(humGain.gain, { value: 0, duration: 0.5 }, 3.5);
-        } catch (e) { /* no audio */ }
-
-        // ── TRANSITION TO MAIN SITE
-        function transitionToMain() {
-            if (introComplete) return;
-            introComplete = true;
-            // Quick flash
-            const flash = document.createElement('div');
-            flash.style.cssText = 'position:fixed;inset:0;z-index:100002;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.15s';
-            document.body.appendChild(flash);
-            requestAnimationFrame(() => {
-                flash.style.opacity = '0.8';
-                setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 200); }, 100);
-            });
-            // Fade canvas & UI
-            gsap.to('#intro-canvas', { opacity: 0, duration: 0.4, delay: 0.1 });
-            gsap.to(uiOverlay, { opacity: 0, duration: 0.3, delay: 0.1 });
-            document.body.style.overflow = '';
-            mainSite.classList.add('visible');
-            // Remove overlay after fade
-            setTimeout(() => {
-                overlay.classList.add('removed');
-                overlay.style.display = 'none';
-                initMainSiteScripts();
-            }, 600);
-            if (humOsc) humOsc.stop();
-        }
-
-        // ── RESIZE
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            composer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
-
-    <!-- ═══════════ MAIN WEBSITE SCRIPTS ═══════════ -->
+    <!-- ═══════════ CYBERPUNK INTRO + APP SCRIPTS ═══════════ -->
     <script>
+        (function() {
+            // ─────────────────────────────────────
+            // 1. CYBERPUNK CINEMATIC INTRO SYSTEM
+            // ─────────────────────────────────────
+            const overlay = document.getElementById('intro-overlay');
+            const canvas = document.getElementById('intro-canvas');
+            const mainSite = document.getElementById('main-site');
+            const scanlines = document.getElementById('introScanlines');
+            const crtCurve = document.getElementById('introCrt');
+            const glitchFlash = document.getElementById('introGlitchFlash');
+            const ctx = canvas.getContext('2d');
+
+            document.body.style.overflow = 'hidden';
+            crtCurve.classList.add('active');
+
+            let W, H;
+            let introPhase = 0; // 0=terminal, 1=loading, 2=welcome, 3=complete
+            let phaseStartTime = 0;
+            let introStartTime = 0;
+            let progressPercent = 0;
+            let welcomeAlpha = 0;
+            let introComplete = false;
+            let frameCount = 0;
+
+            // Particles
+            const particles = [];
+            const PARTICLE_COUNT = 120;
+
+            // Terminal lines
+            const terminalLines = [];
+            const terminalLogs = [
+                { text: 'INITIALIZING SYSTEM KERNEL...', delay: 0.15, color: '#888' },
+                { text: 'MOUNTING SECURE VOLUME [OK]', delay: 0.35, color: '#0f0' },
+                { text: 'QUANTUM CORE ACTIVATED', delay: 0.55, color: '#00d4ff' },
+                { text: 'NEURAL ENGINE v4.2.7 ONLINE', delay: 0.75, color: '#00d4ff' },
+                { text: 'LOADING ENCRYPTED MODULES...', delay: 0.95, color: '#888' },
+                { text: 'BIOMETRIC SIGNATURE VERIFIED', delay: 1.15, color: '#0f0' },
+                { text: 'FIREWALL: ACTIVE | PROXY: SECURE', delay: 1.35, color: '#00ff88' },
+                { text: 'BOOT SEQUENCE COMPLETE [100%]', delay: 1.6, color: '#00d4ff' },
+                { text: '', delay: 1.75, color: '#fff' },
+                { text: '> ACCESS GRANTED — WELCOME', delay: 1.9, color: '#00ffcc' },
+                { text: '> INITIALIZING HUD INTERFACE...', delay: 2.15, color: '#00d4ff' },
+            ];
+
+            let typedChars = 0;
+            let currentLogIndex = 0;
+            let currentLogText = '';
+            let typingTimer = 0;
+            const TYPING_SPEED = 0.018;
+
+            function resize() {
+                W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = W;
+                canvas.height = H;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Init particles
+            for (let i = 0; i < PARTICLE_COUNT; i++) {
+                particles.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    speed: 0.3 + Math.random() * 2.5,
+                    size: 0.5 + Math.random() * 1.8,
+                    opacity: 0.15 + Math.random() * 0.6,
+                    color: Math.random() < 0.5 ? '#00d4ff' : (Math.random() < 0.5 ? '#00ff88' : '#ffffff'),
+                });
+            }
+
+            // Audio system
+            let audioCtx = null;
+            let audioEnabled = false;
+
+            function initAudio() {
+                if (audioCtx) return;
+                try {
+                    audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                    audioEnabled = true;
+                } catch (e) { audioEnabled = false; }
+            }
+
+            function playBeep(freq, duration, type = 'square', vol = 0.04) {
+                if (!audioEnabled || !audioCtx) return;
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = type;
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime);
+                    osc.stop(audioCtx.currentTime + duration);
+                } catch (e) { /* silent */ }
+            }
+
+            function playTypingSound() {
+                playBeep(800 + Math.random() * 400, 0.03, 'square', 0.025);
+            }
+
+            function playGlitchSound() {
+                playBeep(60 + Math.random() * 200, 0.12, 'sawtooth', 0.06);
+            }
+
+            function playBootSound() {
+                if (!audioEnabled || !audioCtx) return;
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(40, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(200, audioCtx.currentTime + 0.4);
+                    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime);
+                    osc.stop(audioCtx.currentTime + 0.5);
+                } catch (e) { /* silent */ }
+            }
+
+            function playClickSound() {
+                playBeep(1000, 0.04, 'square', 0.03);
+            }
+
+            function triggerGlitchFlash() {
+                glitchFlash.classList.add('active');
+                setTimeout(() => glitchFlash.classList.remove('active'), 40 + Math.random() * 60);
+                playGlitchSound();
+            }
+
+            function drawScanlines() {
+                // Scanlines are handled by CSS, but we add subtle variation
+                if (frameCount % 8 === 0 && Math.random() < 0.3) {
+                    scanlines.style.opacity = (0.04 + Math.random() * 0.04).toString();
+                }
+            }
+
+            function drawMatrixParticles() {
+                for (const p of particles) {
+                    p.y += p.speed;
+                    if (p.y > H + 10) {
+                        p.y = -10;
+                        p.x = Math.random() * W;
+                    }
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.opacity * (introPhase === 2 ? 0.5 : 1);
+                    ctx.fillRect(p.x, p.y, p.size, p.size * 3);
+                }
+                ctx.globalAlpha = 1;
+            }
+
+            function drawTerminal(elapsed) {
+                const fontSize = Math.min(16, W / 55);
+                const lineHeight = fontSize * 1.6;
+                const startX = W * 0.08;
+                const startY = H * 0.25;
+                ctx.font = `${fontSize}px 'Share Tech Mono', 'JetBrains Mono', monospace`;
+                ctx.textBaseline = 'top';
+
+                // Update typing
+                typingTimer += 0.016;
+                if (typingTimer >= TYPING_SPEED && currentLogIndex < terminalLogs.length) {
+                    typingTimer = 0;
+                    const log = terminalLogs[currentLogIndex];
+                    if (typedChars < log.text.length) {
+                        typedChars++;
+                        currentLogText = log.text.substring(0, typedChars);
+                        if (Math.random() < 0.7) playTypingSound();
+                    } else {
+                        terminalLines.push({ text: log.text, color: log.color, full: true });
+                        typedChars = 0;
+                        currentLogIndex++;
+                        currentLogText = '';
+                        if (currentLogIndex < terminalLogs.length) {
+                            // small gap
+                            typingTimer = -terminalLogs[currentLogIndex].delay + 0.016;
+                        }
+                    }
+                }
+
+                // Draw completed lines
+                for (let i = 0; i < terminalLines.length; i++) {
+                    const line = terminalLines[i];
+                    const y = startY + i * lineHeight;
+                    ctx.fillStyle = line.color;
+                    ctx.fillText(line.text, startX, y);
+                }
+
+                // Draw current typing line
+                if (currentLogIndex < terminalLogs.length && currentLogText) {
+                    const y = startY + terminalLines.length * lineHeight;
+                    ctx.fillStyle = terminalLogs[currentLogIndex].color;
+                    ctx.fillText(currentLogText, startX, y);
+                    // Blinking cursor
+                    if (Math.floor(elapsed * 4) % 2 === 0) {
+                        const textWidth = ctx.measureText(currentLogText).width;
+                        ctx.fillStyle = '#00ffcc';
+                        ctx.fillRect(startX + textWidth + 2, y + 2, fontSize * 0.6, fontSize * 0.85);
+                    }
+                }
+
+                // Glitch effect on terminal text
+                if (Math.random() < 0.015 && introPhase === 0) {
+                    triggerGlitchFlash();
+                }
+            }
+
+            function drawProgressBar(elapsed) {
+                const barWidth = Math.min(380, W * 0.6);
+                const barHeight = 4;
+                const barX = (W - barWidth) / 2;
+                const barY = H * 0.62;
+
+                // Glow track
+                ctx.fillStyle = 'rgba(0,212,255,0.1)';
+                ctx.fillRect(barX - 2, barY - 2, barWidth + 4, barHeight + 4);
+                ctx.fillStyle = 'rgba(0,0,0,0.6)';
+                ctx.fillRect(barX, barY, barWidth, barHeight);
+
+                // Progress fill with glow
+                const fillWidth = barWidth * (progressPercent / 100);
+                const gradient = ctx.createLinearGradient(barX, barY, barX + barWidth, barY);
+                gradient.addColorStop(0, '#00d4ff');
+                gradient.addColorStop(0.5, '#00ffcc');
+                gradient.addColorStop(1, '#00d4ff');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(barX, barY, fillWidth, barHeight);
+
+                // Glow overlay
+                ctx.shadowColor = '#00d4ff';
+                ctx.shadowBlur = 14;
+                ctx.fillStyle = 'rgba(0,212,255,0.5)';
+                ctx.fillRect(barX, barY, fillWidth, barHeight);
+                ctx.shadowBlur = 0;
+
+                // Percentage text
+                const pctText = Math.floor(progressPercent) + '%';
+                ctx.fillStyle = '#00d4ff';
+                ctx.font = `${Math.min(28, W/25)}px 'Orbitron', 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText(pctText, W / 2, barY - 32);
+                ctx.textAlign = 'start';
+
+                // HUD label
+                ctx.fillStyle = '#666';
+                ctx.font = `${Math.min(10, W/70)}px 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('INITIALIZING NEURAL INTERFACE', W / 2, barY + 18);
+                ctx.textAlign = 'start';
+            }
+
+            function drawWelcomeCard(elapsed) {
+                const cardW = Math.min(420, W * 0.75);
+                const cardH = 180;
+                const cardX = (W - cardW) / 2;
+                const cardY = (H - cardH) / 2;
+
+                // Card background with glassmorphism
+                ctx.fillStyle = `rgba(10,15,25,${0.7 * welcomeAlpha})`;
+                ctx.strokeStyle = `rgba(0,212,255,${0.5 * welcomeAlpha})`;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+                ctx.fill();
+                ctx.stroke();
+
+                // Inner glow border
+                ctx.strokeStyle = `rgba(0,255,200,${0.2 * welcomeAlpha})`;
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.roundRect(cardX + 3, cardY + 3, cardW - 6, cardH - 6, 17);
+                ctx.stroke();
+
+                // Title
+                ctx.fillStyle = `rgba(0,255,200,${welcomeAlpha})`;
+                ctx.font = `bold ${Math.min(26,W/28)}px 'Orbitron', 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('WELCOME BACK', W / 2, cardY + 52);
+                ctx.textAlign = 'start';
+
+                // Subtitle
+                ctx.fillStyle = `rgba(200,220,240,${0.85 * welcomeAlpha})`;
+                ctx.font = `${Math.min(15,W/45)}px 'Inter', 'Noto Sans Bengali', sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.fillText('The Debug Point — Coding & Robotics Solution', W / 2, cardY + 95);
+                ctx.textAlign = 'start';
+
+                // Divider
+                ctx.strokeStyle = `rgba(0,212,255,${0.35 * welcomeAlpha})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(cardX + 40, cardY + 115);
+                ctx.lineTo(cardX + cardW - 40, cardY + 115);
+                ctx.stroke();
+
+                // Status
+                ctx.fillStyle = `rgba(0,255,136,${0.9 * welcomeAlpha})`;
+                ctx.font = `${Math.min(10,W/70)}px 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('● SYSTEM READY — CHITTAGONG, BD', W / 2, cardY + 142);
+                ctx.textAlign = 'start';
+            }
+
+            function drawHUDCorners(elapsed) {
+                const cornerSize = 28;
+                const margin = 22;
+                const alpha = introPhase >= 2 ? welcomeAlpha : 0.4;
+                ctx.strokeStyle = `rgba(0,212,255,${alpha})`;
+                ctx.lineWidth = 1.5;
+                // Top-left
+                ctx.beginPath();
+                ctx.moveTo(margin, margin + cornerSize);
+                ctx.lineTo(margin, margin);
+                ctx.lineTo(margin + cornerSize, margin);
+                ctx.stroke();
+                // Top-right
+                ctx.beginPath();
+                ctx.moveTo(W - margin - cornerSize, margin);
+                ctx.lineTo(W - margin, margin);
+                ctx.lineTo(W - margin, margin + cornerSize);
+                ctx.stroke();
+                // Bottom-left
+                ctx.beginPath();
+                ctx.moveTo(margin, H - margin - cornerSize);
+                ctx.lineTo(margin, H - margin);
+                ctx.lineTo(margin + cornerSize, H - margin);
+                ctx.stroke();
+                // Bottom-right
+                ctx.beginPath();
+                ctx.moveTo(W - margin - cornerSize, H - margin);
+                ctx.lineTo(W - margin, H - margin);
+                ctx.lineTo(W - margin, H - margin - cornerSize);
+                ctx.stroke();
+            }
+
+            function draw(elapsed) {
+                ctx.clearRect(0, 0, W, H);
+
+                // Background
+                const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.8);
+                bgGrad.addColorStop(0, '#0a1018');
+                bgGrad.addColorStop(1, '#020508');
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, W, H);
+
+                drawMatrixParticles();
+                drawHUDCorners(elapsed);
+
+                if (introPhase === 0) {
+                    drawTerminal(elapsed);
+                } else if (introPhase === 1) {
+                    drawTerminal(elapsed);
+                    drawProgressBar(elapsed);
+                } else if (introPhase === 2) {
+                    drawWelcomeCard(elapsed);
+                    drawProgressBar(elapsed);
+                }
+
+                drawScanlines();
+            }
+
+            function transitionToPhase1() {
+                introPhase = 1;
+                phaseStartTime = performance.now() / 1000;
+                progressPercent = 0;
+                playBootSound();
+            }
+
+            function transitionToPhase2() {
+                introPhase = 2;
+                phaseStartTime = performance.now() / 1000;
+                progressPercent = 100;
+                playClickSound();
+            }
+
+            function transitionToMain() {
+                if (introComplete) return;
+                introComplete = true;
+                introPhase = 3;
+
+                // Flash
+                const flash = document.createElement('div');
+                flash.style.cssText =
+                    'position:fixed;inset:0;z-index:100005;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.12s';
+                document.body.appendChild(flash);
+                requestAnimationFrame(() => {
+                    flash.style.opacity = '0.7';
+                    setTimeout(() => { flash.style.opacity = '0';
+                        setTimeout(() => flash.remove(), 180); }, 80);
+                });
+
+                // Fade overlay
+                overlay.classList.add('fading-out');
+                scanlines.style.opacity = '0';
+                crtCurve.classList.remove('active');
+                document.body.style.overflow = '';
+                mainSite.classList.add('visible');
+
+                setTimeout(() => {
+                    overlay.classList.add('removed');
+                    overlay.style.display = 'none';
+                    scanlines.style.display = 'none';
+                    crtCurve.style.display = 'none';
+                    glitchFlash.style.display = 'none';
+                    initMainSiteScripts();
+                }, 650);
+            }
+
+            function animateIntro(timestamp) {
+                if (introComplete) return;
+                const elapsed = (timestamp - introStartTime) / 1000;
+                frameCount++;
+
+                // Phase transitions
+                if (introPhase === 0 && elapsed > 2.5) {
+                    transitionToPhase1();
+                }
+                if (introPhase === 1) {
+                    const phaseElapsed = (timestamp / 1000) - phaseStartTime;
+                    progressPercent = Math.min(100, phaseElapsed * 72);
+                    if (progressPercent >= 100 && phaseElapsed > 1.5) {
+                        transitionToPhase2();
+                    }
+                }
+                if (introPhase === 2) {
+                    const phaseElapsed = (timestamp / 1000) - phaseStartTime;
+                    welcomeAlpha = Math.min(1, phaseElapsed * 2.5);
+                    if (phaseElapsed > 1.8) {
+                        transitionToMain();
+                        return;
+                    }
+                }
+
+                draw(elapsed);
+                requestAnimationFrame(animateIntro);
+            }
+
+            // Handle click to init audio (browser policy)
+            document.addEventListener('click', initAudio, { once: true });
+            document.addEventListener('touchstart', initAudio, { once: true });
+            // Also try immediately (some browsers allow it in certain contexts)
+            initAudio();
+
+            // Start
+            introStartTime = performance.now();
+            requestAnimationFrame(animateIntro);
+
+            // ─────────────────────────────────────
+            // 2. FIREBASE INTEGRATION
+            // ─────────────────────────────────────
+            window.FIREBASE_READY = false;
+            window.db = null;
+            window.firebaseApp = null;
+            window.currentUserUid = null;
+            window.isAdmin = false;
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyD-PLACEHOLDER-KEY", // ⚠️ REPLACE with your actual Firebase API key
+                authDomain: "ctg-1st-web.firebaseapp.com",
+                databaseURL: "https://ctg-1st-web-default-rtdb.firebaseio.com/",
+                projectId: "ctg-1st-web",
+                storageBucket: "ctg-1st-web.appspot.com",
+                messagingSenderId: "000000000000",
+                appId: "1:000000000000:web:xxxxxxxxxxxxxxxxxxxx"
+            };
+
+            function initFirebase() {
+                try {
+                    if (typeof firebase === 'undefined') {
+                        console.warn('Firebase SDK not loaded. Running in offline mode.');
+                        return;
+                    }
+                    window.firebaseApp = firebase.initializeApp(firebaseConfig);
+                    window.db = firebase.database();
+                    if (firebase.analytics) {
+                        try { firebase.analytics(); } catch (e) { /* analytics blocked */ }
+                    }
+                    window.FIREBASE_READY = true;
+                    console.log('Firebase connected successfully.');
+                    initUserProfile();
+                    loadSiteSettings();
+                } catch (e) {
+                    console.warn('Firebase init failed:', e.message);
+                    window.FIREBASE_READY = false;
+                }
+            }
+
+            // ─────────────────────────────────────
+            // 3. USER PROFILE SYSTEM
+            // ─────────────────────────────────────
+            function getOrCreateUserId() {
+                let uid = localStorage.getItem('tdp_user_uid');
+                if (!uid) {
+                    uid = 'user_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+                    localStorage.setItem('tdp_user_uid', uid);
+                }
+                return uid;
+            }
+
+            function initUserProfile() {
+                if (!window.FIREBASE_READY || !window.db) return;
+                window.currentUserUid = getOrCreateUserId();
+                const userRef = window.db.ref('users/' + window.currentUserUid);
+                userRef.once('value').then(snap => {
+                    const data = snap.val() || {};
+                    if (!data.username) {
+                        const defaultName = 'User_' + window.currentUserUid.substring(5, 11);
+                        userRef.set({
+                            username: defaultName,
+                            lastActive: firebase.database.ServerValue.TIMESTAMP,
+                            isAdmin: false
+                        });
+                        updateProfileUI(defaultName, false);
+                    } else {
+                        updateProfileUI(data.username, !!data.isAdmin);
+                    }
+                }).catch(() => {
+                    updateProfileUI('User', false);
+                });
+                // Listen for changes
+                userRef.on('value', snap => {
+                    const data = snap.val() || {};
+                    updateProfileUI(data.username || 'User', !!data.isAdmin);
+                });
+            }
+
+            function updateProfileUI(username, isAdminFlag) {
+                window.isAdmin = isAdminFlag;
+                const wrap = document.getElementById('navProfileWrap');
+                const icon = document.getElementById('navProfileIcon');
+                const nameEl = document.getElementById('navProfileName');
+                const adminLink = document.getElementById('profileAdminPanel');
+                const footerAdmin = document.getElementById('footerAdminLink');
+                if (wrap) wrap.style.display = 'flex';
+                if (icon) icon.textContent = (username || 'U').charAt(0).toUpperCase();
+                if (nameEl) nameEl.textContent = username || 'User';
+                if (adminLink) adminLink.style.display = isAdminFlag ? 'block' : 'none';
+                if (footerAdmin) footerAdmin.style.opacity = isAdminFlag ? '1' : '0.4';
+            }
+
+            // ─────────────────────────────────────
+            // 4. ADMIN PANEL SYSTEM
+            // ─────────────────────────────────────
+            const adminPanel = document.getElementById('adminPanel');
+            const adminPanelOverlay = document.getElementById('adminPanelOverlay');
+            let adminPanelOpen = false;
+
+            function openAdminPanel() {
+                if (!window.isAdmin) {
+                    showAdminLoginModal();
+                    return;
+                }
+                adminPanel.classList.add('active');
+                adminPanelOverlay.classList.add('active');
+                adminPanelOpen = true;
+                document.body.style.overflow = 'hidden';
+                loadAdminProjects();
+                loadAdminUsers();
+                loadAdminSettings();
+            }
+
+            function closeAdminPanel() {
+                adminPanel.classList.remove('active');
+                adminPanelOverlay.classList.remove('active');
+                adminPanelOpen = false;
+                document.body.style.overflow = '';
+            }
+
+            function showToast(msg, isError = false) {
+                const toast = document.getElementById('adminToast');
+                toast.textContent = msg;
+                toast.className = 'admin-toast ' + (isError ? 'error' : '');
+                toast.classList.add('show');
+                clearTimeout(toast._timeout);
+                toast._timeout = setTimeout(() => toast.classList.remove('show'), 2200);
+            }
+
+            function showAdminLoginModal() {
+                document.getElementById('adminLoginModalOverlay').classList.add('active');
+                document.getElementById('adminLoginInput').value = '';
+                document.getElementById('adminLoginInput').focus();
+            }
+
+            function hideAdminLoginModal() {
+                document.getElementById('adminLoginModalOverlay').classList.remove('active');
+            }
+
+            function verifyAdminPin(pin) {
+                if (!window.FIREBASE_READY || !window.db) {
+                    if (pin === '1234') {
+                        window.isAdmin = true;
+                        updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
+                        hideAdminLoginModal();
+                        openAdminPanel();
+                        showToast('Admin access granted (offline mode)');
+                    } else {
+                        showToast('Invalid PIN', true);
+                    }
+                    return;
+                }
+                window.db.ref('admin/siteSettings/adminPin').once('value').then(snap => {
+                    const storedPin = snap.val() || '1234';
+                    if (pin === storedPin) {
+                        window.isAdmin = true;
+                        const userRef = window.db.ref('users/' + window.currentUserUid);
+                        userRef.update({ isAdmin: true });
+                        updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
+                        hideAdminLoginModal();
+                        openAdminPanel();
+                        showToast('Admin access granted');
+                    } else {
+                        showToast('Invalid PIN', true);
+                    }
+                }).catch(() => {
+                    if (pin === '1234') {
+                        window.isAdmin = true;
+                        hideAdminLoginModal();
+                        openAdminPanel();
+                        showToast('Admin access granted');
+                    } else {
+                        showToast('Invalid PIN', true);
+                    }
+                });
+            }
+
+            // Admin Projects CRUD
+            function loadAdminProjects() {
+                const listEl = document.getElementById('adminProjectsList');
+                if (!listEl) return;
+                if (!window.FIREBASE_READY || !window.db) {
+                    listEl.innerHTML =
+                        '<div class="admin-empty">Firebase offline — cannot load projects.<br>Use Firebase console to manage data.</div>';
+                    return;
+                }
+                window.db.ref('projects').once('value').then(snap => {
+                    const projects = snap.val() || {};
+                    const entries = Object.entries(projects);
+                    if (entries.length === 0) {
+                        listEl.innerHTML = '<div class="admin-empty">No projects yet. Add one above.</div>';
+                        return;
+                    }
+                    listEl.innerHTML = entries.map(([id, p]) => `
+                <div class="admin-item">
+                  <div class="admin-item-info">
+                    <div class="admin-item-title">${escapeHTML(p.title || 'Untitled')}</div>
+                    <div class="admin-item-sub">${escapeHTML(p.category || '')} · Tags: ${escapeHTML(p.tags || '')}</div>
+                  </div>
+                  <div class="admin-item-actions">
+                    <button class="admin-btn admin-btn-sm" onclick="editAdminProject('${id}')">Edit</button>
+                    <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="deleteAdminProject('${id}')">Del</button>
+                  </div>
+                </div>
+              `).join('');
+                }).catch(() => {
+                    listEl.innerHTML =
+                    '<div class="admin-empty">Failed to load projects. Check Firebase connection.</div>';
+                });
+            }
+
+            function saveAdminProject() {
+                if (!window.FIREBASE_READY || !window.db) {
+                    showToast('Firebase offline — cannot save', true);
+                    return;
+                }
+                const title = document.getElementById('adminProjTitle').value.trim();
+                const category = document.getElementById('adminProjCat').value;
+                const desc = document.getElementById('adminProjDesc').value.trim();
+                const tags = document.getElementById('adminProjTags').value.trim();
+                const bestFor = document.getElementById('adminProjBestFor').value.trim();
+                const editId = document.getElementById('adminProjEditId').value;
+                if (!title) { showToast('Title is required', true); return; }
+                const projectData = { title, category, description: desc, tags, bestFor, updatedAt: Date.now() };
+                if (editId) {
+                    window.db.ref('projects/' + editId).update(projectData).then(() => {
+                        showToast('Project updated!');
+                        resetAdminProjectForm();
+                        loadAdminProjects();
+                    }).catch(() => showToast('Update failed', true));
+                } else {
+                    const newRef = window.db.ref('projects').push();
+                    projectData.createdAt = Date.now();
+                    newRef.set(projectData).then(() => {
+                        showToast('Project added!');
+                        resetAdminProjectForm();
+                        loadAdminProjects();
+                    }).catch(() => showToast('Add failed', true));
+                }
+            }
+
+            window.editAdminProject = function(id) {
+                if (!window.FIREBASE_READY || !window.db) return;
+                window.db.ref('projects/' + id).once('value').then(snap => {
+                    const p = snap.val();
+                    if (!p) return;
+                    document.getElementById('adminProjTitle').value = p.title || '';
+                    document.getElementById('adminProjCat').value = p.category || 'Robotics';
+                    document.getElementById('adminProjDesc').value = p.description || '';
+                    document.getElementById('adminProjTags').value = p.tags || '';
+                    document.getElementById('adminProjBestFor').value = p.bestFor || '';
+                    document.getElementById('adminProjEditId').value = id;
+                    document.getElementById('adminProjSaveBtn').textContent = '✏ Update Project';
+                    document.getElementById('adminProjCancelEdit').style.display = 'inline-block';
+                    document.getElementById('adminContent').scrollTop = 0;
+                });
+            };
+
+            window.deleteAdminProject = function(id) {
+                if (!window.FIREBASE_READY || !window.db) return;
+                if (!confirm('Delete this project permanently?')) return;
+                window.db.ref('projects/' + id).remove().then(() => {
+                    showToast('Project deleted');
+                    loadAdminProjects();
+                }).catch(() => showToast('Delete failed', true));
+            };
+
+            function resetAdminProjectForm() {
+                document.getElementById('adminProjTitle').value = '';
+                document.getElementById('adminProjCat').value = 'Robotics';
+                document.getElementById('adminProjDesc').value = '';
+                document.getElementById('adminProjTags').value = '';
+                document.getElementById('adminProjBestFor').value = '';
+                document.getElementById('adminProjEditId').value = '';
+                document.getElementById('adminProjSaveBtn').textContent = '➕ Add Project';
+                document.getElementById('adminProjCancelEdit').style.display = 'none';
+            }
+
+            function loadAdminUsers() {
+                const listEl = document.getElementById('adminUsersList');
+                if (!listEl) return;
+                if (!window.FIREBASE_READY || !window.db) {
+                    listEl.innerHTML = '<div class="admin-empty">Firebase offline.</div>';
+                    return;
+                }
+                window.db.ref('users').once('value').then(snap => {
+                    const users = snap.val() || {};
+                    const entries = Object.entries(users);
+                    if (entries.length === 0) {
+                        listEl.innerHTML = '<div class="admin-empty">No users registered yet.</div>';
+                        return;
+                    }
+                    listEl.innerHTML = entries.map(([uid, u]) => `
+                <div class="admin-item">
+                  <div class="admin-item-info">
+                    <div class="admin-item-title">${escapeHTML(u.username || 'Unknown')}</div>
+                    <div class="admin-item-sub">UID: ${uid.substring(0,16)}... · Admin: ${u.isAdmin ? 'Yes' : 'No'}</div>
+                  </div>
+                  <div class="admin-item-actions">
+                    <button class="admin-btn admin-btn-sm" onclick="editAdminUsername('${uid}')">Edit</button>
+                    <button class="admin-btn admin-btn-sm" onclick="toggleAdminUser('${uid}', ${!u.isAdmin})">${u.isAdmin ? 'Revoke' : 'Make Admin'}</button>
+                  </div>
+                </div>
+              `).join('');
+                }).catch(() => {
+                    listEl.innerHTML = '<div class="admin-empty">Failed to load users.</div>';
+                });
+            }
+
+            window.editAdminUsername = function(uid) {
+                const newName = prompt('Enter new username:');
+                if (!newName || !newName.trim()) return;
+                if (!window.FIREBASE_READY || !window.db) return;
+                window.db.ref('users/' + uid).update({ username: newName.trim() }).then(() => {
+                    showToast('Username updated');
+                    loadAdminUsers();
+                }).catch(() => showToast('Update failed', true));
+            };
+
+            window.toggleAdminUser = function(uid, makeAdmin) {
+                if (!window.FIREBASE_READY || !window.db) return;
+                window.db.ref('users/' + uid).update({ isAdmin: makeAdmin }).then(() => {
+                    showToast(makeAdmin ? 'Admin granted' : 'Admin revoked');
+                    loadAdminUsers();
+                }).catch(() => showToast('Toggle failed', true));
+            };
+
+            function loadAdminSettings() {
+                if (!window.FIREBASE_READY || !window.db) return;
+                window.db.ref('admin/siteSettings').once('value').then(snap => {
+                    const s = snap.val() || {};
+                    document.getElementById('adminSettingAnnouncement').value = s.announcement || '';
+                    document.getElementById('adminSettingSiteName').value = s.siteName || 'The Debug Point';
+                }).catch(() => {});
+            }
+
+            function saveAdminSettings() {
+                if (!window.FIREBASE_READY || !window.db) {
+                    showToast('Firebase offline', true);
+                    return;
+                }
+                const announcement = document.getElementById('adminSettingAnnouncement').value.trim();
+                const siteName = document.getElementById('adminSettingSiteName').value.trim();
+                window.db.ref('admin/siteSettings').update({
+                    announcement,
+                    siteName,
+                    updatedAt: Date.now()
+                }).then(() => {
+                    showToast('Settings saved!');
+                    if (announcement) {
+                        const bar = document.getElementById('announcementBar');
+                        if (bar) bar.innerHTML = announcement +
+                            ' <span>এখনই ভিজিট করুন</span> →';
+                    }
+                }).catch(() => showToast('Save failed', true));
+            }
+
+            function loadSiteSettings() {
+                if (!window.FIREBASE_READY || !window.db) return;
+                window.db.ref('admin/siteSettings').once('value').then(snap => {
+                    const s = snap.val() || {};
+                    if (s.announcement) {
+                        const bar = document.getElementById('announcementBar');
+                        if (bar) bar.innerHTML = s.announcement +
+                            ' <span>এখনই ভিজিট করুন</span> →';
+                    }
+                }).catch(() => {});
+            }
+
+            function escapeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // ─────────────────────────────────────
+            // 5. EVENT BINDINGS
+            // ─────────────────────────────────────
+            document.getElementById('adminCloseBtn').addEventListener('click', closeAdminPanel);
+            document.getElementById('adminPanelOverlay').addEventListener('click', closeAdminPanel);
+            document.getElementById('footerAdminLink').addEventListener('click', () => {
+                if (window.isAdmin) openAdminPanel();
+                else showAdminLoginModal();
+            });
+            document.getElementById('profileAdminPanel').addEventListener('click', () => {
+                document.getElementById('navProfileDropdown').classList.remove('open');
+                openAdminPanel();
+            });
+            document.getElementById('adminLoginConfirm').addEventListener('click', () => {
+                const pin = document.getElementById('adminLoginInput').value.trim();
+                if (pin) verifyAdminPin(pin);
+            });
+            document.getElementById('adminLoginCancel').addEventListener('click', hideAdminLoginModal);
+            document.getElementById('adminLoginModalOverlay').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('adminLoginModalOverlay')) hideAdminLoginModal();
+            });
+            document.getElementById('adminProjSaveBtn').addEventListener('click', saveAdminProject);
+            document.getElementById('adminProjCancelEdit').addEventListener('click', resetAdminProjectForm);
+            document.getElementById('adminSettingsSaveBtn').addEventListener('click', saveAdminSettings);
+
+            // Admin tabs
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove(
+                        'active'));
+                    this.classList.add('active');
+                    const tabName = this.dataset.tab;
+                    document.getElementById('adminTabProjects').style.display = tabName ===
+                        'projects' ? '' : 'none';
+                    document.getElementById('adminTabUsers').style.display = tabName === 'users' ?
+                        '' : 'none';
+                    document.getElementById('adminTabSettings').style.display = tabName ===
+                        'settings' ? '' : 'none';
+                    if (tabName === 'users') loadAdminUsers();
+                    if (tabName === 'settings') loadAdminSettings();
+                });
+            });
+
+            // Profile dropdown
+            document.getElementById('navProfileIcon').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('navProfileDropdown').classList.toggle('open');
+            });
+            document.getElementById('profileEditUsername').addEventListener('click', () => {
+                document.getElementById('navProfileDropdown').classList.remove('open');
+                document.getElementById('usernameModalOverlay').classList.add('active');
+                document.getElementById('usernameModalInput').value = document.getElementById('navProfileName')
+                    .textContent || '';
+                document.getElementById('usernameModalInput').focus();
+            });
+            document.getElementById('usernameModalSave').addEventListener('click', () => {
+                const newName = document.getElementById('usernameModalInput').value.trim();
+                if (!newName) { showToast('Username cannot be empty', true); return; }
+                if (window.FIREBASE_READY && window.db && window.currentUserUid) {
+                    window.db.ref('users/' + window.currentUserUid).update({ username: newName }).then(
+                        () => {
+                            updateProfileUI(newName, window.isAdmin);
+                            showToast('Username updated!');
+                        }).catch(() => showToast('Update failed', true));
+                } else {
+                    updateProfileUI(newName, window.isAdmin);
+                    showToast('Username updated (offline)');
+                }
+                document.getElementById('usernameModalOverlay').classList.remove('active');
+            });
+            document.getElementById('usernameModalCancel').addEventListener('click', () => {
+                document.getElementById('usernameModalOverlay').classList.remove('active');
+            });
+            document.getElementById('usernameModalOverlay').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('usernameModalOverlay'))
+                    document.getElementById('usernameModalOverlay').classList.remove('active');
+            });
+            document.addEventListener('click', () => {
+                document.getElementById('navProfileDropdown').classList.remove('open');
+            });
+
+            // Keyboard shortcut
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                    e.preventDefault();
+                    if (window.isAdmin) openAdminPanel();
+                    else showAdminLoginModal();
+                }
+                if (e.key === 'Escape') {
+                    if (adminPanelOpen) closeAdminPanel();
+                    hideAdminLoginModal();
+                    document.getElementById('usernameModalOverlay').classList.remove('active');
+                }
+            });
+
+            // ─────────────────────────────────────
+            // 6. INIT FIREBASE ON DOM READY
+            // ─────────────────────────────────────
+            initFirebase();
+
+            // ─────────────────────────────────────
+            // 7. GLOBAL FUNCTION EXPORTS
+            // ─────────────────────────────────────
+            window.openAdminPanel = openAdminPanel;
+            window.closeAdminPanel = closeAdminPanel;
+            window.showAdminLoginModal = showAdminLoginModal;
+            window.verifyAdminPin = verifyAdminPin;
+            window.saveAdminProject = saveAdminProject;
+            window.resetAdminProjectForm = resetAdminProjectForm;
+            window.loadAdminProjects = loadAdminProjects;
+            window.loadAdminUsers = loadAdminUsers;
+            window.saveAdminSettings = saveAdminSettings;
+            window.escapeHTML = escapeHTML;
+            window.showToast = showToast;
+            window.updateProfileUI = updateProfileUI;
+        })();
+
+        // ─────────────────────────────────────
+        // 8. MAIN SITE SCRIPTS (preserved)
+        // ─────────────────────────────────────
         function initMainSiteScripts() {
             window.toggleNav = function() {
                 document.getElementById('navLinks').classList.toggle('open');
@@ -1908,6 +3100,7 @@
                     curY = -200;
                 document.addEventListener('mousemove', e => { curX = e.clientX;
                     curY = e.clientY; });
+
                 function updateTrail() {
                     trailX += (curX - trailX) * 0.06;
                     trailY += (curY - trailY) * 0.06;
@@ -1917,12 +3110,14 @@
                 }
                 cursorTrail.classList.add('active');
                 updateTrail();
-                window.addEventListener('touchstart', () => { if (cursorTrail) cursorTrail.style.opacity = '0'; }, { once: true });
+                window.addEventListener('touchstart', () => { if (cursorTrail) cursorTrail.style.opacity = '0'; }, {
+                    once: true });
             }
             const heroGrid = document.getElementById('heroGrid'),
                 heroGlow = document.getElementById('heroGlow'),
                 heroOrb = document.getElementById('heroOrb');
             let ticking = false;
+
             function updateParallax() {
                 const heroSection = document.getElementById('hero');
                 if (!heroSection) return;
@@ -1932,21 +3127,25 @@
                     const progress = (window.innerHeight - rect.top) / (window.innerHeight + heroHeight);
                     const offsetY = Math.max(0, Math.min(1, progress)) * 60;
                     if (heroGrid) heroGrid.style.transform = `translateY(${offsetY * 0.3}px)`;
-                    if (heroGlow) heroGlow.style.transform = `translateY(${offsetY * 0.5}px) translateX(${offsetY * 0.15}px)`;
-                    if (heroOrb) heroOrb.style.transform = `translateY(${offsetY * 0.35}px) translateX(${-offsetY * 0.2}px)`;
+                    if (heroGlow) heroGlow.style.transform =
+                        `translateY(${offsetY * 0.5}px) translateX(${offsetY * 0.15}px)`;
+                    if (heroOrb) heroOrb.style.transform =
+                        `translateY(${offsetY * 0.35}px) translateX(${-offsetY * 0.2}px)`;
                 }
                 ticking = false;
             }
-            window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(updateParallax);
-                    ticking = true; } });
-            const sectionObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e
-                    .target.classList.add('visible'); }), { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            window.addEventListener('scroll', () => {
+                if (!ticking) { requestAnimationFrame(updateParallax);
+                    ticking = true; }
+            });
+            const sectionObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting)
+                    e.target.classList.add('visible'); }), { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
             document.querySelectorAll('.reveal-section').forEach(s => sectionObserver.observe(s));
-            const cardObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
-                    .classList.add('visible'); }), { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
+            const cardObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e
+                    .target.classList.add('visible'); }), { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
             document.querySelectorAll('.reveal-card').forEach(c => cardObserver.observe(c));
-            const heroObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
-                    .classList.add('visible'); }), { threshold: 0.3 });
+            const heroObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e
+                    .target.classList.add('visible'); }), { threshold: 0.3 });
             document.querySelectorAll('.hero-reveal').forEach(el => heroObserver.observe(el));
             window.filterSci = function(type, btn) {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -1956,6 +3155,24 @@
                     card.style.display = (type === 'all' || cat === type) ? '' : 'none';
                     card.dataset.hidden = (type === 'all' || cat === type) ? 'false' : 'true';
                 });
+            };
+        }
+
+        // Polyfill for roundRect if needed
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r };
+                this.beginPath();
+                this.moveTo(x + r.tl, y);
+                this.lineTo(x + w - r.tr, y);
+                this.quadraticCurveTo(x + w, y, x + w, y + r.tr);
+                this.lineTo(x + w, y + h - r.br);
+                this.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
+                this.lineTo(x + r.bl, y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - r.bl);
+                this.lineTo(x, y + r.tl);
+                this.quadraticCurveTo(x, y, x + r.tl, y);
+                this.closePath();
             };
         }
     </script>
