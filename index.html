@@ -8,7 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Share+Tech+Mono&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* ═══════════ INTRO OVERLAY — CYBERPUNK CINEMATIC ═══════════ */
+        /* ═══════════════════════════════════════════
+           eDEX-UI INSPIRED CINEMATIC INTRO STYLES
+           ═══════════════════════════════════════════ */
+        :root {
+            --intro-bg: #03050a;
+            --intro-surface: #080e18;
+            --intro-cyan: #00d4ff;
+            --intro-cyan2: #00ffcc;
+            --intro-green: #00ff88;
+            --intro-amber: #ffaa00;
+            --intro-white: #e0e8f0;
+            --intro-dim: #5a6a7a;
+            --intro-glow-cyan: 0 0 12px rgba(0, 212, 255, 0.5);
+            --intro-glow-green: 0 0 12px rgba(0, 255, 136, 0.5);
+            --intro-font-mono: 'Share Tech Mono', 'JetBrains Mono', 'Courier New', monospace;
+            --intro-font-hud: 'Orbitron', 'JetBrains Mono', monospace;
+        }
+
         #intro-overlay {
             position: fixed;
             inset: 0;
@@ -17,9 +34,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1);
             will-change: opacity;
             overflow: hidden;
+            cursor: none;
         }
         #intro-overlay.fading-out {
             opacity: 0;
@@ -35,19 +53,27 @@
             position: absolute;
             inset: 0;
             image-rendering: auto;
+            z-index: 1;
         }
+        /* Scanline overlay */
         .intro-scanlines {
             position: fixed;
             inset: 0;
             z-index: 100001;
             pointer-events: none;
-            opacity: 0.06;
+            opacity: 0.055;
             background: repeating-linear-gradient(0deg,
                     transparent,
                     transparent 2px,
-                    rgba(0, 0, 0, 0.3) 2px,
-                    rgba(0, 0, 0, 0.3) 4px);
+                    rgba(0, 0, 0, 0.35) 2px,
+                    rgba(0, 0, 0, 0.35) 4px);
+            transition: opacity 0.6s;
         }
+        .intro-scanlines.intensify {
+            opacity: 0.12;
+            transition: opacity 0.08s;
+        }
+        /* CRT vignette curve */
         .intro-crt-curve {
             position: fixed;
             inset: 0;
@@ -55,27 +81,74 @@
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.5s;
-            box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.7), inset 0 0 60px rgba(0, 0, 0, 0.5);
-            border-radius: 0;
+            box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.75), inset 0 0 70px rgba(0, 0, 0, 0.5);
         }
         .intro-crt-curve.active {
             opacity: 1;
         }
+        /* Glitch flash */
         .intro-glitch-flash {
             position: fixed;
             inset: 0;
             z-index: 100003;
             pointer-events: none;
-            background: rgba(0, 255, 255, 0.08);
+            background: rgba(0, 220, 255, 0.07);
             opacity: 0;
-            transition: opacity 0.05s;
+            transition: opacity 0.04s;
         }
         .intro-glitch-flash.active {
             opacity: 1;
-            transition: opacity 0.02s;
+            transition: opacity 0.015s;
+        }
+        /* Screen shake container */
+        .intro-shake {
+            animation: introShake 0.15s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+        @keyframes introShake {
+            0%,
+            100% {
+                transform: translate(0);
+            }
+            15% {
+                transform: translate(-6px, 3px);
+            }
+            30% {
+                transform: translate(5px, -4px);
+            }
+            45% {
+                transform: translate(-3px, -2px);
+            }
+            60% {
+                transform: translate(4px, 1px);
+            }
+            75% {
+                transform: translate(-1px, 3px);
+            }
+            90% {
+                transform: translate(2px, -1px);
+            }
+        }
+        /* Skip hint (subtle, appears after 2s) */
+        .intro-skip-hint {
+            position: fixed;
+            bottom: 28px;
+            right: 32px;
+            z-index: 100010;
+            pointer-events: none;
+            font-family: var(--intro-font-mono);
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.2);
+            letter-spacing: 0.06em;
+            opacity: 0;
+            transition: opacity 0.8s;
+        }
+        .intro-skip-hint.visible {
+            opacity: 1;
         }
 
-        /* ═══════ MAIN SITE (hidden until intro ends) ═══════ */
+        /* ═══════════════════════════════════════════
+           MAIN SITE (hidden until intro ends)
+           ═══════════════════════════════════════════ */
         #main-site {
             opacity: 0;
             transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -84,7 +157,9 @@
             opacity: 1;
         }
 
-        /* ═══════ ADMIN PANEL STYLES ═══════ */
+        /* ═══════════════════════════════════════════
+           ADMIN PANEL STYLES (preserved)
+           ═══════════════════════════════════════════ */
         .admin-panel-overlay {
             position: fixed;
             inset: 0;
@@ -573,7 +648,9 @@
             }
         }
 
-        /* ═══ MAIN WEBSITE STYLES (preserved & extended) ═══ */
+        /* ═══════════════════════════════════════════
+           MAIN WEBSITE STYLES (preserved)
+           ═══════════════════════════════════════════ */
         :root {
             --bg: #ffffff;
             --bg-alt: #f7f8fa;
@@ -1900,12 +1977,15 @@
 </head>
 <body>
 
-    <!-- ═══════════ INTRO OVERLAY — CYBERPUNK CINEMATIC ═══════════ -->
+    <!-- ═══════════════════════════════════════════
+    eDEX-UI INSPIRED CINEMATIC INTRO OVERLAY
+    ═══════════════════════════════════════════ -->
     <div id="intro-overlay">
         <canvas id="intro-canvas"></canvas>
         <div class="intro-scanlines" id="introScanlines"></div>
-        <div class="intro-crt-curve" id="introCrt"></div>
+        <div class="intro-crt-curve active" id="introCrt"></div>
         <div class="intro-glitch-flash" id="introGlitchFlash"></div>
+        <div class="intro-skip-hint" id="introSkipHint">PRESS ANY KEY TO SKIP</div>
     </div>
 
     <!-- ═══════════ MAIN SITE ═══════════ -->
@@ -2064,7 +2144,6 @@
             <button class="admin-tab" data-tab="settings">Settings</button>
         </div>
         <div class="admin-content" id="adminContent">
-            <!-- Tab: Projects -->
             <div id="adminTabProjects">
                 <div class="admin-section-title">📦 Project Management</div>
                 <div class="admin-input-group"><label>Project Title</label><input type="text" id="adminProjTitle" placeholder="Enter project title"></div>
@@ -2078,12 +2157,10 @@
                 <hr style="border-color:rgba(255,255,255,0.08);margin:1rem 0;">
                 <div id="adminProjectsList"></div>
             </div>
-            <!-- Tab: Users -->
             <div id="adminTabUsers" style="display:none;">
                 <div class="admin-section-title">👥 User Management</div>
                 <div id="adminUsersList"></div>
             </div>
-            <!-- Tab: Settings -->
             <div id="adminTabSettings" style="display:none;">
                 <div class="admin-section-title">⚙ Site Settings</div>
                 <div class="admin-input-group"><label>Announcement Bar Text</label><input type="text" id="adminSettingAnnouncement" placeholder="Announcement text..."></div>
@@ -2120,7 +2197,9 @@
     <!-- ═══════════ TOAST ═══════════ -->
     <div class="admin-toast" id="adminToast"></div>
 
-    <!-- ═══════════ FIREBASE SDK ═══════════ -->
+    <!-- ═══════════════════════════════════════════
+    FIREBASE SDK (compat)
+    ═══════════════════════════════════════════ -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
     </script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
@@ -2130,80 +2209,396 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js">
     </script>
 
-    <!-- ═══════════ CYBERPUNK INTRO + APP SCRIPTS ═══════════ -->
+    <!-- ═══════════════════════════════════════════
+    eDEX-UI INSPIRED CINEMATIC INTRO — CORE ENGINE
+    ═══════════════════════════════════════════ -->
     <script>
         (function() {
-            // ─────────────────────────────────────
-            // 1. CYBERPUNK CINEMATIC INTRO SYSTEM
-            // ─────────────────────────────────────
+            // ───────────────────────────────────────
+            // DOM REFERENCES
+            // ───────────────────────────────────────
             const overlay = document.getElementById('intro-overlay');
             const canvas = document.getElementById('intro-canvas');
+            const ctx = canvas.getContext('2d');
             const mainSite = document.getElementById('main-site');
             const scanlines = document.getElementById('introScanlines');
             const crtCurve = document.getElementById('introCrt');
             const glitchFlash = document.getElementById('introGlitchFlash');
-            const ctx = canvas.getContext('2d');
+            const skipHint = document.getElementById('introSkipHint');
 
-            document.body.style.overflow = 'hidden';
-            crtCurve.classList.add('active');
-
+            // ───────────────────────────────────────
+            // STATE
+            // ───────────────────────────────────────
             let W, H;
-            let introPhase = 0; // 0=terminal, 1=loading, 2=welcome, 3=complete
+            let introPhase = 0; // 0=terminal-boot, 1=loading-progress, 2=welcome-dashboard, 3=transitioning, 4=complete
             let phaseStartTime = 0;
             let introStartTime = 0;
             let progressPercent = 0;
             let welcomeAlpha = 0;
             let introComplete = false;
             let frameCount = 0;
+            let skipRequested = false;
 
-            // Particles
+            // ───────────────────────────────────────
+            // PARTICLE SYSTEM (Matrix-style)
+            // ───────────────────────────────────────
             const particles = [];
-            const PARTICLE_COUNT = 120;
+            const PARTICLE_COUNT = 140;
+            const particleColors = ['#00d4ff', '#00ffcc', '#00ff88', '#ffffff', '#4dd0ff', '#88ffdd'];
 
-            // Terminal lines
-            const terminalLines = [];
+            function initParticles() {
+                particles.length = 0;
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    particles.push({
+                        x: Math.random() * W,
+                        y: Math.random() * H,
+                        speed: 0.4 + Math.random() * 3.2,
+                        size: 0.4 + Math.random() * 2.0,
+                        opacity: 0.12 + Math.random() * 0.55,
+                        color: particleColors[Math.floor(Math.random() * particleColors.length)],
+                        wobble: Math.random() * Math.PI * 2,
+                        wobbleSpeed: 0.01 + Math.random() * 0.04,
+                    });
+                }
+            }
+
+            function updateParticles() {
+                for (const p of particles) {
+                    p.y += p.speed;
+                    p.wobble += p.wobbleSpeed;
+                    p.x += Math.sin(p.wobble) * 0.3;
+                    if (p.y > H + 15) {
+                        p.y = -15;
+                        p.x = Math.random() * W;
+                    }
+                    if (p.x < -10) p.x = W + 10;
+                    if (p.x > W + 10) p.x = -10;
+                }
+            }
+
+            function drawParticles() {
+                const alphaMul = introPhase === 2 ? 0.45 : 1;
+                for (const p of particles) {
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.opacity * alphaMul;
+                    ctx.fillRect(p.x, p.y, p.size, p.size * 3.5);
+                }
+                ctx.globalAlpha = 1;
+            }
+
+            // ───────────────────────────────────────
+            // TERMINAL BOOT LOGS
+            // ───────────────────────────────────────
             const terminalLogs = [
-                { text: 'INITIALIZING SYSTEM KERNEL...', delay: 0.15, color: '#888' },
-                { text: 'MOUNTING SECURE VOLUME [OK]', delay: 0.35, color: '#0f0' },
-                { text: 'QUANTUM CORE ACTIVATED', delay: 0.55, color: '#00d4ff' },
-                { text: 'NEURAL ENGINE v4.2.7 ONLINE', delay: 0.75, color: '#00d4ff' },
-                { text: 'LOADING ENCRYPTED MODULES...', delay: 0.95, color: '#888' },
-                { text: 'BIOMETRIC SIGNATURE VERIFIED', delay: 1.15, color: '#0f0' },
-                { text: 'FIREWALL: ACTIVE | PROXY: SECURE', delay: 1.35, color: '#00ff88' },
-                { text: 'BOOT SEQUENCE COMPLETE [100%]', delay: 1.6, color: '#00d4ff' },
-                { text: '', delay: 1.75, color: '#fff' },
-                { text: '> ACCESS GRANTED — WELCOME', delay: 1.9, color: '#00ffcc' },
-                { text: '> INITIALIZING HUD INTERFACE...', delay: 2.15, color: '#00d4ff' },
+                { text: 'INITIALIZING SYSTEM KERNEL...', delay: 0.12, color: '#8899aa', prefix: '[BOOT]' },
+                { text: 'MOUNTING SECURE VOLUME', delay: 0.30, color: '#00ff88', prefix: '[ OK ]', ok: true },
+                { text: 'QUANTUM CORE ACTIVATED', delay: 0.48, color: '#00d4ff', prefix: '[CORE]' },
+                { text: 'NEURAL ENGINE v4.2.7 ONLINE', delay: 0.66, color: '#00d4ff', prefix: '[  AI]' },
+                { text: 'LOADING ENCRYPTED MODULES...', delay: 0.84, color: '#8899aa', prefix: '[MOD ]' },
+                { text: 'BIOMETRIC SIGNATURE VERIFIED', delay: 1.02, color: '#00ff88', prefix: '[ OK ]', ok: true },
+                { text: 'FIREWALL: ACTIVE  |  PROXY: SECURE', delay: 1.20, color: '#00ff88', prefix: '[SEC ]' },
+                { text: 'INITIALIZING HUD OVERLAY...', delay: 1.38, color: '#8899aa', prefix: '[HUD ]' },
+                { text: 'BOOT SEQUENCE COMPLETE', delay: 1.56, color: '#00d4ff', prefix: '[SYS ]' },
+                { text: '', delay: 1.70, color: '#fff', prefix: '' },
+                { text: 'ACCESS GRANTED — WELCOME, USER', delay: 1.80, color: '#00ffcc', prefix: '  >', glow: true },
+                { text: 'INITIALIZING INTERFACE...', delay: 2.00, color: '#00d4ff', prefix: '  >' },
             ];
 
-            let typedChars = 0;
+            const completedLines = [];
             let currentLogIndex = 0;
-            let currentLogText = '';
+            let currentTypedText = '';
+            let typedCharCount = 0;
             let typingTimer = 0;
-            const TYPING_SPEED = 0.018;
+            const TYPING_SPEED = 0.016; // seconds per character
 
-            function resize() {
-                W = window.innerWidth;
-                H = window.innerHeight;
-                canvas.width = W;
-                canvas.height = H;
+            function updateTyping(dt) {
+                if (currentLogIndex >= terminalLogs.length) return;
+                typingTimer += dt;
+                const log = terminalLogs[currentLogIndex];
+                if (typedCharCount < log.text.length) {
+                    if (typingTimer >= TYPING_SPEED) {
+                        typingTimer -= TYPING_SPEED;
+                        typedCharCount++;
+                        currentTypedText = log.text.substring(0, typedCharCount);
+                        // Trigger typing sound
+                        if (Math.random() < 0.65) playTypingSound();
+                    }
+                } else {
+                    // Line complete
+                    completedLines.push({
+                        text: log.text,
+                        color: log.color,
+                        prefix: log.prefix,
+                        ok: log.ok || false,
+                        glow: log.glow || false,
+                    });
+                    currentLogIndex++;
+                    typedCharCount = 0;
+                    currentTypedText = '';
+                    typingTimer = -log.delay; // pause before next line
+                    if (currentLogIndex < terminalLogs.length && currentLogIndex === terminalLogs.length - 2) {
+                        playBootSound();
+                    }
+                }
             }
-            resize();
-            window.addEventListener('resize', resize);
 
-            // Init particles
-            for (let i = 0; i < PARTICLE_COUNT; i++) {
-                particles.push({
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    speed: 0.3 + Math.random() * 2.5,
-                    size: 0.5 + Math.random() * 1.8,
-                    opacity: 0.15 + Math.random() * 0.6,
-                    color: Math.random() < 0.5 ? '#00d4ff' : (Math.random() < 0.5 ? '#00ff88' : '#ffffff'),
-                });
+            function drawTerminal(elapsed) {
+                const fontSize = Math.min(15, W / 58);
+                const lineHeight = fontSize * 1.75;
+                const startX = W * 0.07;
+                const startY = H * 0.22;
+                ctx.font = `${fontSize}px 'Share Tech Mono', 'JetBrains Mono', 'Courier New', monospace`;
+                ctx.textBaseline = 'top';
+
+                // Draw completed lines
+                for (let i = 0; i < completedLines.length; i++) {
+                    const line = completedLines[i];
+                    const y = startY + i * lineHeight;
+                    if (line.prefix) {
+                        ctx.fillStyle = line.ok ? '#00ff88' : '#667788';
+                        ctx.fillText(line.prefix + ' ', startX, y);
+                        const prefixW = ctx.measureText(line.prefix + ' ').width;
+                        ctx.fillStyle = line.color;
+                        if (line.glow) {
+                            ctx.shadowColor = '#00ffcc';
+                            ctx.shadowBlur = 8;
+                        }
+                        ctx.fillText(line.text, startX + prefixW, y);
+                        ctx.shadowBlur = 0;
+                    } else {
+                        ctx.fillStyle = line.color;
+                        ctx.fillText(line.text, startX, y);
+                    }
+                }
+
+                // Draw current typing line
+                if (currentLogIndex < terminalLogs.length && currentTypedText) {
+                    const log = terminalLogs[currentLogIndex];
+                    const y = startY + completedLines.length * lineHeight;
+                    if (log.prefix) {
+                        ctx.fillStyle = '#667788';
+                        ctx.fillText(log.prefix + ' ', startX, y);
+                        const prefixW = ctx.measureText(log.prefix + ' ').width;
+                        ctx.fillStyle = log.color;
+                        ctx.fillText(currentTypedText, startX + prefixW, y);
+                        // Blinking cursor
+                        if (Math.floor(elapsed * 5) % 2 === 0) {
+                            const textW = ctx.measureText(currentTypedText).width;
+                            ctx.fillStyle = '#00ffcc';
+                            ctx.fillRect(startX + prefixW + textW + 2, y + 2, fontSize * 0.55, fontSize * 0.8);
+                        }
+                    } else {
+                        ctx.fillStyle = log.color;
+                        ctx.fillText(currentTypedText, startX, y);
+                        if (Math.floor(elapsed * 5) % 2 === 0) {
+                            const textW = ctx.measureText(currentTypedText).width;
+                            ctx.fillStyle = '#00ffcc';
+                            ctx.fillRect(startX + textW + 2, y + 2, fontSize * 0.55, fontSize * 0.8);
+                        }
+                    }
+                }
+
+                // Random glitch flicker on terminal
+                if (Math.random() < 0.012 && introPhase === 0) {
+                    triggerMicroGlitch();
+                }
             }
 
-            // Audio system
+            // ───────────────────────────────────────
+            // PROGRESS BAR
+            // ───────────────────────────────────────
+            function drawProgressBar() {
+                const barWidth = Math.min(380, W * 0.62);
+                const barHeight = 4;
+                const barX = (W - barWidth) / 2;
+                const barY = H * 0.64;
+
+                // Track
+                ctx.fillStyle = 'rgba(0,180,220,0.08)';
+                ctx.fillRect(barX - 3, barY - 3, barWidth + 6, barHeight + 6);
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.fillRect(barX, barY, barWidth, barHeight);
+
+                // Fill
+                const fillW = barWidth * (progressPercent / 100);
+                const grad = ctx.createLinearGradient(barX, barY, barX + barWidth, barY);
+                grad.addColorStop(0, '#00d4ff');
+                grad.addColorStop(0.5, '#00ffcc');
+                grad.addColorStop(1, '#00d4ff');
+                ctx.fillStyle = grad;
+                ctx.fillRect(barX, barY, fillW, barHeight);
+
+                // Glow
+                ctx.shadowColor = '#00d4ff';
+                ctx.shadowBlur = 16;
+                ctx.fillStyle = 'rgba(0,212,255,0.45)';
+                ctx.fillRect(barX, barY, fillW, barHeight);
+                ctx.shadowBlur = 0;
+
+                // Percentage
+                const pct = Math.floor(progressPercent);
+                ctx.fillStyle = '#00d4ff';
+                ctx.font = `${Math.min(26, W/28)}px 'Orbitron', 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText(pct + '%', W / 2, barY - 36);
+                ctx.textAlign = 'start';
+
+                // Label
+                ctx.fillStyle = '#556677';
+                ctx.font = `${Math.min(9.5, W/75)}px 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('INITIALIZING NEURAL INTERFACE', W / 2, barY + 20);
+                ctx.textAlign = 'start';
+            }
+
+            // ───────────────────────────────────────
+            // WELCOME DASHBOARD CARD
+            // ───────────────────────────────────────
+            function drawWelcomeCard() {
+                const cardW = Math.min(440, W * 0.78);
+                const cardH = 175;
+                const cardX = (W - cardW) / 2;
+                const cardY = (H - cardH) / 2;
+
+                // Glassmorphism card
+                ctx.fillStyle = `rgba(8,14,24,${0.75 * welcomeAlpha})`;
+                ctx.strokeStyle = `rgba(0,212,255,${0.5 * welcomeAlpha})`;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.roundRect(cardX, cardY, cardW, cardH, 22);
+                ctx.fill();
+                ctx.stroke();
+
+                // Inner glow border
+                ctx.strokeStyle = `rgba(0,255,200,${0.18 * welcomeAlpha})`;
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.roundRect(cardX + 3, cardY + 3, cardW - 6, cardH - 6, 19);
+                ctx.stroke();
+
+                // Title
+                ctx.fillStyle = `rgba(0,255,200,${welcomeAlpha})`;
+                ctx.font = `bold ${Math.min(24,W/30)}px 'Orbitron', 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('WELCOME BACK', W / 2, cardY + 48);
+                ctx.textAlign = 'start';
+
+                // Subtitle
+                ctx.fillStyle = `rgba(190,215,235,${0.85 * welcomeAlpha})`;
+                ctx.font = `${Math.min(14,W/48)}px 'Inter', 'Noto Sans Bengali', sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.fillText('The Debug Point — Coding & Robotics Solution', W / 2, cardY + 88);
+                ctx.textAlign = 'start';
+
+                // Divider
+                ctx.strokeStyle = `rgba(0,212,255,${0.3 * welcomeAlpha})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(cardX + 45, cardY + 108);
+                ctx.lineTo(cardX + cardW - 45, cardY + 108);
+                ctx.stroke();
+
+                // Status dot
+                ctx.fillStyle = `rgba(0,255,136,${0.9 * welcomeAlpha})`;
+                ctx.beginPath();
+                ctx.arc(W / 2 - 85, cardY + 138, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = `rgba(0,255,136,${0.7 * welcomeAlpha})`;
+                ctx.font = `${Math.min(9.5,W/75)}px 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('SYSTEM READY — CHITTAGONG, BD', W / 2 + 10, cardY + 134);
+                ctx.textAlign = 'start';
+            }
+
+            // ───────────────────────────────────────
+            // HUD CORNER BRACKETS
+            // ───────────────────────────────────────
+            function drawHUDCorners() {
+                const sz = 26;
+                const m = 20;
+                const alpha = introPhase >= 2 ? welcomeAlpha : 0.45;
+                ctx.strokeStyle = `rgba(0,212,255,${alpha})`;
+                ctx.lineWidth = 1.5;
+                ctx.lineCap = 'round';
+                // TL
+                ctx.beginPath();
+                ctx.moveTo(m, m + sz);
+                ctx.lineTo(m, m);
+                ctx.lineTo(m + sz, m);
+                ctx.stroke();
+                // TR
+                ctx.beginPath();
+                ctx.moveTo(W - m - sz, m);
+                ctx.lineTo(W - m, m);
+                ctx.lineTo(W - m, m + sz);
+                ctx.stroke();
+                // BL
+                ctx.beginPath();
+                ctx.moveTo(m, H - m - sz);
+                ctx.lineTo(m, H - m);
+                ctx.lineTo(m + sz, H - m);
+                ctx.stroke();
+                // BR
+                ctx.beginPath();
+                ctx.moveTo(W - m - sz, H - m);
+                ctx.lineTo(W - m, H - m);
+                ctx.lineTo(W - m, H - m - sz);
+                ctx.stroke();
+            }
+
+            // ───────────────────────────────────────
+            // BACKGROUND GRID
+            // ───────────────────────────────────────
+            function drawGrid() {
+                const gridSize = 48;
+                ctx.strokeStyle = 'rgba(0,180,220,0.03)';
+                ctx.lineWidth = 0.5;
+                for (let x = gridSize; x < W; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, H);
+                    ctx.stroke();
+                }
+                for (let y = gridSize; y < H; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(W, y);
+                    ctx.stroke();
+                }
+            }
+
+            // ───────────────────────────────────────
+            // MAIN RENDER
+            // ───────────────────────────────────────
+            function drawBackground() {
+                const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.75);
+                bgGrad.addColorStop(0, '#0b1119');
+                bgGrad.addColorStop(1, '#020508');
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, W, H);
+                drawGrid();
+            }
+
+            function draw(elapsed) {
+                ctx.clearRect(0, 0, W, H);
+                drawBackground();
+                drawParticles();
+                drawHUDCorners();
+
+                if (introPhase === 0) {
+                    drawTerminal(elapsed);
+                } else if (introPhase === 1) {
+                    drawTerminal(elapsed);
+                    drawProgressBar();
+                } else if (introPhase === 2) {
+                    drawWelcomeCard();
+                    drawProgressBar();
+                }
+            }
+
+            // ───────────────────────────────────────
+            // AUDIO ENGINE (Web Audio API)
+            // ───────────────────────────────────────
             let audioCtx = null;
             let audioEnabled = false;
 
@@ -2212,10 +2607,12 @@
                 try {
                     audioCtx = new(window.AudioContext || window.webkitAudioContext)();
                     audioEnabled = true;
-                } catch (e) { audioEnabled = false; }
+                } catch (e) {
+                    audioEnabled = false;
+                }
             }
 
-            function playBeep(freq, duration, type = 'square', vol = 0.04) {
+            function playTone(freq, duration, type = 'square', vol = 0.03, rampDown = true) {
                 if (!audioEnabled || !audioCtx) return;
                 try {
                     const osc = audioCtx.createOscillator();
@@ -2223,20 +2620,18 @@
                     osc.type = type;
                     osc.frequency.value = freq;
                     gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                    if (rampDown) {
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                    }
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     osc.start(audioCtx.currentTime);
-                    osc.stop(audioCtx.currentTime + duration);
+                    osc.stop(audioCtx.currentTime + duration + 0.01);
                 } catch (e) { /* silent */ }
             }
 
             function playTypingSound() {
-                playBeep(800 + Math.random() * 400, 0.03, 'square', 0.025);
-            }
-
-            function playGlitchSound() {
-                playBeep(60 + Math.random() * 200, 0.12, 'sawtooth', 0.06);
+                playTone(700 + Math.random() * 500, 0.025, 'square', 0.02);
             }
 
             function playBootSound() {
@@ -2245,326 +2640,205 @@
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(40, audioCtx.currentTime);
-                    osc.frequency.linearRampToValueAtTime(200, audioCtx.currentTime + 0.4);
-                    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+                    osc.frequency.setValueAtTime(35, audioCtx.currentTime);
+                    osc.frequency.linearRampToValueAtTime(220, audioCtx.currentTime + 0.45);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.55);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     osc.start(audioCtx.currentTime);
-                    osc.stop(audioCtx.currentTime + 0.5);
+                    osc.stop(audioCtx.currentTime + 0.55);
                 } catch (e) { /* silent */ }
             }
 
+            function playGlitchSound() {
+                playTone(50 + Math.random() * 180, 0.1, 'sawtooth', 0.05);
+            }
+
             function playClickSound() {
-                playBeep(1000, 0.04, 'square', 0.03);
+                playTone(1100, 0.03, 'square', 0.025);
             }
 
-            function triggerGlitchFlash() {
+            function playAmbientHum() {
+                if (!audioEnabled || !audioCtx) return;
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = 56;
+                    gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.02, audioCtx.currentTime + 1);
+                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 5);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime);
+                    osc.stop(audioCtx.currentTime + 5.5);
+                } catch (e) { /* silent */ }
+            }
+
+            // ───────────────────────────────────────
+            // GLITCH EFFECTS
+            // ───────────────────────────────────────
+            function triggerMicroGlitch() {
                 glitchFlash.classList.add('active');
-                setTimeout(() => glitchFlash.classList.remove('active'), 40 + Math.random() * 60);
+                scanlines.classList.add('intensify');
+                setTimeout(() => {
+                    glitchFlash.classList.remove('active');
+                    scanlines.classList.remove('intensify');
+                }, 35 + Math.random() * 50);
+                if (Math.random() < 0.5) playGlitchSound();
+            }
+
+            function triggerHeavyGlitch() {
+                glitchFlash.classList.add('active');
+                scanlines.classList.add('intensify');
+                overlay.classList.add('intro-shake');
                 playGlitchSound();
+                setTimeout(() => {
+                    glitchFlash.classList.remove('active');
+                    scanlines.classList.remove('intensify');
+                    overlay.classList.remove('intro-shake');
+                }, 140);
             }
 
-            function drawScanlines() {
-                // Scanlines are handled by CSS, but we add subtle variation
-                if (frameCount % 8 === 0 && Math.random() < 0.3) {
-                    scanlines.style.opacity = (0.04 + Math.random() * 0.04).toString();
-                }
-            }
-
-            function drawMatrixParticles() {
-                for (const p of particles) {
-                    p.y += p.speed;
-                    if (p.y > H + 10) {
-                        p.y = -10;
-                        p.x = Math.random() * W;
-                    }
-                    ctx.fillStyle = p.color;
-                    ctx.globalAlpha = p.opacity * (introPhase === 2 ? 0.5 : 1);
-                    ctx.fillRect(p.x, p.y, p.size, p.size * 3);
-                }
-                ctx.globalAlpha = 1;
-            }
-
-            function drawTerminal(elapsed) {
-                const fontSize = Math.min(16, W / 55);
-                const lineHeight = fontSize * 1.6;
-                const startX = W * 0.08;
-                const startY = H * 0.25;
-                ctx.font = `${fontSize}px 'Share Tech Mono', 'JetBrains Mono', monospace`;
-                ctx.textBaseline = 'top';
-
-                // Update typing
-                typingTimer += 0.016;
-                if (typingTimer >= TYPING_SPEED && currentLogIndex < terminalLogs.length) {
-                    typingTimer = 0;
-                    const log = terminalLogs[currentLogIndex];
-                    if (typedChars < log.text.length) {
-                        typedChars++;
-                        currentLogText = log.text.substring(0, typedChars);
-                        if (Math.random() < 0.7) playTypingSound();
-                    } else {
-                        terminalLines.push({ text: log.text, color: log.color, full: true });
-                        typedChars = 0;
-                        currentLogIndex++;
-                        currentLogText = '';
-                        if (currentLogIndex < terminalLogs.length) {
-                            // small gap
-                            typingTimer = -terminalLogs[currentLogIndex].delay + 0.016;
-                        }
-                    }
-                }
-
-                // Draw completed lines
-                for (let i = 0; i < terminalLines.length; i++) {
-                    const line = terminalLines[i];
-                    const y = startY + i * lineHeight;
-                    ctx.fillStyle = line.color;
-                    ctx.fillText(line.text, startX, y);
-                }
-
-                // Draw current typing line
-                if (currentLogIndex < terminalLogs.length && currentLogText) {
-                    const y = startY + terminalLines.length * lineHeight;
-                    ctx.fillStyle = terminalLogs[currentLogIndex].color;
-                    ctx.fillText(currentLogText, startX, y);
-                    // Blinking cursor
-                    if (Math.floor(elapsed * 4) % 2 === 0) {
-                        const textWidth = ctx.measureText(currentLogText).width;
-                        ctx.fillStyle = '#00ffcc';
-                        ctx.fillRect(startX + textWidth + 2, y + 2, fontSize * 0.6, fontSize * 0.85);
-                    }
-                }
-
-                // Glitch effect on terminal text
-                if (Math.random() < 0.015 && introPhase === 0) {
-                    triggerGlitchFlash();
-                }
-            }
-
-            function drawProgressBar(elapsed) {
-                const barWidth = Math.min(380, W * 0.6);
-                const barHeight = 4;
-                const barX = (W - barWidth) / 2;
-                const barY = H * 0.62;
-
-                // Glow track
-                ctx.fillStyle = 'rgba(0,212,255,0.1)';
-                ctx.fillRect(barX - 2, barY - 2, barWidth + 4, barHeight + 4);
-                ctx.fillStyle = 'rgba(0,0,0,0.6)';
-                ctx.fillRect(barX, barY, barWidth, barHeight);
-
-                // Progress fill with glow
-                const fillWidth = barWidth * (progressPercent / 100);
-                const gradient = ctx.createLinearGradient(barX, barY, barX + barWidth, barY);
-                gradient.addColorStop(0, '#00d4ff');
-                gradient.addColorStop(0.5, '#00ffcc');
-                gradient.addColorStop(1, '#00d4ff');
-                ctx.fillStyle = gradient;
-                ctx.fillRect(barX, barY, fillWidth, barHeight);
-
-                // Glow overlay
-                ctx.shadowColor = '#00d4ff';
-                ctx.shadowBlur = 14;
-                ctx.fillStyle = 'rgba(0,212,255,0.5)';
-                ctx.fillRect(barX, barY, fillWidth, barHeight);
-                ctx.shadowBlur = 0;
-
-                // Percentage text
-                const pctText = Math.floor(progressPercent) + '%';
-                ctx.fillStyle = '#00d4ff';
-                ctx.font = `${Math.min(28, W/25)}px 'Orbitron', 'JetBrains Mono', monospace`;
-                ctx.textAlign = 'center';
-                ctx.fillText(pctText, W / 2, barY - 32);
-                ctx.textAlign = 'start';
-
-                // HUD label
-                ctx.fillStyle = '#666';
-                ctx.font = `${Math.min(10, W/70)}px 'JetBrains Mono', monospace`;
-                ctx.textAlign = 'center';
-                ctx.fillText('INITIALIZING NEURAL INTERFACE', W / 2, barY + 18);
-                ctx.textAlign = 'start';
-            }
-
-            function drawWelcomeCard(elapsed) {
-                const cardW = Math.min(420, W * 0.75);
-                const cardH = 180;
-                const cardX = (W - cardW) / 2;
-                const cardY = (H - cardH) / 2;
-
-                // Card background with glassmorphism
-                ctx.fillStyle = `rgba(10,15,25,${0.7 * welcomeAlpha})`;
-                ctx.strokeStyle = `rgba(0,212,255,${0.5 * welcomeAlpha})`;
-                ctx.lineWidth = 1.5;
-                ctx.beginPath();
-                ctx.roundRect(cardX, cardY, cardW, cardH, 20);
-                ctx.fill();
-                ctx.stroke();
-
-                // Inner glow border
-                ctx.strokeStyle = `rgba(0,255,200,${0.2 * welcomeAlpha})`;
-                ctx.lineWidth = 4;
-                ctx.beginPath();
-                ctx.roundRect(cardX + 3, cardY + 3, cardW - 6, cardH - 6, 17);
-                ctx.stroke();
-
-                // Title
-                ctx.fillStyle = `rgba(0,255,200,${welcomeAlpha})`;
-                ctx.font = `bold ${Math.min(26,W/28)}px 'Orbitron', 'JetBrains Mono', monospace`;
-                ctx.textAlign = 'center';
-                ctx.fillText('WELCOME BACK', W / 2, cardY + 52);
-                ctx.textAlign = 'start';
-
-                // Subtitle
-                ctx.fillStyle = `rgba(200,220,240,${0.85 * welcomeAlpha})`;
-                ctx.font = `${Math.min(15,W/45)}px 'Inter', 'Noto Sans Bengali', sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.fillText('The Debug Point — Coding & Robotics Solution', W / 2, cardY + 95);
-                ctx.textAlign = 'start';
-
-                // Divider
-                ctx.strokeStyle = `rgba(0,212,255,${0.35 * welcomeAlpha})`;
-                ctx.lineWidth = 1;
-                ctx.beginPath();
-                ctx.moveTo(cardX + 40, cardY + 115);
-                ctx.lineTo(cardX + cardW - 40, cardY + 115);
-                ctx.stroke();
-
-                // Status
-                ctx.fillStyle = `rgba(0,255,136,${0.9 * welcomeAlpha})`;
-                ctx.font = `${Math.min(10,W/70)}px 'JetBrains Mono', monospace`;
-                ctx.textAlign = 'center';
-                ctx.fillText('● SYSTEM READY — CHITTAGONG, BD', W / 2, cardY + 142);
-                ctx.textAlign = 'start';
-            }
-
-            function drawHUDCorners(elapsed) {
-                const cornerSize = 28;
-                const margin = 22;
-                const alpha = introPhase >= 2 ? welcomeAlpha : 0.4;
-                ctx.strokeStyle = `rgba(0,212,255,${alpha})`;
-                ctx.lineWidth = 1.5;
-                // Top-left
-                ctx.beginPath();
-                ctx.moveTo(margin, margin + cornerSize);
-                ctx.lineTo(margin, margin);
-                ctx.lineTo(margin + cornerSize, margin);
-                ctx.stroke();
-                // Top-right
-                ctx.beginPath();
-                ctx.moveTo(W - margin - cornerSize, margin);
-                ctx.lineTo(W - margin, margin);
-                ctx.lineTo(W - margin, margin + cornerSize);
-                ctx.stroke();
-                // Bottom-left
-                ctx.beginPath();
-                ctx.moveTo(margin, H - margin - cornerSize);
-                ctx.lineTo(margin, H - margin);
-                ctx.lineTo(margin + cornerSize, H - margin);
-                ctx.stroke();
-                // Bottom-right
-                ctx.beginPath();
-                ctx.moveTo(W - margin - cornerSize, H - margin);
-                ctx.lineTo(W - margin, H - margin);
-                ctx.lineTo(W - margin, H - margin - cornerSize);
-                ctx.stroke();
-            }
-
-            function draw(elapsed) {
-                ctx.clearRect(0, 0, W, H);
-
-                // Background
-                const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.8);
-                bgGrad.addColorStop(0, '#0a1018');
-                bgGrad.addColorStop(1, '#020508');
-                ctx.fillStyle = bgGrad;
-                ctx.fillRect(0, 0, W, H);
-
-                drawMatrixParticles();
-                drawHUDCorners(elapsed);
-
-                if (introPhase === 0) {
-                    drawTerminal(elapsed);
-                } else if (introPhase === 1) {
-                    drawTerminal(elapsed);
-                    drawProgressBar(elapsed);
-                } else if (introPhase === 2) {
-                    drawWelcomeCard(elapsed);
-                    drawProgressBar(elapsed);
-                }
-
-                drawScanlines();
-            }
-
-            function transitionToPhase1() {
+            // ───────────────────────────────────────
+            // PHASE TRANSITIONS
+            // ───────────────────────────────────────
+            function transitionToLoading() {
                 introPhase = 1;
                 phaseStartTime = performance.now() / 1000;
                 progressPercent = 0;
                 playBootSound();
+                playAmbientHum();
             }
 
-            function transitionToPhase2() {
+            function transitionToWelcome() {
                 introPhase = 2;
                 phaseStartTime = performance.now() / 1000;
                 progressPercent = 100;
                 playClickSound();
+                // Show skip hint
+                skipHint.classList.add('visible');
             }
 
-            function transitionToMain() {
+            function transitionToMainSite() {
                 if (introComplete) return;
                 introComplete = true;
-                introPhase = 3;
+                introPhase = 4;
 
-                // Flash
+                triggerHeavyGlitch();
+
+                // White flash
                 const flash = document.createElement('div');
                 flash.style.cssText =
-                    'position:fixed;inset:0;z-index:100005;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.12s';
+                    'position:fixed;inset:0;z-index:100010;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.1s';
                 document.body.appendChild(flash);
                 requestAnimationFrame(() => {
-                    flash.style.opacity = '0.7';
-                    setTimeout(() => { flash.style.opacity = '0';
-                        setTimeout(() => flash.remove(), 180); }, 80);
+                    flash.style.opacity = '0.75';
+                    setTimeout(() => {
+                        flash.style.opacity = '0';
+                        setTimeout(() => flash.remove(), 180);
+                    }, 70);
                 });
 
                 // Fade overlay
-                overlay.classList.add('fading-out');
-                scanlines.style.opacity = '0';
-                crtCurve.classList.remove('active');
-                document.body.style.overflow = '';
-                mainSite.classList.add('visible');
+                setTimeout(() => {
+                    overlay.classList.add('fading-out');
+                    scanlines.style.opacity = '0';
+                    crtCurve.classList.remove('active');
+                    skipHint.style.opacity = '0';
+                    document.body.style.overflow = '';
+                    document.body.style.cursor = '';
+                    mainSite.classList.add('visible');
+                }, 100);
 
+                // Cleanup
                 setTimeout(() => {
                     overlay.classList.add('removed');
                     overlay.style.display = 'none';
                     scanlines.style.display = 'none';
                     crtCurve.style.display = 'none';
                     glitchFlash.style.display = 'none';
+                    skipHint.style.display = 'none';
                     initMainSiteScripts();
-                }, 650);
+                }, 700);
             }
 
+            function requestSkip() {
+                if (skipRequested || introComplete) return;
+                skipRequested = true;
+                // Fast-forward: complete terminal, jump to welcome, then transition
+                while (currentLogIndex < terminalLogs.length) {
+                    const log = terminalLogs[currentLogIndex];
+                    completedLines.push({
+                        text: log.text,
+                        color: log.color,
+                        prefix: log.prefix,
+                        ok: log.ok || false,
+                        glow: log.glow || false,
+                    });
+                    currentLogIndex++;
+                }
+                currentTypedText = '';
+                typedCharCount = 0;
+                introPhase = 2;
+                phaseStartTime = performance.now() / 1000;
+                progressPercent = 100;
+                welcomeAlpha = 1;
+                playClickSound();
+                // Quick transition after a brief moment
+                setTimeout(() => {
+                    transitionToMainSite();
+                }, 600);
+            }
+
+            // ───────────────────────────────────────
+            // RESIZE HANDLER
+            // ───────────────────────────────────────
+            function resize() {
+                W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = W;
+                canvas.height = H;
+                if (particles.length === 0) initParticles();
+                // Re-clamp particles to new bounds
+                for (const p of particles) {
+                    if (p.x > W) p.x = Math.random() * W;
+                    if (p.y > H) p.y = Math.random() * H;
+                }
+            }
+            window.addEventListener('resize', resize);
+            resize();
+            initParticles();
+
+            // ───────────────────────────────────────
+            // ANIMATION LOOP
+            // ───────────────────────────────────────
             function animateIntro(timestamp) {
                 if (introComplete) return;
                 const elapsed = (timestamp - introStartTime) / 1000;
+                const dt = Math.min(0.1, 1 / 60); // clamp dt
                 frameCount++;
 
-                // Phase transitions
-                if (introPhase === 0 && elapsed > 2.5) {
-                    transitionToPhase1();
-                }
-                if (introPhase === 1) {
-                    const phaseElapsed = (timestamp / 1000) - phaseStartTime;
-                    progressPercent = Math.min(100, phaseElapsed * 72);
-                    if (progressPercent >= 100 && phaseElapsed > 1.5) {
-                        transitionToPhase2();
+                updateParticles();
+
+                if (introPhase === 0) {
+                    updateTyping(dt);
+                    // Auto-transition after terminal logs complete
+                    if (currentLogIndex >= terminalLogs.length && elapsed > 2.3) {
+                        transitionToLoading();
                     }
-                }
-                if (introPhase === 2) {
+                } else if (introPhase === 1) {
                     const phaseElapsed = (timestamp / 1000) - phaseStartTime;
-                    welcomeAlpha = Math.min(1, phaseElapsed * 2.5);
-                    if (phaseElapsed > 1.8) {
-                        transitionToMain();
+                    progressPercent = Math.min(100, phaseElapsed * 68);
+                    if (progressPercent >= 100 && phaseElapsed > 1.6) {
+                        transitionToWelcome();
+                    }
+                } else if (introPhase === 2) {
+                    const phaseElapsed = (timestamp / 1000) - phaseStartTime;
+                    welcomeAlpha = Math.min(1, phaseElapsed * 2.8);
+                    if (phaseElapsed > 2.0) {
+                        transitionToMainSite();
                         return;
                     }
                 }
@@ -2573,19 +2847,59 @@
                 requestAnimationFrame(animateIntro);
             }
 
-            // Handle click to init audio (browser policy)
-            document.addEventListener('click', initAudio, { once: true });
-            document.addEventListener('touchstart', initAudio, { once: true });
-            // Also try immediately (some browsers allow it in certain contexts)
-            initAudio();
+            // ───────────────────────────────────────
+            // USER INTERACTION — AUDIO INIT + SKIP
+            // ───────────────────────────────────────
+            function handleFirstInteraction() {
+                initAudio();
+                document.removeEventListener('click', handleFirstInteraction);
+                document.removeEventListener('touchstart', handleFirstInteraction);
+                document.removeEventListener('keydown', handleFirstInteractionKey);
+            }
 
-            // Start
+            function handleFirstInteractionKey(e) {
+                initAudio();
+                document.removeEventListener('click', handleFirstInteraction);
+                document.removeEventListener('touchstart', handleFirstInteraction);
+                document.removeEventListener('keydown', handleFirstInteractionKey);
+                // Also check for skip
+                if (e.key && introPhase < 2) {
+                    requestSkip();
+                }
+            }
+
+            document.addEventListener('click', handleFirstInteraction, { once: true });
+            document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+            document.addEventListener('keydown', handleFirstInteractionKey, { once: true });
+
+            // Global skip listener (any key after audio init)
+            document.addEventListener('keydown', function skipListener(e) {
+                if (introComplete) {
+                    document.removeEventListener('keydown', skipListener);
+                    return;
+                }
+                if (e.key && introPhase < 2 && !skipRequested) {
+                    requestSkip();
+                }
+            });
+
+            // Skip hint click
+            skipHint.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!skipRequested && introPhase < 3) requestSkip();
+            });
+
+            // ───────────────────────────────────────
+            // START THE INTRO
+            // ───────────────────────────────────────
+            document.body.style.overflow = 'hidden';
+            document.body.style.cursor = 'none';
             introStartTime = performance.now();
             requestAnimationFrame(animateIntro);
 
-            // ─────────────────────────────────────
-            // 2. FIREBASE INTEGRATION
-            // ─────────────────────────────────────
+            // ───────────────────────────────────────
+            // FIREBASE INTEGRATION
+            // ───────────────────────────────────────
             window.FIREBASE_READY = false;
             window.db = null;
             window.firebaseApp = null;
@@ -2593,7 +2907,7 @@
             window.isAdmin = false;
 
             const firebaseConfig = {
-                apiKey: "AIzaSyD-PLACEHOLDER-KEY", // ⚠️ REPLACE with your actual Firebase API key
+                apiKey: "AIzaSyD-PLACEHOLDER-KEY",
                 authDomain: "ctg-1st-web.firebaseapp.com",
                 databaseURL: "https://ctg-1st-web-default-rtdb.firebaseio.com/",
                 projectId: "ctg-1st-web",
@@ -2623,9 +2937,6 @@
                 }
             }
 
-            // ─────────────────────────────────────
-            // 3. USER PROFILE SYSTEM
-            // ─────────────────────────────────────
             function getOrCreateUserId() {
                 let uid = localStorage.getItem('tdp_user_uid');
                 if (!uid) {
@@ -2655,7 +2966,6 @@
                 }).catch(() => {
                     updateProfileUI('User', false);
                 });
-                // Listen for changes
                 userRef.on('value', snap => {
                     const data = snap.val() || {};
                     updateProfileUI(data.username || 'User', !!data.isAdmin);
@@ -2676,11 +2986,26 @@
                 if (footerAdmin) footerAdmin.style.opacity = isAdminFlag ? '1' : '0.4';
             }
 
-            // ─────────────────────────────────────
-            // 4. ADMIN PANEL SYSTEM
-            // ─────────────────────────────────────
-            const adminPanel = document.getElementById('adminPanel');
-            const adminPanelOverlay = document.getElementById('adminPanelOverlay');
+            function loadSiteSettings() {
+                if (!window.FIREBASE_READY || !window.db) return;
+                window.db.ref('admin/siteSettings').once('value').then(snap => {
+                    const s = snap.val() || {};
+                    if (s.announcement) {
+                        const bar = document.getElementById('announcementBar');
+                        if (bar) bar.innerHTML = s.announcement + ' <span>এখনই ভিজিট করুন</span> →';
+                    }
+                }).catch(() => {});
+            }
+
+            function escapeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // ───────────────────────────────────────
+            // ADMIN PANEL LOGIC
+            // ───────────────────────────────────────
             let adminPanelOpen = false;
 
             function openAdminPanel() {
@@ -2688,8 +3013,8 @@
                     showAdminLoginModal();
                     return;
                 }
-                adminPanel.classList.add('active');
-                adminPanelOverlay.classList.add('active');
+                document.getElementById('adminPanel').classList.add('active');
+                document.getElementById('adminPanelOverlay').classList.add('active');
                 adminPanelOpen = true;
                 document.body.style.overflow = 'hidden';
                 loadAdminProjects();
@@ -2698,8 +3023,8 @@
             }
 
             function closeAdminPanel() {
-                adminPanel.classList.remove('active');
-                adminPanelOverlay.classList.remove('active');
+                document.getElementById('adminPanel').classList.remove('active');
+                document.getElementById('adminPanelOverlay').classList.remove('active');
                 adminPanelOpen = false;
                 document.body.style.overflow = '';
             }
@@ -2740,8 +3065,7 @@
                     const storedPin = snap.val() || '1234';
                     if (pin === storedPin) {
                         window.isAdmin = true;
-                        const userRef = window.db.ref('users/' + window.currentUserUid);
-                        userRef.update({ isAdmin: true });
+                        window.db.ref('users/' + window.currentUserUid).update({ isAdmin: true });
                         updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
                         hideAdminLoginModal();
                         openAdminPanel();
@@ -2761,7 +3085,6 @@
                 });
             }
 
-            // Admin Projects CRUD
             function loadAdminProjects() {
                 const listEl = document.getElementById('adminProjectsList');
                 if (!listEl) return;
@@ -2825,32 +3148,6 @@
                 }
             }
 
-            window.editAdminProject = function(id) {
-                if (!window.FIREBASE_READY || !window.db) return;
-                window.db.ref('projects/' + id).once('value').then(snap => {
-                    const p = snap.val();
-                    if (!p) return;
-                    document.getElementById('adminProjTitle').value = p.title || '';
-                    document.getElementById('adminProjCat').value = p.category || 'Robotics';
-                    document.getElementById('adminProjDesc').value = p.description || '';
-                    document.getElementById('adminProjTags').value = p.tags || '';
-                    document.getElementById('adminProjBestFor').value = p.bestFor || '';
-                    document.getElementById('adminProjEditId').value = id;
-                    document.getElementById('adminProjSaveBtn').textContent = '✏ Update Project';
-                    document.getElementById('adminProjCancelEdit').style.display = 'inline-block';
-                    document.getElementById('adminContent').scrollTop = 0;
-                });
-            };
-
-            window.deleteAdminProject = function(id) {
-                if (!window.FIREBASE_READY || !window.db) return;
-                if (!confirm('Delete this project permanently?')) return;
-                window.db.ref('projects/' + id).remove().then(() => {
-                    showToast('Project deleted');
-                    loadAdminProjects();
-                }).catch(() => showToast('Delete failed', true));
-            };
-
             function resetAdminProjectForm() {
                 document.getElementById('adminProjTitle').value = '';
                 document.getElementById('adminProjCat').value = 'Robotics';
@@ -2893,24 +3190,6 @@
                 });
             }
 
-            window.editAdminUsername = function(uid) {
-                const newName = prompt('Enter new username:');
-                if (!newName || !newName.trim()) return;
-                if (!window.FIREBASE_READY || !window.db) return;
-                window.db.ref('users/' + uid).update({ username: newName.trim() }).then(() => {
-                    showToast('Username updated');
-                    loadAdminUsers();
-                }).catch(() => showToast('Update failed', true));
-            };
-
-            window.toggleAdminUser = function(uid, makeAdmin) {
-                if (!window.FIREBASE_READY || !window.db) return;
-                window.db.ref('users/' + uid).update({ isAdmin: makeAdmin }).then(() => {
-                    showToast(makeAdmin ? 'Admin granted' : 'Admin revoked');
-                    loadAdminUsers();
-                }).catch(() => showToast('Toggle failed', true));
-            };
-
             function loadAdminSettings() {
                 if (!window.FIREBASE_READY || !window.db) return;
                 window.db.ref('admin/siteSettings').once('value').then(snap => {
@@ -2935,33 +3214,63 @@
                     showToast('Settings saved!');
                     if (announcement) {
                         const bar = document.getElementById('announcementBar');
-                        if (bar) bar.innerHTML = announcement +
-                            ' <span>এখনই ভিজিট করুন</span> →';
+                        if (bar) bar.innerHTML = announcement + ' <span>এখনই ভিজিট করুন</span> →';
                     }
                 }).catch(() => showToast('Save failed', true));
             }
 
-            function loadSiteSettings() {
+            // ───────────────────────────────────────
+            // GLOBAL EXPORTS
+            // ───────────────────────────────────────
+            window.editAdminProject = function(id) {
                 if (!window.FIREBASE_READY || !window.db) return;
-                window.db.ref('admin/siteSettings').once('value').then(snap => {
-                    const s = snap.val() || {};
-                    if (s.announcement) {
-                        const bar = document.getElementById('announcementBar');
-                        if (bar) bar.innerHTML = s.announcement +
-                            ' <span>এখনই ভিজিট করুন</span> →';
-                    }
-                }).catch(() => {});
-            }
+                window.db.ref('projects/' + id).once('value').then(snap => {
+                    const p = snap.val();
+                    if (!p) return;
+                    document.getElementById('adminProjTitle').value = p.title || '';
+                    document.getElementById('adminProjCat').value = p.category || 'Robotics';
+                    document.getElementById('adminProjDesc').value = p.description || '';
+                    document.getElementById('adminProjTags').value = p.tags || '';
+                    document.getElementById('adminProjBestFor').value = p.bestFor || '';
+                    document.getElementById('adminProjEditId').value = id;
+                    document.getElementById('adminProjSaveBtn').textContent = '✏ Update Project';
+                    document.getElementById('adminProjCancelEdit').style.display = 'inline-block';
+                    document.getElementById('adminContent').scrollTop = 0;
+                });
+            };
+            window.deleteAdminProject = function(id) {
+                if (!window.FIREBASE_READY || !window.db) return;
+                if (!confirm('Delete this project permanently?')) return;
+                window.db.ref('projects/' + id).remove().then(() => {
+                    showToast('Project deleted');
+                    loadAdminProjects();
+                }).catch(() => showToast('Delete failed', true));
+            };
+            window.editAdminUsername = function(uid) {
+                const newName = prompt('Enter new username:');
+                if (!newName || !newName.trim()) return;
+                if (!window.FIREBASE_READY || !window.db) return;
+                window.db.ref('users/' + uid).update({ username: newName.trim() }).then(() => {
+                    showToast('Username updated');
+                    loadAdminUsers();
+                }).catch(() => showToast('Update failed', true));
+            };
+            window.toggleAdminUser = function(uid, makeAdmin) {
+                if (!window.FIREBASE_READY || !window.db) return;
+                window.db.ref('users/' + uid).update({ isAdmin: makeAdmin }).then(() => {
+                    showToast(makeAdmin ? 'Admin granted' : 'Admin revoked');
+                    loadAdminUsers();
+                }).catch(() => showToast('Toggle failed', true));
+            };
+            window.openAdminPanel = openAdminPanel;
+            window.closeAdminPanel = closeAdminPanel;
+            window.showToast = showToast;
+            window.escapeHTML = escapeHTML;
+            window.updateProfileUI = updateProfileUI;
 
-            function escapeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            // ─────────────────────────────────────
-            // 5. EVENT BINDINGS
-            // ─────────────────────────────────────
+            // ───────────────────────────────────────
+            // EVENT BINDINGS
+            // ───────────────────────────────────────
             document.getElementById('adminCloseBtn').addEventListener('click', closeAdminPanel);
             document.getElementById('adminPanelOverlay').addEventListener('click', closeAdminPanel);
             document.getElementById('footerAdminLink').addEventListener('click', () => {
@@ -2983,26 +3292,21 @@
             document.getElementById('adminProjSaveBtn').addEventListener('click', saveAdminProject);
             document.getElementById('adminProjCancelEdit').addEventListener('click', resetAdminProjectForm);
             document.getElementById('adminSettingsSaveBtn').addEventListener('click', saveAdminSettings);
-
-            // Admin tabs
             document.querySelectorAll('.admin-tab').forEach(tab => {
                 tab.addEventListener('click', function() {
-                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove(
-                        'active'));
+                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
-                    const tabName = this.dataset.tab;
-                    document.getElementById('adminTabProjects').style.display = tabName ===
-                        'projects' ? '' : 'none';
-                    document.getElementById('adminTabUsers').style.display = tabName === 'users' ?
+                    const tn = this.dataset.tab;
+                    document.getElementById('adminTabProjects').style.display = tn === 'projects' ?
                         '' : 'none';
-                    document.getElementById('adminTabSettings').style.display = tabName ===
-                        'settings' ? '' : 'none';
-                    if (tabName === 'users') loadAdminUsers();
-                    if (tabName === 'settings') loadAdminSettings();
+                    document.getElementById('adminTabUsers').style.display = tn === 'users' ? '' :
+                        'none';
+                    document.getElementById('adminTabSettings').style.display = tn === 'settings' ?
+                        '' : 'none';
+                    if (tn === 'users') loadAdminUsers();
+                    if (tn === 'settings') loadAdminSettings();
                 });
             });
-
-            // Profile dropdown
             document.getElementById('navProfileIcon').addEventListener('click', (e) => {
                 e.stopPropagation();
                 document.getElementById('navProfileDropdown').classList.toggle('open');
@@ -3010,8 +3314,8 @@
             document.getElementById('profileEditUsername').addEventListener('click', () => {
                 document.getElementById('navProfileDropdown').classList.remove('open');
                 document.getElementById('usernameModalOverlay').classList.add('active');
-                document.getElementById('usernameModalInput').value = document.getElementById('navProfileName')
-                    .textContent || '';
+                document.getElementById('usernameModalInput').value = document.getElementById(
+                    'navProfileName').textContent || '';
                 document.getElementById('usernameModalInput').focus();
             });
             document.getElementById('usernameModalSave').addEventListener('click', () => {
@@ -3039,8 +3343,6 @@
             document.addEventListener('click', () => {
                 document.getElementById('navProfileDropdown').classList.remove('open');
             });
-
-            // Keyboard shortcut
             document.addEventListener('keydown', (e) => {
                 if (e.ctrlKey && e.shiftKey && e.key === 'A') {
                     e.preventDefault();
@@ -3054,32 +3356,40 @@
                 }
             });
 
-            // ─────────────────────────────────────
-            // 6. INIT FIREBASE ON DOM READY
-            // ─────────────────────────────────────
+            // ───────────────────────────────────────
+            // INIT FIREBASE
+            // ───────────────────────────────────────
             initFirebase();
 
-            // ─────────────────────────────────────
-            // 7. GLOBAL FUNCTION EXPORTS
-            // ─────────────────────────────────────
-            window.openAdminPanel = openAdminPanel;
-            window.closeAdminPanel = closeAdminPanel;
-            window.showAdminLoginModal = showAdminLoginModal;
-            window.verifyAdminPin = verifyAdminPin;
-            window.saveAdminProject = saveAdminProject;
-            window.resetAdminProjectForm = resetAdminProjectForm;
-            window.loadAdminProjects = loadAdminProjects;
-            window.loadAdminUsers = loadAdminUsers;
-            window.saveAdminSettings = saveAdminSettings;
-            window.escapeHTML = escapeHTML;
-            window.showToast = showToast;
-            window.updateProfileUI = updateProfileUI;
-        })();
+        })(); // END INTRO + APP IIFE
 
-        // ─────────────────────────────────────
-        // 8. MAIN SITE SCRIPTS (preserved)
-        // ─────────────────────────────────────
+        // ───────────────────────────────────────
+        // Polyfill: CanvasRenderingContext2D.roundRect
+        // ───────────────────────────────────────
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r };
+                this.beginPath();
+                this.moveTo(x + r.tl, y);
+                this.lineTo(x + w - r.tr, y);
+                this.quadraticCurveTo(x + w, y, x + w, y + r.tr);
+                this.lineTo(x + w, y + h - r.br);
+                this.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
+                this.lineTo(x + r.bl, y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - r.bl);
+                this.lineTo(x, y + r.tl);
+                this.quadraticCurveTo(x, y, x + r.tl, y);
+                this.closePath();
+            };
+        }
+
+        // ───────────────────────────────────────
+        // MAIN SITE SCRIPTS (preserved)
+        // ───────────────────────────────────────
         function initMainSiteScripts() {
+            if (window._mainSiteScriptsInitialized) return;
+            window._mainSiteScriptsInitialized = true;
+
             window.toggleNav = function() {
                 document.getElementById('navLinks').classList.toggle('open');
             };
@@ -3110,8 +3420,8 @@
                 }
                 cursorTrail.classList.add('active');
                 updateTrail();
-                window.addEventListener('touchstart', () => { if (cursorTrail) cursorTrail.style.opacity = '0'; }, {
-                    once: true });
+                window.addEventListener('touchstart', () => { if (cursorTrail) cursorTrail.style.opacity =
+                    '0'; }, { once: true });
             }
             const heroGrid = document.getElementById('heroGrid'),
                 heroGlow = document.getElementById('heroGlow'),
@@ -3155,24 +3465,6 @@
                     card.style.display = (type === 'all' || cat === type) ? '' : 'none';
                     card.dataset.hidden = (type === 'all' || cat === type) ? 'false' : 'true';
                 });
-            };
-        }
-
-        // Polyfill for roundRect if needed
-        if (!CanvasRenderingContext2D.prototype.roundRect) {
-            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-                if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r };
-                this.beginPath();
-                this.moveTo(x + r.tl, y);
-                this.lineTo(x + w - r.tr, y);
-                this.quadraticCurveTo(x + w, y, x + w, y + r.tr);
-                this.lineTo(x + w, y + h - r.br);
-                this.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
-                this.lineTo(x + r.bl, y + h);
-                this.quadraticCurveTo(x, y + h, x, y + h - r.bl);
-                this.lineTo(x, y + r.tl);
-                this.quadraticCurveTo(x, y, x + r.tl, y);
-                this.closePath();
             };
         }
     </script>
