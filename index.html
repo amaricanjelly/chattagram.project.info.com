@@ -461,27 +461,20 @@
             cursor: pointer;
         }
         .nav-profile-icon {
-            width: 34px;
-            height: 34px;
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             background: rgba(0, 212, 255, 0.15);
-            border: 2px solid rgba(0, 212, 255, 0.4);
+            border: 1.5px solid rgba(0, 212, 255, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: #00d4ff;
             transition: all 0.25s;
             flex-shrink: 0;
-            overflow: hidden;
-        }
-        .nav-profile-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
         }
         .nav-profile-icon:hover {
             border-color: #00d4ff;
@@ -508,7 +501,7 @@
             border: 1px solid rgba(0, 212, 255, 0.25);
             border-radius: 12px;
             padding: 0.5rem 0;
-            min-width: 200px;
+            min-width: 170px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             opacity: 0;
             pointer-events: none;
@@ -522,17 +515,14 @@
             transform: translateY(0);
         }
         .nav-profile-dropdown-item {
-            padding: 10px 16px;
-            font-size: 0.75rem;
+            padding: 8px 16px;
+            font-size: 0.7rem;
             color: #ccc;
             cursor: pointer;
             transition: all 0.2s;
             font-family: 'Inter', 'Noto Sans Bengali', sans-serif;
             letter-spacing: 0.01em;
             white-space: nowrap;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
         .nav-profile-dropdown-item:hover {
             background: rgba(0, 212, 255, 0.08);
@@ -544,77 +534,119 @@
             margin: 4px 0;
         }
 
-        /* Google Sign-in Banner */
-        .auth-banner {
+        /* ═══════ MODAL ═══════ */
+        .modal-overlay {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            background: rgba(10, 14, 22, 0.96);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(0, 212, 255, 0.4);
-            border-radius: 24px;
-            padding: 2rem;
-            text-align: center;
+            inset: 0;
             z-index: 99995;
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
-            color: #ddd;
-            max-width: 360px;
-            width: 90%;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.4s, transform 0.4s;
+            transition: opacity 0.3s;
         }
-        .auth-banner.show {
+        .modal-overlay.active {
             opacity: 1;
             pointer-events: auto;
-            transform: translate(-50%, -50%) scale(1);
         }
-        .auth-banner h4 {
-            font-family: 'Orbitron', sans-serif;
-            color: #00d4ff;
-            margin-bottom: 0.5rem;
+        .modal-box {
+            background: rgba(15, 20, 30, 0.97);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 16px;
+            padding: 1.8rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
+            text-align: center;
         }
-        .auth-banner p {
+        .modal-title {
+            font-family: 'Orbitron', 'JetBrains Mono', monospace;
             font-size: 0.8rem;
-            margin-bottom: 1.2rem;
-            color: #aaa;
+            font-weight: 700;
+            color: #00d4ff;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
         }
-        .google-signin-btn {
-            background: #fff;
-            color: #333;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: 600;
+        .modal-input {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #ddd;
+            font-family: 'Inter', sans-serif;
             font-size: 0.85rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.3s;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+            outline: none;
+            margin-bottom: 0.8rem;
+            transition: all 0.25s;
         }
-        .google-signin-btn:hover {
-            box-shadow: 0 6px 20px rgba(255,255,255,0.2);
-            transform: translateY(-2px);
+        .modal-input:focus {
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.05);
         }
-        .auth-banner-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #777;
-            font-size: 1.2rem;
+        .modal-btn-row {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .modal-btn {
+            padding: 9px 20px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
             cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.25s;
+            text-transform: uppercase;
+        }
+        .modal-btn-confirm {
+            background: #00d4ff;
+            color: #000;
+            font-weight: 700;
+        }
+        .modal-btn-confirm:hover {
+            background: #00bce6;
+            box-shadow: 0 0 16px rgba(0, 212, 255, 0.3);
+        }
+        .modal-btn-cancel {
+            background: transparent;
+            color: #999;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        .modal-btn-cancel:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
-        /* ── All remaining original main site CSS (hero, services, projects, etc.) preserved exactly as before ── */
-        /* ... (I'll include the full original CSS for all sections, but for brevity in this response I'll represent it as continued) ... */
-        /* Actually, I need to output the whole CSS. I'll write the full CSS block now. */
+        /* ═══════ RESPONSIVE ADMIN ═══════ */
+        @media (max-width: 500px) {
+            .admin-panel {
+                width: 100%;
+                max-width: 100%;
+                right: -105%;
+            }
+            .admin-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .admin-item-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
 
-        /* ── Rest of original site styles (condensed but complete) ── */
+        /* ═══════════════════════════════════════════
+           MAIN WEBSITE STYLES (preserved)
+           ═══════════════════════════════════════════ */
         :root {
             --bg: #ffffff;
             --bg-alt: #f7f8fa;
@@ -674,6 +706,7 @@
             letter-spacing: -0.01em;
             overflow-x: hidden;
             position: relative;
+            cursor: default;
         }
         body::before {
             content: '';
@@ -978,6 +1011,9 @@
             transition: var(--transition);
             letter-spacing: 0.01em;
             white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            outline: none;
         }
         .btn-primary {
             background: var(--accent);
@@ -989,6 +1025,10 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 28px rgba(0, 212, 255, 0.32);
         }
+        .btn-primary:active {
+            transform: scale(0.96);
+            transition: transform 0.1s;
+        }
         .btn-secondary {
             background: transparent;
             color: var(--text);
@@ -999,6 +1039,9 @@
             background: rgba(0, 0, 0, 0.02);
             transform: translateY(-3px);
             box-shadow: var(--shadow-sm);
+        }
+        .btn-secondary:active {
+            transform: scale(0.96);
         }
         .hero-note {
             display: inline-flex;
@@ -1535,6 +1578,50 @@
             padding: 2px 7px;
             border-radius: 4px;
         }
+        .sci-bestfor {
+            margin-top: 0.9rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+        .sci-bestfor-label {
+            font-size: 0.68rem;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        .sci-level-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 3px;
+        }
+        .sci-level-name {
+            font-size: 0.66rem;
+            color: var(--text);
+            font-weight: 600;
+            min-width: 68px;
+        }
+        .sci-pct-track {
+            flex: 1;
+            height: 3px;
+            background: #e8eaed;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .sci-pct-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: var(--accent);
+            transition: width 0.45s ease;
+        }
+        .sci-pct-num {
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            min-width: 28px;
+            text-align: right;
+        }
         .filter-bar {
             display: flex;
             flex-wrap: wrap;
@@ -1575,6 +1662,40 @@
             font-weight: 600;
             box-shadow: 0 2px 10px rgba(0, 212, 255, 0.2);
         }
+        .search-wrap {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .search-wrap input {
+            width: 100%;
+            padding: 11px 14px 11px 40px;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            transition: var(--transition-fast);
+            letter-spacing: 0.01em;
+        }
+        .search-wrap input:focus {
+            border-color: var(--border-accent);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.06);
+        }
+        .search-wrap input::placeholder {
+            color: var(--text-muted);
+        }
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            width: 16px;
+            height: 16px;
+        }
         .youtube-note {
             display: flex;
             align-items: flex-start;
@@ -1588,6 +1709,26 @@
             font-size: 0.85rem;
             color: #3a5070;
             line-height: 1.65;
+        }
+        .youtube-note-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            color: #4a90d9;
+            margin-top: 1px;
+        }
+        .youtube-note-warning {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: #6b5500;
+            background: #fffef5;
+            border: 1px solid rgba(200, 160, 40, 0.25);
+            border-radius: 6px;
+            padding: 4px 10px;
+            margin-top: 6px;
         }
         .contact-card {
             max-width: 500px;
@@ -1704,7 +1845,10 @@
             color: var(--accent);
             opacity: 1;
         }
-        /* Support floating widget styles (preserved) */
+
+        /* ═══════════════════════════════════════════
+           SUPPORT FLOATING WIDGET
+           ═══════════════════════════════════════════ */
         .support-float-btn {
             position: fixed;
             bottom: 90px;
@@ -1891,17 +2035,31 @@
         }
         .support-send-btn:hover { background: #00bce6; box-shadow: 0 0 14px rgba(0,212,255,0.4); }
         .support-send-btn svg { width: 16px; height: 16px; fill: #000; }
-        .typing-indicator {
-            font-size: 0.65rem;
-            color: #aaa;
-            margin-left: 8px;
-            display: none;
+
+        /* Password modal */
+        #secretPasswordModal {
+            z-index: 99997;
+        }
+
+        @media (max-width: 768px) {
+            .support-widget {
+                right: 8px;
+                bottom: 140px;
+                width: calc(100vw - 20px);
+                max-width: 400px;
+            }
+            .support-float-btn {
+                right: 12px;
+                bottom: 80px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ═══════════════ INTRO OVERLAY ═══════════════ -->
+    <!-- ═══════════════════════════════════════════
+    eDEX-UI INSPIRED CINEMATIC INTRO OVERLAY
+    ═══════════════════════════════════════════ -->
     <div id="intro-overlay">
         <canvas id="intro-canvas"></canvas>
         <div class="intro-scanlines" id="introScanlines"></div>
@@ -1910,22 +2068,10 @@
         <div class="intro-skip-hint" id="introSkipHint">PRESS ANY KEY TO SKIP</div>
     </div>
 
-    <!-- ═══════════════ MAIN SITE ═══════════════ -->
+    <!-- ═══════════ MAIN SITE ═══════════ -->
     <div id="main-site">
-        <!-- Google Sign-in Banner -->
-        <div class="auth-banner" id="authBanner">
-            <button class="auth-banner-close" id="authBannerClose">✕</button>
-            <h4>🔐 Sign in with Google</h4>
-            <p>Save your chat history, sync across devices, and get premium support experience.</p>
-            <button class="google-signin-btn" id="googleSignInBtn">
-                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                Sign in with Google
-            </button>
-            <p style="font-size:0.7rem; margin-top:0.8rem; color:#666;">No account? Continue as guest</p>
-        </div>
-
         <div class="cursor-trail" id="cursorTrail"></div>
-        <div class="announcement-bar" id="announcementBar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')">
+        <div class="announcement-bar" id="announcementBar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')" role="button" tabindex="0" aria-label="Visit premium code website">
             প্রিমিয়াম কোড কিনতে আমাদের ওয়েবসাইটে <span>এখনই ভিজিট করুন</span> →
         </div>
         <nav class="navbar" id="navbar">
@@ -1944,18 +2090,11 @@
                     <li><a href="#contact" class="nav-cta">যোগাযোগ</a></li>
                 </ul>
                 <div class="nav-profile-wrap" id="navProfileWrap" style="display:none;">
-                    <div class="nav-profile-icon" id="navProfileIcon"></div>
+                    <div class="nav-profile-icon" id="navProfileIcon">?</div>
                     <span class="nav-profile-name" id="navProfileName">User</span>
                     <div class="nav-profile-dropdown" id="navProfileDropdown">
-                        <div class="nav-profile-dropdown-item" style="pointer-events:none; flex-direction: column; align-items: flex-start; gap:2px;">
-                            <span id="profileDisplayName" style="font-weight:600;"></span>
-                            <span id="profileEmailDisplay" style="font-size:0.65rem;color:#888;"></span>
-                        </div>
+                        <div class="nav-profile-dropdown-item" id="profileEditUsername">✎ Username Edit</div>
                         <div class="nav-profile-dropdown-divider"></div>
-                        <div class="nav-profile-dropdown-item" id="profileEditUsername">✎ Edit Username</div>
-                        <div class="nav-profile-dropdown-item" id="profileSignIn" style="display:none;">🔐 Sign in with Google</div>
-                        <div class="nav-profile-dropdown-item" id="profileLogout" style="display:none;">🚪 Logout</div>
-                        <div class="nav-profile-dropdown-divider" id="profileAdminDivider" style="display:none;"></div>
                         <div class="nav-profile-dropdown-item" id="profileAdminPanel" style="display:none;">⚙ Admin Panel</div>
                     </div>
                 </div>
@@ -1964,7 +2103,6 @@
                 </button>
             </div>
         </nav>
-
         <section class="hero" id="hero">
             <div class="hero-bg">
                 <div class="hero-bg-grid" id="heroGrid"></div>
@@ -2002,7 +2140,6 @@
                 </div>
             </div>
         </section>
-
         <section class="section section-alt reveal-section reveal-right" id="services">
             <div class="container">
                 <div class="section-header"><div class="section-eyebrow">What We Do</div><h2 class="section-title">আমাদের সার্ভিসসমূহ</h2><div class="section-line"></div></div>
@@ -2015,7 +2152,6 @@
                 </div>
             </div>
         </section>
-
         <hr class="section-divider">
         <section class="section reveal-section reveal-left" id="featured">
             <div class="container">
@@ -2037,44 +2173,44 @@
                 </div>
             </div>
         </section>
-
-        <!-- ... Rest of sections (projects, science, contact, footer) identical to original ... -->
-        <!-- Keep them exactly as they were in your original code, I'll include placeholder but you can copy paste rest -->
-        <!-- For the sake of this answer's length, I'll condense the repeated blocks, but in the real file they are present -->
-
         <hr class="section-divider">
         <section class="section section-alt reveal-section reveal-right" id="projects">
             <div class="container">
                 <div class="section-header"><div class="section-eyebrow">Our Work</div><h2 class="section-title">Robotics &amp; IoT প্রজেক্ট</h2><div class="section-line"></div></div>
                 <div class="card-grid" id="projectsGrid">
-                    <!-- projects loaded dynamically if needed, but original had static HTML. Keep them -->
-                    <div class="project-card reveal-card">...</div>
-                    <!-- etc. I'll omit repetition for brevity but they are in final file -->
+                    <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#01</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Human Following Robot</p><p class="project-card-desc">IR Sensor ও Ultrasonic Sensor ব্যবহার করে সামনের মানুষকে চিনে গতিপথ নির্ধারণ করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#02</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Fingerprint Door Lock System</p><p class="project-card-desc">বায়োমেট্রিক Fingerprint Sensor — Registered আঙুলের ছাপ মিললে দরজা খুলে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d2"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#03</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">RFID Door Lock System</p><p class="project-card-desc">RFID Card বা Keychain Tap করলে দরজা খুলে যায়। Office, Hostel, Lab এর জন্য আদর্শ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d3"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><span class="project-card-num">#04</span></div><div class="project-card-tags"><span class="tag">IoT</span></div><p class="project-card-title">Home Automation System</p><p class="project-card-desc">Bluetooth/WiFi ব্যবহার করে স্মার্টফোন থেকে ঘরের আলো, ফ্যান ও যন্ত্রপাতি নিয়ন্ত্রণ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d4"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><span class="project-card-num">#05</span></div><div class="project-card-tags"><span class="tag">Safety</span></div><p class="project-card-title">Emergency Room Alert System</p><p class="project-card-desc">রোগীর অবস্থা সংকটজনক হলে স্বয়ংক্রিয়ভাবে Buzzer বাজে এবং LED Signal দেয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
+                    <div class="project-card reveal-card reveal-card-d5"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="22" height="12" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></svg></div><span class="project-card-num">#06</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Bluetooth Control Car</p><p class="project-card-desc">স্মার্টফোনের Bluetooth App দিয়ে গাড়িটি সামনে, পেছনে, বাম ও ডানে নিয়ন্ত্রণ করা যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
                 </div>
             </div>
         </section>
-
+        <hr class="section-divider">
         <section class="section reveal-section reveal-left" id="science">
             <div class="container">
                 <div class="section-header"><div class="section-eyebrow">Science Projects</div><h2 class="section-title">Chemistry &middot; Biology &middot; Physics</h2><div class="section-line"></div></div>
-                <div class="filter-bar">...</div>
-                <div class="card-grid" id="sciGrid">...</div>
+                <div class="filter-bar"><span class="filter-label">Filter:</span><button class="filter-btn active" onclick="filterSci('all', this)">সব</button><button class="filter-btn" onclick="filterSci('chemistry', this)">Chemistry</button><button class="filter-btn" onclick="filterSci('biology', this)">Biology</button><button class="filter-btn" onclick="filterSci('physics', this)">Physics</button></div>
+                <div class="card-grid" id="sciGrid">
+                    <div class="project-card sci-card reveal-card" data-cat="chemistry"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg></div><span class="project-card-num">#C-01</span></div><div class="project-card-tags"><span class="tag">Chemistry</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Gas Leak Detection (MQ2)</p><p class="project-card-desc">MQ-2 Sensor বাতাসে LPG, Methane, Smoke এবং Hydrogen গ্যাসের উপস্থিতি শনাক্ত করে।</p></div>
+                    <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="biology"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#B-01</span></div><div class="project-card-tags"><span class="tag">Biology</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Smart Plant Watering System</p><p class="project-card-desc">Soil Moisture Sensor — মাটি শুকিয়ে গেলে Water Pump চালু হয়ে Automatic পানি দেয়।</p></div>
+                    <div class="project-card sci-card reveal-card reveal-card-d2" data-cat="physics"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></div><span class="project-card-num">#P-01</span></div><div class="project-card-tags"><span class="tag">Physics</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Distance Measurement System</p><p class="project-card-desc">HC-SR04 Ultrasonic Sensor — Sound Wave পাঠিয়ে বস্তুর দূরত্ব নির্ণয়।</p></div>
+                </div>
             </div>
         </section>
-
+        <hr class="section-divider">
         <section class="section section-alt reveal-section reveal-right" id="contact">
             <div class="container">
                 <div class="section-header"><div class="section-eyebrow">Get In Touch</div><h2 class="section-title">যোগাযোগ করুন</h2><div class="section-line"></div></div>
-                <div class="contact-card reveal-card">...</div>
+                <div class="contact-card reveal-card"><h3 class="contact-title">বিস্তারিত জানতে বা অর্ডার করতে<br>Telegram এ মেসেজ দিন</h3><p class="contact-sub">আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।</p><a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram"><svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/></svg>Telegram এ মেসেজ করুন</a></div>
             </div>
         </section>
-
-        <a href="https://wa.me/qr/MYNYVDWC2VAJJ1" target="_blank" class="whatsapp-float">...</a>
+        <a href="https://wa.me/qr/MYNYVDWC2VAJJ1" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.66.74 5.14 2.02 7.24L2.5 29.5l6.44-1.68C10.84 29.24 13.34 30 16 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm0 25.45c-2.3 0-4.54-.6-6.48-1.74l-.46-.27-3.82 1 .98-3.72-.3-.48C4.8 20.44 4.18 18.26 4.18 16c0-6.52 5.3-11.82 11.82-11.82S27.82 9.48 27.82 16 22.52 27.45 16 27.45z"/><path d="M22.98 19.08c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.34.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.34.45-.51.15-.17.2-.29.3-.48.1-.19.05-.36-.03-.5-.07-.15-.67-1.62-.92-2.22-.24-.58-.48-.5-.67-.51-.17-.01-.37-.01-.57-.01s-.52.07-.79.36c-.27.29-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.18 5.06 4.46.71.31 1.26.49 1.69.63.71.22 1.35.19 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.08-.12-.28-.19-.58-.34z"/></svg></a>
         <footer class="footer"><div class="container">&copy; 2026 <span>The Debug Point</span> &nbsp;&middot;&nbsp; Coding &amp; Robotics Solution &nbsp;&middot;&nbsp; চট্টগ্রাম, বাংলাদেশ <span class="footer-admin-link" id="footerAdminLink" title="Admin Access">⚙</span></div></footer>
     </div>
 
-    <!-- Admin Panel, Support Widget, Modals exactly as original but with updated JS logic -->
-    <!-- I'll add their HTML snippets -->
+    <!-- ═══════════ ADMIN PANEL ═══════════ -->
     <div class="admin-panel-overlay" id="adminPanelOverlay"></div>
     <div class="admin-panel" id="adminPanel">
         <div class="admin-panel-header">
@@ -2088,22 +2224,76 @@
             <button class="admin-tab" data-tab="settings">Settings</button>
         </div>
         <div class="admin-content" id="adminContent">
-            <div id="adminTabProjects">...</div>
-            <div id="adminTabUsers" style="display:none;">...</div>
+            <div id="adminTabProjects">
+                <div class="admin-section-title">📦 Project Management</div>
+                <div class="admin-input-group"><label>Project Title</label><input type="text" id="adminProjTitle" placeholder="Enter project title"></div>
+                <div class="admin-input-group"><label>Category</label><select id="adminProjCat"><option value="Robotics">Robotics</option><option value="Security">Security</option><option value="IoT">IoT</option><option value="Safety">Safety</option><option value="Chemistry">Chemistry</option><option value="Biology">Biology</option><option value="Physics">Physics</option></select></div>
+                <div class="admin-input-group"><label>Description</label><textarea id="adminProjDesc" placeholder="Project description..."></textarea></div>
+                <div class="admin-input-group"><label>Tags (comma-separated)</label><input type="text" id="adminProjTags" placeholder="e.g. Robotics, IoT"></div>
+                <div class="admin-input-group"><label>Best For (comma-separated)</label><input type="text" id="adminProjBestFor" placeholder="e.g. Class 9–10, HSC"></div>
+                <input type="hidden" id="adminProjEditId">
+                <button class="admin-btn admin-btn-primary" id="adminProjSaveBtn">➕ Add Project</button>
+                <button class="admin-btn admin-btn-danger admin-btn-sm" id="adminProjCancelEdit" style="display:none;margin-left:6px;">Cancel Edit</button>
+                <hr style="border-color:rgba(255,255,255,0.08);margin:1rem 0;">
+                <div id="adminProjectsList"></div>
+            </div>
+            <div id="adminTabUsers" style="display:none;">
+                <div class="admin-section-title">👥 User Management</div>
+                <div id="adminUsersList"></div>
+            </div>
             <div id="adminTabSupport" style="display:none;">
+                <div class="admin-section-title">💬 Support Conversations</div>
                 <div id="adminSupportConversations"></div>
                 <div id="adminSupportMessages" style="margin-top:1rem;"></div>
             </div>
-            <div id="adminTabSettings" style="display:none;">...</div>
+            <div id="adminTabSettings" style="display:none;">
+                <div class="admin-section-title">⚙ Site Settings</div>
+                <div class="admin-input-group"><label>Announcement Bar Text</label><input type="text" id="adminSettingAnnouncement" placeholder="Announcement text..."></div>
+                <div class="admin-input-group"><label>Site Name</label><input type="text" id="adminSettingSiteName" placeholder="The Debug Point"></div>
+                <button class="admin-btn admin-btn-primary" id="adminSettingsSaveBtn">💾 Save Settings</button>
+            </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="usernameModalOverlay">...</div>
-    <div class="modal-overlay" id="adminLoginModalOverlay">...</div>
-    <div class="modal-overlay" id="secretPasswordModal">...</div>
+    <!-- ═══════════ USERNAME EDIT MODAL ═══════════ -->
+    <div class="modal-overlay" id="usernameModalOverlay">
+        <div class="modal-box">
+            <div class="modal-title">Edit Username</div>
+            <input type="text" class="modal-input" id="usernameModalInput" placeholder="Enter new username" maxlength="24">
+            <div class="modal-btn-row">
+                <button class="modal-btn modal-btn-confirm" id="usernameModalSave">Save</button>
+                <button class="modal-btn modal-btn-cancel" id="usernameModalCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
 
+    <!-- ═══════════ ADMIN LOGIN MODAL ═══════════ -->
+    <div class="modal-overlay" id="adminLoginModalOverlay">
+        <div class="modal-box">
+            <div class="modal-title">🔐 Admin Access</div>
+            <input type="password" class="modal-input" id="adminLoginInput" placeholder="Enter admin PIN" maxlength="16">
+            <div class="modal-btn-row">
+                <button class="modal-btn modal-btn-confirm" id="adminLoginConfirm">Unlock</button>
+                <button class="modal-btn modal-btn-cancel" id="adminLoginCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ SECRET PASSWORD MODAL ═══════════ -->
+    <div class="modal-overlay" id="secretPasswordModal">
+        <div class="modal-box">
+            <div class="modal-title">🔐 System Access</div>
+            <input type="password" class="modal-input" id="secretPasswordInput" placeholder="Enter access code">
+            <div class="modal-btn-row">
+                <button class="modal-btn modal-btn-confirm" id="secretPasswordConfirm">Authenticate</button>
+                <button class="modal-btn modal-btn-cancel" id="secretPasswordCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ SUPPORT WIDGET ═══════════ -->
     <div class="support-float-btn" id="supportFloatBtn" title="Support Chat">
-        <svg viewBox="0 0 24 24">...</svg>
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
         <span class="support-badge" id="supportBadge">0</span>
     </div>
     <div class="support-widget" id="supportWidget">
@@ -2114,301 +2304,629 @@
         <div class="support-messages" id="supportMessages"></div>
         <div class="support-input-row">
             <input type="text" id="supportInput" placeholder="Type your message..." maxlength="500">
-            <button class="support-send-btn" id="supportSendBtn"><svg viewBox="0 0 24 24">...</svg></button>
+            <button class="support-send-btn" id="supportSendBtn"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button>
         </div>
     </div>
 
+    <!-- ═══════════ TOAST ═══════════ -->
     <div class="admin-toast" id="adminToast"></div>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+    <!-- ═══════════════════════════════════════════
+    FIREBASE SDK (compat)
+    ═══════════════════════════════════════════ -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js">
+    </script>
 
+    <!-- ═══════════════════════════════════════════
+    eDEX-UI INSPIRED CINEMATIC INTRO — CORE ENGINE
+    ═══════════════════════════════════════════ -->
     <script>
-        // ────────────── INTRO ANIMATION ENGINE (UNCHANGED) ──────────────
-        (function() { /* ... full intro script ... */ })();
+        (function() {
+            // ───────────────────────────────────────
+            // DOM REFERENCES
+            // ───────────────────────────────────────
+            const overlay = document.getElementById('intro-overlay');
+            const canvas = document.getElementById('intro-canvas');
+            const ctx = canvas.getContext('2d');
+            const mainSite = document.getElementById('main-site');
+            const scanlines = document.getElementById('introScanlines');
+            const crtCurve = document.getElementById('introCrt');
+            const glitchFlash = document.getElementById('introGlitchFlash');
+            const skipHint = document.getElementById('introSkipHint');
 
-        // ────────────── FIREBASE INIT ──────────────
-        const firebaseConfig = {
-            apiKey: "AIzaSyCzx5PjKJNlKMJC4evQPjyXmdp1sTwpCP4",
-            authDomain: "my-website-ctg.firebaseapp.com",
-            databaseURL: "https://my-website-ctg-default-rtdb.firebaseio.com",
-            projectId: "my-website-ctg",
-            storageBucket: "my-website-ctg.firebasestorage.app",
-            messagingSenderId: "655567782113",
-            appId: "1:655567782113:web:e0332ff9df7434c1f5b7a0",
-            measurementId: "G-0QV5BTEPBF"
-        };
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.database();
-        if (firebase.analytics) firebase.analytics();
+            // ───────────────────────────────────────
+            // STATE
+            // ───────────────────────────────────────
+            let W, H;
+            let introPhase = 0;
+            let phaseStartTime = 0;
+            let introStartTime = 0;
+            let progressPercent = 0;
+            let welcomeAlpha = 0;
+            let introComplete = false;
+            let frameCount = 0;
+            let skipRequested = false;
 
-        window.db = db;
-        window.auth = auth;
+            const particles = [];
+            const PARTICLE_COUNT = 140;
+            const particleColors = ['#00d4ff', '#00ffcc', '#00ff88', '#ffffff', '#4dd0ff', '#88ffdd'];
 
-        // ────────────── GLOBAL STATE ──────────────
-        let currentUser = null; // Firebase auth user
-        let currentUid = null;
-        let isAdmin = false;
-        let adminPanelOpen = false;
-        let supportListenerUnsubscribe = null;
-
-        // ────────────── GUEST UID ──────────────
-        function getGuestUid() {
-            let uid = localStorage.getItem('tdp_guest_uid');
-            if (!uid) {
-                uid = 'guest_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 8);
-                localStorage.setItem('tdp_guest_uid', uid);
+            function initParticles() {
+                particles.length = 0;
+                for (let i = 0; i < PARTICLE_COUNT; i++) {
+                    particles.push({
+                        x: Math.random() * W,
+                        y: Math.random() * H,
+                        speed: 0.4 + Math.random() * 3.2,
+                        size: 0.4 + Math.random() * 2.0,
+                        opacity: 0.12 + Math.random() * 0.55,
+                        color: particleColors[Math.floor(Math.random() * particleColors.length)],
+                        wobble: Math.random() * Math.PI * 2,
+                        wobbleSpeed: 0.01 + Math.random() * 0.04,
+                    });
+                }
             }
+
+            function updateParticles() {
+                for (const p of particles) {
+                    p.y += p.speed;
+                    p.wobble += p.wobbleSpeed;
+                    p.x += Math.sin(p.wobble) * 0.3;
+                    if (p.y > H + 15) { p.y = -15;
+                        p.x = Math.random() * W; }
+                    if (p.x < -10) p.x = W + 10;
+                    if (p.x > W + 10) p.x = -10;
+                }
+            }
+
+            function drawParticles() {
+                const alphaMul = introPhase === 2 ? 0.45 : 1;
+                for (const p of particles) {
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.opacity * alphaMul;
+                    ctx.fillRect(p.x, p.y, p.size, p.size * 3.5);
+                }
+                ctx.globalAlpha = 1;
+            }
+
+            const terminalLogs = [
+                { text: 'INITIALIZING SYSTEM KERNEL...', delay: 0.12, color: '#8899aa', prefix: '[BOOT]' },
+                { text: 'MOUNTING SECURE VOLUME', delay: 0.30, color: '#00ff88', prefix: '[ OK ]', ok: true },
+                { text: 'QUANTUM CORE ACTIVATED', delay: 0.48, color: '#00d4ff', prefix: '[CORE]' },
+                { text: 'NEURAL ENGINE v4.2.7 ONLINE', delay: 0.66, color: '#00d4ff', prefix: '[  AI]' },
+                { text: 'LOADING ENCRYPTED MODULES...', delay: 0.84, color: '#8899aa', prefix: '[MOD ]' },
+                { text: 'BIOMETRIC SIGNATURE VERIFIED', delay: 1.02, color: '#00ff88', prefix: '[ OK ]', ok: true },
+                { text: 'FIREWALL: ACTIVE  |  PROXY: SECURE', delay: 1.20, color: '#00ff88', prefix: '[SEC ]' },
+                { text: 'INITIALIZING HUD OVERLAY...', delay: 1.38, color: '#8899aa', prefix: '[HUD ]' },
+                { text: 'BOOT SEQUENCE COMPLETE', delay: 1.56, color: '#00d4ff', prefix: '[SYS ]' },
+                { text: '', delay: 1.70, color: '#fff', prefix: '' },
+                { text: 'ACCESS GRANTED — WELCOME, USER', delay: 1.80, color: '#00ffcc', prefix: '  >', glow: true },
+                { text: 'INITIALIZING INTERFACE...', delay: 2.00, color: '#00d4ff', prefix: '  >' },
+            ];
+
+            const completedLines = [];
+            let currentLogIndex = 0;
+            let currentTypedText = '';
+            let typedCharCount = 0;
+            let typingTimer = 0;
+            const TYPING_SPEED = 0.016;
+
+            function updateTyping(dt) {
+                if (currentLogIndex >= terminalLogs.length) return;
+                typingTimer += dt;
+                const log = terminalLogs[currentLogIndex];
+                if (typedCharCount < log.text.length) {
+                    if (typingTimer >= TYPING_SPEED) {
+                        typingTimer -= TYPING_SPEED;
+                        typedCharCount++;
+                        currentTypedText = log.text.substring(0, typedCharCount);
+                        if (Math.random() < 0.65) playTypingSound();
+                    }
+                } else {
+                    completedLines.push({
+                        text: log.text,
+                        color: log.color,
+                        prefix: log.prefix,
+                        ok: log.ok || false,
+                        glow: log.glow || false,
+                    });
+                    currentLogIndex++;
+                    typedCharCount = 0;
+                    currentTypedText = '';
+                    typingTimer = -log.delay;
+                    if (currentLogIndex < terminalLogs.length && currentLogIndex === terminalLogs.length - 2) {
+                        playBootSound();
+                    }
+                }
+            }
+
+            function drawTerminal(elapsed) {
+                const fontSize = Math.min(15, W / 58);
+                const lineHeight = fontSize * 1.75;
+                const startX = W * 0.07;
+                const startY = H * 0.22;
+                ctx.font = `${fontSize}px 'Share Tech Mono', 'JetBrains Mono', 'Courier New', monospace`;
+                ctx.textBaseline = 'top';
+                for (let i = 0; i < completedLines.length; i++) {
+                    const line = completedLines[i];
+                    const y = startY + i * lineHeight;
+                    if (line.prefix) {
+                        ctx.fillStyle = line.ok ? '#00ff88' : '#667788';
+                        ctx.fillText(line.prefix + ' ', startX, y);
+                        const prefixW = ctx.measureText(line.prefix + ' ').width;
+                        ctx.fillStyle = line.color;
+                        if (line.glow) { ctx.shadowColor = '#00ffcc';
+                            ctx.shadowBlur = 8; }
+                        ctx.fillText(line.text, startX + prefixW, y);
+                        ctx.shadowBlur = 0;
+                    } else {
+                        ctx.fillStyle = line.color;
+                        ctx.fillText(line.text, startX, y);
+                    }
+                }
+                if (currentLogIndex < terminalLogs.length && currentTypedText) {
+                    const log = terminalLogs[currentLogIndex];
+                    const y = startY + completedLines.length * lineHeight;
+                    if (log.prefix) {
+                        ctx.fillStyle = '#667788';
+                        ctx.fillText(log.prefix + ' ', startX, y);
+                        const prefixW = ctx.measureText(log.prefix + ' ').width;
+                        ctx.fillStyle = log.color;
+                        ctx.fillText(currentTypedText, startX + prefixW, y);
+                        if (Math.floor(elapsed * 5) % 2 === 0) {
+                            const textW = ctx.measureText(currentTypedText).width;
+                            ctx.fillStyle = '#00ffcc';
+                            ctx.fillRect(startX + prefixW + textW + 2, y + 2, fontSize * 0.55, fontSize * 0.8);
+                        }
+                    } else {
+                        ctx.fillStyle = log.color;
+                        ctx.fillText(currentTypedText, startX, y);
+                        if (Math.floor(elapsed * 5) % 2 === 0) {
+                            const textW = ctx.measureText(currentTypedText).width;
+                            ctx.fillStyle = '#00ffcc';
+                            ctx.fillRect(startX + textW + 2, y + 2, fontSize * 0.55, fontSize * 0.8);
+                        }
+                    }
+                }
+                if (Math.random() < 0.012 && introPhase === 0) triggerMicroGlitch();
+            }
+
+            function drawProgressBar() {
+                const barWidth = Math.min(380, W * 0.62);
+                const barHeight = 4;
+                const barX = (W - barWidth) / 2;
+                const barY = H * 0.64;
+                ctx.fillStyle = 'rgba(0,180,220,0.08)';
+                ctx.fillRect(barX - 3, barY - 3, barWidth + 6, barHeight + 6);
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.fillRect(barX, barY, barWidth, barHeight);
+                const fillW = barWidth * (progressPercent / 100);
+                const grad = ctx.createLinearGradient(barX, barY, barX + barWidth, barY);
+                grad.addColorStop(0, '#00d4ff');
+                grad.addColorStop(0.5, '#00ffcc');
+                grad.addColorStop(1, '#00d4ff');
+                ctx.fillStyle = grad;
+                ctx.fillRect(barX, barY, fillW, barHeight);
+                ctx.shadowColor = '#00d4ff';
+                ctx.shadowBlur = 16;
+                ctx.fillStyle = 'rgba(0,212,255,0.45)';
+                ctx.fillRect(barX, barY, fillW, barHeight);
+                ctx.shadowBlur = 0;
+                const pct = Math.floor(progressPercent);
+                ctx.fillStyle = '#00d4ff';
+                ctx.font = `${Math.min(26, W/28)}px 'Orbitron', 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText(pct + '%', W / 2, barY - 36);
+                ctx.textAlign = 'start';
+                ctx.fillStyle = '#556677';
+                ctx.font = `${Math.min(9.5, W/75)}px 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('INITIALIZING NEURAL INTERFACE', W / 2, barY + 20);
+                ctx.textAlign = 'start';
+            }
+
+            function drawWelcomeCard() {
+                const cardW = Math.min(440, W * 0.78);
+                const cardH = 175;
+                const cardX = (W - cardW) / 2;
+                const cardY = (H - cardH) / 2;
+                ctx.fillStyle = `rgba(8,14,24,${0.75 * welcomeAlpha})`;
+                ctx.strokeStyle = `rgba(0,212,255,${0.5 * welcomeAlpha})`;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.roundRect(cardX, cardY, cardW, cardH, 22);
+                ctx.fill();
+                ctx.stroke();
+                ctx.strokeStyle = `rgba(0,255,200,${0.18 * welcomeAlpha})`;
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.roundRect(cardX + 3, cardY + 3, cardW - 6, cardH - 6, 19);
+                ctx.stroke();
+                ctx.fillStyle = `rgba(0,255,200,${welcomeAlpha})`;
+                ctx.font = `bold ${Math.min(24,W/30)}px 'Orbitron', 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('WELCOME BACK', W / 2, cardY + 48);
+                ctx.textAlign = 'start';
+                ctx.fillStyle = `rgba(190,215,235,${0.85 * welcomeAlpha})`;
+                ctx.font = `${Math.min(14,W/48)}px 'Inter', 'Noto Sans Bengali', sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.fillText('The Debug Point — Coding & Robotics Solution', W / 2, cardY + 88);
+                ctx.textAlign = 'start';
+                ctx.strokeStyle = `rgba(0,212,255,${0.3 * welcomeAlpha})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(cardX + 45, cardY + 108);
+                ctx.lineTo(cardX + cardW - 45, cardY + 108);
+                ctx.stroke();
+                ctx.fillStyle = `rgba(0,255,136,${0.9 * welcomeAlpha})`;
+                ctx.beginPath();
+                ctx.arc(W / 2 - 85, cardY + 138, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = `rgba(0,255,136,${0.7 * welcomeAlpha})`;
+                ctx.font = `${Math.min(9.5,W/75)}px 'JetBrains Mono', monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('SYSTEM READY — CHITTAGONG, BD', W / 2 + 10, cardY + 134);
+                ctx.textAlign = 'start';
+            }
+
+            function drawHUDCorners() {
+                const sz = 26;
+                const m = 20;
+                const alpha = introPhase >= 2 ? welcomeAlpha : 0.45;
+                ctx.strokeStyle = `rgba(0,212,255,${alpha})`;
+                ctx.lineWidth = 1.5;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(m, m + sz);
+                ctx.lineTo(m, m);
+                ctx.lineTo(m + sz, m);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(W - m - sz, m);
+                ctx.lineTo(W - m, m);
+                ctx.lineTo(W - m, m + sz);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(m, H - m - sz);
+                ctx.lineTo(m, H - m);
+                ctx.lineTo(m + sz, H - m);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(W - m - sz, H - m);
+                ctx.lineTo(W - m, H - m);
+                ctx.lineTo(W - m, H - m - sz);
+                ctx.stroke();
+            }
+
+            function drawGrid() {
+                const gridSize = 48;
+                ctx.strokeStyle = 'rgba(0,180,220,0.03)';
+                ctx.lineWidth = 0.5;
+                for (let x = gridSize; x < W; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, H);
+                    ctx.stroke();
+                }
+                for (let y = gridSize; y < H; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(W, y);
+                    ctx.stroke();
+                }
+            }
+
+            function drawBackground() {
+                const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.75);
+                bgGrad.addColorStop(0, '#0b1119');
+                bgGrad.addColorStop(1, '#020508');
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, W, H);
+                drawGrid();
+            }
+
+            function draw(elapsed) {
+                ctx.clearRect(0, 0, W, H);
+                drawBackground();
+                drawParticles();
+                drawHUDCorners();
+                if (introPhase === 0) drawTerminal(elapsed);
+                else if (introPhase === 1) { drawTerminal(elapsed);
+                    drawProgressBar(); } else if (introPhase === 2) { drawWelcomeCard();
+                    drawProgressBar(); }
+            }
+
+            let audioCtx = null;
+            let audioEnabled = false;
+
+            function initAudio() {
+                if (audioCtx) return;
+                try { audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                    audioEnabled = true; } catch (e) {}
+            }
+
+            function playTone(freq, duration, type = 'square', vol = 0.03, rampDown = true) {
+                if (!audioEnabled || !audioCtx) return;
+                try {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = type;
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+                    if (rampDown) gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + duration + 0.01);
+                } catch (e) {}
+            }
+
+            function playTypingSound() { playTone(700 + Math.random() * 500, 0.025, 'square', 0.02); }
+
+            function playBootSound() { if (!audioEnabled) return;
+                playTone(35, 0.45, 'sine', 0.05, false); }
+
+            function playGlitchSound() { playTone(50 + Math.random() * 180, 0.1, 'sawtooth', 0.05); }
+
+            function playClickSound() { playTone(1100, 0.03, 'square', 0.025); }
+
+            function triggerMicroGlitch() {
+                glitchFlash.classList.add('active');
+                scanlines.classList.add('intensify');
+                setTimeout(() => { glitchFlash.classList.remove('active');
+                    scanlines.classList.remove('intensify'); }, 35 + Math.random() * 50);
+                if (Math.random() < 0.5) playGlitchSound();
+            }
+
+            function triggerHeavyGlitch() {
+                glitchFlash.classList.add('active');
+                scanlines.classList.add('intensify');
+                overlay.classList.add('intro-shake');
+                playGlitchSound();
+                setTimeout(() => { glitchFlash.classList.remove('active');
+                    scanlines.classList.remove('intensify');
+                    overlay.classList.remove('intro-shake'); }, 140);
+            }
+
+            function transitionToLoading() {
+                introPhase = 1;
+                phaseStartTime = performance.now() / 1000;
+                progressPercent = 0;
+                playBootSound();
+            }
+
+            function transitionToWelcome() {
+                introPhase = 2;
+                phaseStartTime = performance.now() / 1000;
+                progressPercent = 100;
+                playClickSound();
+                skipHint.classList.add('visible');
+            }
+
+            function transitionToMainSite() {
+                if (introComplete) return;
+                introComplete = true;
+                introPhase = 4;
+                triggerHeavyGlitch();
+                const flash = document.createElement('div');
+                flash.style.cssText =
+                    'position:fixed;inset:0;z-index:100010;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.1s';
+                document.body.appendChild(flash);
+                requestAnimationFrame(() => {
+                    flash.style.opacity = '0.75';
+                    setTimeout(() => { flash.style.opacity = '0';
+                        setTimeout(() => flash.remove(), 180); }, 70);
+                });
+                setTimeout(() => {
+                    overlay.classList.add('fading-out');
+                    scanlines.style.opacity = '0';
+                    crtCurve.classList.remove('active');
+                    skipHint.style.opacity = '0';
+                    document.body.style.overflow = '';
+                    document.body.style.cursor = '';
+                    mainSite.classList.add('visible');
+                }, 100);
+                setTimeout(() => {
+                    overlay.classList.add('removed');
+                    scanlines.style.display = 'none';
+                    crtCurve.style.display = 'none';
+                    glitchFlash.style.display = 'none';
+                    skipHint.style.display = 'none';
+                    initMainSiteScripts();
+                }, 700);
+            }
+
+            function requestSkip() {
+                if (skipRequested || introComplete) return;
+                skipRequested = true;
+                while (currentLogIndex < terminalLogs.length) {
+                    const log = terminalLogs[currentLogIndex];
+                    completedLines.push({ text: log.text, color: log.color, prefix: log.prefix, ok: log.ok || false,
+                        glow: log.glow || false });
+                    currentLogIndex++;
+                }
+                introPhase = 2;
+                phaseStartTime = performance.now() / 1000;
+                progressPercent = 100;
+                welcomeAlpha = 1;
+                playClickSound();
+                setTimeout(() => transitionToMainSite(), 600);
+            }
+
+            function resize() {
+                W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = W;
+                canvas.height = H;
+                if (particles.length === 0) initParticles();
+                for (const p of particles) { if (p.x > W) p.x = Math.random() * W; if (p.y > H) p.y = Math.random() *
+                        H; }
+            }
+            window.addEventListener('resize', resize);
+            resize();
+            initParticles();
+
+            function animateIntro(timestamp) {
+                if (introComplete) return;
+                const elapsed = (timestamp - introStartTime) / 1000;
+                const dt = Math.min(0.1, 1 / 60);
+                frameCount++;
+                updateParticles();
+                if (introPhase === 0) {
+                    updateTyping(dt);
+                    if (currentLogIndex >= terminalLogs.length && elapsed > 2.3) transitionToLoading();
+                } else if (introPhase === 1) {
+                    const phaseElapsed = (timestamp / 1000) - phaseStartTime;
+                    progressPercent = Math.min(100, phaseElapsed * 68);
+                    if (progressPercent >= 100 && phaseElapsed > 1.6) transitionToWelcome();
+                } else if (introPhase === 2) {
+                    const phaseElapsed = (timestamp / 1000) - phaseStartTime;
+                    welcomeAlpha = Math.min(1, phaseElapsed * 2.8);
+                    if (phaseElapsed > 2.0) { transitionToMainSite(); return; }
+                }
+                draw(elapsed);
+                requestAnimationFrame(animateIntro);
+            }
+
+            function handleFirstInteraction() { initAudio();
+                document.removeEventListener('click', handleFirstInteraction);
+                document.removeEventListener('touchstart', handleFirstInteraction);
+                document.removeEventListener('keydown', handleFirstInteractionKey); }
+
+            function handleFirstInteractionKey(e) { initAudio();
+                document.removeEventListener('click', handleFirstInteraction);
+                document.removeEventListener('touchstart', handleFirstInteraction);
+                document.removeEventListener('keydown', handleFirstInteractionKey); if (e.key && introPhase < 2)
+                requestSkip(); }
+            document.addEventListener('click', handleFirstInteraction, { once: true });
+            document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+            document.addEventListener('keydown', handleFirstInteractionKey, { once: true });
+            document.addEventListener('keydown', function skipListener(e) { if (introComplete) { document
+                    .removeEventListener('keydown', skipListener); return; } if (e.key && introPhase < 2 && !
+                    skipRequested) requestSkip(); });
+            skipHint.addEventListener('click', (e) => { e.stopPropagation(); if (!skipRequested && introPhase < 3)
+                    requestSkip(); });
+            document.body.style.overflow = 'hidden';
+            document.body.style.cursor = 'none';
+            introStartTime = performance.now();
+            requestAnimationFrame(animateIntro);
+        })();
+
+        // ───────────────────────────────────────
+        // Polyfill
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r };
+                this.beginPath();
+                this.moveTo(x + r.tl, y);
+                this.lineTo(x + w - r.tr, y);
+                this.quadraticCurveTo(x + w, y, x + w, y + r.tr);
+                this.lineTo(x + w, y + h - r.br);
+                this.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
+                this.lineTo(x + r.bl, y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - r.bl);
+                this.lineTo(x, y + r.tl);
+                this.quadraticCurveTo(x, y, x + r.tl, y);
+                this.closePath();
+            };
+        }
+
+        // ───────────────────────────────────────
+        // GLOBAL APP LOGIC
+        // ───────────────────────────────────────
+        window.FIREBASE_READY = false;
+        window.db = null;
+        window.firebaseApp = null;
+        window.currentUserUid = null;
+        window.isAdmin = false;
+        window.adminUnlocked = false;
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCc50Kvtc8-7keVGlJ1JQEHzyPGmyFcdjs",
+            authDomain: "ctg-1st-web.firebaseapp.com",
+            databaseURL: "https://ctg-1st-web-default-rtdb.firebaseio.com",
+            projectId: "ctg-1st-web",
+            storageBucket: "ctg-1st-web.firebasestorage.app",
+            messagingSenderId: "775343695903",
+            appId: "1:775343695903:web:f2a33b5342846909830d2a",
+            measurementId: "G-24EH32M7S6"
+        };
+
+        function initFirebase() {
+            try {
+                if (typeof firebase === 'undefined') { console.warn('Firebase SDK not loaded.'); return; }
+                window.firebaseApp = firebase.initializeApp(firebaseConfig);
+                window.db = firebase.database();
+                if (firebase.analytics) try { firebase.analytics(); } catch (e) {}
+                window.FIREBASE_READY = true;
+                console.log('Firebase connected.');
+                initUserProfile();
+                loadSiteSettings();
+            } catch (e) { console.warn('Firebase init failed:', e.message); }
+        }
+
+        function getOrCreateUserId() {
+            let uid = localStorage.getItem('tdp_user_uid');
+            if (!uid) { uid = 'user_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+                localStorage.setItem('tdp_user_uid', uid); }
             return uid;
         }
 
-        function resolveUserId() {
-            return currentUser ? currentUser.uid : getGuestUid();
+        function initUserProfile() {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.currentUserUid = getOrCreateUserId();
+            const userRef = window.db.ref('users/' + window.currentUserUid);
+            userRef.once('value').then(snap => {
+                const data = snap.val() || {};
+                if (!data.username) {
+                    const defaultName = 'User_' + window.currentUserUid.substring(5, 11);
+                    userRef.set({ username: defaultName, lastActive: firebase.database.ServerValue
+                            .TIMESTAMP, isAdmin: false });
+                    updateProfileUI(defaultName, false);
+                } else { updateProfileUI(data.username, !!data.isAdmin); }
+            }).catch(() => updateProfileUI('User', false));
+            userRef.on('value', snap => { const data = snap.val() || {};
+                updateProfileUI(data.username || 'User', !!data.isAdmin); });
         }
 
-        // ────────────── PRESENCE ──────────────
-        function setupPresence(uid) {
-            if (!uid) return;
-            const connectedRef = db.ref('.info/connected');
-            const onlineRef = db.ref('onlineUsers/' + uid);
-            const presenceRef = db.ref('presence/' + uid);
-            connectedRef.on('value', snap => {
-                if (snap.val() === true) {
-                    onlineRef.set(true);
-                    presenceRef.set(firebase.database.ServerValue.TIMESTAMP);
-                    onlineRef.onDisconnect().remove();
-                    presenceRef.onDisconnect().remove();
-                }
-            });
-        }
-
-        // ────────────── AUTH STATE HANDLER ──────────────
-        function onAuthStateChanged(user) {
-            currentUser = user;
-            currentUid = resolveUserId();
-            const profileIcon = document.getElementById('navProfileIcon');
-            const profileName = document.getElementById('navProfileName');
-            const profileDisplayName = document.getElementById('profileDisplayName');
-            const profileEmail = document.getElementById('profileEmailDisplay');
+        function updateProfileUI(username, isAdminFlag) {
+            window.isAdmin = isAdminFlag;
             const wrap = document.getElementById('navProfileWrap');
-            wrap.style.display = 'flex';
+            const icon = document.getElementById('navProfileIcon');
+            const nameEl = document.getElementById('navProfileName');
+            const adminLink = document.getElementById('profileAdminPanel');
+            const footerAdmin = document.getElementById('footerAdminLink');
+            if (wrap) wrap.style.display = 'flex';
+            if (icon) icon.textContent = (username || 'U').charAt(0).toUpperCase();
+            if (nameEl) nameEl.textContent = username || 'User';
+            if (adminLink) adminLink.style.display = isAdminFlag ? 'block' : 'none';
+            if (footerAdmin) footerAdmin.style.opacity = isAdminFlag ? '1' : '0.4';
+        }
 
-            if (user) {
-                // Signed in
-                document.getElementById('authBanner').classList.remove('show');
-                if (user.photoURL) {
-                    profileIcon.innerHTML = `<img src="${user.photoURL}" alt="profile">`;
-                } else {
-                    profileIcon.innerHTML = (user.displayName || 'U').charAt(0).toUpperCase();
+        function loadSiteSettings() {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('admin/siteSettings').once('value').then(snap => {
+                const s = snap.val() || {};
+                if (s.announcement) {
+                    const bar = document.getElementById('announcementBar');
+                    if (bar) bar.innerHTML = s.announcement + ' <span>এখনই ভিজিট করুন</span> →';
                 }
-                profileName.textContent = user.displayName || 'User';
-                profileDisplayName.textContent = user.displayName || 'User';
-                profileEmail.textContent = user.email || '';
-                // Update user DB
-                db.ref('users/' + user.uid).update({
-                    email: user.email,
-                    displayName: user.displayName,
-                    photoURL: user.photoURL,
-                    lastActive: firebase.database.ServerValue.TIMESTAMP
-                });
-                setupPresence(user.uid);
-                // Check admin
-                db.ref('users/' + user.uid + '/isAdmin').on('value', snap => {
-                    isAdmin = snap.val() === true;
-                    document.getElementById('profileAdminPanel').style.display = isAdmin ? 'block' : 'none';
-                    document.getElementById('profileAdminDivider').style.display = isAdmin ? 'block' : 'none';
-                });
-            } else {
-                // Guest
-                const guestName = localStorage.getItem('tdp_username') || 'Guest';
-                profileIcon.innerHTML = guestName.charAt(0).toUpperCase();
-                profileName.textContent = guestName;
-                profileDisplayName.textContent = guestName;
-                profileEmail.textContent = 'Guest mode';
-                isAdmin = false;
-                document.getElementById('profileAdminPanel').style.display = 'none';
-                document.getElementById('profileAdminDivider').style.display = 'none';
-                setupPresence(null);
-                // Show auth banner if not dismissed
-                if (!localStorage.getItem('auth_banner_dismissed')) {
-                    setTimeout(() => {
-                        if (!currentUser) document.getElementById('authBanner').classList.add('show');
-                    }, 4000);
-                }
-            }
-            document.getElementById('profileSignIn').style.display = user ? 'none' : 'block';
-            document.getElementById('profileLogout').style.display = user ? 'block' : 'none';
-            initSupportSystem();
+            }).catch(() => {});
         }
 
-        // ────────────── AUTH ACTIONS ──────────────
-        function signInWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch(error => {
-                showToast('Sign-in failed: ' + error.message, true);
-            });
-        }
+        function escapeHTML(str) { const div = document.createElement('div');
+            div.textContent = str; return div.innerHTML; }
 
-        function signOut() {
-            auth.signOut();
-            document.getElementById('navProfileDropdown').classList.remove('open');
-        }
+        let adminPanelOpen = false;
 
-        // ────────────── PROFILE EDIT ──────────────
-        function editUsername(newName) {
-            if (!newName || !newName.trim()) return;
-            if (currentUser) {
-                db.ref('users/' + currentUser.uid).update({ username: newName });
-                currentUser.updateProfile({ displayName: newName }).then(() => {
-                    updateProfileUI(currentUser);
-                    showToast('Username updated');
-                });
-            } else {
-                localStorage.setItem('tdp_username', newName);
-                updateProfileUI(null);
-                showToast('Username updated');
-            }
-        }
-
-        function updateProfileUI(user) {
-            const profileName = document.getElementById('navProfileName');
-            const profileDisplayName = document.getElementById('profileDisplayName');
-            if (user) {
-                profileName.textContent = user.displayName || 'User';
-                profileDisplayName.textContent = user.displayName || 'User';
-            } else {
-                const guestName = localStorage.getItem('tdp_username') || 'Guest';
-                profileName.textContent = guestName;
-                profileDisplayName.textContent = guestName;
-            }
-        }
-
-        // ────────────── SUPPORT CHAT ──────────────
-        function initSupportSystem() {
-            if (!currentUid) return;
-            if (supportListenerUnsubscribe) supportListenerUnsubscribe();
-            const chatRef = db.ref('supportChats/' + currentUid + '/messages');
-            supportListenerUnsubscribe = chatRef.on('value', snap => {
-                const messages = snap.val() || {};
-                const msgs = Object.values(messages).sort((a, b) => a.timestamp - b.timestamp);
-                renderSupportMessages(msgs);
-                updateSupportBadge(msgs);
-            });
-            // Typing listener
-            db.ref('supportChats/' + currentUid + '/typing').on('value', snap => {
-                const isTyping = snap.val();
-                const indicator = document.getElementById('typingIndicator');
-                if (indicator) indicator.style.display = isTyping ? 'inline' : 'none';
-            });
-        }
-
-        function renderSupportMessages(msgs) {
-            const container = document.getElementById('supportMessages');
-            if (!container) return;
-            container.innerHTML = msgs.map(m => {
-                const time = new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const cls = m.from === 'admin' ? 'admin' : 'user';
-                return `<div class="support-msg ${cls}">${escapeHTML(m.text)}<div class="msg-time">${time}</div></div>`;
-            }).join('');
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function updateSupportBadge(msgs) {
-            const badge = document.getElementById('supportBadge');
-            const unread = msgs.filter(m => m.from === 'admin' && !m.read).length;
-            if (badge) {
-                badge.textContent = unread > 9 ? '9+' : unread;
-                badge.classList.toggle('show', unread > 0);
-            }
-        }
-
-        function sendSupportMessage(text) {
-            if (!currentUid || !text.trim()) return;
-            db.ref('supportChats/' + currentUid + '/messages').push({
-                text: text.trim(),
-                timestamp: firebase.database.ServerValue.TIMESTAMP,
-                from: 'user',
-                read: false
-            }).then(() => {
-                document.getElementById('supportInput').value = '';
-            });
-            // Clear typing
-            db.ref('supportChats/' + currentUid + '/typing').set(false);
-        }
-
-        function setUserTyping(isTyping) {
-            if (currentUid) db.ref('supportChats/' + currentUid + '/typing').set(isTyping);
-        }
-
-        // ────────────── ADMIN SUPPORT ──────────────
-        function loadAdminSupport() {
-            const convList = document.getElementById('adminSupportConversations');
-            db.ref('supportChats').on('value', snap => {
-                const chats = snap.val() || {};
-                const entries = Object.entries(chats);
-                convList.innerHTML = entries.map(([uid, data]) => {
-                    const msgs = data.messages ? Object.values(data.messages) : [];
-                    const lastMsg = msgs.length ? msgs[msgs.length - 1] : null;
-                    const lastTime = lastMsg ? new Date(lastMsg.timestamp).toLocaleString() : '—';
-                    return `<div class="admin-item" onclick="openSupportConversation('${uid}')">
-                        <div class="admin-item-info">
-                            <div class="admin-item-title">User: ${uid.substring(0,12)}...</div>
-                            <div class="admin-item-sub">Last: ${lastTime} · Msgs: ${msgs.length}</div>
-                        </div>
-                        <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="event.stopPropagation(); deleteSupportChat('${uid}')">Del</button>
-                    </div>`;
-                }).join('');
-                if (entries.length === 0) convList.innerHTML = '<div class="admin-empty">No chats yet.</div>';
-            });
-        }
-
-        function openSupportConversation(userId) {
-            currentChatPartner = userId;
-            const msgArea = document.getElementById('adminSupportMessages');
-            db.ref('supportChats/' + userId + '/messages').off();
-            db.ref('supportChats/' + userId + '/messages').on('value', snap => {
-                const messages = snap.val() || {};
-                const msgs = Object.values(messages).sort((a, b) => a.timestamp - b.timestamp);
-                msgArea.innerHTML = `<div class="admin-section-title">Chat with ${userId.substring(0,12)}...</div>` +
-                    msgs.map(m => `<div class="support-msg ${m.from==='admin'?'admin':'user'}">${escapeHTML(m.text)}<div class="msg-time">${new Date(m.timestamp).toLocaleTimeString()}</div></div>`).join('') +
-                    `<div style="display:flex;gap:6px;margin-top:8px;">
-                        <input type="text" id="adminReplyInput" placeholder="Reply..." style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:6px 12px;color:#ddd;font-size:0.7rem;">
-                        <button class="admin-btn admin-btn-primary" onclick="sendAdminReplyFromInput('${userId}')">Send</button>
-                    </div>`;
-                msgArea.scrollTop = msgArea.scrollHeight;
-            });
-            // Typing
-            db.ref('supportChats/' + userId + '/typing').on('value', snap => {
-                const el = document.getElementById('adminTypingIndicator');
-                if (el) el.style.display = snap.val() ? 'block' : 'none';
-            });
-        }
-
-        function sendAdminReplyFromInput(userId) {
-            const input = document.getElementById('adminReplyInput');
-            if (!input || !input.value.trim()) return;
-            db.ref('supportChats/' + userId + '/messages').push({
-                text: input.value.trim(),
-                timestamp: firebase.database.ServerValue.TIMESTAMP,
-                from: 'admin',
-                read: false
-            });
-            input.value = '';
-        }
-
-        function deleteSupportChat(userId) {
-            if (!confirm('Delete?')) return;
-            db.ref('supportChats/' + userId).remove();
-            document.getElementById('adminSupportMessages').innerHTML = '';
-        }
-
-        // ────────────── ADMIN PANEL GENERAL ──────────────
         function openAdminPanel() {
-            if (!isAdmin) {
+            if (!window.isAdmin && !sessionStorage.getItem('tdp_admin_unlocked')) {
                 showAdminLoginModal();
                 return;
             }
@@ -2429,11 +2947,6 @@
             document.body.style.overflow = '';
         }
 
-        // Project CRUD (using db.ref('projects')...)
-        // User management, settings – keep original but use db.ref paths.
-        // ...
-
-        // ────────────── TOAST & UTIL ──────────────
         function showToast(msg, isError = false) {
             const toast = document.getElementById('adminToast');
             toast.textContent = msg;
@@ -2443,94 +2956,521 @@
             toast._timeout = setTimeout(() => toast.classList.remove('show'), 2200);
         }
 
-        function escapeHTML(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
+        function showAdminLoginModal() {
+            document.getElementById('adminLoginModalOverlay').classList.add('active');
+            document.getElementById('adminLoginInput').value = '';
+            document.getElementById('adminLoginInput').focus();
         }
 
-        // ────────────── EVENT LISTENERS ──────────────
-        document.addEventListener('DOMContentLoaded', () => {
-            auth.onAuthStateChanged(onAuthStateChanged);
+        function hideAdminLoginModal() { document.getElementById('adminLoginModalOverlay').classList.remove('active'); }
 
-            // Auth banner
-            document.getElementById('googleSignInBtn').addEventListener('click', signInWithGoogle);
-            document.getElementById('authBannerClose').addEventListener('click', () => {
-                document.getElementById('authBanner').classList.remove('show');
-                localStorage.setItem('auth_banner_dismissed', 'true');
-            });
+        function verifyAdminPin(pin) {
+            if (!window.FIREBASE_READY || !window.db) {
+                if (pin === '1234') { window.isAdmin = true;
+                    updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
+                    hideAdminLoginModal();
+                    openAdminPanel();
+                    showToast('Admin access granted (offline)'); } else showToast('Invalid PIN', true);
+                return;
+            }
+            window.db.ref('admin/siteSettings/adminPin').once('value').then(snap => {
+                const storedPin = snap.val() || '1234';
+                if (pin === storedPin) {
+                    window.isAdmin = true;
+                    window.db.ref('users/' + window.currentUserUid).update({ isAdmin: true });
+                    updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
+                    hideAdminLoginModal();
+                    openAdminPanel();
+                    showToast('Admin access granted');
+                } else showToast('Invalid PIN', true);
+            }).catch(() => { if (pin === '1234') { window.isAdmin = true;
+                    hideAdminLoginModal();
+                    openAdminPanel();
+                    showToast('Admin access granted'); } else showToast('Invalid PIN', true); });
+        }
 
-            // Profile dropdown
-            document.getElementById('navProfileIcon').addEventListener('click', e => {
-                e.stopPropagation();
-                document.getElementById('navProfileDropdown').classList.toggle('open');
-            });
-            document.getElementById('profileEditUsername').addEventListener('click', () => {
-                const newName = prompt('Enter new username:');
-                if (newName) editUsername(newName);
-                document.getElementById('navProfileDropdown').classList.remove('open');
-            });
-            document.getElementById('profileSignIn').addEventListener('click', () => {
-                signInWithGoogle();
-                document.getElementById('navProfileDropdown').classList.remove('open');
-            });
-            document.getElementById('profileLogout').addEventListener('click', () => {
-                signOut();
-                document.getElementById('navProfileDropdown').classList.remove('open');
-            });
-            document.getElementById('profileAdminPanel').addEventListener('click', () => {
-                openAdminPanel();
-                document.getElementById('navProfileDropdown').classList.remove('open');
-            });
-            document.addEventListener('click', () => {
-                document.getElementById('navProfileDropdown').classList.remove('open');
-            });
+        function loadAdminProjects() {
+            const listEl = document.getElementById('adminProjectsList');
+            if (!listEl) return;
+            if (!window.FIREBASE_READY || !window.db) { listEl.innerHTML =
+                    '<div class="admin-empty">Firebase offline.</div>'; return; }
+            window.db.ref('projects').once('value').then(snap => {
+                const projects = snap.val() || {};
+                const entries = Object.entries(projects);
+                if (entries.length === 0) { listEl.innerHTML =
+                        '<div class="admin-empty">No projects yet.</div>'; return; }
+                listEl.innerHTML = entries.map(([id, p]) => `
+              <div class="admin-item">
+                <div class="admin-item-info">
+                  <div class="admin-item-title">${escapeHTML(p.title || 'Untitled')}</div>
+                  <div class="admin-item-sub">${escapeHTML(p.category || '')} · ${escapeHTML(p.tags || '')}</div>
+                </div>
+                <div class="admin-item-actions">
+                  <button class="admin-btn admin-btn-sm" onclick="editAdminProject('${id}')">Edit</button>
+                  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="deleteAdminProject('${id}')">Del</button>
+                </div>
+              </div>`).join('');
+            }).catch(() => { listEl.innerHTML = '<div class="admin-empty">Failed to load projects.</div>'; });
+        }
 
-            // Support widget
-            document.getElementById('supportFloatBtn').addEventListener('click', () => {
-                document.getElementById('supportWidget').classList.toggle('open');
-                if (document.getElementById('supportWidget').classList.contains('open')) initSupportSystem();
-            });
-            document.getElementById('supportCloseBtn').addEventListener('click', () => {
-                document.getElementById('supportWidget').classList.remove('open');
-            });
-            document.getElementById('supportSendBtn').addEventListener('click', () => {
-                sendSupportMessage(document.getElementById('supportInput').value);
-            });
-            document.getElementById('supportInput').addEventListener('keypress', e => {
-                if (e.key === 'Enter') sendSupportMessage(document.getElementById('supportInput').value);
-            });
-            document.getElementById('supportInput').addEventListener('input', () => {
-                setUserTyping(true);
-                clearTimeout(window.typingTimer);
-                window.typingTimer = setTimeout(() => setUserTyping(false), 1500);
-            });
+        function saveAdminProject() {
+            if (!window.FIREBASE_READY || !window.db) { showToast('Firebase offline', true); return; }
+            const title = document.getElementById('adminProjTitle').value.trim();
+            const category = document.getElementById('adminProjCat').value;
+            const desc = document.getElementById('adminProjDesc').value.trim();
+            const tags = document.getElementById('adminProjTags').value.trim();
+            const bestFor = document.getElementById('adminProjBestFor').value.trim();
+            const editId = document.getElementById('adminProjEditId').value;
+            if (!title) { showToast('Title required', true); return; }
+            const projectData = { title, category, description: desc, tags, bestFor, updatedAt: Date.now() };
+            if (editId) {
+                window.db.ref('projects/' + editId).update(projectData).then(() => { showToast(
+                        'Project updated!');
+                    resetAdminProjectForm();
+                    loadAdminProjects(); }).catch(() => showToast('Update failed', true));
+            } else {
+                const newRef = window.db.ref('projects').push();
+                projectData.createdAt = Date.now();
+                newRef.set(projectData).then(() => { showToast('Project added!');
+                    resetAdminProjectForm();
+                    loadAdminProjects(); }).catch(() => showToast('Add failed', true));
+            }
+        }
 
-            // Admin panel close
-            document.getElementById('adminCloseBtn').addEventListener('click', closeAdminPanel);
-            document.getElementById('adminPanelOverlay').addEventListener('click', closeAdminPanel);
+        function resetAdminProjectForm() {
+            document.getElementById('adminProjTitle').value = '';
+            document.getElementById('adminProjCat').value = 'Robotics';
+            document.getElementById('adminProjDesc').value = '';
+            document.getElementById('adminProjTags').value = '';
+            document.getElementById('adminProjBestFor').value = '';
+            document.getElementById('adminProjEditId').value = '';
+            document.getElementById('adminProjSaveBtn').textContent = '➕ Add Project';
+            document.getElementById('adminProjCancelEdit').style.display = 'none';
+        }
 
-            // Secret password modal etc. (keep original)
-            // Admin tabs switching
-            // ... (rest of admin panel listeners)
+        function loadAdminUsers() {
+            const listEl = document.getElementById('adminUsersList');
+            if (!listEl) return;
+            if (!window.FIREBASE_READY || !window.db) { listEl.innerHTML =
+                    '<div class="admin-empty">Firebase offline.</div>'; return; }
+            window.db.ref('users').once('value').then(snap => {
+                const users = snap.val() || {};
+                const entries = Object.entries(users);
+                if (entries.length === 0) { listEl.innerHTML =
+                        '<div class="admin-empty">No users registered.</div>'; return; }
+                listEl.innerHTML = entries.map(([uid, u]) => `
+              <div class="admin-item">
+                <div class="admin-item-info">
+                  <div class="admin-item-title">${escapeHTML(u.username || 'Unknown')}</div>
+                  <div class="admin-item-sub">UID: ${uid.substring(0,16)}... · Admin: ${u.isAdmin ? 'Yes' : 'No'}</div>
+                </div>
+                <div class="admin-item-actions">
+                  <button class="admin-btn admin-btn-sm" onclick="editAdminUsername('${uid}')">Edit</button>
+                  <button class="admin-btn admin-btn-sm" onclick="toggleAdminUser('${uid}', ${!u.isAdmin})">${u.isAdmin ? 'Revoke' : 'Make Admin'}</button>
+                </div>
+              </div>`).join('');
+            }).catch(() => { listEl.innerHTML = '<div class="admin-empty">Failed to load users.</div>'; });
+        }
+
+        function loadAdminSettings() {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('admin/siteSettings').once('value').then(snap => {
+                const s = snap.val() || {};
+                document.getElementById('adminSettingAnnouncement').value = s.announcement || '';
+                document.getElementById('adminSettingSiteName').value = s.siteName || 'The Debug Point';
+            }).catch(() => {});
+        }
+
+        function saveAdminSettings() {
+            if (!window.FIREBASE_READY || !window.db) { showToast('Firebase offline', true); return; }
+            const announcement = document.getElementById('adminSettingAnnouncement').value.trim();
+            const siteName = document.getElementById('adminSettingSiteName').value.trim();
+            window.db.ref('admin/siteSettings').update({ announcement, siteName, updatedAt: Date.now() }).then(() => {
+                showToast('Settings saved!');
+                if (announcement) document.getElementById('announcementBar').innerHTML = announcement +
+                    ' <span>এখনই ভিজিট করুন</span> →';
+            }).catch(() => showToast('Save failed', true));
+        }
+
+        // ═══════════════════════════════════════════
+        // SUPPORT CHAT SYSTEM
+        // ═══════════════════════════════════════════
+        let supportUnread = 0;
+        let supportListenerUnsubscribe = null;
+        let currentSupportChatUserId = null;
+
+        function initSupportSystem() {
+            if (!window.FIREBASE_READY || !window.db || !window.currentUserUid) return;
+            const chatRef = window.db.ref('supportChats/' + window.currentUserUid + '/messages');
+            if (supportListenerUnsubscribe) supportListenerUnsubscribe();
+            supportListenerUnsubscribe = chatRef.on('value', snap => {
+                const messages = snap.val() || {};
+                const msgs = Object.values(messages).sort((a, b) => a.timestamp - b.timestamp);
+                renderSupportMessages(msgs);
+                updateSupportBadge(msgs);
+            });
+        }
+
+        function renderSupportMessages(msgs) {
+            const container = document.getElementById('supportMessages');
+            if (!container) return;
+            container.innerHTML = msgs.map(m => {
+                const time = new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const cls = m.from === 'admin' ? 'admin' : 'user';
+                return `<div class="support-msg ${cls}">${escapeHTML(m.text)}<div class="msg-time">${time}</div></div>`;
+            }).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function updateSupportBadge(msgs) {
+            const badge = document.getElementById('supportBadge');
+            const unread = msgs.filter(m => m.from === 'admin' && !m.read).length;
+            supportUnread = unread;
+            if (badge) {
+                badge.textContent = unread > 9 ? '9+' : unread;
+                if (unread > 0) badge.classList.add('show');
+                else badge.classList.remove('show');
+            }
+        }
+
+        function sendSupportMessage(text) {
+            if (!window.FIREBASE_READY || !window.db || !window.currentUserUid) return;
+            const chatRef = window.db.ref('supportChats/' + window.currentUserUid + '/messages');
+            chatRef.push({
+                text: text.trim(),
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                from: 'user',
+                read: false
+            }).then(() => {
+                document.getElementById('supportInput').value = '';
+            });
+        }
+
+        function sendAdminReply(userId, text) {
+            if (!window.FIREBASE_READY || !window.db) return;
+            const chatRef = window.db.ref('supportChats/' + userId + '/messages');
+            chatRef.push({
+                text: text.trim(),
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                from: 'admin',
+                read: false
+            });
+        }
+
+        function loadAdminSupport() {
+            if (!window.FIREBASE_READY || !window.db) return;
+            const convList = document.getElementById('adminSupportConversations');
+            const msgArea = document.getElementById('adminSupportMessages');
+            window.db.ref('supportChats').on('value', snap => {
+                const chats = snap.val() || {};
+                const entries = Object.entries(chats);
+                convList.innerHTML = entries.map(([uid, data]) => {
+                    const msgs = data.messages ? Object.values(data.messages) : [];
+                    const lastMsg = msgs.length ? msgs[msgs.length - 1] : null;
+                    const lastTime = lastMsg ? new Date(lastMsg.timestamp).toLocaleString() : '—';
+                    return `<div class="admin-item" style="cursor:pointer;" onclick="openSupportConversation('${uid}')">
+                <div class="admin-item-info">
+                  <div class="admin-item-title">User: ${uid.substring(0,12)}...</div>
+                  <div class="admin-item-sub">Last: ${lastTime} · Messages: ${msgs.length}</div>
+                </div>
+                <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="event.stopPropagation(); deleteSupportChat('${uid}')">Delete</button>
+              </div>`;
+                }).join('');
+                if (entries.length === 0) convList.innerHTML = '<div class="admin-empty">No support chats yet.</div>';
+                if (currentSupportChatUserId) openSupportConversation(currentSupportChatUserId, true);
+            });
+        }
+
+        function openSupportConversation(userId, silent = false) {
+            currentSupportChatUserId = userId;
+            const msgArea = document.getElementById('adminSupportMessages');
+            window.db.ref('supportChats/' + userId + '/messages').off();
+            window.db.ref('supportChats/' + userId + '/messages').on('value', snap => {
+                const messages = snap.val() || {};
+                const msgs = Object.values(messages).sort((a, b) => a.timestamp - b.timestamp);
+                msgArea.innerHTML = `<div class="admin-section-title">Conversation with ${userId.substring(0,12)}...</div>` +
+                    msgs.map(m => `<div class="support-msg ${m.from==='admin'?'admin':'user'}">${escapeHTML(m.text)}<div class="msg-time">${new Date(m.timestamp).toLocaleTimeString()}</div></div>`).join('') +
+                    `<div style="display:flex;gap:6px;margin-top:8px;">
+                <input type="text" id="adminReplyInput" placeholder="Reply as admin..." style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:6px 12px;color:#ddd;font-size:0.7rem;">
+                <button class="admin-btn admin-btn-primary" onclick="sendAdminReplyFromInput('${userId}')">Send</button>
+              </div>`;
+                msgArea.scrollTop = msgArea.scrollHeight;
+            });
+        }
+
+        function deleteSupportChat(userId) {
+            if (!confirm('Delete this entire support conversation?')) return;
+            window.db.ref('supportChats/' + userId).remove().then(() => { showToast('Chat deleted');
+                loadAdminSupport(); });
+        }
+
+        function sendAdminReplyFromInput(userId) {
+            const input = document.getElementById('adminReplyInput');
+            if (!input || !input.value.trim()) return;
+            sendAdminReply(userId, input.value);
+            input.value = '';
+        }
+
+        // ═══════════════════════════════════════════
+        // SECRET ADMIN TRIGGER
+        // ═══════════════════════════════════════════
+        let secretClickCount = parseInt(localStorage.getItem('tdp_secret_clicks') || '0');
+        let secretClickResetTimer = null;
+
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.admin-panel-overlay') || e.target.closest('.admin-panel') || e.target.closest(
+                    '#secretPasswordModal') || e.target.closest('#adminLoginModalOverlay') || e.target.closest(
+                    '#usernameModalOverlay') || e.target.closest('.support-widget') || e.target.closest(
+                    '.support-float-btn')) return;
+            secretClickCount++;
+            localStorage.setItem('tdp_secret_clicks', secretClickCount);
+            clearTimeout(secretClickResetTimer);
+            secretClickResetTimer = setTimeout(() => { secretClickCount = 0;
+                localStorage.setItem('tdp_secret_clicks', '0'); }, 8000);
+            if (secretClickCount >= 10) {
+                secretClickCount = 0;
+                localStorage.setItem('tdp_secret_clicks', '0');
+                document.getElementById('secretPasswordModal').classList.add('active');
+                document.getElementById('secretPasswordInput').value = '';
+                document.getElementById('secretPasswordInput').focus();
+            }
         });
 
-        // Expose global functions needed by inline onclick handlers
+        document.getElementById('secretPasswordConfirm').addEventListener('click', () => {
+            const pass = document.getElementById('secretPasswordInput').value;
+            if (pass === '308580') {
+                sessionStorage.setItem('tdp_admin_unlocked', 'true');
+                window.adminUnlocked = true;
+                document.getElementById('secretPasswordModal').classList.remove('active');
+                showToast('Access granted. Opening admin panel.');
+                openAdminPanel();
+            } else {
+                showToast('Invalid code', true);
+                document.getElementById('secretPasswordModal').classList.add('shake');
+                setTimeout(() => document.getElementById('secretPasswordModal').classList.remove('shake'), 400);
+            }
+        });
+        document.getElementById('secretPasswordCancel').addEventListener('click', () => document.getElementById(
+            'secretPasswordModal').classList.remove('active'));
+        document.getElementById('secretPasswordModal').addEventListener('click', function(e) { if (e.target === this) this
+                .classList.remove('active'); });
+
+        // ═══════════════════════════════════════════
+        // SUPPORT WIDGET UI
+        // ═══════════════════════════════════════════
+        const supportFloatBtn = document.getElementById('supportFloatBtn');
+        const supportWidget = document.getElementById('supportWidget');
+        const supportCloseBtn = document.getElementById('supportCloseBtn');
+        const supportSendBtn = document.getElementById('supportSendBtn');
+        const supportInput = document.getElementById('supportInput');
+
+        supportFloatBtn.addEventListener('click', () => {
+            supportWidget.classList.toggle('open');
+            if (supportWidget.classList.contains('open')) initSupportSystem();
+        });
+        supportCloseBtn.addEventListener('click', () => supportWidget.classList.remove('open'));
+        supportSendBtn.addEventListener('click', () => {
+            const text = supportInput.value.trim();
+            if (text) sendSupportMessage(text);
+        });
+        supportInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { supportSendBtn.click(); } });
+
+        // ═══════════════════════════════════════════
+        // EXISTING ADMIN PANEL EVENTS
+        // ═══════════════════════════════════════════
+        document.getElementById('adminCloseBtn').addEventListener('click', closeAdminPanel);
+        document.getElementById('adminPanelOverlay').addEventListener('click', closeAdminPanel);
+        document.getElementById('footerAdminLink').addEventListener('click', () => { if (window.isAdmin || window
+                .adminUnlocked) openAdminPanel();
+            else showAdminLoginModal(); });
+        document.getElementById('profileAdminPanel').addEventListener('click', () => { document.getElementById(
+                'navProfileDropdown').classList.remove('open');
+            openAdminPanel(); });
+        document.getElementById('adminLoginConfirm').addEventListener('click', () => { const pin = document.getElementById(
+                'adminLoginInput').value.trim(); if (pin) verifyAdminPin(pin); });
+        document.getElementById('adminLoginCancel').addEventListener('click', hideAdminLoginModal);
+        document.getElementById('adminLoginModalOverlay').addEventListener('click', (e) => { if (e.target === document
+                .getElementById('adminLoginModalOverlay')) hideAdminLoginModal(); });
+        document.getElementById('adminProjSaveBtn').addEventListener('click', saveAdminProject);
+        document.getElementById('adminProjCancelEdit').addEventListener('click', resetAdminProjectForm);
+        document.getElementById('adminSettingsSaveBtn').addEventListener('click', saveAdminSettings);
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const tn = this.dataset.tab;
+                document.getElementById('adminTabProjects').style.display = tn === 'projects' ? '' :
+                    'none';
+                document.getElementById('adminTabUsers').style.display = tn === 'users' ? '' : 'none';
+                document.getElementById('adminTabSupport').style.display = tn === 'support' ? '' : 'none';
+                document.getElementById('adminTabSettings').style.display = tn === 'settings' ? '' :
+                    'none';
+                if (tn === 'users') loadAdminUsers();
+                if (tn === 'settings') loadAdminSettings();
+                if (tn === 'support') loadAdminSupport();
+            });
+        });
+        document.getElementById('navProfileIcon').addEventListener('click', (e) => { e.stopPropagation();
+            document.getElementById('navProfileDropdown').classList.toggle('open'); });
+        document.getElementById('profileEditUsername').addEventListener('click', () => { document.getElementById(
+                'navProfileDropdown').classList.remove('open');
+            document.getElementById('usernameModalOverlay').classList.add('active');
+            document.getElementById('usernameModalInput').value = document.getElementById('navProfileName')
+                .textContent || '';
+            document.getElementById('usernameModalInput').focus(); });
+        document.getElementById('usernameModalSave').addEventListener('click', () => {
+            const newName = document.getElementById('usernameModalInput').value.trim();
+            if (!newName) { showToast('Username cannot be empty', true); return; }
+            if (window.FIREBASE_READY && window.db && window.currentUserUid) {
+                window.db.ref('users/' + window.currentUserUid).update({ username: newName }).then(() => {
+                    updateProfileUI(newName, window.isAdmin);
+                    showToast('Username updated!');
+                }).catch(() => showToast('Update failed', true));
+            } else { updateProfileUI(newName, window.isAdmin);
+                showToast('Username updated (offline)'); }
+            document.getElementById('usernameModalOverlay').classList.remove('active');
+        });
+        document.getElementById('usernameModalCancel').addEventListener('click', () => document.getElementById(
+            'usernameModalOverlay').classList.remove('active'));
+        document.getElementById('usernameModalOverlay').addEventListener('click', (e) => { if (e.target === document
+                .getElementById('usernameModalOverlay')) document.getElementById('usernameModalOverlay').classList
+                .remove('active'); });
+        document.addEventListener('click', () => { document.getElementById('navProfileDropdown').classList.remove(
+                'open'); });
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'A') { e.preventDefault(); if (window.isAdmin || window
+                    .adminUnlocked) openAdminPanel();
+                else showAdminLoginModal(); }
+            if (e.key === 'Escape') {
+                if (adminPanelOpen) closeAdminPanel();
+                hideAdminLoginModal();
+                document.getElementById('usernameModalOverlay').classList.remove('active');
+                document.getElementById('secretPasswordModal').classList.remove('active');
+            }
+        });
+
+        window.editAdminProject = function(id) {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('projects/' + id).once('value').then(snap => {
+                const p = snap.val();
+                if (!p) return;
+                document.getElementById('adminProjTitle').value = p.title || '';
+                document.getElementById('adminProjCat').value = p.category || 'Robotics';
+                document.getElementById('adminProjDesc').value = p.description || '';
+                document.getElementById('adminProjTags').value = p.tags || '';
+                document.getElementById('adminProjBestFor').value = p.bestFor || '';
+                document.getElementById('adminProjEditId').value = id;
+                document.getElementById('adminProjSaveBtn').textContent = '✏ Update Project';
+                document.getElementById('adminProjCancelEdit').style.display = 'inline-block';
+                document.getElementById('adminContent').scrollTop = 0;
+            });
+        };
+        window.deleteAdminProject = function(id) {
+            if (!window.FIREBASE_READY || !window.db) return;
+            if (!confirm('Delete this project permanently?')) return;
+            window.db.ref('projects/' + id).remove().then(() => { showToast('Project deleted');
+                loadAdminProjects(); }).catch(() => showToast('Delete failed', true));
+        };
+        window.editAdminUsername = function(uid) {
+            const newName = prompt('Enter new username:');
+            if (!newName || !newName.trim()) return;
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('users/' + uid).update({ username: newName.trim() }).then(() => { showToast(
+                    'Username updated');
+                loadAdminUsers(); }).catch(() => showToast('Update failed', true));
+        };
+        window.toggleAdminUser = function(uid, makeAdmin) {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('users/' + uid).update({ isAdmin: makeAdmin }).then(() => { showToast(makeAdmin ?
+                    'Admin granted' : 'Admin revoked');
+                loadAdminUsers(); }).catch(() => showToast('Toggle failed', true));
+        };
+        window.openAdminPanel = openAdminPanel;
+        window.closeAdminPanel = closeAdminPanel;
+        window.loadAdminSupport = loadAdminSupport;
         window.openSupportConversation = openSupportConversation;
         window.sendAdminReplyFromInput = sendAdminReplyFromInput;
         window.deleteSupportChat = deleteSupportChat;
-        window.toggleNav = function() { document.getElementById('navLinks').classList.toggle('open'); };
-        window.filterSci = function(type, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            if (btn) btn.classList.add('active');
-            document.querySelectorAll('.sci-card').forEach(card => {
-                const cat = card.dataset.cat || '';
-                card.style.display = (type === 'all' || cat === type) ? '' : 'none';
-                card.dataset.hidden = (type === 'all' || cat === type) ? 'false' : 'true';
-            });
-        };
+        window.sendSupportMessage = sendSupportMessage;
 
-        // ... include all other original admin functions (loadAdminProjects, etc.) using db.ref ...
+        // Init Firebase and system
+        initFirebase();
+        // After intro, main site scripts will set up rest
+        function initMainSiteScripts() {
+            if (window._mainSiteScriptsInitialized) return;
+            window._mainSiteScriptsInitialized = true;
+            window.toggleNav = function() { document.getElementById('navLinks').classList.toggle('open'); };
+            document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document
+                .getElementById('navLinks').classList.remove('open')));
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => { if (navbar) navbar.classList.toggle('scrolled', window.scrollY >
+                    30); });
+            const cursorTrail = document.getElementById('cursorTrail');
+            if (window.innerWidth > 768 && cursorTrail) {
+                let trailX = -200,
+                    trailY = -200,
+                    curX = -200,
+                    curY = -200;
+                document.addEventListener('mousemove', e => { curX = e.clientX;
+                    curY = e.clientY; });
+
+                function updateTrail() { trailX += (curX - trailX) * 0.06;
+                    trailY += (curY - trailY) * 0.06;
+                    cursorTrail.style.left = trailX + 'px';
+                    cursorTrail.style.top = trailY + 'px';
+                    requestAnimationFrame(updateTrail); }
+                cursorTrail.classList.add('active');
+                updateTrail();
+                window.addEventListener('touchstart', () => { if (cursorTrail) cursorTrail.style.opacity = '0'; }, {
+                    once: true });
+            }
+            const heroGrid = document.getElementById('heroGrid'),
+                heroGlow = document.getElementById('heroGlow'),
+                heroOrb = document.getElementById('heroOrb');
+            let ticking = false;
+
+            function updateParallax() {
+                const heroSection = document.getElementById('hero');
+                if (!heroSection) return;
+                const rect = heroSection.getBoundingClientRect();
+                const heroHeight = heroSection.offsetHeight;
+                if (rect.bottom > 0 && rect.top < window.innerHeight) {
+                    const progress = (window.innerHeight - rect.top) / (window.innerHeight + heroHeight);
+                    const offsetY = Math.max(0, Math.min(1, progress)) * 60;
+                    if (heroGrid) heroGrid.style.transform = `translateY(${offsetY * 0.3}px)`;
+                    if (heroGlow) heroGlow.style.transform =
+                        `translateY(${offsetY * 0.5}px) translateX(${offsetY * 0.15}px)`;
+                    if (heroOrb) heroOrb.style.transform =
+                        `translateY(${offsetY * 0.35}px) translateX(${-offsetY * 0.2}px)`;
+                }
+                ticking = false;
+            }
+            window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(updateParallax);
+                    ticking = true; } });
+            const sectionObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e
+                    .target.classList.add('visible'); }), { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            document.querySelectorAll('.reveal-section').forEach(s => sectionObserver.observe(s));
+            const cardObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
+                    .classList.add('visible'); }), { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
+            document.querySelectorAll('.reveal-card').forEach(c => cardObserver.observe(c));
+            const heroObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
+                    .classList.add('visible'); }), { threshold: 0.3 });
+            document.querySelectorAll('.hero-reveal').forEach(el => heroObserver.observe(el));
+            window.filterSci = function(type, btn) {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                if (btn) btn.classList.add('active');
+                document.querySelectorAll('.sci-card').forEach(card => {
+                    const cat = card.dataset.cat || '';
+                    card.style.display = (type === 'all' || cat === type) ? '' : 'none';
+                    card.dataset.hidden = (type === 'all' || cat === type) ? 'false' : 'true';
+                });
+            };
+        }
     </script>
 </body>
 </html>
+
+
+
+
+
