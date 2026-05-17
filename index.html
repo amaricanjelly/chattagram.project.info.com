@@ -55,7 +55,6 @@
             image-rendering: auto;
             z-index: 1;
         }
-        /* Scanline overlay */
         .intro-scanlines {
             position: fixed;
             inset: 0;
@@ -73,7 +72,6 @@
             opacity: 0.12;
             transition: opacity 0.08s;
         }
-        /* CRT vignette curve */
         .intro-crt-curve {
             position: fixed;
             inset: 0;
@@ -86,7 +84,6 @@
         .intro-crt-curve.active {
             opacity: 1;
         }
-        /* Glitch flash */
         .intro-glitch-flash {
             position: fixed;
             inset: 0;
@@ -100,7 +97,6 @@
             opacity: 1;
             transition: opacity 0.015s;
         }
-        /* Screen shake container */
         .intro-shake {
             animation: introShake 0.15s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
         }
@@ -128,7 +124,6 @@
                 transform: translate(2px, -1px);
             }
         }
-        /* Skip hint (subtle, appears after 2s) */
         .intro-skip-hint {
             position: fixed;
             bottom: 28px;
@@ -256,9 +251,10 @@
             display: flex;
             border-bottom: 1px solid rgba(0, 212, 255, 0.15);
             flex-shrink: 0;
+            overflow-x: auto;
         }
         .admin-tab {
-            flex: 1;
+            flex: 1 0 auto;
             padding: 10px 12px;
             text-align: center;
             font-family: 'JetBrains Mono', monospace;
@@ -1850,127 +1846,211 @@
             opacity: 1;
         }
 
-        /* ═══════ RESPONSIVE ═══════ */
-        @media (max-width: 900px) {
-            .featured-inner {
-                grid-template-columns: 1fr;
-                padding: 2rem 1.5rem;
-            }
-            .featured-visual {
-                flex-direction: row;
-                justify-content: flex-start;
-                gap: 1rem;
-            }
-            .featured-stat-row {
-                grid-template-columns: repeat(4, 1fr);
-                width: auto;
-            }
-            .featured-icon-box {
-                width: 72px;
-                height: 72px;
-            }
-            .hero-stats {
-                gap: 1.5rem;
-            }
-            .reveal-section.reveal-right,
-            .reveal-section.reveal-left {
-                transform: translateY(30px);
-            }
-            .reveal-section.visible {
-                transform: translateY(0);
-            }
+        /* ═══════════════════════════════════════════
+           SUPPORT FLOATING WIDGET
+           ═══════════════════════════════════════════ */
+        .support-float-btn {
+            position: fixed;
+            bottom: 90px;
+            right: 22px;
+            z-index: 997;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #0a0f1a, #0d1525);
+            border: 1.5px solid rgba(0, 212, 255, 0.45);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 18px rgba(0, 212, 255, 0.2), 0 4px 18px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
+        .support-float-btn:hover {
+            transform: scale(1.1);
+            border-color: #00d4ff;
+            box-shadow: 0 0 32px rgba(0, 212, 255, 0.4);
+        }
+        .support-float-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: #00d4ff;
+            stroke-width: 2;
+        }
+        .support-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff3b30;
+            color: #fff;
+            font-size: 0.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            box-shadow: 0 0 10px rgba(255,59,48,0.4);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+        .support-badge.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .support-widget {
+            position: fixed;
+            bottom: 150px;
+            right: 22px;
+            width: 340px;
+            max-width: 88vw;
+            height: 440px;
+            max-height: 70vh;
+            background: rgba(10, 14, 22, 0.96);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 18px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 212, 255, 0.15);
+            z-index: 996;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        .support-widget.open {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+        .support-header {
+            padding: 0.9rem 1.1rem;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #00d4ff;
+            letter-spacing: 0.05em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .support-close {
+            cursor: pointer;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: #aaa;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .support-close:hover { background: rgba(255,60,60,0.2); color: #ff5555; }
+        .support-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .support-messages::-webkit-scrollbar { width: 3px; }
+        .support-messages::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 2px; }
+        .support-msg {
+            max-width: 85%;
+            padding: 0.6rem 0.9rem;
+            border-radius: 14px;
+            font-size: 0.73rem;
+            line-height: 1.55;
+            word-break: break-word;
+            animation: msgFadeIn 0.25s ease;
+        }
+        @keyframes msgFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .support-msg.user {
+            align-self: flex-end;
+            background: rgba(0, 212, 255, 0.12);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            color: #ddd;
+        }
+        .support-msg.admin {
+            align-self: flex-start;
+            background: rgba(0, 255, 136, 0.08);
+            border: 1px solid rgba(0, 255, 136, 0.22);
+            color: #e0f0e8;
+        }
+        .support-msg .msg-time {
+            font-size: 0.5rem;
+            color: #777;
+            margin-top: 4px;
+            font-family: var(--font-mono);
+        }
+        .support-input-row {
+            display: flex;
+            gap: 6px;
+            padding: 0.7rem;
+            border-top: 1px solid rgba(0, 212, 255, 0.15);
+        }
+        .support-input-row input {
+            flex: 1;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 20px;
+            padding: 8px 14px;
+            color: #ddd;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            outline: none;
+            transition: 0.2s;
+        }
+        .support-input-row input:focus {
+            border-color: rgba(0,212,255,0.5);
+            box-shadow: 0 0 0 3px rgba(0,212,255,0.06);
+        }
+        .support-send-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #00d4ff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .support-send-btn:hover { background: #00bce6; box-shadow: 0 0 14px rgba(0,212,255,0.4); }
+        .support-send-btn svg { width: 16px; height: 16px; fill: #000; }
+
+        /* Password modal */
+        #secretPasswordModal {
+            z-index: 99997;
+        }
+
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .support-widget {
+                right: 8px;
+                bottom: 140px;
+                width: calc(100vw - 20px);
+                max-width: 400px;
             }
-            .nav-links.open {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                position: fixed;
-                top: 88px;
-                left: 0;
-                right: 0;
-                background: rgba(255, 255, 255, 0.97);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                padding: 1.5rem 5%;
-                border-bottom: 1px solid var(--border);
-                gap: 1rem;
-                box-shadow: var(--shadow-lg);
-                z-index: 999;
-            }
-            .nav-hamburger {
-                display: flex;
-            }
-            .section {
-                padding: 60px 0;
-            }
-            .hero {
-                min-height: auto;
-                padding: 60px 0 50px;
-            }
-            .contact-card {
-                padding: 2rem 1.5rem;
-            }
-            .hero-title {
-                font-size: 1.55rem;
-            }
-            .youtube-note {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .featured-stat-row {
-                grid-template-columns: 1fr 1fr;
-            }
-            .featured-visual {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-            .reveal-section.reveal-right,
-            .reveal-section.reveal-left {
-                transform: translateY(30px);
-            }
-            .reveal-section.visible {
-                transform: translateY(0);
-            }
-            .cursor-trail {
-                display: none !important;
-            }
-            .nav-profile-name {
-                display: none;
-            }
-        }
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 1.35rem;
-            }
-            .hero-stats {
-                flex-wrap: wrap;
-                gap: 1rem;
-            }
-            .hero-actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .hero-actions .btn {
-                justify-content: center;
-            }
-            .featured-inner {
-                padding: 1.5rem 1rem;
-            }
-            .contact-card {
-                padding: 1.5rem 1rem;
-            }
-            .cursor-trail {
-                display: none !important;
+            .support-float-btn {
+                right: 12px;
+                bottom: 80px;
             }
         }
     </style>
@@ -2009,7 +2089,6 @@
                     <li><a href="https://amaricanjelly.github.io/bokaxuda/" target="_blank">Magical Front</a></li>
                     <li><a href="#contact" class="nav-cta">যোগাযোগ</a></li>
                 </ul>
-                <!-- USER PROFILE IN NAV -->
                 <div class="nav-profile-wrap" id="navProfileWrap" style="display:none;">
                     <div class="nav-profile-icon" id="navProfileIcon">?</div>
                     <span class="nav-profile-name" id="navProfileName">User</span>
@@ -2138,9 +2217,10 @@
             <div class="admin-panel-title"><span class="admin-panel-title-dot"></span> Admin Panel</div>
             <button class="admin-close-btn" id="adminCloseBtn">✕</button>
         </div>
-        <div class="admin-tabs">
+        <div class="admin-tabs" id="adminTabs">
             <button class="admin-tab active" data-tab="projects">Projects</button>
             <button class="admin-tab" data-tab="users">Users</button>
+            <button class="admin-tab" data-tab="support">Support</button>
             <button class="admin-tab" data-tab="settings">Settings</button>
         </div>
         <div class="admin-content" id="adminContent">
@@ -2160,6 +2240,11 @@
             <div id="adminTabUsers" style="display:none;">
                 <div class="admin-section-title">👥 User Management</div>
                 <div id="adminUsersList"></div>
+            </div>
+            <div id="adminTabSupport" style="display:none;">
+                <div class="admin-section-title">💬 Support Conversations</div>
+                <div id="adminSupportConversations"></div>
+                <div id="adminSupportMessages" style="margin-top:1rem;"></div>
             </div>
             <div id="adminTabSettings" style="display:none;">
                 <div class="admin-section-title">⚙ Site Settings</div>
@@ -2191,6 +2276,35 @@
                 <button class="modal-btn modal-btn-confirm" id="adminLoginConfirm">Unlock</button>
                 <button class="modal-btn modal-btn-cancel" id="adminLoginCancel">Cancel</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ SECRET PASSWORD MODAL ═══════════ -->
+    <div class="modal-overlay" id="secretPasswordModal">
+        <div class="modal-box">
+            <div class="modal-title">🔐 System Access</div>
+            <input type="password" class="modal-input" id="secretPasswordInput" placeholder="Enter access code">
+            <div class="modal-btn-row">
+                <button class="modal-btn modal-btn-confirm" id="secretPasswordConfirm">Authenticate</button>
+                <button class="modal-btn modal-btn-cancel" id="secretPasswordCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════ SUPPORT WIDGET ═══════════ -->
+    <div class="support-float-btn" id="supportFloatBtn" title="Support Chat">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        <span class="support-badge" id="supportBadge">0</span>
+    </div>
+    <div class="support-widget" id="supportWidget">
+        <div class="support-header">
+            <span>Support Chat</span>
+            <button class="support-close" id="supportCloseBtn">✕</button>
+        </div>
+        <div class="support-messages" id="supportMessages"></div>
+        <div class="support-input-row">
+            <input type="text" id="supportInput" placeholder="Type your message..." maxlength="500">
+            <button class="support-send-btn" id="supportSendBtn"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button>
         </div>
     </div>
 
@@ -2230,7 +2344,7 @@
             // STATE
             // ───────────────────────────────────────
             let W, H;
-            let introPhase = 0; // 0=terminal-boot, 1=loading-progress, 2=welcome-dashboard, 3=transitioning, 4=complete
+            let introPhase = 0;
             let phaseStartTime = 0;
             let introStartTime = 0;
             let progressPercent = 0;
@@ -2239,9 +2353,6 @@
             let frameCount = 0;
             let skipRequested = false;
 
-            // ───────────────────────────────────────
-            // PARTICLE SYSTEM (Matrix-style)
-            // ───────────────────────────────────────
             const particles = [];
             const PARTICLE_COUNT = 140;
             const particleColors = ['#00d4ff', '#00ffcc', '#00ff88', '#ffffff', '#4dd0ff', '#88ffdd'];
@@ -2267,10 +2378,8 @@
                     p.y += p.speed;
                     p.wobble += p.wobbleSpeed;
                     p.x += Math.sin(p.wobble) * 0.3;
-                    if (p.y > H + 15) {
-                        p.y = -15;
-                        p.x = Math.random() * W;
-                    }
+                    if (p.y > H + 15) { p.y = -15;
+                        p.x = Math.random() * W; }
                     if (p.x < -10) p.x = W + 10;
                     if (p.x > W + 10) p.x = -10;
                 }
@@ -2286,9 +2395,6 @@
                 ctx.globalAlpha = 1;
             }
 
-            // ───────────────────────────────────────
-            // TERMINAL BOOT LOGS
-            // ───────────────────────────────────────
             const terminalLogs = [
                 { text: 'INITIALIZING SYSTEM KERNEL...', delay: 0.12, color: '#8899aa', prefix: '[BOOT]' },
                 { text: 'MOUNTING SECURE VOLUME', delay: 0.30, color: '#00ff88', prefix: '[ OK ]', ok: true },
@@ -2309,7 +2415,7 @@
             let currentTypedText = '';
             let typedCharCount = 0;
             let typingTimer = 0;
-            const TYPING_SPEED = 0.016; // seconds per character
+            const TYPING_SPEED = 0.016;
 
             function updateTyping(dt) {
                 if (currentLogIndex >= terminalLogs.length) return;
@@ -2320,11 +2426,9 @@
                         typingTimer -= TYPING_SPEED;
                         typedCharCount++;
                         currentTypedText = log.text.substring(0, typedCharCount);
-                        // Trigger typing sound
                         if (Math.random() < 0.65) playTypingSound();
                     }
                 } else {
-                    // Line complete
                     completedLines.push({
                         text: log.text,
                         color: log.color,
@@ -2335,7 +2439,7 @@
                     currentLogIndex++;
                     typedCharCount = 0;
                     currentTypedText = '';
-                    typingTimer = -log.delay; // pause before next line
+                    typingTimer = -log.delay;
                     if (currentLogIndex < terminalLogs.length && currentLogIndex === terminalLogs.length - 2) {
                         playBootSound();
                     }
@@ -2349,8 +2453,6 @@
                 const startY = H * 0.22;
                 ctx.font = `${fontSize}px 'Share Tech Mono', 'JetBrains Mono', 'Courier New', monospace`;
                 ctx.textBaseline = 'top';
-
-                // Draw completed lines
                 for (let i = 0; i < completedLines.length; i++) {
                     const line = completedLines[i];
                     const y = startY + i * lineHeight;
@@ -2359,10 +2461,8 @@
                         ctx.fillText(line.prefix + ' ', startX, y);
                         const prefixW = ctx.measureText(line.prefix + ' ').width;
                         ctx.fillStyle = line.color;
-                        if (line.glow) {
-                            ctx.shadowColor = '#00ffcc';
-                            ctx.shadowBlur = 8;
-                        }
+                        if (line.glow) { ctx.shadowColor = '#00ffcc';
+                            ctx.shadowBlur = 8; }
                         ctx.fillText(line.text, startX + prefixW, y);
                         ctx.shadowBlur = 0;
                     } else {
@@ -2370,8 +2470,6 @@
                         ctx.fillText(line.text, startX, y);
                     }
                 }
-
-                // Draw current typing line
                 if (currentLogIndex < terminalLogs.length && currentTypedText) {
                     const log = terminalLogs[currentLogIndex];
                     const y = startY + completedLines.length * lineHeight;
@@ -2381,7 +2479,6 @@
                         const prefixW = ctx.measureText(log.prefix + ' ').width;
                         ctx.fillStyle = log.color;
                         ctx.fillText(currentTypedText, startX + prefixW, y);
-                        // Blinking cursor
                         if (Math.floor(elapsed * 5) % 2 === 0) {
                             const textW = ctx.measureText(currentTypedText).width;
                             ctx.fillStyle = '#00ffcc';
@@ -2397,29 +2494,18 @@
                         }
                     }
                 }
-
-                // Random glitch flicker on terminal
-                if (Math.random() < 0.012 && introPhase === 0) {
-                    triggerMicroGlitch();
-                }
+                if (Math.random() < 0.012 && introPhase === 0) triggerMicroGlitch();
             }
 
-            // ───────────────────────────────────────
-            // PROGRESS BAR
-            // ───────────────────────────────────────
             function drawProgressBar() {
                 const barWidth = Math.min(380, W * 0.62);
                 const barHeight = 4;
                 const barX = (W - barWidth) / 2;
                 const barY = H * 0.64;
-
-                // Track
                 ctx.fillStyle = 'rgba(0,180,220,0.08)';
                 ctx.fillRect(barX - 3, barY - 3, barWidth + 6, barHeight + 6);
                 ctx.fillStyle = 'rgba(0,0,0,0.5)';
                 ctx.fillRect(barX, barY, barWidth, barHeight);
-
-                // Fill
                 const fillW = barWidth * (progressPercent / 100);
                 const grad = ctx.createLinearGradient(barX, barY, barX + barWidth, barY);
                 grad.addColorStop(0, '#00d4ff');
@@ -2427,23 +2513,17 @@
                 grad.addColorStop(1, '#00d4ff');
                 ctx.fillStyle = grad;
                 ctx.fillRect(barX, barY, fillW, barHeight);
-
-                // Glow
                 ctx.shadowColor = '#00d4ff';
                 ctx.shadowBlur = 16;
                 ctx.fillStyle = 'rgba(0,212,255,0.45)';
                 ctx.fillRect(barX, barY, fillW, barHeight);
                 ctx.shadowBlur = 0;
-
-                // Percentage
                 const pct = Math.floor(progressPercent);
                 ctx.fillStyle = '#00d4ff';
                 ctx.font = `${Math.min(26, W/28)}px 'Orbitron', 'JetBrains Mono', monospace`;
                 ctx.textAlign = 'center';
                 ctx.fillText(pct + '%', W / 2, barY - 36);
                 ctx.textAlign = 'start';
-
-                // Label
                 ctx.fillStyle = '#556677';
                 ctx.font = `${Math.min(9.5, W/75)}px 'JetBrains Mono', monospace`;
                 ctx.textAlign = 'center';
@@ -2451,16 +2531,11 @@
                 ctx.textAlign = 'start';
             }
 
-            // ───────────────────────────────────────
-            // WELCOME DASHBOARD CARD
-            // ───────────────────────────────────────
             function drawWelcomeCard() {
                 const cardW = Math.min(440, W * 0.78);
                 const cardH = 175;
                 const cardX = (W - cardW) / 2;
                 const cardY = (H - cardH) / 2;
-
-                // Glassmorphism card
                 ctx.fillStyle = `rgba(8,14,24,${0.75 * welcomeAlpha})`;
                 ctx.strokeStyle = `rgba(0,212,255,${0.5 * welcomeAlpha})`;
                 ctx.lineWidth = 1.5;
@@ -2468,37 +2543,27 @@
                 ctx.roundRect(cardX, cardY, cardW, cardH, 22);
                 ctx.fill();
                 ctx.stroke();
-
-                // Inner glow border
                 ctx.strokeStyle = `rgba(0,255,200,${0.18 * welcomeAlpha})`;
                 ctx.lineWidth = 4;
                 ctx.beginPath();
                 ctx.roundRect(cardX + 3, cardY + 3, cardW - 6, cardH - 6, 19);
                 ctx.stroke();
-
-                // Title
                 ctx.fillStyle = `rgba(0,255,200,${welcomeAlpha})`;
                 ctx.font = `bold ${Math.min(24,W/30)}px 'Orbitron', 'JetBrains Mono', monospace`;
                 ctx.textAlign = 'center';
                 ctx.fillText('WELCOME BACK', W / 2, cardY + 48);
                 ctx.textAlign = 'start';
-
-                // Subtitle
                 ctx.fillStyle = `rgba(190,215,235,${0.85 * welcomeAlpha})`;
                 ctx.font = `${Math.min(14,W/48)}px 'Inter', 'Noto Sans Bengali', sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.fillText('The Debug Point — Coding & Robotics Solution', W / 2, cardY + 88);
                 ctx.textAlign = 'start';
-
-                // Divider
                 ctx.strokeStyle = `rgba(0,212,255,${0.3 * welcomeAlpha})`;
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(cardX + 45, cardY + 108);
                 ctx.lineTo(cardX + cardW - 45, cardY + 108);
                 ctx.stroke();
-
-                // Status dot
                 ctx.fillStyle = `rgba(0,255,136,${0.9 * welcomeAlpha})`;
                 ctx.beginPath();
                 ctx.arc(W / 2 - 85, cardY + 138, 4, 0, Math.PI * 2);
@@ -2510,9 +2575,6 @@
                 ctx.textAlign = 'start';
             }
 
-            // ───────────────────────────────────────
-            // HUD CORNER BRACKETS
-            // ───────────────────────────────────────
             function drawHUDCorners() {
                 const sz = 26;
                 const m = 20;
@@ -2520,25 +2582,21 @@
                 ctx.strokeStyle = `rgba(0,212,255,${alpha})`;
                 ctx.lineWidth = 1.5;
                 ctx.lineCap = 'round';
-                // TL
                 ctx.beginPath();
                 ctx.moveTo(m, m + sz);
                 ctx.lineTo(m, m);
                 ctx.lineTo(m + sz, m);
                 ctx.stroke();
-                // TR
                 ctx.beginPath();
                 ctx.moveTo(W - m - sz, m);
                 ctx.lineTo(W - m, m);
                 ctx.lineTo(W - m, m + sz);
                 ctx.stroke();
-                // BL
                 ctx.beginPath();
                 ctx.moveTo(m, H - m - sz);
                 ctx.lineTo(m, H - m);
                 ctx.lineTo(m + sz, H - m);
                 ctx.stroke();
-                // BR
                 ctx.beginPath();
                 ctx.moveTo(W - m - sz, H - m);
                 ctx.lineTo(W - m, H - m);
@@ -2546,9 +2604,6 @@
                 ctx.stroke();
             }
 
-            // ───────────────────────────────────────
-            // BACKGROUND GRID
-            // ───────────────────────────────────────
             function drawGrid() {
                 const gridSize = 48;
                 ctx.strokeStyle = 'rgba(0,180,220,0.03)';
@@ -2567,9 +2622,6 @@
                 }
             }
 
-            // ───────────────────────────────────────
-            // MAIN RENDER
-            // ───────────────────────────────────────
             function drawBackground() {
                 const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.75);
                 bgGrad.addColorStop(0, '#0b1119');
@@ -2584,32 +2636,19 @@
                 drawBackground();
                 drawParticles();
                 drawHUDCorners();
-
-                if (introPhase === 0) {
-                    drawTerminal(elapsed);
-                } else if (introPhase === 1) {
-                    drawTerminal(elapsed);
-                    drawProgressBar();
-                } else if (introPhase === 2) {
-                    drawWelcomeCard();
-                    drawProgressBar();
-                }
+                if (introPhase === 0) drawTerminal(elapsed);
+                else if (introPhase === 1) { drawTerminal(elapsed);
+                    drawProgressBar(); } else if (introPhase === 2) { drawWelcomeCard();
+                    drawProgressBar(); }
             }
 
-            // ───────────────────────────────────────
-            // AUDIO ENGINE (Web Audio API)
-            // ───────────────────────────────────────
             let audioCtx = null;
             let audioEnabled = false;
 
             function initAudio() {
                 if (audioCtx) return;
-                try {
-                    audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-                    audioEnabled = true;
-                } catch (e) {
-                    audioEnabled = false;
-                }
+                try { audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                    audioEnabled = true; } catch (e) {}
             }
 
             function playTone(freq, duration, type = 'square', vol = 0.03, rampDown = true) {
@@ -2620,72 +2659,28 @@
                     osc.type = type;
                     osc.frequency.value = freq;
                     gain.gain.setValueAtTime(vol, audioCtx.currentTime);
-                    if (rampDown) {
-                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                    }
+                    if (rampDown) gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
-                    osc.start(audioCtx.currentTime);
+                    osc.start();
                     osc.stop(audioCtx.currentTime + duration + 0.01);
-                } catch (e) { /* silent */ }
+                } catch (e) {}
             }
 
-            function playTypingSound() {
-                playTone(700 + Math.random() * 500, 0.025, 'square', 0.02);
-            }
+            function playTypingSound() { playTone(700 + Math.random() * 500, 0.025, 'square', 0.02); }
 
-            function playBootSound() {
-                if (!audioEnabled || !audioCtx) return;
-                try {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(35, audioCtx.currentTime);
-                    osc.frequency.linearRampToValueAtTime(220, audioCtx.currentTime + 0.45);
-                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.55);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(audioCtx.currentTime);
-                    osc.stop(audioCtx.currentTime + 0.55);
-                } catch (e) { /* silent */ }
-            }
+            function playBootSound() { if (!audioEnabled) return;
+                playTone(35, 0.45, 'sine', 0.05, false); }
 
-            function playGlitchSound() {
-                playTone(50 + Math.random() * 180, 0.1, 'sawtooth', 0.05);
-            }
+            function playGlitchSound() { playTone(50 + Math.random() * 180, 0.1, 'sawtooth', 0.05); }
 
-            function playClickSound() {
-                playTone(1100, 0.03, 'square', 0.025);
-            }
+            function playClickSound() { playTone(1100, 0.03, 'square', 0.025); }
 
-            function playAmbientHum() {
-                if (!audioEnabled || !audioCtx) return;
-                try {
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.value = 56;
-                    gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
-                    gain.gain.linearRampToValueAtTime(0.02, audioCtx.currentTime + 1);
-                    gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 5);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(audioCtx.currentTime);
-                    osc.stop(audioCtx.currentTime + 5.5);
-                } catch (e) { /* silent */ }
-            }
-
-            // ───────────────────────────────────────
-            // GLITCH EFFECTS
-            // ───────────────────────────────────────
             function triggerMicroGlitch() {
                 glitchFlash.classList.add('active');
                 scanlines.classList.add('intensify');
-                setTimeout(() => {
-                    glitchFlash.classList.remove('active');
-                    scanlines.classList.remove('intensify');
-                }, 35 + Math.random() * 50);
+                setTimeout(() => { glitchFlash.classList.remove('active');
+                    scanlines.classList.remove('intensify'); }, 35 + Math.random() * 50);
                 if (Math.random() < 0.5) playGlitchSound();
             }
 
@@ -2694,22 +2689,16 @@
                 scanlines.classList.add('intensify');
                 overlay.classList.add('intro-shake');
                 playGlitchSound();
-                setTimeout(() => {
-                    glitchFlash.classList.remove('active');
+                setTimeout(() => { glitchFlash.classList.remove('active');
                     scanlines.classList.remove('intensify');
-                    overlay.classList.remove('intro-shake');
-                }, 140);
+                    overlay.classList.remove('intro-shake'); }, 140);
             }
 
-            // ───────────────────────────────────────
-            // PHASE TRANSITIONS
-            // ───────────────────────────────────────
             function transitionToLoading() {
                 introPhase = 1;
                 phaseStartTime = performance.now() / 1000;
                 progressPercent = 0;
                 playBootSound();
-                playAmbientHum();
             }
 
             function transitionToWelcome() {
@@ -2717,7 +2706,6 @@
                 phaseStartTime = performance.now() / 1000;
                 progressPercent = 100;
                 playClickSound();
-                // Show skip hint
                 skipHint.classList.add('visible');
             }
 
@@ -2725,23 +2713,16 @@
                 if (introComplete) return;
                 introComplete = true;
                 introPhase = 4;
-
                 triggerHeavyGlitch();
-
-                // White flash
                 const flash = document.createElement('div');
                 flash.style.cssText =
                     'position:fixed;inset:0;z-index:100010;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.1s';
                 document.body.appendChild(flash);
                 requestAnimationFrame(() => {
                     flash.style.opacity = '0.75';
-                    setTimeout(() => {
-                        flash.style.opacity = '0';
-                        setTimeout(() => flash.remove(), 180);
-                    }, 70);
+                    setTimeout(() => { flash.style.opacity = '0';
+                        setTimeout(() => flash.remove(), 180); }, 70);
                 });
-
-                // Fade overlay
                 setTimeout(() => {
                     overlay.classList.add('fading-out');
                     scanlines.style.opacity = '0';
@@ -2751,11 +2732,8 @@
                     document.body.style.cursor = '';
                     mainSite.classList.add('visible');
                 }, 100);
-
-                // Cleanup
                 setTimeout(() => {
                     overlay.classList.add('removed');
-                    overlay.style.display = 'none';
                     scanlines.style.display = 'none';
                     crtCurve.style.display = 'none';
                     glitchFlash.style.display = 'none';
@@ -2767,605 +2745,81 @@
             function requestSkip() {
                 if (skipRequested || introComplete) return;
                 skipRequested = true;
-                // Fast-forward: complete terminal, jump to welcome, then transition
                 while (currentLogIndex < terminalLogs.length) {
                     const log = terminalLogs[currentLogIndex];
-                    completedLines.push({
-                        text: log.text,
-                        color: log.color,
-                        prefix: log.prefix,
-                        ok: log.ok || false,
-                        glow: log.glow || false,
-                    });
+                    completedLines.push({ text: log.text, color: log.color, prefix: log.prefix, ok: log.ok || false,
+                        glow: log.glow || false });
                     currentLogIndex++;
                 }
-                currentTypedText = '';
-                typedCharCount = 0;
                 introPhase = 2;
                 phaseStartTime = performance.now() / 1000;
                 progressPercent = 100;
                 welcomeAlpha = 1;
                 playClickSound();
-                // Quick transition after a brief moment
-                setTimeout(() => {
-                    transitionToMainSite();
-                }, 600);
+                setTimeout(() => transitionToMainSite(), 600);
             }
 
-            // ───────────────────────────────────────
-            // RESIZE HANDLER
-            // ───────────────────────────────────────
             function resize() {
                 W = window.innerWidth;
                 H = window.innerHeight;
                 canvas.width = W;
                 canvas.height = H;
                 if (particles.length === 0) initParticles();
-                // Re-clamp particles to new bounds
-                for (const p of particles) {
-                    if (p.x > W) p.x = Math.random() * W;
-                    if (p.y > H) p.y = Math.random() * H;
-                }
+                for (const p of particles) { if (p.x > W) p.x = Math.random() * W; if (p.y > H) p.y = Math.random() *
+                        H; }
             }
             window.addEventListener('resize', resize);
             resize();
             initParticles();
 
-            // ───────────────────────────────────────
-            // ANIMATION LOOP
-            // ───────────────────────────────────────
             function animateIntro(timestamp) {
                 if (introComplete) return;
                 const elapsed = (timestamp - introStartTime) / 1000;
-                const dt = Math.min(0.1, 1 / 60); // clamp dt
+                const dt = Math.min(0.1, 1 / 60);
                 frameCount++;
-
                 updateParticles();
-
                 if (introPhase === 0) {
                     updateTyping(dt);
-                    // Auto-transition after terminal logs complete
-                    if (currentLogIndex >= terminalLogs.length && elapsed > 2.3) {
-                        transitionToLoading();
-                    }
+                    if (currentLogIndex >= terminalLogs.length && elapsed > 2.3) transitionToLoading();
                 } else if (introPhase === 1) {
                     const phaseElapsed = (timestamp / 1000) - phaseStartTime;
                     progressPercent = Math.min(100, phaseElapsed * 68);
-                    if (progressPercent >= 100 && phaseElapsed > 1.6) {
-                        transitionToWelcome();
-                    }
+                    if (progressPercent >= 100 && phaseElapsed > 1.6) transitionToWelcome();
                 } else if (introPhase === 2) {
                     const phaseElapsed = (timestamp / 1000) - phaseStartTime;
                     welcomeAlpha = Math.min(1, phaseElapsed * 2.8);
-                    if (phaseElapsed > 2.0) {
-                        transitionToMainSite();
-                        return;
-                    }
+                    if (phaseElapsed > 2.0) { transitionToMainSite(); return; }
                 }
-
                 draw(elapsed);
                 requestAnimationFrame(animateIntro);
             }
 
-            // ───────────────────────────────────────
-            // USER INTERACTION — AUDIO INIT + SKIP
-            // ───────────────────────────────────────
-            function handleFirstInteraction() {
-                initAudio();
+            function handleFirstInteraction() { initAudio();
                 document.removeEventListener('click', handleFirstInteraction);
                 document.removeEventListener('touchstart', handleFirstInteraction);
-                document.removeEventListener('keydown', handleFirstInteractionKey);
-            }
+                document.removeEventListener('keydown', handleFirstInteractionKey); }
 
-            function handleFirstInteractionKey(e) {
-                initAudio();
+            function handleFirstInteractionKey(e) { initAudio();
                 document.removeEventListener('click', handleFirstInteraction);
                 document.removeEventListener('touchstart', handleFirstInteraction);
-                document.removeEventListener('keydown', handleFirstInteractionKey);
-                // Also check for skip
-                if (e.key && introPhase < 2) {
-                    requestSkip();
-                }
-            }
-
+                document.removeEventListener('keydown', handleFirstInteractionKey); if (e.key && introPhase < 2)
+                requestSkip(); }
             document.addEventListener('click', handleFirstInteraction, { once: true });
             document.addEventListener('touchstart', handleFirstInteraction, { once: true });
             document.addEventListener('keydown', handleFirstInteractionKey, { once: true });
-
-            // Global skip listener (any key after audio init)
-            document.addEventListener('keydown', function skipListener(e) {
-                if (introComplete) {
-                    document.removeEventListener('keydown', skipListener);
-                    return;
-                }
-                if (e.key && introPhase < 2 && !skipRequested) {
-                    requestSkip();
-                }
-            });
-
-            // Skip hint click
-            skipHint.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (!skipRequested && introPhase < 3) requestSkip();
-            });
-
-            // ───────────────────────────────────────
-            // START THE INTRO
-            // ───────────────────────────────────────
+            document.addEventListener('keydown', function skipListener(e) { if (introComplete) { document
+                    .removeEventListener('keydown', skipListener); return; } if (e.key && introPhase < 2 && !
+                    skipRequested) requestSkip(); });
+            skipHint.addEventListener('click', (e) => { e.stopPropagation(); if (!skipRequested && introPhase < 3)
+                    requestSkip(); });
             document.body.style.overflow = 'hidden';
             document.body.style.cursor = 'none';
             introStartTime = performance.now();
             requestAnimationFrame(animateIntro);
-
-            // ───────────────────────────────────────
-            // FIREBASE INTEGRATION
-            // ───────────────────────────────────────
-            window.FIREBASE_READY = false;
-            window.db = null;
-            window.firebaseApp = null;
-            window.currentUserUid = null;
-            window.isAdmin = false;
-
-            const firebaseConfig = {
-                apiKey: "AIzaSyD-PLACEHOLDER-KEY",
-                authDomain: "ctg-1st-web.firebaseapp.com",
-                databaseURL: "https://ctg-1st-web-default-rtdb.firebaseio.com/",
-                projectId: "ctg-1st-web",
-                storageBucket: "ctg-1st-web.appspot.com",
-                messagingSenderId: "000000000000",
-                appId: "1:000000000000:web:xxxxxxxxxxxxxxxxxxxx"
-            };
-
-            function initFirebase() {
-                try {
-                    if (typeof firebase === 'undefined') {
-                        console.warn('Firebase SDK not loaded. Running in offline mode.');
-                        return;
-                    }
-                    window.firebaseApp = firebase.initializeApp(firebaseConfig);
-                    window.db = firebase.database();
-                    if (firebase.analytics) {
-                        try { firebase.analytics(); } catch (e) { /* analytics blocked */ }
-                    }
-                    window.FIREBASE_READY = true;
-                    console.log('Firebase connected successfully.');
-                    initUserProfile();
-                    loadSiteSettings();
-                } catch (e) {
-                    console.warn('Firebase init failed:', e.message);
-                    window.FIREBASE_READY = false;
-                }
-            }
-
-            function getOrCreateUserId() {
-                let uid = localStorage.getItem('tdp_user_uid');
-                if (!uid) {
-                    uid = 'user_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
-                    localStorage.setItem('tdp_user_uid', uid);
-                }
-                return uid;
-            }
-
-            function initUserProfile() {
-                if (!window.FIREBASE_READY || !window.db) return;
-                window.currentUserUid = getOrCreateUserId();
-                const userRef = window.db.ref('users/' + window.currentUserUid);
-                userRef.once('value').then(snap => {
-                    const data = snap.val() || {};
-                    if (!data.username) {
-                        const defaultName = 'User_' + window.currentUserUid.substring(5, 11);
-                        userRef.set({
-                            username: defaultName,
-                            lastActive: firebase.database.ServerValue.TIMESTAMP,
-                            isAdmin: false
-                        });
-                        updateProfileUI(defaultName, false);
-                    } else {
-                        updateProfileUI(data.username, !!data.isAdmin);
-                    }
-                }).catch(() => {
-                    updateProfileUI('User', false);
-                });
-                userRef.on('value', snap => {
-                    const data = snap.val() || {};
-                    updateProfileUI(data.username || 'User', !!data.isAdmin);
-                });
-            }
-
-            function updateProfileUI(username, isAdminFlag) {
-                window.isAdmin = isAdminFlag;
-                const wrap = document.getElementById('navProfileWrap');
-                const icon = document.getElementById('navProfileIcon');
-                const nameEl = document.getElementById('navProfileName');
-                const adminLink = document.getElementById('profileAdminPanel');
-                const footerAdmin = document.getElementById('footerAdminLink');
-                if (wrap) wrap.style.display = 'flex';
-                if (icon) icon.textContent = (username || 'U').charAt(0).toUpperCase();
-                if (nameEl) nameEl.textContent = username || 'User';
-                if (adminLink) adminLink.style.display = isAdminFlag ? 'block' : 'none';
-                if (footerAdmin) footerAdmin.style.opacity = isAdminFlag ? '1' : '0.4';
-            }
-
-            function loadSiteSettings() {
-                if (!window.FIREBASE_READY || !window.db) return;
-                window.db.ref('admin/siteSettings').once('value').then(snap => {
-                    const s = snap.val() || {};
-                    if (s.announcement) {
-                        const bar = document.getElementById('announcementBar');
-                        if (bar) bar.innerHTML = s.announcement + ' <span>এখনই ভিজিট করুন</span> →';
-                    }
-                }).catch(() => {});
-            }
-
-            function escapeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            // ───────────────────────────────────────
-            // ADMIN PANEL LOGIC
-            // ───────────────────────────────────────
-            let adminPanelOpen = false;
-
-            function openAdminPanel() {
-                if (!window.isAdmin) {
-                    showAdminLoginModal();
-                    return;
-                }
-                document.getElementById('adminPanel').classList.add('active');
-                document.getElementById('adminPanelOverlay').classList.add('active');
-                adminPanelOpen = true;
-                document.body.style.overflow = 'hidden';
-                loadAdminProjects();
-                loadAdminUsers();
-                loadAdminSettings();
-            }
-
-            function closeAdminPanel() {
-                document.getElementById('adminPanel').classList.remove('active');
-                document.getElementById('adminPanelOverlay').classList.remove('active');
-                adminPanelOpen = false;
-                document.body.style.overflow = '';
-            }
-
-            function showToast(msg, isError = false) {
-                const toast = document.getElementById('adminToast');
-                toast.textContent = msg;
-                toast.className = 'admin-toast ' + (isError ? 'error' : '');
-                toast.classList.add('show');
-                clearTimeout(toast._timeout);
-                toast._timeout = setTimeout(() => toast.classList.remove('show'), 2200);
-            }
-
-            function showAdminLoginModal() {
-                document.getElementById('adminLoginModalOverlay').classList.add('active');
-                document.getElementById('adminLoginInput').value = '';
-                document.getElementById('adminLoginInput').focus();
-            }
-
-            function hideAdminLoginModal() {
-                document.getElementById('adminLoginModalOverlay').classList.remove('active');
-            }
-
-            function verifyAdminPin(pin) {
-                if (!window.FIREBASE_READY || !window.db) {
-                    if (pin === '1234') {
-                        window.isAdmin = true;
-                        updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
-                        hideAdminLoginModal();
-                        openAdminPanel();
-                        showToast('Admin access granted (offline mode)');
-                    } else {
-                        showToast('Invalid PIN', true);
-                    }
-                    return;
-                }
-                window.db.ref('admin/siteSettings/adminPin').once('value').then(snap => {
-                    const storedPin = snap.val() || '1234';
-                    if (pin === storedPin) {
-                        window.isAdmin = true;
-                        window.db.ref('users/' + window.currentUserUid).update({ isAdmin: true });
-                        updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
-                        hideAdminLoginModal();
-                        openAdminPanel();
-                        showToast('Admin access granted');
-                    } else {
-                        showToast('Invalid PIN', true);
-                    }
-                }).catch(() => {
-                    if (pin === '1234') {
-                        window.isAdmin = true;
-                        hideAdminLoginModal();
-                        openAdminPanel();
-                        showToast('Admin access granted');
-                    } else {
-                        showToast('Invalid PIN', true);
-                    }
-                });
-            }
-
-            function loadAdminProjects() {
-                const listEl = document.getElementById('adminProjectsList');
-                if (!listEl) return;
-                if (!window.FIREBASE_READY || !window.db) {
-                    listEl.innerHTML =
-                        '<div class="admin-empty">Firebase offline — cannot load projects.<br>Use Firebase console to manage data.</div>';
-                    return;
-                }
-                window.db.ref('projects').once('value').then(snap => {
-                    const projects = snap.val() || {};
-                    const entries = Object.entries(projects);
-                    if (entries.length === 0) {
-                        listEl.innerHTML = '<div class="admin-empty">No projects yet. Add one above.</div>';
-                        return;
-                    }
-                    listEl.innerHTML = entries.map(([id, p]) => `
-                <div class="admin-item">
-                  <div class="admin-item-info">
-                    <div class="admin-item-title">${escapeHTML(p.title || 'Untitled')}</div>
-                    <div class="admin-item-sub">${escapeHTML(p.category || '')} · Tags: ${escapeHTML(p.tags || '')}</div>
-                  </div>
-                  <div class="admin-item-actions">
-                    <button class="admin-btn admin-btn-sm" onclick="editAdminProject('${id}')">Edit</button>
-                    <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="deleteAdminProject('${id}')">Del</button>
-                  </div>
-                </div>
-              `).join('');
-                }).catch(() => {
-                    listEl.innerHTML =
-                    '<div class="admin-empty">Failed to load projects. Check Firebase connection.</div>';
-                });
-            }
-
-            function saveAdminProject() {
-                if (!window.FIREBASE_READY || !window.db) {
-                    showToast('Firebase offline — cannot save', true);
-                    return;
-                }
-                const title = document.getElementById('adminProjTitle').value.trim();
-                const category = document.getElementById('adminProjCat').value;
-                const desc = document.getElementById('adminProjDesc').value.trim();
-                const tags = document.getElementById('adminProjTags').value.trim();
-                const bestFor = document.getElementById('adminProjBestFor').value.trim();
-                const editId = document.getElementById('adminProjEditId').value;
-                if (!title) { showToast('Title is required', true); return; }
-                const projectData = { title, category, description: desc, tags, bestFor, updatedAt: Date.now() };
-                if (editId) {
-                    window.db.ref('projects/' + editId).update(projectData).then(() => {
-                        showToast('Project updated!');
-                        resetAdminProjectForm();
-                        loadAdminProjects();
-                    }).catch(() => showToast('Update failed', true));
-                } else {
-                    const newRef = window.db.ref('projects').push();
-                    projectData.createdAt = Date.now();
-                    newRef.set(projectData).then(() => {
-                        showToast('Project added!');
-                        resetAdminProjectForm();
-                        loadAdminProjects();
-                    }).catch(() => showToast('Add failed', true));
-                }
-            }
-
-            function resetAdminProjectForm() {
-                document.getElementById('adminProjTitle').value = '';
-                document.getElementById('adminProjCat').value = 'Robotics';
-                document.getElementById('adminProjDesc').value = '';
-                document.getElementById('adminProjTags').value = '';
-                document.getElementById('adminProjBestFor').value = '';
-                document.getElementById('adminProjEditId').value = '';
-                document.getElementById('adminProjSaveBtn').textContent = '➕ Add Project';
-                document.getElementById('adminProjCancelEdit').style.display = 'none';
-            }
-
-            function loadAdminUsers() {
-                const listEl = document.getElementById('adminUsersList');
-                if (!listEl) return;
-                if (!window.FIREBASE_READY || !window.db) {
-                    listEl.innerHTML = '<div class="admin-empty">Firebase offline.</div>';
-                    return;
-                }
-                window.db.ref('users').once('value').then(snap => {
-                    const users = snap.val() || {};
-                    const entries = Object.entries(users);
-                    if (entries.length === 0) {
-                        listEl.innerHTML = '<div class="admin-empty">No users registered yet.</div>';
-                        return;
-                    }
-                    listEl.innerHTML = entries.map(([uid, u]) => `
-                <div class="admin-item">
-                  <div class="admin-item-info">
-                    <div class="admin-item-title">${escapeHTML(u.username || 'Unknown')}</div>
-                    <div class="admin-item-sub">UID: ${uid.substring(0,16)}... · Admin: ${u.isAdmin ? 'Yes' : 'No'}</div>
-                  </div>
-                  <div class="admin-item-actions">
-                    <button class="admin-btn admin-btn-sm" onclick="editAdminUsername('${uid}')">Edit</button>
-                    <button class="admin-btn admin-btn-sm" onclick="toggleAdminUser('${uid}', ${!u.isAdmin})">${u.isAdmin ? 'Revoke' : 'Make Admin'}</button>
-                  </div>
-                </div>
-              `).join('');
-                }).catch(() => {
-                    listEl.innerHTML = '<div class="admin-empty">Failed to load users.</div>';
-                });
-            }
-
-            function loadAdminSettings() {
-                if (!window.FIREBASE_READY || !window.db) return;
-                window.db.ref('admin/siteSettings').once('value').then(snap => {
-                    const s = snap.val() || {};
-                    document.getElementById('adminSettingAnnouncement').value = s.announcement || '';
-                    document.getElementById('adminSettingSiteName').value = s.siteName || 'The Debug Point';
-                }).catch(() => {});
-            }
-
-            function saveAdminSettings() {
-                if (!window.FIREBASE_READY || !window.db) {
-                    showToast('Firebase offline', true);
-                    return;
-                }
-                const announcement = document.getElementById('adminSettingAnnouncement').value.trim();
-                const siteName = document.getElementById('adminSettingSiteName').value.trim();
-                window.db.ref('admin/siteSettings').update({
-                    announcement,
-                    siteName,
-                    updatedAt: Date.now()
-                }).then(() => {
-                    showToast('Settings saved!');
-                    if (announcement) {
-                        const bar = document.getElementById('announcementBar');
-                        if (bar) bar.innerHTML = announcement + ' <span>এখনই ভিজিট করুন</span> →';
-                    }
-                }).catch(() => showToast('Save failed', true));
-            }
-
-            // ───────────────────────────────────────
-            // GLOBAL EXPORTS
-            // ───────────────────────────────────────
-            window.editAdminProject = function(id) {
-                if (!window.FIREBASE_READY || !window.db) return;
-                window.db.ref('projects/' + id).once('value').then(snap => {
-                    const p = snap.val();
-                    if (!p) return;
-                    document.getElementById('adminProjTitle').value = p.title || '';
-                    document.getElementById('adminProjCat').value = p.category || 'Robotics';
-                    document.getElementById('adminProjDesc').value = p.description || '';
-                    document.getElementById('adminProjTags').value = p.tags || '';
-                    document.getElementById('adminProjBestFor').value = p.bestFor || '';
-                    document.getElementById('adminProjEditId').value = id;
-                    document.getElementById('adminProjSaveBtn').textContent = '✏ Update Project';
-                    document.getElementById('adminProjCancelEdit').style.display = 'inline-block';
-                    document.getElementById('adminContent').scrollTop = 0;
-                });
-            };
-            window.deleteAdminProject = function(id) {
-                if (!window.FIREBASE_READY || !window.db) return;
-                if (!confirm('Delete this project permanently?')) return;
-                window.db.ref('projects/' + id).remove().then(() => {
-                    showToast('Project deleted');
-                    loadAdminProjects();
-                }).catch(() => showToast('Delete failed', true));
-            };
-            window.editAdminUsername = function(uid) {
-                const newName = prompt('Enter new username:');
-                if (!newName || !newName.trim()) return;
-                if (!window.FIREBASE_READY || !window.db) return;
-                window.db.ref('users/' + uid).update({ username: newName.trim() }).then(() => {
-                    showToast('Username updated');
-                    loadAdminUsers();
-                }).catch(() => showToast('Update failed', true));
-            };
-            window.toggleAdminUser = function(uid, makeAdmin) {
-                if (!window.FIREBASE_READY || !window.db) return;
-                window.db.ref('users/' + uid).update({ isAdmin: makeAdmin }).then(() => {
-                    showToast(makeAdmin ? 'Admin granted' : 'Admin revoked');
-                    loadAdminUsers();
-                }).catch(() => showToast('Toggle failed', true));
-            };
-            window.openAdminPanel = openAdminPanel;
-            window.closeAdminPanel = closeAdminPanel;
-            window.showToast = showToast;
-            window.escapeHTML = escapeHTML;
-            window.updateProfileUI = updateProfileUI;
-
-            // ───────────────────────────────────────
-            // EVENT BINDINGS
-            // ───────────────────────────────────────
-            document.getElementById('adminCloseBtn').addEventListener('click', closeAdminPanel);
-            document.getElementById('adminPanelOverlay').addEventListener('click', closeAdminPanel);
-            document.getElementById('footerAdminLink').addEventListener('click', () => {
-                if (window.isAdmin) openAdminPanel();
-                else showAdminLoginModal();
-            });
-            document.getElementById('profileAdminPanel').addEventListener('click', () => {
-                document.getElementById('navProfileDropdown').classList.remove('open');
-                openAdminPanel();
-            });
-            document.getElementById('adminLoginConfirm').addEventListener('click', () => {
-                const pin = document.getElementById('adminLoginInput').value.trim();
-                if (pin) verifyAdminPin(pin);
-            });
-            document.getElementById('adminLoginCancel').addEventListener('click', hideAdminLoginModal);
-            document.getElementById('adminLoginModalOverlay').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('adminLoginModalOverlay')) hideAdminLoginModal();
-            });
-            document.getElementById('adminProjSaveBtn').addEventListener('click', saveAdminProject);
-            document.getElementById('adminProjCancelEdit').addEventListener('click', resetAdminProjectForm);
-            document.getElementById('adminSettingsSaveBtn').addEventListener('click', saveAdminSettings);
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    const tn = this.dataset.tab;
-                    document.getElementById('adminTabProjects').style.display = tn === 'projects' ?
-                        '' : 'none';
-                    document.getElementById('adminTabUsers').style.display = tn === 'users' ? '' :
-                        'none';
-                    document.getElementById('adminTabSettings').style.display = tn === 'settings' ?
-                        '' : 'none';
-                    if (tn === 'users') loadAdminUsers();
-                    if (tn === 'settings') loadAdminSettings();
-                });
-            });
-            document.getElementById('navProfileIcon').addEventListener('click', (e) => {
-                e.stopPropagation();
-                document.getElementById('navProfileDropdown').classList.toggle('open');
-            });
-            document.getElementById('profileEditUsername').addEventListener('click', () => {
-                document.getElementById('navProfileDropdown').classList.remove('open');
-                document.getElementById('usernameModalOverlay').classList.add('active');
-                document.getElementById('usernameModalInput').value = document.getElementById(
-                    'navProfileName').textContent || '';
-                document.getElementById('usernameModalInput').focus();
-            });
-            document.getElementById('usernameModalSave').addEventListener('click', () => {
-                const newName = document.getElementById('usernameModalInput').value.trim();
-                if (!newName) { showToast('Username cannot be empty', true); return; }
-                if (window.FIREBASE_READY && window.db && window.currentUserUid) {
-                    window.db.ref('users/' + window.currentUserUid).update({ username: newName }).then(
-                        () => {
-                            updateProfileUI(newName, window.isAdmin);
-                            showToast('Username updated!');
-                        }).catch(() => showToast('Update failed', true));
-                } else {
-                    updateProfileUI(newName, window.isAdmin);
-                    showToast('Username updated (offline)');
-                }
-                document.getElementById('usernameModalOverlay').classList.remove('active');
-            });
-            document.getElementById('usernameModalCancel').addEventListener('click', () => {
-                document.getElementById('usernameModalOverlay').classList.remove('active');
-            });
-            document.getElementById('usernameModalOverlay').addEventListener('click', (e) => {
-                if (e.target === document.getElementById('usernameModalOverlay'))
-                    document.getElementById('usernameModalOverlay').classList.remove('active');
-            });
-            document.addEventListener('click', () => {
-                document.getElementById('navProfileDropdown').classList.remove('open');
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-                    e.preventDefault();
-                    if (window.isAdmin) openAdminPanel();
-                    else showAdminLoginModal();
-                }
-                if (e.key === 'Escape') {
-                    if (adminPanelOpen) closeAdminPanel();
-                    hideAdminLoginModal();
-                    document.getElementById('usernameModalOverlay').classList.remove('active');
-                }
-            });
-
-            // ───────────────────────────────────────
-            // INIT FIREBASE
-            // ───────────────────────────────────────
-            initFirebase();
-
-        })(); // END INTRO + APP IIFE
+        })();
 
         // ───────────────────────────────────────
-        // Polyfill: CanvasRenderingContext2D.roundRect
-        // ───────────────────────────────────────
+        // Polyfill
         if (!CanvasRenderingContext2D.prototype.roundRect) {
             CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
                 if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r };
@@ -3384,24 +2838,573 @@
         }
 
         // ───────────────────────────────────────
-        // MAIN SITE SCRIPTS (preserved)
+        // GLOBAL APP LOGIC
         // ───────────────────────────────────────
+        window.FIREBASE_READY = false;
+        window.db = null;
+        window.firebaseApp = null;
+        window.currentUserUid = null;
+        window.isAdmin = false;
+        window.adminUnlocked = false;
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCc50Kvtc8-7keVGlJ1JQEHzyPGmyFcdjs",
+            authDomain: "ctg-1st-web.firebaseapp.com",
+            databaseURL: "https://ctg-1st-web-default-rtdb.firebaseio.com",
+            projectId: "ctg-1st-web",
+            storageBucket: "ctg-1st-web.firebasestorage.app",
+            messagingSenderId: "775343695903",
+            appId: "1:775343695903:web:f2a33b5342846909830d2a",
+            measurementId: "G-24EH32M7S6"
+        };
+
+        function initFirebase() {
+            try {
+                if (typeof firebase === 'undefined') { console.warn('Firebase SDK not loaded.'); return; }
+                window.firebaseApp = firebase.initializeApp(firebaseConfig);
+                window.db = firebase.database();
+                if (firebase.analytics) try { firebase.analytics(); } catch (e) {}
+                window.FIREBASE_READY = true;
+                console.log('Firebase connected.');
+                initUserProfile();
+                loadSiteSettings();
+            } catch (e) { console.warn('Firebase init failed:', e.message); }
+        }
+
+        function getOrCreateUserId() {
+            let uid = localStorage.getItem('tdp_user_uid');
+            if (!uid) { uid = 'user_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+                localStorage.setItem('tdp_user_uid', uid); }
+            return uid;
+        }
+
+        function initUserProfile() {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.currentUserUid = getOrCreateUserId();
+            const userRef = window.db.ref('users/' + window.currentUserUid);
+            userRef.once('value').then(snap => {
+                const data = snap.val() || {};
+                if (!data.username) {
+                    const defaultName = 'User_' + window.currentUserUid.substring(5, 11);
+                    userRef.set({ username: defaultName, lastActive: firebase.database.ServerValue
+                            .TIMESTAMP, isAdmin: false });
+                    updateProfileUI(defaultName, false);
+                } else { updateProfileUI(data.username, !!data.isAdmin); }
+            }).catch(() => updateProfileUI('User', false));
+            userRef.on('value', snap => { const data = snap.val() || {};
+                updateProfileUI(data.username || 'User', !!data.isAdmin); });
+        }
+
+        function updateProfileUI(username, isAdminFlag) {
+            window.isAdmin = isAdminFlag;
+            const wrap = document.getElementById('navProfileWrap');
+            const icon = document.getElementById('navProfileIcon');
+            const nameEl = document.getElementById('navProfileName');
+            const adminLink = document.getElementById('profileAdminPanel');
+            const footerAdmin = document.getElementById('footerAdminLink');
+            if (wrap) wrap.style.display = 'flex';
+            if (icon) icon.textContent = (username || 'U').charAt(0).toUpperCase();
+            if (nameEl) nameEl.textContent = username || 'User';
+            if (adminLink) adminLink.style.display = isAdminFlag ? 'block' : 'none';
+            if (footerAdmin) footerAdmin.style.opacity = isAdminFlag ? '1' : '0.4';
+        }
+
+        function loadSiteSettings() {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('admin/siteSettings').once('value').then(snap => {
+                const s = snap.val() || {};
+                if (s.announcement) {
+                    const bar = document.getElementById('announcementBar');
+                    if (bar) bar.innerHTML = s.announcement + ' <span>এখনই ভিজিট করুন</span> →';
+                }
+            }).catch(() => {});
+        }
+
+        function escapeHTML(str) { const div = document.createElement('div');
+            div.textContent = str; return div.innerHTML; }
+
+        let adminPanelOpen = false;
+
+        function openAdminPanel() {
+            if (!window.isAdmin && !sessionStorage.getItem('tdp_admin_unlocked')) {
+                showAdminLoginModal();
+                return;
+            }
+            document.getElementById('adminPanel').classList.add('active');
+            document.getElementById('adminPanelOverlay').classList.add('active');
+            adminPanelOpen = true;
+            document.body.style.overflow = 'hidden';
+            loadAdminProjects();
+            loadAdminUsers();
+            loadAdminSettings();
+            loadAdminSupport();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('active');
+            document.getElementById('adminPanelOverlay').classList.remove('active');
+            adminPanelOpen = false;
+            document.body.style.overflow = '';
+        }
+
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('adminToast');
+            toast.textContent = msg;
+            toast.className = 'admin-toast ' + (isError ? 'error' : '');
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        function showAdminLoginModal() {
+            document.getElementById('adminLoginModalOverlay').classList.add('active');
+            document.getElementById('adminLoginInput').value = '';
+            document.getElementById('adminLoginInput').focus();
+        }
+
+        function hideAdminLoginModal() { document.getElementById('adminLoginModalOverlay').classList.remove('active'); }
+
+        function verifyAdminPin(pin) {
+            if (!window.FIREBASE_READY || !window.db) {
+                if (pin === '1234') { window.isAdmin = true;
+                    updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
+                    hideAdminLoginModal();
+                    openAdminPanel();
+                    showToast('Admin access granted (offline)'); } else showToast('Invalid PIN', true);
+                return;
+            }
+            window.db.ref('admin/siteSettings/adminPin').once('value').then(snap => {
+                const storedPin = snap.val() || '1234';
+                if (pin === storedPin) {
+                    window.isAdmin = true;
+                    window.db.ref('users/' + window.currentUserUid).update({ isAdmin: true });
+                    updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
+                    hideAdminLoginModal();
+                    openAdminPanel();
+                    showToast('Admin access granted');
+                } else showToast('Invalid PIN', true);
+            }).catch(() => { if (pin === '1234') { window.isAdmin = true;
+                    hideAdminLoginModal();
+                    openAdminPanel();
+                    showToast('Admin access granted'); } else showToast('Invalid PIN', true); });
+        }
+
+        function loadAdminProjects() {
+            const listEl = document.getElementById('adminProjectsList');
+            if (!listEl) return;
+            if (!window.FIREBASE_READY || !window.db) { listEl.innerHTML =
+                    '<div class="admin-empty">Firebase offline.</div>'; return; }
+            window.db.ref('projects').once('value').then(snap => {
+                const projects = snap.val() || {};
+                const entries = Object.entries(projects);
+                if (entries.length === 0) { listEl.innerHTML =
+                        '<div class="admin-empty">No projects yet.</div>'; return; }
+                listEl.innerHTML = entries.map(([id, p]) => `
+              <div class="admin-item">
+                <div class="admin-item-info">
+                  <div class="admin-item-title">${escapeHTML(p.title || 'Untitled')}</div>
+                  <div class="admin-item-sub">${escapeHTML(p.category || '')} · ${escapeHTML(p.tags || '')}</div>
+                </div>
+                <div class="admin-item-actions">
+                  <button class="admin-btn admin-btn-sm" onclick="editAdminProject('${id}')">Edit</button>
+                  <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="deleteAdminProject('${id}')">Del</button>
+                </div>
+              </div>`).join('');
+            }).catch(() => { listEl.innerHTML = '<div class="admin-empty">Failed to load projects.</div>'; });
+        }
+
+        function saveAdminProject() {
+            if (!window.FIREBASE_READY || !window.db) { showToast('Firebase offline', true); return; }
+            const title = document.getElementById('adminProjTitle').value.trim();
+            const category = document.getElementById('adminProjCat').value;
+            const desc = document.getElementById('adminProjDesc').value.trim();
+            const tags = document.getElementById('adminProjTags').value.trim();
+            const bestFor = document.getElementById('adminProjBestFor').value.trim();
+            const editId = document.getElementById('adminProjEditId').value;
+            if (!title) { showToast('Title required', true); return; }
+            const projectData = { title, category, description: desc, tags, bestFor, updatedAt: Date.now() };
+            if (editId) {
+                window.db.ref('projects/' + editId).update(projectData).then(() => { showToast(
+                        'Project updated!');
+                    resetAdminProjectForm();
+                    loadAdminProjects(); }).catch(() => showToast('Update failed', true));
+            } else {
+                const newRef = window.db.ref('projects').push();
+                projectData.createdAt = Date.now();
+                newRef.set(projectData).then(() => { showToast('Project added!');
+                    resetAdminProjectForm();
+                    loadAdminProjects(); }).catch(() => showToast('Add failed', true));
+            }
+        }
+
+        function resetAdminProjectForm() {
+            document.getElementById('adminProjTitle').value = '';
+            document.getElementById('adminProjCat').value = 'Robotics';
+            document.getElementById('adminProjDesc').value = '';
+            document.getElementById('adminProjTags').value = '';
+            document.getElementById('adminProjBestFor').value = '';
+            document.getElementById('adminProjEditId').value = '';
+            document.getElementById('adminProjSaveBtn').textContent = '➕ Add Project';
+            document.getElementById('adminProjCancelEdit').style.display = 'none';
+        }
+
+        function loadAdminUsers() {
+            const listEl = document.getElementById('adminUsersList');
+            if (!listEl) return;
+            if (!window.FIREBASE_READY || !window.db) { listEl.innerHTML =
+                    '<div class="admin-empty">Firebase offline.</div>'; return; }
+            window.db.ref('users').once('value').then(snap => {
+                const users = snap.val() || {};
+                const entries = Object.entries(users);
+                if (entries.length === 0) { listEl.innerHTML =
+                        '<div class="admin-empty">No users registered.</div>'; return; }
+                listEl.innerHTML = entries.map(([uid, u]) => `
+              <div class="admin-item">
+                <div class="admin-item-info">
+                  <div class="admin-item-title">${escapeHTML(u.username || 'Unknown')}</div>
+                  <div class="admin-item-sub">UID: ${uid.substring(0,16)}... · Admin: ${u.isAdmin ? 'Yes' : 'No'}</div>
+                </div>
+                <div class="admin-item-actions">
+                  <button class="admin-btn admin-btn-sm" onclick="editAdminUsername('${uid}')">Edit</button>
+                  <button class="admin-btn admin-btn-sm" onclick="toggleAdminUser('${uid}', ${!u.isAdmin})">${u.isAdmin ? 'Revoke' : 'Make Admin'}</button>
+                </div>
+              </div>`).join('');
+            }).catch(() => { listEl.innerHTML = '<div class="admin-empty">Failed to load users.</div>'; });
+        }
+
+        function loadAdminSettings() {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('admin/siteSettings').once('value').then(snap => {
+                const s = snap.val() || {};
+                document.getElementById('adminSettingAnnouncement').value = s.announcement || '';
+                document.getElementById('adminSettingSiteName').value = s.siteName || 'The Debug Point';
+            }).catch(() => {});
+        }
+
+        function saveAdminSettings() {
+            if (!window.FIREBASE_READY || !window.db) { showToast('Firebase offline', true); return; }
+            const announcement = document.getElementById('adminSettingAnnouncement').value.trim();
+            const siteName = document.getElementById('adminSettingSiteName').value.trim();
+            window.db.ref('admin/siteSettings').update({ announcement, siteName, updatedAt: Date.now() }).then(() => {
+                showToast('Settings saved!');
+                if (announcement) document.getElementById('announcementBar').innerHTML = announcement +
+                    ' <span>এখনই ভিজিট করুন</span> →';
+            }).catch(() => showToast('Save failed', true));
+        }
+
+        // ═══════════════════════════════════════════
+        // SUPPORT CHAT SYSTEM
+        // ═══════════════════════════════════════════
+        let supportUnread = 0;
+        let supportListenerUnsubscribe = null;
+        let currentSupportChatUserId = null;
+
+        function initSupportSystem() {
+            if (!window.FIREBASE_READY || !window.db || !window.currentUserUid) return;
+            const chatRef = window.db.ref('supportChats/' + window.currentUserUid + '/messages');
+            if (supportListenerUnsubscribe) supportListenerUnsubscribe();
+            supportListenerUnsubscribe = chatRef.on('value', snap => {
+                const messages = snap.val() || {};
+                const msgs = Object.values(messages).sort((a, b) => a.timestamp - b.timestamp);
+                renderSupportMessages(msgs);
+                updateSupportBadge(msgs);
+            });
+        }
+
+        function renderSupportMessages(msgs) {
+            const container = document.getElementById('supportMessages');
+            if (!container) return;
+            container.innerHTML = msgs.map(m => {
+                const time = new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const cls = m.from === 'admin' ? 'admin' : 'user';
+                return `<div class="support-msg ${cls}">${escapeHTML(m.text)}<div class="msg-time">${time}</div></div>`;
+            }).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function updateSupportBadge(msgs) {
+            const badge = document.getElementById('supportBadge');
+            const unread = msgs.filter(m => m.from === 'admin' && !m.read).length;
+            supportUnread = unread;
+            if (badge) {
+                badge.textContent = unread > 9 ? '9+' : unread;
+                if (unread > 0) badge.classList.add('show');
+                else badge.classList.remove('show');
+            }
+        }
+
+        function sendSupportMessage(text) {
+            if (!window.FIREBASE_READY || !window.db || !window.currentUserUid) return;
+            const chatRef = window.db.ref('supportChats/' + window.currentUserUid + '/messages');
+            chatRef.push({
+                text: text.trim(),
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                from: 'user',
+                read: false
+            }).then(() => {
+                document.getElementById('supportInput').value = '';
+            });
+        }
+
+        function sendAdminReply(userId, text) {
+            if (!window.FIREBASE_READY || !window.db) return;
+            const chatRef = window.db.ref('supportChats/' + userId + '/messages');
+            chatRef.push({
+                text: text.trim(),
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                from: 'admin',
+                read: false
+            });
+        }
+
+        function loadAdminSupport() {
+            if (!window.FIREBASE_READY || !window.db) return;
+            const convList = document.getElementById('adminSupportConversations');
+            const msgArea = document.getElementById('adminSupportMessages');
+            window.db.ref('supportChats').on('value', snap => {
+                const chats = snap.val() || {};
+                const entries = Object.entries(chats);
+                convList.innerHTML = entries.map(([uid, data]) => {
+                    const msgs = data.messages ? Object.values(data.messages) : [];
+                    const lastMsg = msgs.length ? msgs[msgs.length - 1] : null;
+                    const lastTime = lastMsg ? new Date(lastMsg.timestamp).toLocaleString() : '—';
+                    return `<div class="admin-item" style="cursor:pointer;" onclick="openSupportConversation('${uid}')">
+                <div class="admin-item-info">
+                  <div class="admin-item-title">User: ${uid.substring(0,12)}...</div>
+                  <div class="admin-item-sub">Last: ${lastTime} · Messages: ${msgs.length}</div>
+                </div>
+                <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="event.stopPropagation(); deleteSupportChat('${uid}')">Delete</button>
+              </div>`;
+                }).join('');
+                if (entries.length === 0) convList.innerHTML = '<div class="admin-empty">No support chats yet.</div>';
+                if (currentSupportChatUserId) openSupportConversation(currentSupportChatUserId, true);
+            });
+        }
+
+        function openSupportConversation(userId, silent = false) {
+            currentSupportChatUserId = userId;
+            const msgArea = document.getElementById('adminSupportMessages');
+            window.db.ref('supportChats/' + userId + '/messages').off();
+            window.db.ref('supportChats/' + userId + '/messages').on('value', snap => {
+                const messages = snap.val() || {};
+                const msgs = Object.values(messages).sort((a, b) => a.timestamp - b.timestamp);
+                msgArea.innerHTML = `<div class="admin-section-title">Conversation with ${userId.substring(0,12)}...</div>` +
+                    msgs.map(m => `<div class="support-msg ${m.from==='admin'?'admin':'user'}">${escapeHTML(m.text)}<div class="msg-time">${new Date(m.timestamp).toLocaleTimeString()}</div></div>`).join('') +
+                    `<div style="display:flex;gap:6px;margin-top:8px;">
+                <input type="text" id="adminReplyInput" placeholder="Reply as admin..." style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:6px 12px;color:#ddd;font-size:0.7rem;">
+                <button class="admin-btn admin-btn-primary" onclick="sendAdminReplyFromInput('${userId}')">Send</button>
+              </div>`;
+                msgArea.scrollTop = msgArea.scrollHeight;
+            });
+        }
+
+        function deleteSupportChat(userId) {
+            if (!confirm('Delete this entire support conversation?')) return;
+            window.db.ref('supportChats/' + userId).remove().then(() => { showToast('Chat deleted');
+                loadAdminSupport(); });
+        }
+
+        function sendAdminReplyFromInput(userId) {
+            const input = document.getElementById('adminReplyInput');
+            if (!input || !input.value.trim()) return;
+            sendAdminReply(userId, input.value);
+            input.value = '';
+        }
+
+        // ═══════════════════════════════════════════
+        // SECRET ADMIN TRIGGER
+        // ═══════════════════════════════════════════
+        let secretClickCount = parseInt(localStorage.getItem('tdp_secret_clicks') || '0');
+        let secretClickResetTimer = null;
+
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.admin-panel-overlay') || e.target.closest('.admin-panel') || e.target.closest(
+                    '#secretPasswordModal') || e.target.closest('#adminLoginModalOverlay') || e.target.closest(
+                    '#usernameModalOverlay') || e.target.closest('.support-widget') || e.target.closest(
+                    '.support-float-btn')) return;
+            secretClickCount++;
+            localStorage.setItem('tdp_secret_clicks', secretClickCount);
+            clearTimeout(secretClickResetTimer);
+            secretClickResetTimer = setTimeout(() => { secretClickCount = 0;
+                localStorage.setItem('tdp_secret_clicks', '0'); }, 8000);
+            if (secretClickCount >= 10) {
+                secretClickCount = 0;
+                localStorage.setItem('tdp_secret_clicks', '0');
+                document.getElementById('secretPasswordModal').classList.add('active');
+                document.getElementById('secretPasswordInput').value = '';
+                document.getElementById('secretPasswordInput').focus();
+            }
+        });
+
+        document.getElementById('secretPasswordConfirm').addEventListener('click', () => {
+            const pass = document.getElementById('secretPasswordInput').value;
+            if (pass === '308580') {
+                sessionStorage.setItem('tdp_admin_unlocked', 'true');
+                window.adminUnlocked = true;
+                document.getElementById('secretPasswordModal').classList.remove('active');
+                showToast('Access granted. Opening admin panel.');
+                openAdminPanel();
+            } else {
+                showToast('Invalid code', true);
+                document.getElementById('secretPasswordModal').classList.add('shake');
+                setTimeout(() => document.getElementById('secretPasswordModal').classList.remove('shake'), 400);
+            }
+        });
+        document.getElementById('secretPasswordCancel').addEventListener('click', () => document.getElementById(
+            'secretPasswordModal').classList.remove('active'));
+        document.getElementById('secretPasswordModal').addEventListener('click', function(e) { if (e.target === this) this
+                .classList.remove('active'); });
+
+        // ═══════════════════════════════════════════
+        // SUPPORT WIDGET UI
+        // ═══════════════════════════════════════════
+        const supportFloatBtn = document.getElementById('supportFloatBtn');
+        const supportWidget = document.getElementById('supportWidget');
+        const supportCloseBtn = document.getElementById('supportCloseBtn');
+        const supportSendBtn = document.getElementById('supportSendBtn');
+        const supportInput = document.getElementById('supportInput');
+
+        supportFloatBtn.addEventListener('click', () => {
+            supportWidget.classList.toggle('open');
+            if (supportWidget.classList.contains('open')) initSupportSystem();
+        });
+        supportCloseBtn.addEventListener('click', () => supportWidget.classList.remove('open'));
+        supportSendBtn.addEventListener('click', () => {
+            const text = supportInput.value.trim();
+            if (text) sendSupportMessage(text);
+        });
+        supportInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') { supportSendBtn.click(); } });
+
+        // ═══════════════════════════════════════════
+        // EXISTING ADMIN PANEL EVENTS
+        // ═══════════════════════════════════════════
+        document.getElementById('adminCloseBtn').addEventListener('click', closeAdminPanel);
+        document.getElementById('adminPanelOverlay').addEventListener('click', closeAdminPanel);
+        document.getElementById('footerAdminLink').addEventListener('click', () => { if (window.isAdmin || window
+                .adminUnlocked) openAdminPanel();
+            else showAdminLoginModal(); });
+        document.getElementById('profileAdminPanel').addEventListener('click', () => { document.getElementById(
+                'navProfileDropdown').classList.remove('open');
+            openAdminPanel(); });
+        document.getElementById('adminLoginConfirm').addEventListener('click', () => { const pin = document.getElementById(
+                'adminLoginInput').value.trim(); if (pin) verifyAdminPin(pin); });
+        document.getElementById('adminLoginCancel').addEventListener('click', hideAdminLoginModal);
+        document.getElementById('adminLoginModalOverlay').addEventListener('click', (e) => { if (e.target === document
+                .getElementById('adminLoginModalOverlay')) hideAdminLoginModal(); });
+        document.getElementById('adminProjSaveBtn').addEventListener('click', saveAdminProject);
+        document.getElementById('adminProjCancelEdit').addEventListener('click', resetAdminProjectForm);
+        document.getElementById('adminSettingsSaveBtn').addEventListener('click', saveAdminSettings);
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const tn = this.dataset.tab;
+                document.getElementById('adminTabProjects').style.display = tn === 'projects' ? '' :
+                    'none';
+                document.getElementById('adminTabUsers').style.display = tn === 'users' ? '' : 'none';
+                document.getElementById('adminTabSupport').style.display = tn === 'support' ? '' : 'none';
+                document.getElementById('adminTabSettings').style.display = tn === 'settings' ? '' :
+                    'none';
+                if (tn === 'users') loadAdminUsers();
+                if (tn === 'settings') loadAdminSettings();
+                if (tn === 'support') loadAdminSupport();
+            });
+        });
+        document.getElementById('navProfileIcon').addEventListener('click', (e) => { e.stopPropagation();
+            document.getElementById('navProfileDropdown').classList.toggle('open'); });
+        document.getElementById('profileEditUsername').addEventListener('click', () => { document.getElementById(
+                'navProfileDropdown').classList.remove('open');
+            document.getElementById('usernameModalOverlay').classList.add('active');
+            document.getElementById('usernameModalInput').value = document.getElementById('navProfileName')
+                .textContent || '';
+            document.getElementById('usernameModalInput').focus(); });
+        document.getElementById('usernameModalSave').addEventListener('click', () => {
+            const newName = document.getElementById('usernameModalInput').value.trim();
+            if (!newName) { showToast('Username cannot be empty', true); return; }
+            if (window.FIREBASE_READY && window.db && window.currentUserUid) {
+                window.db.ref('users/' + window.currentUserUid).update({ username: newName }).then(() => {
+                    updateProfileUI(newName, window.isAdmin);
+                    showToast('Username updated!');
+                }).catch(() => showToast('Update failed', true));
+            } else { updateProfileUI(newName, window.isAdmin);
+                showToast('Username updated (offline)'); }
+            document.getElementById('usernameModalOverlay').classList.remove('active');
+        });
+        document.getElementById('usernameModalCancel').addEventListener('click', () => document.getElementById(
+            'usernameModalOverlay').classList.remove('active'));
+        document.getElementById('usernameModalOverlay').addEventListener('click', (e) => { if (e.target === document
+                .getElementById('usernameModalOverlay')) document.getElementById('usernameModalOverlay').classList
+                .remove('active'); });
+        document.addEventListener('click', () => { document.getElementById('navProfileDropdown').classList.remove(
+                'open'); });
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'A') { e.preventDefault(); if (window.isAdmin || window
+                    .adminUnlocked) openAdminPanel();
+                else showAdminLoginModal(); }
+            if (e.key === 'Escape') {
+                if (adminPanelOpen) closeAdminPanel();
+                hideAdminLoginModal();
+                document.getElementById('usernameModalOverlay').classList.remove('active');
+                document.getElementById('secretPasswordModal').classList.remove('active');
+            }
+        });
+
+        window.editAdminProject = function(id) {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('projects/' + id).once('value').then(snap => {
+                const p = snap.val();
+                if (!p) return;
+                document.getElementById('adminProjTitle').value = p.title || '';
+                document.getElementById('adminProjCat').value = p.category || 'Robotics';
+                document.getElementById('adminProjDesc').value = p.description || '';
+                document.getElementById('adminProjTags').value = p.tags || '';
+                document.getElementById('adminProjBestFor').value = p.bestFor || '';
+                document.getElementById('adminProjEditId').value = id;
+                document.getElementById('adminProjSaveBtn').textContent = '✏ Update Project';
+                document.getElementById('adminProjCancelEdit').style.display = 'inline-block';
+                document.getElementById('adminContent').scrollTop = 0;
+            });
+        };
+        window.deleteAdminProject = function(id) {
+            if (!window.FIREBASE_READY || !window.db) return;
+            if (!confirm('Delete this project permanently?')) return;
+            window.db.ref('projects/' + id).remove().then(() => { showToast('Project deleted');
+                loadAdminProjects(); }).catch(() => showToast('Delete failed', true));
+        };
+        window.editAdminUsername = function(uid) {
+            const newName = prompt('Enter new username:');
+            if (!newName || !newName.trim()) return;
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('users/' + uid).update({ username: newName.trim() }).then(() => { showToast(
+                    'Username updated');
+                loadAdminUsers(); }).catch(() => showToast('Update failed', true));
+        };
+        window.toggleAdminUser = function(uid, makeAdmin) {
+            if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('users/' + uid).update({ isAdmin: makeAdmin }).then(() => { showToast(makeAdmin ?
+                    'Admin granted' : 'Admin revoked');
+                loadAdminUsers(); }).catch(() => showToast('Toggle failed', true));
+        };
+        window.openAdminPanel = openAdminPanel;
+        window.closeAdminPanel = closeAdminPanel;
+        window.loadAdminSupport = loadAdminSupport;
+        window.openSupportConversation = openSupportConversation;
+        window.sendAdminReplyFromInput = sendAdminReplyFromInput;
+        window.deleteSupportChat = deleteSupportChat;
+        window.sendSupportMessage = sendSupportMessage;
+
+        // Init Firebase and system
+        initFirebase();
+        // After intro, main site scripts will set up rest
         function initMainSiteScripts() {
             if (window._mainSiteScriptsInitialized) return;
             window._mainSiteScriptsInitialized = true;
-
-            window.toggleNav = function() {
-                document.getElementById('navLinks').classList.toggle('open');
-            };
-            document.querySelectorAll('.nav-links a').forEach(a => {
-                a.addEventListener('click', () => {
-                    document.getElementById('navLinks').classList.remove('open');
-                });
-            });
+            window.toggleNav = function() { document.getElementById('navLinks').classList.toggle('open'); };
+            document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document
+                .getElementById('navLinks').classList.remove('open')));
             const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 30);
-            });
+            window.addEventListener('scroll', () => { if (navbar) navbar.classList.toggle('scrolled', window.scrollY >
+                    30); });
             const cursorTrail = document.getElementById('cursorTrail');
             if (window.innerWidth > 768 && cursorTrail) {
                 let trailX = -200,
@@ -3411,17 +3414,15 @@
                 document.addEventListener('mousemove', e => { curX = e.clientX;
                     curY = e.clientY; });
 
-                function updateTrail() {
-                    trailX += (curX - trailX) * 0.06;
+                function updateTrail() { trailX += (curX - trailX) * 0.06;
                     trailY += (curY - trailY) * 0.06;
                     cursorTrail.style.left = trailX + 'px';
                     cursorTrail.style.top = trailY + 'px';
-                    requestAnimationFrame(updateTrail);
-                }
+                    requestAnimationFrame(updateTrail); }
                 cursorTrail.classList.add('active');
                 updateTrail();
-                window.addEventListener('touchstart', () => { if (cursorTrail) cursorTrail.style.opacity =
-                    '0'; }, { once: true });
+                window.addEventListener('touchstart', () => { if (cursorTrail) cursorTrail.style.opacity = '0'; }, {
+                    once: true });
             }
             const heroGrid = document.getElementById('heroGrid'),
                 heroGlow = document.getElementById('heroGlow'),
@@ -3444,18 +3445,16 @@
                 }
                 ticking = false;
             }
-            window.addEventListener('scroll', () => {
-                if (!ticking) { requestAnimationFrame(updateParallax);
-                    ticking = true; }
-            });
-            const sectionObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting)
-                    e.target.classList.add('visible'); }), { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+            window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(updateParallax);
+                    ticking = true; } });
+            const sectionObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e
+                    .target.classList.add('visible'); }), { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
             document.querySelectorAll('.reveal-section').forEach(s => sectionObserver.observe(s));
-            const cardObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e
-                    .target.classList.add('visible'); }), { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
+            const cardObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
+                    .classList.add('visible'); }), { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
             document.querySelectorAll('.reveal-card').forEach(c => cardObserver.observe(c));
-            const heroObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e
-                    .target.classList.add('visible'); }), { threshold: 0.3 });
+            const heroObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
+                    .classList.add('visible'); }), { threshold: 0.3 });
             document.querySelectorAll('.hero-reveal').forEach(el => heroObserver.observe(el));
             window.filterSci = function(type, btn) {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
