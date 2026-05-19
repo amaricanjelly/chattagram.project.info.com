@@ -8,9 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Share+Tech+Mono&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* ═══════════════════════════════════════════
-           eDEX-UI INSPIRED CINEMATIC INTRO STYLES
-           ═══════════════════════════════════════════ */
         :root {
             --intro-bg: #03050a;
             --intro-surface: #080e18;
@@ -59,16 +56,16 @@
             inset: 0;
             z-index: 100001;
             pointer-events: none;
-            opacity: 0.055;
+            opacity: 0.045;
             background: repeating-linear-gradient(0deg,
                     transparent,
                     transparent 2px,
-                    rgba(0, 0, 0, 0.35) 2px,
-                    rgba(0, 0, 0, 0.35) 4px);
+                    rgba(0, 0, 0, 0.3) 2px,
+                    rgba(0, 0, 0, 0.3) 4px);
             transition: opacity 0.6s;
         }
         .intro-scanlines.intensify {
-            opacity: 0.12;
+            opacity: 0.10;
             transition: opacity 0.08s;
         }
         .intro-crt-curve {
@@ -78,7 +75,7 @@
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.5s;
-            box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.75), inset 0 0 70px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.7), inset 0 0 70px rgba(0, 0, 0, 0.45);
         }
         .intro-crt-curve.active {
             opacity: 1;
@@ -88,7 +85,7 @@
             inset: 0;
             z-index: 100003;
             pointer-events: none;
-            background: rgba(0, 220, 255, 0.07);
+            background: rgba(0, 220, 255, 0.06);
             opacity: 0;
             transition: opacity 0.04s;
         }
@@ -105,19 +102,19 @@
                 transform: translate(0);
             }
             15% {
-                transform: translate(-6px, 3px);
+                transform: translate(-5px, 2px);
             }
             30% {
-                transform: translate(5px, -4px);
+                transform: translate(4px, -3px);
             }
             45% {
-                transform: translate(-3px, -2px);
+                transform: translate(-2px, -1px);
             }
             60% {
-                transform: translate(4px, 1px);
+                transform: translate(3px, 1px);
             }
             75% {
-                transform: translate(-1px, 3px);
+                transform: translate(-1px, 2px);
             }
             90% {
                 transform: translate(2px, -1px);
@@ -139,10 +136,25 @@
         .intro-skip-hint.visible {
             opacity: 1;
         }
-
-        /* ═══════════════════════════════════════════
-           MAIN SITE (hidden until intro ends)
-           ═══════════════════════════════════════════ */
+        .intro-cinematic-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100005;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            background: radial-gradient(ellipse at center, rgba(0, 180, 240, 0.08) 0%, transparent 55%),
+                radial-gradient(ellipse at 30% 40%, rgba(0, 255, 200, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, rgba(0, 200, 255, 0.04) 0%, transparent 50%);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            transition: opacity 0.8s ease, backdrop-filter 0.8s ease;
+        }
+        .intro-cinematic-overlay.active {
+            opacity: 1;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
         #main-site {
             opacity: 0;
             transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -151,9 +163,6 @@
             opacity: 1;
         }
 
-        /* ═══════════════════════════════════════════
-           ADMIN PANEL STYLES (preserved & enhanced)
-           ═══════════════════════════════════════════ */
         .admin-panel-overlay {
             position: fixed;
             inset: 0;
@@ -459,8 +468,6 @@
             margin-left: 5px;
             font-weight: 700;
         }
-
-        /* ═══════ PROFILE DROPDOWN ═══════ */
         .nav-profile-wrap {
             position: relative;
             display: flex;
@@ -469,11 +476,11 @@
             cursor: pointer;
         }
         .nav-profile-icon {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
-            background: rgba(0, 212, 255, 0.15);
-            border: 1.5px solid rgba(0, 212, 255, 0.4);
+            background: rgba(0, 212, 255, 0.12);
+            border: 1.5px solid rgba(0, 212, 255, 0.35);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -509,14 +516,14 @@
             position: absolute;
             top: 110%;
             right: 0;
-            background: rgba(15, 20, 30, 0.97);
+            background: rgba(12, 16, 24, 0.97);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 212, 255, 0.25);
+            border: 1px solid rgba(0, 212, 255, 0.22);
             border-radius: 12px;
             padding: 0.5rem 0;
-            min-width: 200px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            min-width: 210px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.55), 0 0 20px rgba(0, 180, 255, 0.08);
             opacity: 0;
             pointer-events: none;
             transform: translateY(-8px);
@@ -529,7 +536,7 @@
             transform: translateY(0);
         }
         .nav-profile-dropdown-item {
-            padding: 8px 16px;
+            padding: 9px 16px;
             font-size: 0.7rem;
             color: #ccc;
             cursor: pointer;
@@ -542,16 +549,14 @@
             gap: 8px;
         }
         .nav-profile-dropdown-item:hover {
-            background: rgba(0, 212, 255, 0.08);
+            background: rgba(0, 212, 255, 0.07);
             color: #00d4ff;
         }
         .nav-profile-dropdown-divider {
             height: 1px;
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.07);
             margin: 4px 0;
         }
-
-        /* ═══════ MODAL ═══════ */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -642,8 +647,6 @@
             color: #fff;
             border-color: rgba(255, 255, 255, 0.4);
         }
-
-        /* Google Login Button */
         .google-login-btn {
             display: inline-flex;
             align-items: center;
@@ -659,20 +662,18 @@
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             width: 100%;
             margin-bottom: 15px;
         }
         .google-login-btn:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             transform: translateY(-2px);
         }
         .google-login-btn img {
             width: 20px;
             height: 20px;
         }
-
-        /* Auth Banner */
         .auth-banner {
             background: linear-gradient(135deg, #0a0f1a, #141b2b);
             border: 1px solid rgba(0, 212, 255, 0.2);
@@ -702,14 +703,19 @@
             font-size: 1.2rem;
             transition: color 0.2s;
         }
-        .auth-banner-close:hover { color: #fff; }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .auth-banner-close:hover {
+            color: #fff;
         }
-
-        /* ═══════ RESPONSIVE ADMIN ═══════ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         @media (max-width: 500px) {
             .admin-panel {
                 width: 100%;
@@ -726,10 +732,6 @@
                 justify-content: flex-end;
             }
         }
-
-        /* ═══════════════════════════════════════════
-           MAIN WEBSITE STYLES (preserved)
-           ═══════════════════════════════════════════ */
         :root {
             --bg: #ffffff;
             --bg-alt: #f7f8fa;
@@ -796,7 +798,7 @@
             inset: 0;
             pointer-events: none;
             z-index: 99999;
-            opacity: 0.022;
+            opacity: 0.018;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
             mix-blend-mode: multiply;
         }
@@ -807,7 +809,7 @@
             width: 180px;
             height: 180px;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.07) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.06) 0%, transparent 70%);
             transform: translate(-50%, -50%);
             opacity: 0;
             transition: opacity 0.3s;
@@ -1927,10 +1929,6 @@
             color: var(--accent);
             opacity: 1;
         }
-
-        /* ═══════════════════════════════════════════
-           SUPPORT FLOATING WIDGET (Enhanced)
-           ═══════════════════════════════════════════ */
         .support-float-btn {
             position: fixed;
             bottom: 90px;
@@ -1945,7 +1943,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 0 18px rgba(0, 212, 255, 0.2), 0 4px 18px rgba(0,0,0,0.5);
+            box-shadow: 0 0 18px rgba(0, 212, 255, 0.2), 0 4px 18px rgba(0, 0, 0, 0.5);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -1977,7 +1975,7 @@
             align-items: center;
             justify-content: center;
             font-family: var(--font-mono);
-            box-shadow: 0 0 10px rgba(255,59,48,0.4);
+            box-shadow: 0 0 10px rgba(255, 59, 48, 0.4);
             opacity: 0;
             transform: scale(0.5);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -2032,7 +2030,7 @@
             width: 26px;
             height: 26px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border: none;
             color: #aaa;
             font-size: 0.8rem;
@@ -2041,7 +2039,10 @@
             align-items: center;
             justify-content: center;
         }
-        .support-close:hover { background: rgba(255,60,60,0.2); color: #ff5555; }
+        .support-close:hover {
+            background: rgba(255, 60, 60, 0.2);
+            color: #ff5555;
+        }
         .support-messages {
             flex: 1;
             overflow-y: auto;
@@ -2050,8 +2051,13 @@
             flex-direction: column;
             gap: 0.6rem;
         }
-        .support-messages::-webkit-scrollbar { width: 3px; }
-        .support-messages::-webkit-scrollbar-thumb { background: rgba(0,212,255,0.2); border-radius: 2px; }
+        .support-messages::-webkit-scrollbar {
+            width: 3px;
+        }
+        .support-messages::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.2);
+            border-radius: 2px;
+        }
         .support-msg {
             max-width: 85%;
             padding: 0.6rem 0.9rem;
@@ -2061,7 +2067,16 @@
             word-break: break-word;
             animation: msgFadeIn 0.25s ease;
         }
-        @keyframes msgFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes msgFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
         .support-msg.user {
             align-self: flex-end;
             background: rgba(0, 212, 255, 0.12);
@@ -2087,7 +2102,15 @@
             align-self: flex-start;
             animation: blink 1.4s infinite;
         }
-        @keyframes blink { 0%,100%{opacity:0.4} 50%{opacity:1} }
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 0.4
+            }
+            50% {
+                opacity: 1
+            }
+        }
         .support-input-row {
             display: flex;
             gap: 6px;
@@ -2096,8 +2119,8 @@
         }
         .support-input-row input {
             flex: 1;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 20px;
             padding: 8px 14px;
             color: #ddd;
@@ -2107,8 +2130,8 @@
             transition: 0.2s;
         }
         .support-input-row input:focus {
-            border-color: rgba(0,212,255,0.5);
-            box-shadow: 0 0 0 3px rgba(0,212,255,0.06);
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.06);
         }
         .support-send-btn {
             width: 36px;
@@ -2123,10 +2146,15 @@
             transition: 0.2s;
             flex-shrink: 0;
         }
-        .support-send-btn:hover { background: #00bce6; box-shadow: 0 0 14px rgba(0,212,255,0.4); }
-        .support-send-btn svg { width: 16px; height: 16px; fill: #000; }
-
-        /* Login indicator in widget */
+        .support-send-btn:hover {
+            background: #00bce6;
+            box-shadow: 0 0 14px rgba(0, 212, 255, 0.4);
+        }
+        .support-send-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #000;
+        }
         .login-prompt {
             text-align: center;
             padding: 15px;
@@ -2143,7 +2171,6 @@
             cursor: pointer;
             margin-top: 8px;
         }
-
         @media (max-width: 768px) {
             .support-widget {
                 right: 8px;
@@ -2155,34 +2182,59 @@
                 right: 12px;
                 bottom: 80px;
             }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 54px;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.96);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 1rem;
+                gap: 0.8rem;
+                border-bottom: 1px solid var(--border);
+                z-index: 998;
+            }
+            .nav-links.open {
+                display: flex;
+            }
+            .nav-hamburger {
+                display: flex;
+            }
+            .featured-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .featured-visual {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ═══════════════════════════════════════════
-    eDEX-UI INSPIRED CINEMATIC INTRO OVERLAY
-    ═══════════════════════════════════════════ -->
     <div id="intro-overlay">
         <canvas id="intro-canvas"></canvas>
         <div class="intro-scanlines" id="introScanlines"></div>
         <div class="intro-crt-curve active" id="introCrt"></div>
         <div class="intro-glitch-flash" id="introGlitchFlash"></div>
+        <div class="intro-cinematic-overlay" id="introCinematic"></div>
         <div class="intro-skip-hint" id="introSkipHint">PRESS ANY KEY TO SKIP</div>
     </div>
 
-    <!-- ═══════════ MAIN SITE ═══════════ -->
     <div id="main-site">
         <div class="cursor-trail" id="cursorTrail"></div>
-        <div class="announcement-bar" id="announcementBar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/', '_blank')" role="button" tabindex="0" aria-label="Visit premium code website">
+        <div class="announcement-bar" id="announcementBar" onclick="window.open('https://amaricanjelly.github.io/onlinecode/','_blank')" role="button" tabindex="0" aria-label="Visit premium code website">
             প্রিমিয়াম কোড কিনতে আমাদের ওয়েবসাইটে <span>এখনই ভিজিট করুন</span> →
         </div>
 
-        <!-- Auth Banner -->
-        <div id="authBanner" class="auth-banner" style="display:none; position: sticky; top: 34px; z-index: 998; margin: 10px auto; max-width: 600px;">
+        <div id="authBanner" class="auth-banner" style="display:none;position:sticky;top:34px;z-index:998;margin:10px auto;max-width:600px;">
             <span class="auth-banner-text">🔐 <strong>Login with Google</strong> to sync your chats and get faster support.</span>
-            <div style="display:flex; align-items:center; gap:10px;">
-                <button id="authBannerLoginBtn" class="google-login-btn" style="width:auto; padding:8px 18px; font-size:0.8rem; margin:0;">Login</button>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <button id="authBannerLoginBtn" class="google-login-btn" style="width:auto;padding:8px 18px;font-size:0.8rem;margin:0;">Login</button>
                 <button class="auth-banner-close" id="authBannerClose">✕</button>
             </div>
         </div>
@@ -2190,9 +2242,7 @@
         <nav class="navbar" id="navbar">
             <div class="container">
                 <a href="#" class="nav-brand" aria-label="The Debug Point Home">
-                    <div class="nav-brand-mark">
-                        <svg viewBox="0 0 24 24"><polygon points="12,3 22,21 2,21"/></svg>
-                    </div>
+                    <div class="nav-brand-mark"><svg viewBox="0 0 24 24"><polygon points="12,3 22,21 2,21"/></svg></div>
                     The Debug Point
                 </a>
                 <ul class="nav-links" id="navLinks">
@@ -2218,120 +2268,67 @@
                 </button>
             </div>
         </nav>
+
         <section class="hero" id="hero">
-            <div class="hero-bg">
-                <div class="hero-bg-grid" id="heroGrid"></div>
-                <div class="hero-bg-glow" id="heroGlow"></div>
-                <div class="hero-bg-orb" id="heroOrb"></div>
-            </div>
-            <div class="container">
-                <div class="hero-content">
-                    <div class="info-banner hero-reveal">
-                        <svg class="info-banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                        <span><strong>Expensive এবং Rare Project</strong> বানাতে হলে অবশ্যই Project জমা দেওয়ার <strong>৩–৭ দিন আগে</strong> আমাদের সাথে যোগাযোগ করতে হবে।</span>
-                    </div>
-                    <div class="hero-badge hero-reveal hr-d1">
-                        <span class="hero-badge-dot"></span> Chittagong · Established 2026
-                    </div>
-                    <h1 class="hero-title hero-reveal hr-d2">
-                        চট্টগ্রামে Coding ও Robotic Project<br>এবং Custom Code এর জন্য<br><em>সঠিক জায়গা</em>
-                        <span class="hero-title-glow"></span>
-                    </h1>
-                    <p class="hero-sub hero-reveal hr-d3">
-                        Professional ভাবে Coding, Robotics ও Science Project তৈরি করে থাকি। School, College, University এবং Engineering শিক্ষার্থীদের জন্য সম্পূর্ণ Support প্রদান করি।
-                    </p>
-                    <div class="hero-actions hero-reveal hr-d4">
-                        <a href="#contact" class="btn btn-primary">অর্ডার করুন</a>
-                        <a href="#projects" class="btn btn-secondary">প্রজেক্ট দেখুন</a>
-                    </div>
-                    <div class="hero-note hero-reveal hr-d4">
-                        <span class="hero-note-dot"></span> প্রজেক্ট করতে সরাসরি আমাদের ঠিকানায় আসতে হবে
-                    </div>
-                    <div class="hero-stats hero-reveal hr-d4">
-                        <div><div class="hero-stat-num">50<span>+</span></div><div class="hero-stat-label">Robotics Projects</div></div>
-                        <div><div class="hero-stat-num">150<span>+</span></div><div class="hero-stat-label">Science Projects</div></div>
-                        <div><div class="hero-stat-num">5<span>+</span></div><div class="hero-stat-label">Services</div></div>
-                    </div>
-                </div>
-            </div>
+            <div class="hero-bg"><div class="hero-bg-grid" id="heroGrid"></div><div class="hero-bg-glow" id="heroGlow"></div><div class="hero-bg-orb" id="heroOrb"></div></div>
+            <div class="container"><div class="hero-content">
+                    <div class="info-banner hero-reveal"><svg class="info-banner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span><strong>Expensive এবং Rare Project</strong> বানাতে হলে অবশ্যই Project জমা দেওয়ার <strong>৩–৭ দিন আগে</strong> আমাদের সাথে যোগাযোগ করতে হবে।</span></div>
+                    <div class="hero-badge hero-reveal hr-d1"><span class="hero-badge-dot"></span> Chittagong · Established 2026</div>
+                    <h1 class="hero-title hero-reveal hr-d2">চট্টগ্রামে Coding ও Robotic Project<br>এবং Custom Code এর জন্য<br><em>সঠিক জায়গা</em><span class="hero-title-glow"></span></h1>
+                    <p class="hero-sub hero-reveal hr-d3">Professional ভাবে Coding, Robotics ও Science Project তৈরি করে থাকি। School, College, University এবং Engineering শিক্ষার্থীদের জন্য সম্পূর্ণ Support প্রদান করি।</p>
+                    <div class="hero-actions hero-reveal hr-d4"><a href="#contact" class="btn btn-primary">অর্ডার করুন</a><a href="#projects" class="btn btn-secondary">প্রজেক্ট দেখুন</a></div>
+                    <div class="hero-note hero-reveal hr-d4"><span class="hero-note-dot"></span> প্রজেক্ট করতে সরাসরি আমাদের ঠিকানায় আসতে হবে</div>
+                    <div class="hero-stats hero-reveal hr-d4"><div><div class="hero-stat-num">50<span>+</span></div><div class="hero-stat-label">Robotics Projects</div></div><div><div class="hero-stat-num">150<span>+</span></div><div class="hero-stat-label">Science Projects</div></div><div><div class="hero-stat-num">5<span>+</span></div><div class="hero-stat-label">Services</div></div></div>
+            </div></div>
         </section>
-        <section class="section section-alt reveal-section reveal-right" id="services">
-            <div class="container">
-                <div class="section-header"><div class="section-eyebrow">What We Do</div><h2 class="section-title">আমাদের সার্ভিসসমূহ</h2><div class="section-line"></div></div>
-                <div class="services-grid">
+
+        <section class="section section-alt reveal-section reveal-right" id="services"><div class="container"><div class="section-header"><div class="section-eyebrow">What We Do</div><h2 class="section-title">আমাদের সার্ভিসসমূহ</h2><div class="section-line"></div></div><div class="services-grid">
                     <div class="service-card reveal-card"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div class="service-card-num">Service 01</div><h3 class="service-card-title">C++ Programming <span class="service-card-tag">CODE</span></h3><p class="service-card-desc">Algorithm, Problem Solving, Academic Projects, Competitive Programming — সব ধরনের C++ সহায়তা।</p></div>
                     <div class="service-card reveal-card reveal-card-d1"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="12" cy="12" r="4"/></svg></div><div class="service-card-num">Service 02</div><h3 class="service-card-title">Arduino Robotics <span class="service-card-tag">HARDWARE</span></h3><p class="service-card-desc">Complete Hardware + Software Setup with Documentation — সম্পূর্ণ রোবোটিক্স প্রজেক্ট তৈরি করা হয়।</p></div>
                     <div class="service-card reveal-card reveal-card-d2"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="service-card-num">Service 03</div><h3 class="service-card-title">Arduino Code <span class="service-card-tag">CODE</span></h3><p class="service-card-desc">শুধু কোড সার্ভিস — Fully Tested &amp; Optimized। Arduino IDE তে পেশাদার কোড লেখা হয়।</p></div>
                     <div class="service-card reveal-card reveal-card-d3"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-7 10 7-10 7z"/><path d="M6 12v6a2 2 0 002 2h8a2 2 0 002-2v-6"/></svg></div><div class="service-card-num">Service 04</div><h3 class="service-card-title">Academic Projects <span class="service-card-tag">ACADEMIC</span></h3><p class="service-card-desc">Science Fair ও Academic Project Support। CUET সহ সব বিশ্ববিদ্যালয়ের প্রজেক্ট করা হয়।</p></div>
                     <div class="service-card reveal-card reveal-card-d4"><div class="service-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0110 10"/><path d="M2 12a10 10 0 0110-10"/></svg></div><div class="service-card-num">Service 05</div><h3 class="service-card-title">Custom IoT Projects <span class="service-card-tag">IoT</span></h3><p class="service-card-desc">Sensor Based Automation ও Smart System। কাস্টম IoT সলিউশন এবং স্মার্ট প্রজেক্ট।</p></div>
-                </div>
-            </div>
-        </section>
+        </div></div></section>
+
         <hr class="section-divider">
-        <section class="section reveal-section reveal-left" id="featured">
-            <div class="container">
-                <div class="featured-card reveal-card">
-                    <div class="featured-inner">
-                        <div>
+        <section class="section reveal-section reveal-left" id="featured"><div class="container"><div class="featured-card reveal-card"><div class="featured-inner"><div>
                             <div class="featured-badge"><span class="featured-badge-dot"></span> Premium Service</div>
                             <h2 class="featured-title">Unlimited Range<br><em>Nursing Calling System</em></h2>
                             <p class="featured-tagline">বিশ্বের বাজারে ও বাংলাদেশের সবচেয়ে বিরল প্রজেক্ট — শুধুমাত্র বিশেষ ব্যবহারের জন্য</p>
                             <p class="featured-desc">Hospital, Clinic বা বৃদ্ধাশ্রমে ব্যবহারের জন্য বিশেষভাবে তৈরি একটি Exclusive IoT System। রোগী যেকোনো জায়গা থেকে Wireless ভাবে Nurse কে Call করতে পারবেন — কোনো Range Limitation ছাড়াই।</p>
                             <div class="featured-pills"><span class="featured-pill">Unlimited Range</span><span class="featured-pill">IoT Based</span><span class="featured-pill">Hospital Grade</span><span class="featured-pill">Instant Alert</span><span class="featured-pill">Mobile Notification</span></div>
                             <a href="https://t.me/jellyofficer" target="_blank" class="btn btn-primary">বিস্তারিত জানুন</a>
-                        </div>
-                        <div class="featured-visual">
-                            <div class="featured-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12h6M12 9v6"/><circle cx="12" cy="12" r="1"/></svg></div>
-                            <div class="featured-stat-row"><div class="featured-stat"><div class="featured-stat-num">&infin;</div><div class="featured-stat-label">Range</div></div><div class="featured-stat"><div class="featured-stat-num">&lt;1s</div><div class="featured-stat-label">Response</div></div><div class="featured-stat"><div class="featured-stat-num">IoT</div><div class="featured-stat-label">Platform</div></div><div class="featured-stat"><div class="featured-stat-num">24/7</div><div class="featured-stat-label">Uptime</div></div></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+                        </div><div class="featured-visual"><div class="featured-icon-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 12h6M12 9v6"/><circle cx="12" cy="12" r="1"/></svg></div><div class="featured-stat-row"><div class="featured-stat"><div class="featured-stat-num">&infin;</div><div class="featured-stat-label">Range</div></div><div class="featured-stat"><div class="featured-stat-num">&lt;1s</div><div class="featured-stat-label">Response</div></div><div class="featured-stat"><div class="featured-stat-num">IoT</div><div class="featured-stat-label">Platform</div></div><div class="featured-stat"><div class="featured-stat-num">24/7</div><div class="featured-stat-label">Uptime</div></div></div></div>
+        </div></div></div></section>
+
         <hr class="section-divider">
-        <section class="section section-alt reveal-section reveal-right" id="projects">
-            <div class="container">
-                <div class="section-header"><div class="section-eyebrow">Our Work</div><h2 class="section-title">Robotics &amp; IoT প্রজেক্ট</h2><div class="section-line"></div></div>
-                <div class="card-grid" id="projectsGrid">
+        <section class="section section-alt reveal-section reveal-right" id="projects"><div class="container"><div class="section-header"><div class="section-eyebrow">Our Work</div><h2 class="section-title">Robotics &amp; IoT প্রজেক্ট</h2><div class="section-line"></div></div><div class="card-grid" id="projectsGrid">
                     <div class="project-card reveal-card"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><span class="project-card-num">#01</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Human Following Robot</p><p class="project-card-desc">IR Sensor ও Ultrasonic Sensor ব্যবহার করে সামনের মানুষকে চিনে গতিপথ নির্ধারণ করে।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
                     <div class="project-card reveal-card reveal-card-d1"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#02</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">Fingerprint Door Lock System</p><p class="project-card-desc">বায়োমেট্রিক Fingerprint Sensor — Registered আঙুলের ছাপ মিললে দরজা খুলে যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
                     <div class="project-card reveal-card reveal-card-d2"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span class="project-card-num">#03</span></div><div class="project-card-tags"><span class="tag">Security</span></div><p class="project-card-title">RFID Door Lock System</p><p class="project-card-desc">RFID Card বা Keychain Tap করলে দরজা খুলে যায়। Office, Hostel, Lab এর জন্য আদর্শ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 9–10</span><span class="bestfor-pill">HSC</span></div></div></div>
                     <div class="project-card reveal-card reveal-card-d3"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><span class="project-card-num">#04</span></div><div class="project-card-tags"><span class="tag">IoT</span></div><p class="project-card-title">Home Automation System</p><p class="project-card-desc">Bluetooth/WiFi ব্যবহার করে স্মার্টফোন থেকে ঘরের আলো, ফ্যান ও যন্ত্রপাতি নিয়ন্ত্রণ।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
                     <div class="project-card reveal-card reveal-card-d4"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><span class="project-card-num">#05</span></div><div class="project-card-tags"><span class="tag">Safety</span></div><p class="project-card-title">Emergency Room Alert System</p><p class="project-card-desc">রোগীর অবস্থা সংকটজনক হলে স্বয়ংক্রিয়ভাবে Buzzer বাজে এবং LED Signal দেয়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">HSC</span><span class="bestfor-pill">CUET</span></div></div></div>
                     <div class="project-card reveal-card reveal-card-d5"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="6" width="22" height="12" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="12" r="2"/></svg></div><span class="project-card-num">#06</span></div><div class="project-card-tags"><span class="tag">Robotics</span></div><p class="project-card-title">Bluetooth Control Car</p><p class="project-card-desc">স্মার্টফোনের Bluetooth App দিয়ে গাড়িটি সামনে, পেছনে, বাম ও ডানে নিয়ন্ত্রণ করা যায়।</p><div class="project-card-bestfor"><strong>Best For:</strong><div class="bestfor-pills"><span class="bestfor-pill">Class 6–8</span><span class="bestfor-pill">Class 9–10</span></div></div></div>
-                </div>
-            </div>
-        </section>
+        </div></div></section>
+
         <hr class="section-divider">
-        <section class="section reveal-section reveal-left" id="science">
-            <div class="container">
-                <div class="section-header"><div class="section-eyebrow">Science Projects</div><h2 class="section-title">Chemistry &middot; Biology &middot; Physics</h2><div class="section-line"></div></div>
-                <div class="filter-bar"><span class="filter-label">Filter:</span><button class="filter-btn active" onclick="filterSci('all', this)">সব</button><button class="filter-btn" onclick="filterSci('chemistry', this)">Chemistry</button><button class="filter-btn" onclick="filterSci('biology', this)">Biology</button><button class="filter-btn" onclick="filterSci('physics', this)">Physics</button></div>
-                <div class="card-grid" id="sciGrid">
+        <section class="section reveal-section reveal-left" id="science"><div class="container"><div class="section-header"><div class="section-eyebrow">Science Projects</div><h2 class="section-title">Chemistry &middot; Biology &middot; Physics</h2><div class="section-line"></div></div><div class="filter-bar"><span class="filter-label">Filter:</span><button class="filter-btn active" onclick="filterSci('all',this)">সব</button><button class="filter-btn" onclick="filterSci('chemistry',this)">Chemistry</button><button class="filter-btn" onclick="filterSci('biology',this)">Biology</button><button class="filter-btn" onclick="filterSci('physics',this)">Physics</button></div><div class="card-grid" id="sciGrid">
                     <div class="project-card sci-card reveal-card" data-cat="chemistry"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg></div><span class="project-card-num">#C-01</span></div><div class="project-card-tags"><span class="tag">Chemistry</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Gas Leak Detection (MQ2)</p><p class="project-card-desc">MQ-2 Sensor বাতাসে LPG, Methane, Smoke এবং Hydrogen গ্যাসের উপস্থিতি শনাক্ত করে।</p></div>
                     <div class="project-card sci-card reveal-card reveal-card-d1" data-cat="biology"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div><span class="project-card-num">#B-01</span></div><div class="project-card-tags"><span class="tag">Biology</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Smart Plant Watering System</p><p class="project-card-desc">Soil Moisture Sensor — মাটি শুকিয়ে গেলে Water Pump চালু হয়ে Automatic পানি দেয়।</p></div>
                     <div class="project-card sci-card reveal-card reveal-card-d2" data-cat="physics"><div class="project-card-header"><div class="project-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></div><span class="project-card-num">#P-01</span></div><div class="project-card-tags"><span class="tag">Physics</span><span class="sci-rec-badge">Recommended</span></div><p class="project-card-title">Distance Measurement System</p><p class="project-card-desc">HC-SR04 Ultrasonic Sensor — Sound Wave পাঠিয়ে বস্তুর দূরত্ব নির্ণয়।</p></div>
-                </div>
-            </div>
-        </section>
+        </div></div></section>
+
         <hr class="section-divider">
-        <section class="section section-alt reveal-section reveal-right" id="contact">
-            <div class="container">
-                <div class="section-header"><div class="section-eyebrow">Get In Touch</div><h2 class="section-title">যোগাযোগ করুন</h2><div class="section-line"></div></div>
-                <div class="contact-card reveal-card"><h3 class="contact-title">বিস্তারিত জানতে বা অর্ডার করতে<br>Telegram এ মেসেজ দিন</h3><p class="contact-sub">আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।</p><a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram"><svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/></svg>Telegram এ মেসেজ করুন</a></div>
-            </div>
-        </section>
+        <section class="section section-alt reveal-section reveal-right" id="contact"><div class="container"><div class="section-header"><div class="section-eyebrow">Get In Touch</div><h2 class="section-title">যোগাযোগ করুন</h2><div class="section-line"></div></div><div class="contact-card reveal-card"><h3 class="contact-title">বিস্তারিত জানতে বা অর্ডার করতে<br>Telegram এ মেসেজ দিন</h3><p class="contact-sub">আমরা সর্বদা আপনার প্রজেক্ট সম্পর্কিত যেকোনো প্রশ্নের উত্তর দিতে প্রস্তুত।</p><a href="https://t.me/jellyofficer" target="_blank" class="btn-telegram"><svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.17 13.5l-2.95-.924c-.64-.203-.654-.64.136-.953l11.57-4.461c.537-.194 1.006.131.968.059z"/></svg>Telegram এ মেসেজ করুন</a></div></div></section>
+
         <a href="https://wa.me/qr/MYNYVDWC2VAJJ1" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp"><svg viewBox="0 0 32 32"><path d="M16 2C8.28 2 2 8.28 2 16c0 2.66.74 5.14 2.02 7.24L2.5 29.5l6.44-1.68C10.84 29.24 13.34 30 16 30c7.72 0 14-6.28 14-14S23.72 2 16 2zm0 25.45c-2.3 0-4.54-.6-6.48-1.74l-.46-.27-3.82 1 .98-3.72-.3-.48C4.8 20.44 4.18 18.26 4.18 16c0-6.52 5.3-11.82 11.82-11.82S27.82 9.48 27.82 16 22.52 27.45 16 27.45z"/><path d="M22.98 19.08c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.34.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.34.45-.51.15-.17.2-.29.3-.48.1-.19.05-.36-.03-.5-.07-.15-.67-1.62-.92-2.22-.24-.58-.48-.5-.67-.51-.17-.01-.37-.01-.57-.01s-.52.07-.79.36c-.27.29-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.09 3.18 5.06 4.46.71.31 1.26.49 1.69.63.71.22 1.35.19 1.86.12.57-.08 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.08-.12-.28-.19-.58-.34z"/></svg></a>
+
         <footer class="footer"><div class="container">&copy; 2026 <span>The Debug Point</span> &nbsp;&middot;&nbsp; Coding &amp; Robotics Solution &nbsp;&middot;&nbsp; চট্টগ্রাম, বাংলাদেশ <span class="footer-admin-link" id="footerAdminLink" title="Admin Access">⚙</span></div></footer>
     </div>
 
-    <!-- ═══════════ ADMIN PANEL ═══════════ -->
     <div class="admin-panel-overlay" id="adminPanelOverlay"></div>
     <div class="admin-panel" id="adminPanel">
-        <div class="admin-panel-header">
-            <div class="admin-panel-title"><span class="admin-panel-title-dot"></span> Admin Panel</div>
-            <button class="admin-close-btn" id="adminCloseBtn">✕</button>
-        </div>
+        <div class="admin-panel-header"><div class="admin-panel-title"><span class="admin-panel-title-dot"></span> Admin Panel</div><button class="admin-close-btn" id="adminCloseBtn">✕</button></div>
         <div class="admin-tabs" id="adminTabs">
             <button class="admin-tab active" data-tab="projects">Projects</button>
             <button class="admin-tab" data-tab="users">Users</button>
@@ -2339,104 +2336,37 @@
             <button class="admin-tab" data-tab="settings">Settings</button>
         </div>
         <div class="admin-content" id="adminContent">
-            <div id="adminTabProjects">
-                <div class="admin-section-title">📦 Project Management</div>
-                <div class="admin-input-group"><label>Project Title</label><input type="text" id="adminProjTitle" placeholder="Enter project title"></div>
-                <div class="admin-input-group"><label>Category</label><select id="adminProjCat"><option value="Robotics">Robotics</option><option value="Security">Security</option><option value="IoT">IoT</option><option value="Safety">Safety</option><option value="Chemistry">Chemistry</option><option value="Biology">Biology</option><option value="Physics">Physics</option></select></div>
-                <div class="admin-input-group"><label>Description</label><textarea id="adminProjDesc" placeholder="Project description..."></textarea></div>
-                <div class="admin-input-group"><label>Tags (comma-separated)</label><input type="text" id="adminProjTags" placeholder="e.g. Robotics, IoT"></div>
-                <div class="admin-input-group"><label>Best For (comma-separated)</label><input type="text" id="adminProjBestFor" placeholder="e.g. Class 9–10, HSC"></div>
-                <input type="hidden" id="adminProjEditId">
-                <button class="admin-btn admin-btn-primary" id="adminProjSaveBtn">➕ Add Project</button>
-                <button class="admin-btn admin-btn-danger admin-btn-sm" id="adminProjCancelEdit" style="display:none;margin-left:6px;">Cancel Edit</button>
-                <hr style="border-color:rgba(255,255,255,0.08);margin:1rem 0;">
-                <div id="adminProjectsList"></div>
-            </div>
-            <div id="adminTabUsers" style="display:none;">
-                <div class="admin-section-title">👥 User Management</div>
-                <div id="adminUsersList"></div>
-            </div>
-            <div id="adminTabSupport" style="display:none;">
-                <div class="admin-section-title">💬 Support Conversations</div>
-                <div id="adminSupportConversations"></div>
-                <div id="adminSupportMessages" style="margin-top:1rem;"></div>
-            </div>
-            <div id="adminTabSettings" style="display:none;">
-                <div class="admin-section-title">⚙ Site Settings</div>
-                <div class="admin-input-group"><label>Announcement Bar Text</label><input type="text" id="adminSettingAnnouncement" placeholder="Announcement text..."></div>
-                <div class="admin-input-group"><label>Site Name</label><input type="text" id="adminSettingSiteName" placeholder="The Debug Point"></div>
-                <button class="admin-btn admin-btn-primary" id="adminSettingsSaveBtn">💾 Save Settings</button>
-            </div>
+            <div id="adminTabProjects"><div class="admin-section-title">📦 Project Management</div><div class="admin-input-group"><label>Project Title</label><input type="text" id="adminProjTitle" placeholder="Enter project title"></div><div class="admin-input-group"><label>Category</label><select id="adminProjCat"><option value="Robotics">Robotics</option><option value="Security">Security</option><option value="IoT">IoT</option><option value="Safety">Safety</option><option value="Chemistry">Chemistry</option><option value="Biology">Biology</option><option value="Physics">Physics</option></select></div><div class="admin-input-group"><label>Description</label><textarea id="adminProjDesc" placeholder="Project description..."></textarea></div><div class="admin-input-group"><label>Tags (comma-separated)</label><input type="text" id="adminProjTags" placeholder="e.g. Robotics, IoT"></div><div class="admin-input-group"><label>Best For (comma-separated)</label><input type="text" id="adminProjBestFor" placeholder="e.g. Class 9–10, HSC"></div><input type="hidden" id="adminProjEditId"><button class="admin-btn admin-btn-primary" id="adminProjSaveBtn">➕ Add Project</button><button class="admin-btn admin-btn-danger admin-btn-sm" id="adminProjCancelEdit" style="display:none;margin-left:6px;">Cancel Edit</button><hr style="border-color:rgba(255,255,255,0.08);margin:1rem 0;"><div id="adminProjectsList"></div></div>
+            <div id="adminTabUsers" style="display:none;"><div class="admin-section-title">👥 User Management</div><div id="adminUsersList"></div></div>
+            <div id="adminTabSupport" style="display:none;"><div class="admin-section-title">💬 Support Conversations</div><div id="adminSupportConversations"></div><div id="adminSupportMessages" style="margin-top:1rem;"></div></div>
+            <div id="adminTabSettings" style="display:none;"><div class="admin-section-title">⚙ Site Settings</div><div class="admin-input-group"><label>Announcement Bar Text</label><input type="text" id="adminSettingAnnouncement" placeholder="Announcement text..."></div><div class="admin-input-group"><label>Site Name</label><input type="text" id="adminSettingSiteName" placeholder="The Debug Point"></div><button class="admin-btn admin-btn-primary" id="adminSettingsSaveBtn">💾 Save Settings</button></div>
         </div>
     </div>
 
-    <!-- ═══════════ USERNAME EDIT MODAL ═══════════ -->
-    <div class="modal-overlay" id="usernameModalOverlay">
-        <div class="modal-box">
-            <div class="modal-title">Edit Username</div>
-            <input type="text" class="modal-input" id="usernameModalInput" placeholder="Enter new username" maxlength="24">
-            <div class="modal-btn-row">
-                <button class="modal-btn modal-btn-confirm" id="usernameModalSave">Save</button>
-                <button class="modal-btn modal-btn-cancel" id="usernameModalCancel">Cancel</button>
-            </div>
-        </div>
-    </div>
+    <div class="modal-overlay" id="usernameModalOverlay"><div class="modal-box"><div class="modal-title">Edit Username</div><input type="text" class="modal-input" id="usernameModalInput" placeholder="Enter new username" maxlength="24"><div class="modal-btn-row"><button class="modal-btn modal-btn-confirm" id="usernameModalSave">Save</button><button class="modal-btn modal-btn-cancel" id="usernameModalCancel">Cancel</button></div></div></div>
+    <div class="modal-overlay" id="adminLoginModalOverlay"><div class="modal-box"><div class="modal-title">🔐 Admin Access</div><input type="password" class="modal-input" id="adminLoginInput" placeholder="Enter admin PIN" maxlength="16"><div class="modal-btn-row"><button class="modal-btn modal-btn-confirm" id="adminLoginConfirm">Unlock</button><button class="modal-btn modal-btn-cancel" id="adminLoginCancel">Cancel</button></div></div></div>
+    <div class="modal-overlay" id="secretPasswordModal"><div class="modal-box"><div class="modal-title">🔐 System Access</div><input type="password" class="modal-input" id="secretPasswordInput" placeholder="Enter access code"><div class="modal-btn-row"><button class="modal-btn modal-btn-confirm" id="secretPasswordConfirm">Authenticate</button><button class="modal-btn modal-btn-cancel" id="secretPasswordCancel">Cancel</button></div></div></div>
 
-    <!-- ═══════════ ADMIN LOGIN MODAL ═══════════ -->
-    <div class="modal-overlay" id="adminLoginModalOverlay">
-        <div class="modal-box">
-            <div class="modal-title">🔐 Admin Access</div>
-            <input type="password" class="modal-input" id="adminLoginInput" placeholder="Enter admin PIN" maxlength="16">
-            <div class="modal-btn-row">
-                <button class="modal-btn modal-btn-confirm" id="adminLoginConfirm">Unlock</button>
-                <button class="modal-btn modal-btn-cancel" id="adminLoginCancel">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ═══════════ SECRET PASSWORD MODAL ═══════════ -->
-    <div class="modal-overlay" id="secretPasswordModal">
-        <div class="modal-box">
-            <div class="modal-title">🔐 System Access</div>
-            <input type="password" class="modal-input" id="secretPasswordInput" placeholder="Enter access code">
-            <div class="modal-btn-row">
-                <button class="modal-btn modal-btn-confirm" id="secretPasswordConfirm">Authenticate</button>
-                <button class="modal-btn modal-btn-cancel" id="secretPasswordCancel">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ═══════════ SUPPORT WIDGET ═══════════ -->
     <div class="support-float-btn" id="supportFloatBtn" title="Support Chat">
         <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
         <span class="support-badge" id="supportBadge">0</span>
     </div>
     <div class="support-widget" id="supportWidget">
-        <div class="support-header">
-            <span>Support Chat</span>
-            <button class="support-close" id="supportCloseBtn">✕</button>
-        </div>
+        <div class="support-header"><span>Support Chat</span><button class="support-close" id="supportCloseBtn">✕</button></div>
         <div class="support-messages" id="supportMessages"></div>
-        <div class="support-input-row">
-            <input type="text" id="supportInput" placeholder="Type your message..." maxlength="500">
-            <button class="support-send-btn" id="supportSendBtn"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button>
-        </div>
+        <div class="support-input-row"><input type="text" id="supportInput" placeholder="Type your message..." maxlength="500"><button class="support-send-btn" id="supportSendBtn"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
     </div>
-
-    <!-- ═══════════ TOAST ═══════════ -->
     <div class="admin-toast" id="adminToast"></div>
 
-    <!-- ═══════════════════════════════════════════
-    FIREBASE SDK (compat) - CORRECT CONFIG
-    ═══════════════════════════════════════════ -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js">
+    </script>
 
-    <!-- ═══════════════════════════════════════════
-    eDEX-UI INSPIRED CINEMATIC INTRO — CORE ENGINE
-    ═══════════════════════════════════════════ -->
     <script>
         (function() {
             const overlay = document.getElementById('intro-overlay');
@@ -2446,6 +2376,7 @@
             const scanlines = document.getElementById('introScanlines');
             const crtCurve = document.getElementById('introCrt');
             const glitchFlash = document.getElementById('introGlitchFlash');
+            const cinematicOverlay = document.getElementById('introCinematic');
             const skipHint = document.getElementById('introSkipHint');
             let W, H;
             let introPhase = 0;
@@ -2453,73 +2384,529 @@
             let introStartTime = 0;
             let progressPercent = 0;
             let welcomeAlpha = 0;
+            let cinematicAlpha = 0;
             let introComplete = false;
             let frameCount = 0;
             let skipRequested = false;
             const particles = [];
-            const PARTICLE_COUNT = 140;
-            const particleColors = ['#00d4ff', '#00ffcc', '#00ff88', '#ffffff', '#4dd0ff', '#88ffdd'];
-            function initParticles() { particles.length = 0; for (let i = 0; i < PARTICLE_COUNT; i++) particles.push({ x: Math.random() * W, y: Math.random() * H, speed: 0.4 + Math.random() * 3.2, size: 0.4 + Math.random() * 2.0, opacity: 0.12 + Math.random() * 0.55, color: particleColors[Math.floor(Math.random() * particleColors.length)], wobble: Math.random() * Math.PI * 2, wobbleSpeed: 0.01 + Math.random() * 0.04 }); }
-            function updateParticles() { for (const p of particles) { p.y += p.speed; p.wobble += p.wobbleSpeed; p.x += Math.sin(p.wobble) * 0.3; if (p.y > H + 15) { p.y = -15; p.x = Math.random() * W; } if (p.x < -10) p.x = W + 10; if (p.x > W + 10) p.x = -10; } }
-            function drawParticles() { const alphaMul = introPhase === 2 ? 0.45 : 1; for (const p of particles) { ctx.fillStyle = p.color; ctx.globalAlpha = p.opacity * alphaMul; ctx.fillRect(p.x, p.y, p.size, p.size * 3.5); } ctx.globalAlpha = 1; }
+            const codeStreams = [];
+            const PARTICLE_COUNT = 180;
+            const CODE_STREAM_COUNT = 28;
+            const particleColors = ['#00d4ff', '#00ffcc', '#00ff88', '#ffffff', '#4dd0ff', '#88ffdd', '#00b8e6', '#55eebb'];
+
+            function initParticles() {
+                particles.length = 0;
+                for (let i = 0; i < PARTICLE_COUNT; i++) particles.push({
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    speed: 0.3 + Math.random() * 3.8,
+                    size: 0.3 + Math.random() * 1.8,
+                    opacity: 0.08 + Math.random() * 0.5,
+                    color: particleColors[Math.floor(Math.random() * particleColors.length)],
+                    wobble: Math.random() * Math.PI * 2,
+                    wobbleSpeed: 0.008 + Math.random() * 0.045
+                });
+            }
+
+            function initCodeStreams() {
+                codeStreams.length = 0;
+                const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+                for (let i = 0; i < CODE_STREAM_COUNT; i++) {
+                    const x = Math.random() * W;
+                    const speed = 1.5 + Math.random() * 6;
+                    const length = 8 + Math.floor(Math.random() * 30);
+                    const fontSize = 9 + Math.random() * 13;
+                    codeStreams.push({
+                        x,
+                        y: -Math.random() * H,
+                        speed,
+                        length,
+                        fontSize,
+                        chars: [],
+                        color: Math.random() < 0.5 ? '#00d4ff' : '#00ff88',
+                        opacity: 0.15 + Math.random() * 0.5,
+                    });
+                    for (let j = 0; j < length; j++) {
+                        codeStreams[i].chars.push(chars[Math.floor(Math.random() * chars.length)]);
+                    }
+                }
+            }
+
+            function updateParticles() {
+                for (const p of particles) {
+                    p.y += p.speed;
+                    p.wobble += p.wobbleSpeed;
+                    p.x += Math.sin(p.wobble) * 0.25;
+                    if (p.y > H + 15) { p.y = -15;
+                        p.x = Math.random() * W; }
+                    if (p.x < -10) p.x = W + 10;
+                    if (p.x > W + 10) p.x = -10;
+                }
+            }
+
+            function updateCodeStreams() {
+                for (const s of codeStreams) {
+                    s.y += s.speed;
+                    if (s.y > H + s.length * s.fontSize) {
+                        s.y = -s.length * s.fontSize;
+                        s.x = Math.random() * W;
+                    }
+                }
+            }
+
+            function drawParticles() {
+                const alphaMul = introPhase >= 2 ? 0.5 : 1;
+                for (const p of particles) {
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.opacity * alphaMul;
+                    ctx.fillRect(p.x, p.y, p.size, p.size * 3.5);
+                }
+                ctx.globalAlpha = 1;
+            }
+
+            function drawCodeStreams() {
+                if (introPhase >= 3) return;
+                const alphaMul = introPhase >= 2 ? 0.55 : 1;
+                for (const s of codeStreams) {
+                    ctx.globalAlpha = s.opacity * alphaMul;
+                    ctx.fillStyle = s.color;
+                    ctx.font = `${s.fontSize}px 'Share Tech Mono','JetBrains Mono',monospace`;
+                    for (let j = 0; j < s.chars.length; j++) {
+                        const cy = s.y - j * s.fontSize;
+                        if (cy > -s.fontSize && cy < H + s.fontSize) {
+                            const alpha = 1 - j / s.chars.length;
+                            ctx.globalAlpha = s.opacity * alphaMul * alpha;
+                            ctx.fillText(s.chars[j], s.x, cy);
+                        }
+                    }
+                }
+                ctx.globalAlpha = 1;
+            }
+
             const terminalLogs = [
-                { text: 'INITIALIZING SYSTEM KERNEL...', delay: 0.12, color: '#8899aa', prefix: '[BOOT]' },
-                { text: 'MOUNTING SECURE VOLUME', delay: 0.30, color: '#00ff88', prefix: '[ OK ]', ok: true },
-                { text: 'QUANTUM CORE ACTIVATED', delay: 0.48, color: '#00d4ff', prefix: '[CORE]' },
-                { text: 'NEURAL ENGINE v4.2.7 ONLINE', delay: 0.66, color: '#00d4ff', prefix: '[  AI]' },
-                { text: 'LOADING ENCRYPTED MODULES...', delay: 0.84, color: '#8899aa', prefix: '[MOD ]' },
-                { text: 'BIOMETRIC SIGNATURE VERIFIED', delay: 1.02, color: '#00ff88', prefix: '[ OK ]', ok: true },
-                { text: 'FIREWALL: ACTIVE  |  PROXY: SECURE', delay: 1.20, color: '#00ff88', prefix: '[SEC ]' },
-                { text: 'INITIALIZING HUD OVERLAY...', delay: 1.38, color: '#8899aa', prefix: '[HUD ]' },
-                { text: 'BOOT SEQUENCE COMPLETE', delay: 1.56, color: '#00d4ff', prefix: '[SYS ]' },
-                { text: '', delay: 1.70, color: '#fff', prefix: '' },
-                { text: 'ACCESS GRANTED — WELCOME, USER', delay: 1.80, color: '#00ffcc', prefix: '  >', glow: true },
-                { text: 'INITIALIZING INTERFACE...', delay: 2.00, color: '#00d4ff', prefix: '  >' },
+                { text: 'INITIALIZING SYSTEM KERNEL...', delay: 0.10, color: '#8899aa', prefix: '[BOOT]' },
+                { text: 'MOUNTING SECURE VOLUME', delay: 0.26, color: '#00ff88', prefix: '[ OK ]', ok: true },
+                { text: 'QUANTUM CORE ACTIVATED', delay: 0.42, color: '#00d4ff', prefix: '[CORE]' },
+                { text: 'NEURAL ENGINE v4.2.7 ONLINE', delay: 0.56, color: '#00d4ff', prefix: '[  AI]' },
+                { text: 'LOADING ENCRYPTED MODULES...', delay: 0.70, color: '#8899aa', prefix: '[MOD ]' },
+                { text: 'BIOMETRIC SIGNATURE VERIFIED', delay: 0.84, color: '#00ff88', prefix: '[ OK ]', ok: true },
+                { text: 'FIREWALL: ACTIVE  |  PROXY: SECURE', delay: 0.98, color: '#00ff88', prefix: '[SEC ]' },
+                { text: 'INITIALIZING HUD OVERLAY...', delay: 1.12, color: '#8899aa', prefix: '[HUD ]' },
+                { text: 'ESTABLISHING SECURE TUNNEL', delay: 1.26, color: '#00d4ff', prefix: '[NET ]' },
+                { text: 'BOOT SEQUENCE COMPLETE', delay: 1.40, color: '#00d4ff', prefix: '[SYS ]' },
+                { text: '', delay: 1.52, color: '#fff', prefix: '' },
+                { text: 'ACCESS GRANTED — WELCOME, USER', delay: 1.60, color: '#00ffcc', prefix: '  >', glow: true },
+                { text: 'RENDERING INTERFACE...', delay: 1.80, color: '#00d4ff', prefix: '  >' },
             ];
             const completedLines = [];
-            let currentLogIndex = 0, currentTypedText = '', typedCharCount = 0, typingTimer = 0;
-            const TYPING_SPEED = 0.016;
-            function updateTyping(dt) { if (currentLogIndex >= terminalLogs.length) return; typingTimer += dt; const log = terminalLogs[currentLogIndex]; if (typedCharCount < log.text.length) { if (typingTimer >= TYPING_SPEED) { typingTimer -= TYPING_SPEED; typedCharCount++; currentTypedText = log.text.substring(0, typedCharCount); if (Math.random() < 0.65) playTypingSound(); } } else { completedLines.push({ text: log.text, color: log.color, prefix: log.prefix, ok: log.ok || false, glow: log.glow || false }); currentLogIndex++; typedCharCount = 0; currentTypedText = ''; typingTimer = -log.delay; if (currentLogIndex < terminalLogs.length && currentLogIndex === terminalLogs.length - 2) playBootSound(); } }
-            function drawTerminal(elapsed) { const fontSize = Math.min(15, W / 58); const lineHeight = fontSize * 1.75; const startX = W * 0.07; const startY = H * 0.22; ctx.font = `${fontSize}px 'Share Tech Mono', 'JetBrains Mono', 'Courier New', monospace`; ctx.textBaseline = 'top'; for (let i = 0; i < completedLines.length; i++) { const line = completedLines[i]; const y = startY + i * lineHeight; if (line.prefix) { ctx.fillStyle = line.ok ? '#00ff88' : '#667788'; ctx.fillText(line.prefix + ' ', startX, y); const prefixW = ctx.measureText(line.prefix + ' ').width; ctx.fillStyle = line.color; if (line.glow) { ctx.shadowColor = '#00ffcc'; ctx.shadowBlur = 8; } ctx.fillText(line.text, startX + prefixW, y); ctx.shadowBlur = 0; } else { ctx.fillStyle = line.color; ctx.fillText(line.text, startX, y); } } if (currentLogIndex < terminalLogs.length && currentTypedText) { const log = terminalLogs[currentLogIndex]; const y = startY + completedLines.length * lineHeight; if (log.prefix) { ctx.fillStyle = '#667788'; ctx.fillText(log.prefix + ' ', startX, y); const prefixW = ctx.measureText(log.prefix + ' ').width; ctx.fillStyle = log.color; ctx.fillText(currentTypedText, startX + prefixW, y); if (Math.floor(elapsed * 5) % 2 === 0) { const textW = ctx.measureText(currentTypedText).width; ctx.fillStyle = '#00ffcc'; ctx.fillRect(startX + prefixW + textW + 2, y + 2, fontSize * 0.55, fontSize * 0.8); } } else { ctx.fillStyle = log.color; ctx.fillText(currentTypedText, startX, y); if (Math.floor(elapsed * 5) % 2 === 0) { const textW = ctx.measureText(currentTypedText).width; ctx.fillStyle = '#00ffcc'; ctx.fillRect(startX + textW + 2, y + 2, fontSize * 0.55, fontSize * 0.8); } } } if (Math.random() < 0.012 && introPhase === 0) triggerMicroGlitch(); }
-            function drawProgressBar() { const barWidth = Math.min(380, W * 0.62); const barHeight = 4; const barX = (W - barWidth) / 2; const barY = H * 0.64; ctx.fillStyle = 'rgba(0,180,220,0.08)'; ctx.fillRect(barX - 3, barY - 3, barWidth + 6, barHeight + 6); ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(barX, barY, barWidth, barHeight); const fillW = barWidth * (progressPercent / 100); const grad = ctx.createLinearGradient(barX, barY, barX + barWidth, barY); grad.addColorStop(0, '#00d4ff'); grad.addColorStop(0.5, '#00ffcc'); grad.addColorStop(1, '#00d4ff'); ctx.fillStyle = grad; ctx.fillRect(barX, barY, fillW, barHeight); ctx.shadowColor = '#00d4ff'; ctx.shadowBlur = 16; ctx.fillStyle = 'rgba(0,212,255,0.45)'; ctx.fillRect(barX, barY, fillW, barHeight); ctx.shadowBlur = 0; const pct = Math.floor(progressPercent); ctx.fillStyle = '#00d4ff'; ctx.font = `${Math.min(26, W/28)}px 'Orbitron', 'JetBrains Mono', monospace`; ctx.textAlign = 'center'; ctx.fillText(pct + '%', W / 2, barY - 36); ctx.textAlign = 'start'; ctx.fillStyle = '#556677'; ctx.font = `${Math.min(9.5, W/75)}px 'JetBrains Mono', monospace`; ctx.textAlign = 'center'; ctx.fillText('INITIALIZING NEURAL INTERFACE', W / 2, barY + 20); ctx.textAlign = 'start'; }
-            function drawWelcomeCard() { const cardW = Math.min(440, W * 0.78); const cardH = 175; const cardX = (W - cardW) / 2; const cardY = (H - cardH) / 2; ctx.fillStyle = `rgba(8,14,24,${0.75 * welcomeAlpha})`; ctx.strokeStyle = `rgba(0,212,255,${0.5 * welcomeAlpha})`; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.roundRect(cardX, cardY, cardW, cardH, 22); ctx.fill(); ctx.stroke(); ctx.strokeStyle = `rgba(0,255,200,${0.18 * welcomeAlpha})`; ctx.lineWidth = 4; ctx.beginPath(); ctx.roundRect(cardX + 3, cardY + 3, cardW - 6, cardH - 6, 19); ctx.stroke(); ctx.fillStyle = `rgba(0,255,200,${welcomeAlpha})`; ctx.font = `bold ${Math.min(24,W/30)}px 'Orbitron', 'JetBrains Mono', monospace`; ctx.textAlign = 'center'; ctx.fillText('WELCOME BACK', W / 2, cardY + 48); ctx.textAlign = 'start'; ctx.fillStyle = `rgba(190,215,235,${0.85 * welcomeAlpha})`; ctx.font = `${Math.min(14,W/48)}px 'Inter', 'Noto Sans Bengali', sans-serif`; ctx.textAlign = 'center'; ctx.fillText('The Debug Point — Coding & Robotics Solution', W / 2, cardY + 88); ctx.textAlign = 'start'; ctx.strokeStyle = `rgba(0,212,255,${0.3 * welcomeAlpha})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cardX + 45, cardY + 108); ctx.lineTo(cardX + cardW - 45, cardY + 108); ctx.stroke(); ctx.fillStyle = `rgba(0,255,136,${0.9 * welcomeAlpha})`; ctx.beginPath(); ctx.arc(W / 2 - 85, cardY + 138, 4, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = `rgba(0,255,136,${0.7 * welcomeAlpha})`; ctx.font = `${Math.min(9.5,W/75)}px 'JetBrains Mono', monospace`; ctx.textAlign = 'center'; ctx.fillText('SYSTEM READY — CHITTAGONG, BD', W / 2 + 10, cardY + 134); ctx.textAlign = 'start'; }
-            function drawHUDCorners() { const sz = 26; const m = 20; const alpha = introPhase >= 2 ? welcomeAlpha : 0.45; ctx.strokeStyle = `rgba(0,212,255,${alpha})`; ctx.lineWidth = 1.5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(m, m + sz); ctx.lineTo(m, m); ctx.lineTo(m + sz, m); ctx.stroke(); ctx.beginPath(); ctx.moveTo(W - m - sz, m); ctx.lineTo(W - m, m); ctx.lineTo(W - m, m + sz); ctx.stroke(); ctx.beginPath(); ctx.moveTo(m, H - m - sz); ctx.lineTo(m, H - m); ctx.lineTo(m + sz, H - m); ctx.stroke(); ctx.beginPath(); ctx.moveTo(W - m - sz, H - m); ctx.lineTo(W - m, H - m); ctx.lineTo(W - m, H - m - sz); ctx.stroke(); }
-            function drawGrid() { const gridSize = 48; ctx.strokeStyle = 'rgba(0,180,220,0.03)'; ctx.lineWidth = 0.5; for (let x = gridSize; x < W; x += gridSize) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); } for (let y = gridSize; y < H; y += gridSize) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); } }
-            function drawBackground() { const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.75); bgGrad.addColorStop(0, '#0b1119'); bgGrad.addColorStop(1, '#020508'); ctx.fillStyle = bgGrad; ctx.fillRect(0, 0, W, H); drawGrid(); }
-            function draw(elapsed) { ctx.clearRect(0, 0, W, H); drawBackground(); drawParticles(); drawHUDCorners(); if (introPhase === 0) drawTerminal(elapsed); else if (introPhase === 1) { drawTerminal(elapsed); drawProgressBar(); } else if (introPhase === 2) { drawWelcomeCard(); drawProgressBar(); } }
-            let audioCtx = null; let audioEnabled = false;
-            function initAudio() { if (audioCtx) return; try { audioCtx = new(window.AudioContext || window.webkitAudioContext)(); audioEnabled = true; } catch (e) {} }
-            function playTone(freq, duration, type = 'square', vol = 0.03, rampDown = true) { if (!audioEnabled || !audioCtx) return; try { const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain(); osc.type = type; osc.frequency.value = freq; gain.gain.setValueAtTime(vol, audioCtx.currentTime); if (rampDown) gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration + 0.01); } catch (e) {} }
-            function playTypingSound() { playTone(700 + Math.random() * 500, 0.025, 'square', 0.02); }
-            function playBootSound() { if (!audioEnabled) return; playTone(35, 0.45, 'sine', 0.05, false); }
-            function playGlitchSound() { playTone(50 + Math.random() * 180, 0.1, 'sawtooth', 0.05); }
-            function playClickSound() { playTone(1100, 0.03, 'square', 0.025); }
-            function triggerMicroGlitch() { glitchFlash.classList.add('active'); scanlines.classList.add('intensify'); setTimeout(() => { glitchFlash.classList.remove('active'); scanlines.classList.remove('intensify'); }, 35 + Math.random() * 50); if (Math.random() < 0.5) playGlitchSound(); }
-            function triggerHeavyGlitch() { glitchFlash.classList.add('active'); scanlines.classList.add('intensify'); overlay.classList.add('intro-shake'); playGlitchSound(); setTimeout(() => { glitchFlash.classList.remove('active'); scanlines.classList.remove('intensify'); overlay.classList.remove('intro-shake'); }, 140); }
-            function transitionToLoading() { introPhase = 1; phaseStartTime = performance.now() / 1000; progressPercent = 0; playBootSound(); }
-            function transitionToWelcome() { introPhase = 2; phaseStartTime = performance.now() / 1000; progressPercent = 100; playClickSound(); skipHint.classList.add('visible'); }
-            function transitionToMainSite() { if (introComplete) return; introComplete = true; introPhase = 4; triggerHeavyGlitch(); const flash = document.createElement('div'); flash.style.cssText = 'position:fixed;inset:0;z-index:100010;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.1s'; document.body.appendChild(flash); requestAnimationFrame(() => { flash.style.opacity = '0.75'; setTimeout(() => { flash.style.opacity = '0'; setTimeout(() => flash.remove(), 180); }, 70); }); setTimeout(() => { overlay.classList.add('fading-out'); scanlines.style.opacity = '0'; crtCurve.classList.remove('active'); skipHint.style.opacity = '0'; document.body.style.overflow = ''; document.body.style.cursor = ''; mainSite.classList.add('visible'); }, 100); setTimeout(() => { overlay.classList.add('removed'); scanlines.style.display = 'none'; crtCurve.style.display = 'none'; glitchFlash.style.display = 'none'; skipHint.style.display = 'none'; initMainSiteScripts(); }, 700); }
-            function requestSkip() { if (skipRequested || introComplete) return; skipRequested = true; while (currentLogIndex < terminalLogs.length) { const log = terminalLogs[currentLogIndex]; completedLines.push({ text: log.text, color: log.color, prefix: log.prefix, ok: log.ok || false, glow: log.glow || false }); currentLogIndex++; } introPhase = 2; phaseStartTime = performance.now() / 1000; progressPercent = 100; welcomeAlpha = 1; playClickSound(); setTimeout(() => transitionToMainSite(), 600); }
-            function resize() { W = window.innerWidth; H = window.innerHeight; canvas.width = W; canvas.height = H; if (particles.length === 0) initParticles(); for (const p of particles) { if (p.x > W) p.x = Math.random() * W; if (p.y > H) p.y = Math.random() * H; } }
-            window.addEventListener('resize', resize); resize(); initParticles();
-            function animateIntro(timestamp) { if (introComplete) return; const elapsed = (timestamp - introStartTime) / 1000; const dt = Math.min(0.1, 1 / 60); frameCount++; updateParticles(); if (introPhase === 0) { updateTyping(dt); if (currentLogIndex >= terminalLogs.length && elapsed > 2.3) transitionToLoading(); } else if (introPhase === 1) { const phaseElapsed = (timestamp / 1000) - phaseStartTime; progressPercent = Math.min(100, phaseElapsed * 68); if (progressPercent >= 100 && phaseElapsed > 1.6) transitionToWelcome(); } else if (introPhase === 2) { const phaseElapsed = (timestamp / 1000) - phaseStartTime; welcomeAlpha = Math.min(1, phaseElapsed * 2.8); if (phaseElapsed > 2.0) { transitionToMainSite(); return; } } draw(elapsed); requestAnimationFrame(animateIntro); }
-            function handleFirstInteraction() { initAudio(); document.removeEventListener('click', handleFirstInteraction); document.removeEventListener('touchstart', handleFirstInteraction); document.removeEventListener('keydown', handleFirstInteractionKey); }
-            function handleFirstInteractionKey(e) { initAudio(); document.removeEventListener('click', handleFirstInteraction); document.removeEventListener('touchstart', handleFirstInteraction); document.removeEventListener('keydown', handleFirstInteractionKey); if (e.key && introPhase < 2) requestSkip(); }
-            document.addEventListener('click', handleFirstInteraction, { once: true }); document.addEventListener('touchstart', handleFirstInteraction, { once: true }); document.addEventListener('keydown', handleFirstInteractionKey, { once: true });
-            document.addEventListener('keydown', function skipListener(e) { if (introComplete) { document.removeEventListener('keydown', skipListener); return; } if (e.key && introPhase < 2 && !skipRequested) requestSkip(); });
-            skipHint.addEventListener('click', (e) => { e.stopPropagation(); if (!skipRequested && introPhase < 3) requestSkip(); });
-            document.body.style.overflow = 'hidden'; document.body.style.cursor = 'none'; introStartTime = performance.now(); requestAnimationFrame(animateIntro);
+            let currentLogIndex = 0,
+                currentTypedText = '',
+                typedCharCount = 0,
+                typingTimer = 0;
+            const TYPING_SPEED = 0.014;
+
+            function updateTyping(dt) {
+                if (currentLogIndex >= terminalLogs.length) return;
+                typingTimer += dt;
+                const log = terminalLogs[currentLogIndex];
+                if (typedCharCount < log.text.length) {
+                    if (typingTimer >= TYPING_SPEED) { typingTimer -= TYPING_SPEED;
+                        typedCharCount++;
+                        currentTypedText = log.text.substring(0, typedCharCount); if (Math.random() < 0.6) playTypingSound
+                        (); }
+                } else {
+                    completedLines.push({ text: log.text, color: log.color, prefix: log.prefix, ok: log.ok || false,
+                        glow: log.glow || false });
+                    currentLogIndex++;
+                    typedCharCount = 0;
+                    currentTypedText = '';
+                    typingTimer = -log.delay;
+                    if (currentLogIndex < terminalLogs.length && currentLogIndex === terminalLogs.length - 2) playBootSound();
+                }
+            }
+
+            function drawTerminal(elapsed) {
+                const fontSize = Math.min(14, W / 60);
+                const lineHeight = fontSize * 1.7;
+                const startX = W * 0.06;
+                const startY = H * 0.20;
+                ctx.font = `${fontSize}px 'Share Tech Mono','JetBrains Mono','Courier New',monospace`;
+                ctx.textBaseline = 'top';
+                for (let i = 0; i < completedLines.length; i++) {
+                    const line = completedLines[i];
+                    const y = startY + i * lineHeight;
+                    if (line.prefix) {
+                        ctx.fillStyle = line.ok ? '#00ff88' : '#667788';
+                        ctx.fillText(line.prefix + ' ', startX, y);
+                        const prefixW = ctx.measureText(line.prefix + ' ').width;
+                        ctx.fillStyle = line.color;
+                        if (line.glow) { ctx.shadowColor = '#00ffcc';
+                            ctx.shadowBlur = 8; }
+                        ctx.fillText(line.text, startX + prefixW, y);
+                        ctx.shadowBlur = 0;
+                    } else {
+                        ctx.fillStyle = line.color;
+                        ctx.fillText(line.text, startX, y);
+                    }
+                }
+                if (currentLogIndex < terminalLogs.length && currentTypedText) {
+                    const log = terminalLogs[currentLogIndex];
+                    const y = startY + completedLines.length * lineHeight;
+                    if (log.prefix) {
+                        ctx.fillStyle = '#667788';
+                        ctx.fillText(log.prefix + ' ', startX, y);
+                        const prefixW = ctx.measureText(log.prefix + ' ').width;
+                        ctx.fillStyle = log.color;
+                        ctx.fillText(currentTypedText, startX + prefixW, y);
+                        if (Math.floor(elapsed * 5) % 2 === 0) { const textW = ctx.measureText(currentTypedText).width;
+                            ctx.fillStyle = '#00ffcc';
+                            ctx.fillRect(startX + prefixW + textW + 2, y + 2, fontSize * 0.5, fontSize * 0.75); }
+                    } else {
+                        ctx.fillStyle = log.color;
+                        ctx.fillText(currentTypedText, startX, y);
+                        if (Math.floor(elapsed * 5) % 2 === 0) { const textW = ctx.measureText(currentTypedText).width;
+                            ctx.fillStyle = '#00ffcc';
+                            ctx.fillRect(startX + textW + 2, y + 2, fontSize * 0.5, fontSize * 0.75); }
+                    }
+                }
+                if (Math.random() < 0.01 && introPhase === 0) triggerMicroGlitch();
+            }
+
+            function drawProgressBar() {
+                const barWidth = Math.min(360, W * 0.58);
+                const barHeight = 3;
+                const barX = (W - barWidth) / 2;
+                const barY = H * 0.62;
+                ctx.fillStyle = 'rgba(0,180,220,0.07)';
+                ctx.fillRect(barX - 2, barY - 2, barWidth + 4, barHeight + 4);
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.fillRect(barX, barY, barWidth, barHeight);
+                const fillW = barWidth * (progressPercent / 100);
+                const grad = ctx.createLinearGradient(barX, barY, barX + barWidth, barY);
+                grad.addColorStop(0, '#00d4ff');
+                grad.addColorStop(0.5, '#00ffcc');
+                grad.addColorStop(1, '#00d4ff');
+                ctx.fillStyle = grad;
+                ctx.fillRect(barX, barY, fillW, barHeight);
+                ctx.shadowColor = '#00d4ff';
+                ctx.shadowBlur = 14;
+                ctx.fillStyle = 'rgba(0,212,255,0.4)';
+                ctx.fillRect(barX, barY, fillW, barHeight);
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#00d4ff';
+                ctx.font = `${Math.min(24,W/30)}px 'Orbitron','JetBrains Mono',monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText(Math.floor(progressPercent) + '%', W / 2, barY - 32);
+                ctx.textAlign = 'start';
+            }
+
+            function drawWelcomeCard() {
+                const cardW = Math.min(420, W * 0.75);
+                const cardH = 160;
+                const cardX = (W - cardW) / 2;
+                const cardY = (H - cardH) / 2;
+                ctx.fillStyle = `rgba(6,10,20,${0.78*welcomeAlpha})`;
+                ctx.strokeStyle = `rgba(0,212,255,${0.45*welcomeAlpha})`;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.roundRect(cardX, cardY, cardW, cardH, 20);
+                ctx.fill();
+                ctx.stroke();
+                ctx.strokeStyle = `rgba(0,255,200,${0.15*welcomeAlpha})`;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.roundRect(cardX + 2, cardY + 2, cardW - 4, cardH - 4, 18);
+                ctx.stroke();
+                ctx.fillStyle = `rgba(0,255,200,${welcomeAlpha})`;
+                ctx.font = `bold ${Math.min(22,W/32)}px 'Orbitron','JetBrains Mono',monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('WELCOME BACK', W / 2, cardY + 42);
+                ctx.textAlign = 'start';
+                ctx.fillStyle = `rgba(180,210,230,${0.8*welcomeAlpha})`;
+                ctx.font = `${Math.min(13,W/50)}px 'Inter','Noto Sans Bengali',sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.fillText('The Debug Point — Coding & Robotics Solution', W / 2, cardY + 78);
+                ctx.textAlign = 'start';
+                ctx.strokeStyle = `rgba(0,212,255,${0.25*welcomeAlpha})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(cardX + 40, cardY + 98);
+                ctx.lineTo(cardX + cardW - 40, cardY + 98);
+                ctx.stroke();
+                ctx.fillStyle = `rgba(0,255,136,${0.85*welcomeAlpha})`;
+                ctx.beginPath();
+                ctx.arc(W / 2 - 75, cardY + 125, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = `rgba(0,255,136,${0.65*welcomeAlpha})`;
+                ctx.font = `${Math.min(9,W/78)}px 'JetBrains Mono',monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('SYSTEM READY — CHITTAGONG, BD', W / 2 + 8, cardY + 121);
+                ctx.textAlign = 'start';
+            }
+
+            function drawHUDCorners() {
+                const sz = 24;
+                const m = 18;
+                const alpha = introPhase >= 2 ? Math.max(welcomeAlpha, cinematicAlpha) : 0.4;
+                ctx.strokeStyle = `rgba(0,212,255,${alpha})`;
+                ctx.lineWidth = 1.5;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(m, m + sz);
+                ctx.lineTo(m, m);
+                ctx.lineTo(m + sz, m);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(W - m - sz, m);
+                ctx.lineTo(W - m, m);
+                ctx.lineTo(W - m, m + sz);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(m, H - m - sz);
+                ctx.lineTo(m, H - m);
+                ctx.lineTo(m + sz, H - m);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(W - m - sz, H - m);
+                ctx.lineTo(W - m, H - m);
+                ctx.lineTo(W - m, H - m - sz);
+                ctx.stroke();
+            }
+
+            function drawGrid() {
+                const gridSize = 44;
+                ctx.strokeStyle = 'rgba(0,180,220,0.025)';
+                ctx.lineWidth = 0.5;
+                for (let x = gridSize; x < W; x += gridSize) { ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, H);
+                    ctx.stroke(); }
+                for (let y = gridSize; y < H; y += gridSize) { ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(W, y);
+                    ctx.stroke(); }
+            }
+
+            function drawBackground() {
+                const bgGrad = ctx.createRadialGradient(W / 2, H / 2, 0, W / 2, H / 2, Math.max(W, H) * 0.7);
+                bgGrad.addColorStop(0, '#0a1018');
+                bgGrad.addColorStop(1, '#020408');
+                ctx.fillStyle = bgGrad;
+                ctx.fillRect(0, 0, W, H);
+                drawGrid();
+            }
+
+            function draw(elapsed) {
+                ctx.clearRect(0, 0, W, H);
+                drawBackground();
+                drawCodeStreams();
+                drawParticles();
+                drawHUDCorners();
+                if (introPhase === 0) drawTerminal(elapsed);
+                else if (introPhase === 1) { drawTerminal(elapsed);
+                    drawProgressBar(); } else if (introPhase === 2) { drawWelcomeCard();
+                    drawProgressBar(); } else if (introPhase === 3) { drawCinematicPhase(elapsed); }
+            }
+
+            function drawCinematicPhase(elapsed) {
+                const phaseElapsed = (performance.now() / 1000) - phaseStartTime;
+                cinematicAlpha = Math.min(1, phaseElapsed * 2.5);
+                cinematicOverlay.classList.add('active');
+                const cx = W / 2;
+                const cy = H / 2;
+                const rings = 3;
+                for (let i = 0; i < rings; i++) {
+                    const radius = 80 + i * 70 + Math.sin(phaseElapsed * 1.8 + i) * 15;
+                    ctx.strokeStyle = `rgba(0,212,255,${0.08*cinematicAlpha*(1-i*0.25)})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+                const glowGrad = ctx.createRadialGradient(cx, cy, 40, cx, cy, 300);
+                glowGrad.addColorStop(0, `rgba(0,200,255,${0.06*cinematicAlpha})`);
+                glowGrad.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = glowGrad;
+                ctx.fillRect(cx - 300, cy - 300, 600, 600);
+                ctx.fillStyle = `rgba(255,255,255,${0.7*cinematicAlpha})`;
+                ctx.font = `bold ${Math.min(26,W/28)}px 'Orbitron','JetBrains Mono',monospace`;
+                ctx.textAlign = 'center';
+                ctx.fillText('THE DEBUG POINT', cx, cy - 60);
+                ctx.fillStyle = `rgba(0,212,255,${0.85*cinematicAlpha})`;
+                ctx.font = `${Math.min(14,W/50)}px 'Inter','Noto Sans Bengali',sans-serif`;
+                ctx.fillText('Coding & Robotics Solution · Chittagong', cx, cy - 20);
+                ctx.textAlign = 'start';
+                drawHUDCorners();
+            }
+
+            let audioCtx = null;
+            let audioEnabled = false;
+
+            function initAudio() { if (audioCtx) return; try { audioCtx = new(window.AudioContext || window
+                    .webkitAudioContext)();
+                    audioEnabled = true; } catch (e) {} }
+
+            function playTone(freq, duration, type = 'square', vol = 0.025, rampDown = true) { if (!audioEnabled || !
+                    audioCtx) return; try { const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = type;
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(vol, audioCtx.currentTime); if (rampDown) gain.gain
+                        .exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + duration + 0.01); } catch (e) {} }
+
+            function playTypingSound() { playTone(650 + Math.random() * 500, 0.02, 'square', 0.018); }
+
+            function playBootSound() { if (!audioEnabled) return;
+                playTone(30, 0.4, 'sine', 0.04, false); }
+
+            function playGlitchSound() { playTone(40 + Math.random() * 160, 0.08, 'sawtooth', 0.04); }
+
+            function playClickSound() { playTone(1000, 0.025, 'square', 0.02); }
+
+            function playCinematicSwoosh() { playTone(80, 0.5, 'sine', 0.035, true);
+                playTone(200, 0.3, 'sine', 0.02, true); }
+
+            function triggerMicroGlitch() { glitchFlash.classList.add('active');
+                scanlines.classList.add('intensify');
+                setTimeout(() => { glitchFlash.classList.remove('active');
+                    scanlines.classList.remove('intensify'); }, 30 + Math.random() * 40); if (Math.random() < 0.4)
+                    playGlitchSound(); }
+
+            function triggerHeavyGlitch() { glitchFlash.classList.add('active');
+                scanlines.classList.add('intensify');
+                overlay.classList.add('intro-shake');
+                playGlitchSound();
+                setTimeout(() => { glitchFlash.classList.remove('active');
+                    scanlines.classList.remove('intensify');
+                    overlay.classList.remove('intro-shake'); }, 130); }
+
+            function transitionToLoading() { introPhase = 1;
+                phaseStartTime = performance.now() / 1000;
+                progressPercent = 0;
+                playBootSound(); }
+
+            function transitionToWelcome() { introPhase = 2;
+                phaseStartTime = performance.now() / 1000;
+                progressPercent = 100;
+                playClickSound(); }
+
+            function transitionToCinematic() { introPhase = 3;
+                phaseStartTime = performance.now() / 1000;
+                cinematicAlpha = 0;
+                playCinematicSwoosh();
+                skipHint.classList.add('visible'); }
+
+            function transitionToMainSite() { if (introComplete) return;
+                introComplete = true;
+                introPhase = 4;
+                triggerHeavyGlitch();
+                const flash = document.createElement('div');
+                flash.style.cssText =
+                    'position:fixed;inset:0;z-index:100010;background:#fff;opacity:0;pointer-events:none;transition:opacity 0.1s';
+                document.body.appendChild(flash);
+                requestAnimationFrame(() => { flash.style.opacity = '0.7';
+                    setTimeout(() => { flash.style.opacity = '0';
+                        setTimeout(() => flash.remove(), 160); }, 60); });
+                setTimeout(() => { overlay.classList.add('fading-out');
+                    scanlines.style.opacity = '0';
+                    crtCurve.classList.remove('active');
+                    cinematicOverlay.classList.remove('active');
+                    skipHint.style.opacity = '0';
+                    document.body.style.overflow = '';
+                    document.body.style.cursor = '';
+                    mainSite.classList.add('visible'); }, 80);
+                setTimeout(() => { overlay.classList.add('removed');
+                    scanlines.style.display = 'none';
+                    crtCurve.style.display = 'none';
+                    glitchFlash.style.display = 'none';
+                    cinematicOverlay.style.display = 'none';
+                    skipHint.style.display = 'none';
+                    initMainSiteScripts(); }, 650); }
+
+            function requestSkip() { if (skipRequested || introComplete) return;
+                skipRequested = true; while (currentLogIndex < terminalLogs.length) { const log = terminalLogs[
+                        currentLogIndex];
+                    completedLines.push({ text: log.text, color: log.color, prefix: log.prefix, ok: log.ok || false,
+                        glow: log.glow || false });
+                    currentLogIndex++; }
+                introPhase = 2;
+                phaseStartTime = performance.now() / 1000;
+                progressPercent = 100;
+                welcomeAlpha = 1;
+                playClickSound();
+                setTimeout(() => transitionToMainSite(), 500); }
+
+            function resize() { W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = W;
+                canvas.height = H; if (particles.length === 0) initParticles(); if (codeStreams.length === 0)
+                    initCodeStreams(); for (const p of particles) { if (p.x > W) p.x = Math.random() * W; if (p.y > H) p
+                        .y = Math.random() * H; } }
+            window.addEventListener('resize', resize);
+            resize();
+            initParticles();
+            initCodeStreams();
+
+            function animateIntro(timestamp) { if (introComplete) return;
+                const elapsed = (timestamp - introStartTime) / 1000;
+                const dt = Math.min(0.1, 1 / 60);
+                frameCount++;
+                updateParticles();
+                updateCodeStreams(); if (introPhase === 0) { updateTyping(dt); if (currentLogIndex >= terminalLogs
+                        .length && elapsed > 2.0) transitionToLoading(); } else if (introPhase === 1) { const
+                        phaseElapsed = (timestamp / 1000) - phaseStartTime;
+                    progressPercent = Math.min(100, phaseElapsed * 65); if (progressPercent >= 100 && phaseElapsed >
+                        1.5) transitionToWelcome(); } else if (introPhase === 2) { const phaseElapsed = (timestamp /
+                        1000) - phaseStartTime;
+                    welcomeAlpha = Math.min(1, phaseElapsed * 3); if (phaseElapsed > 1.8) { transitionToCinematic
+                    (); } } else if (introPhase === 3) { const phaseElapsed = (timestamp / 1000) - phaseStartTime; if (
+                        phaseElapsed > 2.0) { transitionToMainSite(); return; } }
+                draw(elapsed);
+                requestAnimationFrame(animateIntro); }
+
+            function handleFirstInteraction() { initAudio();
+                document.removeEventListener('click', handleFirstInteraction);
+                document.removeEventListener('touchstart', handleFirstInteraction);
+                document.removeEventListener('keydown', handleFirstInteractionKey); }
+
+            function handleFirstInteractionKey(e) { initAudio();
+                document.removeEventListener('click', handleFirstInteraction);
+                document.removeEventListener('touchstart', handleFirstInteraction);
+                document.removeEventListener('keydown', handleFirstInteractionKey); if (e.key && introPhase < 2)
+                    requestSkip(); }
+            document.addEventListener('click', handleFirstInteraction, { once: true });
+            document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+            document.addEventListener('keydown', handleFirstInteractionKey, { once: true });
+            document.addEventListener('keydown', function skipListener(e) { if (introComplete) { document
+                    .removeEventListener('keydown', skipListener); return; } if (e.key && introPhase < 2 && !
+                    skipRequested) requestSkip(); });
+            skipHint.addEventListener('click', (e) => { e.stopPropagation(); if (!skipRequested && introPhase < 3)
+                    requestSkip(); });
+            document.body.style.overflow = 'hidden';
+            document.body.style.cursor = 'none';
+            introStartTime = performance.now();
+            requestAnimationFrame(animateIntro);
         })();
-        if (!CanvasRenderingContext2D.prototype.roundRect) { CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) { if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r }; this.beginPath(); this.moveTo(x + r.tl, y); this.lineTo(x + w - r.tr, y); this.quadraticCurveTo(x + w, y, x + w, y + r.tr); this.lineTo(x + w, y + h - r.br); this.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h); this.lineTo(x + r.bl, y + h); this.quadraticCurveTo(x, y + h, x, y + h - r.bl); this.lineTo(x, y + r.tl); this.quadraticCurveTo(x, y, x + r.tl, y); this.closePath(); }; }
+        if (!CanvasRenderingContext2D.prototype.roundRect) { CanvasRenderingContext2D.prototype.roundRect = function(x, y, w,
+                h, r) { if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r };
+                this.beginPath();
+                this.moveTo(x + r.tl, y);
+                this.lineTo(x + w - r.tr, y);
+                this.quadraticCurveTo(x + w, y, x + w, y + r.tr);
+                this.lineTo(x + w, y + h - r.br);
+                this.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
+                this.lineTo(x + r.bl, y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - r.bl);
+                this.lineTo(x, y + r.tl);
+                this.quadraticCurveTo(x, y, x + r.tl, y);
+                this.closePath(); }; }
     </script>
 
-    <!-- ═══════════════════════════════════════════
-    MAIN APPLICATION LOGIC (FIXED & OPTIMIZED)
-    ═══════════════════════════════════════════ -->
     <script>
-        // ───────────────────────────────────────
-        // FIREBASE CONFIGURATION (NEW CORRECT CONFIG)
-        // ───────────────────────────────────────
         const firebaseConfig = {
             apiKey: "AIzaSyCzx5PjKJNlKMJC4evQPjyXmdp1sTwpCP4",
             authDomain: "my-website-ctg.firebaseapp.com",
@@ -2530,7 +2917,6 @@
             appId: "1:655567782113:web:e0332ff9df7434c1f5b7a0",
             measurementId: "G-0QV5BTEPBF"
         };
-
         window.FIREBASE_READY = false;
         window.db = null;
         window.auth = null;
@@ -2539,105 +2925,59 @@
         window.isAdmin = false;
         window.adminUnlocked = false;
 
-        // Initialize Firebase
         function initFirebase() {
             try {
-                if (typeof firebase === 'undefined') {
-                    console.warn('Firebase SDK not loaded.');
-                    return;
-                }
-                // Prevent duplicate initialization
-                if (firebase.apps.length) {
-                    window.firebaseApp = firebase.apps[0];
-                } else {
-                    window.firebaseApp = firebase.initializeApp(firebaseConfig);
-                }
+                if (typeof firebase === 'undefined') { console.warn('Firebase SDK not loaded.'); return; }
+                if (firebase.apps.length) { window.firebaseApp = firebase.apps[0]; } else { window.firebaseApp = firebase
+                        .initializeApp(firebaseConfig); }
                 window.db = firebase.database();
-                window.auth = firebase.auth();
-                if (firebase.analytics) try { firebase.analytics(); } catch (e) {}
-
+                window.auth = firebase.auth(); if (firebase.analytics) try { firebase.analytics(); } catch (e) {}
                 window.FIREBASE_READY = true;
                 console.log('Firebase connected successfully.');
-
-                // Setup Auth State Listener
                 window.auth.onAuthStateChanged((user) => {
-                    window.currentUser = user;
-                    if (user) {
+                    window.currentUser = user; if (user) {
                         window.currentUserUid = user.uid;
-                        // Sync user profile to DB
                         const userRef = window.db.ref('users/' + user.uid);
-                        userRef.update({
-                            email: user.email,
-                            displayName: user.displayName,
-                            photoURL: user.photoURL,
-                            lastActive: firebase.database.ServerValue.TIMESTAMP
-                        });
-                        userRef.once('value').then(snap => {
-                            const data = snap.val() || {};
-                            if (!data.username && user.displayName) {
-                                userRef.update({ username: user.displayName });
-                            }
-                            updateProfileUI(data.username || user.displayName || 'User', !!data.isAdmin);
-                        });
-                        // Set online presence
+                        userRef.update({ email: user.email, displayName: user.displayName, photoURL: user
+                            .photoURL, lastActive: firebase.database.ServerValue.TIMESTAMP });
+                        userRef.once('value').then(snap => { const data = snap.val() || {}; if (!data
+                                .username && user.displayName) { userRef.update({ username: user
+                                    .displayName }); }
+                            updateProfileUI(data.username || user.displayName || 'User', !!data.isAdmin); });
                         const presenceRef = window.db.ref('onlineUsers/' + user.uid);
                         presenceRef.set(true);
                         presenceRef.onDisconnect().remove();
-                    } else {
-                        window.currentUserUid = getOrCreateGuestId();
-                        initGuestProfile();
-                    }
+                    } else { window.currentUserUid = getOrCreateGuestId();
+                        initGuestProfile(); }
                     initSupportSystem();
                 });
-
                 initUserProfile();
                 loadSiteSettings();
-            } catch (e) {
-                console.warn('Firebase init failed:', e.message);
-                // Fallback to guest mode
+            } catch (e) { console.warn('Firebase init failed:', e.message);
                 window.currentUserUid = getOrCreateGuestId();
-                initGuestProfile();
-            }
+                initGuestProfile(); }
         }
 
-        function getOrCreateGuestId() {
-            let uid = localStorage.getItem('tdp_guest_uid');
-            if (!uid) {
-                uid = 'guest_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
-                localStorage.setItem('tdp_guest_uid', uid);
-            }
-            return uid;
-        }
+        function getOrCreateGuestId() { let uid = localStorage.getItem('tdp_guest_uid'); if (!uid) { uid = 'guest_' + Date
+                .now().toString(36) + '_' + Math.random().toString(36).substring(2, 8);
+                localStorage.setItem('tdp_guest_uid', uid); } return uid; }
+
+        function sanitizeFirebaseKey(str) { return str.replace(/[.#$\/\[\]]/g, '_'); }
 
         function initGuestProfile() {
             window.currentUserUid = getOrCreateGuestId();
-            updateProfileUI('Guest', false);
-            // Still sync guest to DB for support
-            if (window.FIREBASE_READY && window.db) {
-                window.db.ref('users/' + window.currentUserUid).update({
-                    username: 'Guest',
-                    lastActive: firebase.database.ServerValue.TIMESTAMP,
-                    isGuest: true
-                });
+            updateProfileUI('Guest', false); if (window.FIREBASE_READY && window.db) {
+                const safeUid = sanitizeFirebaseKey(window.currentUserUid);
+                window.db.ref('users/' + safeUid).update({ username: 'Guest', lastActive: firebase.database.ServerValue
+                        .TIMESTAMP, isGuest: true });
             }
         }
 
-        function initUserProfile() {
-            if (!window.FIREBASE_READY || !window.db) {
-                initGuestProfile();
-                return;
-            }
-            const user = window.auth?.currentUser;
-            if (user) {
-                window.currentUserUid = user.uid;
-                window.db.ref('users/' + user.uid).once('value').then(snap => {
-                    const data = snap.val() || {};
-                    updateProfileUI(data.username || user.displayName || 'User', !!data.isAdmin);
-                });
-            } else {
-                initGuestProfile();
-            }
-        }
+        function initUserProfile() { if (!window.FIREBASE_READY || !window.db) { initGuestProfile(); return; } const user =
+                window.auth?.currentUser; if (user) { window.currentUserUid = user.uid;
+                window.db.ref('users/' + user.uid).once('value').then(snap => { const data = snap.val() || {};
+                    updateProfileUI(data.username || user.displayName || 'User', !!data.isAdmin); }); } else {
+                initGuestProfile(); } }
 
         function updateProfileUI(username, isAdminFlag) {
             window.isAdmin = isAdminFlag;
@@ -2648,89 +2988,43 @@
             const footerAdmin = document.getElementById('footerAdminLink');
             const loginBtn = document.getElementById('profileLoginBtn');
             const logoutBtn = document.getElementById('profileLogoutBtn');
-            const authBanner = document.getElementById('authBanner');
-
-            if (wrap) wrap.style.display = 'flex';
-
-            const user = window.auth?.currentUser;
-            if (user) {
-                if (icon) {
-                    if (user.photoURL) {
-                        icon.innerHTML = `<img src="${user.photoURL}" alt="avatar">`;
-                    } else {
-                        icon.innerHTML = (username || 'U').charAt(0).toUpperCase();
-                    }
-                }
-                if (nameEl) nameEl.textContent = username || user.displayName || 'User';
-                if (loginBtn) loginBtn.style.display = 'none';
-                if (logoutBtn) logoutBtn.style.display = 'flex';
-                if (authBanner) authBanner.style.display = 'none';
-            } else {
-                if (icon) icon.innerHTML = '?';
-                if (nameEl) nameEl.textContent = username || 'Guest';
-                if (loginBtn) loginBtn.style.display = 'flex';
-                if (logoutBtn) logoutBtn.style.display = 'none';
-                if (authBanner) authBanner.style.display = 'flex';
-            }
-
-            if (adminLink) adminLink.style.display = isAdminFlag ? 'flex' : 'none';
-            if (footerAdmin) footerAdmin.style.opacity = isAdminFlag ? '1' : '0.4';
+            const authBanner = document.getElementById('authBanner'); if (wrap) wrap.style.display = 'flex';
+            const user = window.auth?.currentUser; if (user) { if (icon) { if (user.photoURL) { icon.innerHTML =
+                        `<img src="${user.photoURL}" alt="avatar">`; } else { icon.innerHTML = (username || 'U').charAt(
+                        0).toUpperCase(); } } if (nameEl) nameEl.textContent = username || user.displayName || 'User'; if (
+                    loginBtn) loginBtn.style.display = 'none'; if (logoutBtn) logoutBtn.style.display = 'flex'; if (
+                    authBanner) authBanner.style.display = 'none'; } else { if (icon) icon.innerHTML = '?'; if (nameEl)
+                nameEl.textContent = username || 'Guest'; if (loginBtn) loginBtn.style.display = 'flex'; if (logoutBtn)
+                logoutBtn.style.display = 'none'; if (authBanner) authBanner.style.display = 'flex'; } if (adminLink)
+            adminLink.style.display = (isAdminFlag || sessionStorage.getItem('tdp_admin_unlocked')) ? 'flex' : 'none'; if (
+                footerAdmin) footerAdmin.style.opacity = (isAdminFlag || sessionStorage.getItem('tdp_admin_unlocked')) ? '1' :
+                '0.4';
         }
 
-        function loadSiteSettings() {
-            if (!window.FIREBASE_READY || !window.db) return;
-            window.db.ref('admin/siteSettings').once('value').then(snap => {
-                const s = snap.val() || {};
-                if (s.announcement) {
-                    const bar = document.getElementById('announcementBar');
-                    if (bar) bar.innerHTML = s.announcement + ' <span>এখনই ভিজিট করুন</span> →';
-                }
-            }).catch(() => {});
-        }
+        function loadSiteSettings() { if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('admin/siteSettings').once('value').then(snap => { const s = snap.val() || {}; if (s
+                    .announcement) { const bar = document.getElementById('announcementBar'); if (bar) bar.innerHTML = s
+                        .announcement + ' <span>এখনই ভিজিট করুন</span> →'; } }).catch(() => {}); }
 
-        function escapeHTML(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
+        function escapeHTML(str) { const div = document.createElement('div');
+            div.textContent = str; return div.innerHTML; }
 
-        // ───────────────────────────────────────
-        // GOOGLE AUTHENTICATION
-        // ───────────────────────────────────────
-        function signInWithGoogle() {
-            if (!window.auth) {
-                showToast('Firebase Auth not ready', true);
-                return;
-            }
-            const provider = new firebase.auth.GoogleAuthProvider();
-            window.auth.signInWithPopup(provider).then((result) => {
-                showToast('Welcome, ' + (result.user.displayName || 'User') + '!');
-                updateProfileUI(result.user.displayName || 'User', window.isAdmin);
-            }).catch((error) => {
-                console.error('Login failed:', error);
-                showToast('Login failed: ' + error.message, true);
-            });
-        }
+        function signInWithGoogle() { if (!window.auth) { showToast('Firebase Auth not ready', true); return; } const
+                provider = new firebase.auth.GoogleAuthProvider();
+            window.auth.signInWithPopup(provider).then((result) => { showToast('Welcome, ' + (result.user.displayName ||
+                    'User') + '!');
+                updateProfileUI(result.user.displayName || 'User', window.isAdmin); }).catch((error) => { console.error(
+                    'Login failed:', error);
+                showToast('Login failed: ' + error.message, true); }); }
 
-        function signOut() {
-            if (!window.auth) return;
-            window.auth.signOut().then(() => {
-                window.currentUserUid = getOrCreateGuestId();
+        function signOut() { if (!window.auth) return;
+            window.auth.signOut().then(() => { window.currentUserUid = getOrCreateGuestId();
                 initGuestProfile();
-                showToast('Signed out');
-            });
-        }
-
-        // ───────────────────────────────────────
-        // ADMIN PANEL
-        // ───────────────────────────────────────
+                showToast('Signed out'); }); }
         let adminPanelOpen = false;
 
-        function openAdminPanel() {
-            if (!window.isAdmin && !sessionStorage.getItem('tdp_admin_unlocked')) {
-                showAdminLoginModal();
-                return;
-            }
+        function openAdminPanel() { if (!window.isAdmin && !sessionStorage.getItem('tdp_admin_unlocked')) {
+                showAdminLoginModal(); return; }
             document.getElementById('adminPanel').classList.add('active');
             document.getElementById('adminPanelOverlay').classList.add('active');
             adminPanelOpen = true;
@@ -2738,74 +3032,54 @@
             loadAdminProjects();
             loadAdminUsers();
             loadAdminSettings();
-            loadAdminSupport();
-        }
+            loadAdminSupport(); }
 
-        function closeAdminPanel() {
-            document.getElementById('adminPanel').classList.remove('active');
+        function closeAdminPanel() { document.getElementById('adminPanel').classList.remove('active');
             document.getElementById('adminPanelOverlay').classList.remove('active');
             adminPanelOpen = false;
-            document.body.style.overflow = '';
-        }
+            document.body.style.overflow = ''; }
 
-        function showToast(msg, isError = false) {
-            const toast = document.getElementById('adminToast');
+        function showToast(msg, isError = false) { const toast = document.getElementById('adminToast');
             toast.textContent = msg;
             toast.className = 'admin-toast ' + (isError ? 'error' : '');
             toast.classList.add('show');
             clearTimeout(toast._timeout);
-            toast._timeout = setTimeout(() => toast.classList.remove('show'), 2200);
-        }
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 2200); }
 
-        function showAdminLoginModal() {
-            document.getElementById('adminLoginModalOverlay').classList.add('active');
+        function showAdminLoginModal() { document.getElementById('adminLoginModalOverlay').classList.add('active');
             document.getElementById('adminLoginInput').value = '';
-            document.getElementById('adminLoginInput').focus();
-        }
+            document.getElementById('adminLoginInput').focus(); }
 
         function hideAdminLoginModal() { document.getElementById('adminLoginModalOverlay').classList.remove('active'); }
 
-        function verifyAdminPin(pin) {
-            if (!window.FIREBASE_READY || !window.db) {
-                if (pin === '1234') {
-                    window.isAdmin = true;
+        function verifyAdminPin(pin) { if (!window.FIREBASE_READY || !window.db) { if (pin === '1234') { window.isAdmin =
+                    true;
+                sessionStorage.setItem('tdp_admin_unlocked', '1');
+                updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
+                hideAdminLoginModal();
+                openAdminPanel();
+                showToast('Admin access granted (offline)'); } else showToast('Invalid PIN', true); return; }
+            window.db.ref('admin/siteSettings/adminPin').once('value').then(snap => { const storedPin = snap.val() ||
+                    '1234'; if (pin === storedPin) { window.isAdmin = true;
+                    sessionStorage.setItem('tdp_admin_unlocked', '1'); if (window.currentUserUid && !window
+                        .currentUserUid.startsWith('guest_')) { window.db.ref('users/' + window.currentUserUid).update({
+                            isAdmin: true }); }
                     updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
                     hideAdminLoginModal();
                     openAdminPanel();
-                    showToast('Admin access granted (offline)');
-                } else showToast('Invalid PIN', true);
-                return;
-            }
-            window.db.ref('admin/siteSettings/adminPin').once('value').then(snap => {
-                const storedPin = snap.val() || '1234';
-                if (pin === storedPin) {
-                    window.isAdmin = true;
-                    if (window.currentUserUid && !window.currentUserUid.startsWith('guest_')) {
-                        window.db.ref('users/' + window.currentUserUid).update({ isAdmin: true });
-                    }
-                    updateProfileUI(document.getElementById('navProfileName').textContent || 'Admin', true);
+                    showToast('Admin access granted'); } else showToast('Invalid PIN', true); }).catch(() => { if (pin ===
+                    '1234') { window.isAdmin = true;
+                    sessionStorage.setItem('tdp_admin_unlocked', '1');
                     hideAdminLoginModal();
                     openAdminPanel();
-                    showToast('Admin access granted');
-                } else showToast('Invalid PIN', true);
-            }).catch(() => {
-                if (pin === '1234') {
-                    window.isAdmin = true;
-                    hideAdminLoginModal();
-                    openAdminPanel();
-                    showToast('Admin access granted');
-                } else showToast('Invalid PIN', true);
-            });
-        }
+                    showToast('Admin access granted'); } else showToast('Invalid PIN', true); }); }
 
-        function loadAdminProjects() {
-            const listEl = document.getElementById('adminProjectsList');
-            if (!listEl) return;
-            if (!window.FIREBASE_READY || !window.db) { listEl.innerHTML = '<div class="admin-empty">Firebase offline.</div>'; return; }
-            window.db.ref('projects').on('value', snap => {
-                const projects = snap.val() || {};
-                const entries = Object.entries(projects);
-                if (entries.length === 0) { listEl.innerHTML = '<div class="admin-empty">No projects yet.</div>'; return; }
+        function loadAdminProjects() { const listEl = document.getElementById('adminProjectsList'); if (!listEl) return; if (
+                !window.FIREBASE_READY || !window.db) { listEl.innerHTML =
+                '<div class="admin-empty">Firebase offline.</div>'; return; }
+            window.db.ref('projects').on('value', snap => { const projects = snap.val() || {}; const entries = Object
+                    .entries(projects); if (entries.length === 0) { listEl.innerHTML =
+                        '<div class="admin-empty">No projects yet.</div>'; return; }
                 listEl.innerHTML = entries.map(([id, p]) => `
               <div class="admin-item">
                 <div class="admin-item-info">
@@ -2816,54 +3090,39 @@
                   <button class="admin-btn admin-btn-sm" onclick="editAdminProject('${id}')">Edit</button>
                   <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="deleteAdminProject('${id}')">Del</button>
                 </div>
-              </div>`).join('');
-            });
-        }
+              </div>`).join(''); }); }
 
-        function saveAdminProject() {
-            if (!window.FIREBASE_READY || !window.db) { showToast('Firebase offline', true); return; }
+        function saveAdminProject() { if (!window.FIREBASE_READY || !window.db) { showToast('Firebase offline', true); return; }
             const title = document.getElementById('adminProjTitle').value.trim();
             const category = document.getElementById('adminProjCat').value;
             const desc = document.getElementById('adminProjDesc').value.trim();
             const tags = document.getElementById('adminProjTags').value.trim();
             const bestFor = document.getElementById('adminProjBestFor').value.trim();
-            const editId = document.getElementById('adminProjEditId').value;
-            if (!title) { showToast('Title required', true); return; }
-            const projectData = { title, category, description: desc, tags, bestFor, updatedAt: Date.now() };
-            if (editId) {
-                window.db.ref('projects/' + editId).update(projectData).then(() => {
-                    showToast('Project updated!');
-                    resetAdminProjectForm();
-                }).catch(() => showToast('Update failed', true));
-            } else {
-                const newRef = window.db.ref('projects').push();
+            const editId = document.getElementById('adminProjEditId').value; if (!title) { showToast('Title required',
+                true); return; }
+            const projectData = { title, category, description: desc, tags, bestFor, updatedAt: Date.now() }; if (editId) {
+                window.db.ref('projects/' + editId).update(projectData).then(() => { showToast('Project updated!');
+                    resetAdminProjectForm(); }).catch(() => showToast('Update failed', true)); } else { const newRef =
+                    window.db.ref('projects').push();
                 projectData.createdAt = Date.now();
-                newRef.set(projectData).then(() => {
-                    showToast('Project added!');
-                    resetAdminProjectForm();
-                }).catch(() => showToast('Add failed', true));
-            }
-        }
+                newRef.set(projectData).then(() => { showToast('Project added!');
+                    resetAdminProjectForm(); }).catch(() => showToast('Add failed', true)); } }
 
-        function resetAdminProjectForm() {
-            document.getElementById('adminProjTitle').value = '';
+        function resetAdminProjectForm() { document.getElementById('adminProjTitle').value = '';
             document.getElementById('adminProjCat').value = 'Robotics';
             document.getElementById('adminProjDesc').value = '';
             document.getElementById('adminProjTags').value = '';
             document.getElementById('adminProjBestFor').value = '';
             document.getElementById('adminProjEditId').value = '';
             document.getElementById('adminProjSaveBtn').textContent = '➕ Add Project';
-            document.getElementById('adminProjCancelEdit').style.display = 'none';
-        }
+            document.getElementById('adminProjCancelEdit').style.display = 'none'; }
 
-        function loadAdminUsers() {
-            const listEl = document.getElementById('adminUsersList');
-            if (!listEl) return;
-            if (!window.FIREBASE_READY || !window.db) { listEl.innerHTML = '<div class="admin-empty">Firebase offline.</div>'; return; }
-            window.db.ref('users').on('value', snap => {
-                const users = snap.val() || {};
-                const entries = Object.entries(users);
-                if (entries.length === 0) { listEl.innerHTML = '<div class="admin-empty">No users registered.</div>'; return; }
+        function loadAdminUsers() { const listEl = document.getElementById('adminUsersList'); if (!listEl) return; if (!window
+                .FIREBASE_READY || !window.db) { listEl.innerHTML = '<div class="admin-empty">Firebase offline.</div>'
+                ; return; }
+            window.db.ref('users').on('value', snap => { const users = snap.val() || {}; const entries = Object.entries(
+                    users); if (entries.length === 0) { listEl.innerHTML =
+                    '<div class="admin-empty">No users registered.</div>'; return; }
                 listEl.innerHTML = entries.map(([uid, u]) => `
               <div class="admin-item">
                 <div class="admin-item-info">
@@ -2874,344 +3133,215 @@
                   <button class="admin-btn admin-btn-sm" onclick="editAdminUsername('${uid}')">Edit</button>
                   <button class="admin-btn admin-btn-sm" onclick="toggleAdminUser('${uid}', ${!u.isAdmin})">${u.isAdmin ? 'Revoke' : 'Make Admin'}</button>
                 </div>
-              </div>`).join('');
-            });
-        }
+              </div>`).join(''); }); }
 
-        function loadAdminSettings() {
-            if (!window.FIREBASE_READY || !window.db) return;
-            window.db.ref('admin/siteSettings').on('value', snap => {
-                const s = snap.val() || {};
+        function loadAdminSettings() { if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('admin/siteSettings').on('value', snap => { const s = snap.val() || {};
                 document.getElementById('adminSettingAnnouncement').value = s.announcement || '';
-                document.getElementById('adminSettingSiteName').value = s.siteName || 'The Debug Point';
-            });
-        }
+                document.getElementById('adminSettingSiteName').value = s.siteName || 'The Debug Point'; }); }
 
-        function saveAdminSettings() {
-            if (!window.FIREBASE_READY || !window.db) { showToast('Firebase offline', true); return; }
+        function saveAdminSettings() { if (!window.FIREBASE_READY || !window.db) { showToast('Firebase offline', true); return; }
             const announcement = document.getElementById('adminSettingAnnouncement').value.trim();
             const siteName = document.getElementById('adminSettingSiteName').value.trim();
             window.db.ref('admin/siteSettings').update({ announcement, siteName, updatedAt: Date.now() }).then(() => {
-                showToast('Settings saved!');
-                if (announcement) document.getElementById('announcementBar').innerHTML = announcement + ' <span>এখনই ভিজিট করুন</span> →';
-            }).catch(() => showToast('Save failed', true));
-        }
-
-        // ───────────────────────────────────────
-        // SUPPORT CHAT SYSTEM (COMPLETELY FIXED)
-        // ───────────────────────────────────────
+                showToast('Settings saved!'); if (announcement) document.getElementById('announcementBar').innerHTML =
+                    announcement + ' <span>এখনই ভিজিট করুন</span> →'; }).catch(() => showToast('Save failed', true)); }
         let supportUnread = 0;
         let supportListenerUnsubscribe = null;
         let currentSupportChatUserId = null;
         let typingTimeout = null;
 
-        function initSupportSystem() {
-            if (!window.FIREBASE_READY || !window.db || !window.currentUserUid) return;
-            const chatRef = window.db.ref('supportChats/' + window.currentUserUid + '/messages');
-            if (supportListenerUnsubscribe) supportListenerUnsubscribe();
-            supportListenerUnsubscribe = chatRef.on('value', snap => {
-                const messages = snap.val() || {};
-                const msgs = Object.values(messages).sort((a, b) => a.timestamp - b.timestamp);
+        function initSupportSystem() { if (!window.FIREBASE_READY || !window.db || !window.currentUserUid) return;
+            const safeUid = sanitizeFirebaseKey(window.currentUserUid);
+            const chatRef = window.db.ref('supportChats/' + safeUid + '/messages'); if (supportListenerUnsubscribe)
+                supportListenerUnsubscribe();
+            supportListenerUnsubscribe = chatRef.on('value', snap => { const messages = snap.val() || {}; const msgs = Object
+                    .values(messages).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
                 renderSupportMessages(msgs);
-                updateSupportBadge(msgs);
-            });
+                updateSupportBadge(msgs); });
+            const typingRef = window.db.ref('supportChats/' + safeUid + '/typing');
+            typingRef.on('value', snap => { const typing = snap.val() || {}; if (typing.admin) { showTypingIndicator(
+                    true); } else { showTypingIndicator(false); } }); }
 
-            // Listen for typing indicator
-            const typingRef = window.db.ref('supportChats/' + window.currentUserUid + '/typing');
-            typingRef.on('value', snap => {
-                const typing = snap.val() || {};
-                if (typing.admin) {
-                    showTypingIndicator(true);
-                } else {
-                    showTypingIndicator(false);
-                }
-            });
-        }
-
-        function renderSupportMessages(msgs) {
-            const container = document.getElementById('supportMessages');
-            if (!container) return;
-            let html = msgs.map(m => {
-                const time = new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const cls = m.from === 'admin' ? 'admin' : 'user';
-                return `<div class="support-msg ${cls}">${escapeHTML(m.text)}<div class="msg-time">${time}</div></div>`;
-            }).join('');
-            container.innerHTML = html + '<div id="typingIndicator" class="typing-indicator" style="display:none;">Admin is typing...</div>';
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function showTypingIndicator(show) {
-            const indicator = document.getElementById('typingIndicator');
-            if (indicator) indicator.style.display = show ? 'block' : 'none';
-            const container = document.getElementById('supportMessages');
-            if (container && show) container.scrollTop = container.scrollHeight;
-        }
-
-        function updateSupportBadge(msgs) {
-            const badge = document.getElementById('supportBadge');
-            const unread = msgs.filter(m => m.from === 'admin' && !m.read).length;
-            supportUnread = unread;
-            if (badge) {
-                badge.textContent = unread > 9 ? '9+' : unread;
-                if (unread > 0) badge.classList.add('show');
-                else badge.classList.remove('show');
-            }
-        }
-
-        function sendSupportMessage(text) {
-            if (!window.FIREBASE_READY || !window.db || !window.currentUserUid) {
-                showToast('Chat unavailable. Please try again.', true);
+        function renderSupportMessages(msgs) { const container = document.getElementById('supportMessages'); if (!container)
                 return;
-            }
-            const chatRef = window.db.ref('supportChats/' + window.currentUserUid + '/messages');
-            chatRef.push({
-                text: text.trim(),
-                timestamp: firebase.database.ServerValue.TIMESTAMP,
-                from: 'user',
-                read: false
-            }).then(() => {
-                document.getElementById('supportInput').value = '';
-                // Update last activity
-                window.db.ref('supportChats/' + window.currentUserUid + '/lastActivity').set(firebase.database.ServerValue.TIMESTAMP);
-                // Set typing to false
-                window.db.ref('supportChats/' + window.currentUserUid + '/typing/user').set(false);
-            }).catch(err => {
-                showToast('Failed to send message', true);
-                console.error('Send failed:', err);
-            });
-        }
+            let html = msgs.map(m => { const time = m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit',
+                    minute: '2-digit' }) : '--:--';
+                const cls = m.from === 'admin' ? 'admin' : 'user'; return `<div class="support-msg ${cls}">${escapeHTML(m
+          .text || '')}<div class="msg-time">${time}</div></div>`; }).join('');
+            container.innerHTML = html +
+                '<div id="typingIndicator" class="typing-indicator" style="display:none;">Admin is typing...</div>';
+            container.scrollTop = container.scrollHeight; }
 
-        function sendAdminReply(userId, text) {
-            if (!window.FIREBASE_READY || !window.db) return;
-            const chatRef = window.db.ref('supportChats/' + userId + '/messages');
-            chatRef.push({
-                text: text.trim(),
-                timestamp: firebase.database.ServerValue.TIMESTAMP,
-                from: 'admin',
-                read: false
-            });
-            window.db.ref('supportChats/' + userId + '/typing/admin').set(false);
-        }
+        function showTypingIndicator(show) { const indicator = document.getElementById('typingIndicator'); if (indicator)
+                indicator.style.display = show ? 'block' : 'none';
+            const container = document.getElementById('supportMessages'); if (container && show) container.scrollTop =
+                container.scrollHeight; }
 
-        function loadAdminSupport() {
-            if (!window.FIREBASE_READY || !window.db) return;
-            const convList = document.getElementById('adminSupportConversations');
-            window.db.ref('supportChats').on('value', snap => {
-                const chats = snap.val() || {};
-                const entries = Object.entries(chats);
-                convList.innerHTML = entries.map(([uid, data]) => {
-                    const msgs = data.messages ? Object.values(data.messages) : [];
+        function updateSupportBadge(msgs) { const badge = document.getElementById('supportBadge');
+            const unread = msgs.filter(m => m.from === 'admin' && !m.read).length;
+            supportUnread = unread; if (badge) { badge.textContent = unread > 9 ? '9+' : unread; if (unread > 0) badge.classList
+                    .add('show');
+                else badge.classList.remove('show'); } }
+
+        function sendSupportMessage(text) { if (!window.FIREBASE_READY || !window.db || !window.currentUserUid) { showToast(
+                'Chat unavailable. Please try again.', true); return; }
+            const cleanText = text.trim(); if (!cleanText) return;
+            const safeUid = sanitizeFirebaseKey(window.currentUserUid);
+            const chatRef = window.db.ref('supportChats/' + safeUid + '/messages');
+            chatRef.push({ text: cleanText, timestamp: firebase.database.ServerValue.TIMESTAMP, from: 'user', read: false })
+                .then(() => { const inputEl = document.getElementById('supportInput'); if (inputEl) inputEl.value = '';
+                    window.db.ref('supportChats/' + safeUid + '/lastActivity').set(firebase.database.ServerValue
+                        .TIMESTAMP);
+                    window.db.ref('supportChats/' + safeUid + '/typing/user').set(false);
+                    document.getElementById('supportMessages').scrollTop = document.getElementById('supportMessages')
+                        .scrollHeight; }).catch(err => { showToast('Failed to send message', true);
+                    console.error('Send failed:', err); }); }
+
+        function sendAdminReply(userId, text) { if (!window.FIREBASE_READY || !window.db) return;
+            const cleanText = text.trim(); if (!cleanText) return;
+            const safeUserId = sanitizeFirebaseKey(userId);
+            const chatRef = window.db.ref('supportChats/' + safeUserId + '/messages');
+            chatRef.push({ text: cleanText, timestamp: firebase.database.ServerValue.TIMESTAMP, from: 'admin', read: false });
+            window.db.ref('supportChats/' + safeUserId + '/typing/admin').set(false); }
+
+        function loadAdminSupport() { if (!window.FIREBASE_READY || !window.db) return;
+            const convList = document.getElementById('adminSupportConversations'); if (!convList) return;
+            window.db.ref('supportChats').on('value', snap => { const chats = snap.val() || {}; const entries = Object
+                    .entries(chats);
+                convList.innerHTML = entries.map(([uid, data]) => { const msgs = data.messages ? Object.values(data
+                        .messages) : [];
                     const lastMsg = msgs.length ? msgs[msgs.length - 1] : null;
-                    const lastTime = lastMsg ? new Date(lastMsg.timestamp).toLocaleString() : '—';
-                    const unread = msgs.filter(m => m.from === 'user' && !m.read).length;
-                    return `<div class="admin-item" style="cursor:pointer;" onclick="openSupportConversation('${uid}')">
+                    const lastTime = lastMsg && lastMsg.timestamp ? new Date(lastMsg.timestamp).toLocaleString() :
+                        '—';
+                    const unread = msgs.filter(m => m.from === 'user' && !m.read).length; return `
+              <div class="admin-item" style="cursor:pointer;" onclick="openSupportConversation('${uid}')">
                 <div class="admin-item-info">
                   <div class="admin-item-title">User: ${uid.substring(0,12)}... ${unread > 0 ? '<span class="admin-badge">'+unread+'</span>' : ''}</div>
                   <div class="admin-item-sub">Last: ${lastTime} · Messages: ${msgs.length}</div>
                 </div>
                 <button class="admin-btn admin-btn-danger admin-btn-sm" onclick="event.stopPropagation(); deleteSupportChat('${uid}')">Delete</button>
-              </div>`;
-                }).join('');
-                if (entries.length === 0) convList.innerHTML = '<div class="admin-empty">No support chats yet.</div>';
-            });
-        }
+              </div>`; }).join(''); if (entries.length === 0) convList.innerHTML =
+                    '<div class="admin-empty">No support chats yet.</div>'; }); }
 
         function openSupportConversation(userId, silent = false) {
             currentSupportChatUserId = userId;
-            const msgArea = document.getElementById('adminSupportMessages');
-            window.db.ref('supportChats/' + userId + '/messages').off();
-            window.db.ref('supportChats/' + userId + '/messages').on('value', snap => {
-                const messages = snap.val() || {};
-                const msgs = Object.values(messages).sort((a, b) => a.timestamp - b.timestamp);
-                msgArea.innerHTML = `<div class="admin-section-title">Conversation with ${userId.substring(0,12)}...</div>` +
-                    msgs.map(m => `<div class="support-msg ${m.from==='admin'?'admin':'user'}">${escapeHTML(m.text)}<div class="msg-time">${new Date(m.timestamp).toLocaleTimeString()}</div></div>`).join('') +
+            const msgArea = document.getElementById('adminSupportMessages'); if (!msgArea) return;
+            const safeUserId = sanitizeFirebaseKey(userId);
+            window.db.ref('supportChats/' + safeUserId + '/messages').off();
+            window.db.ref('supportChats/' + safeUserId + '/messages').on('value', snap => { const messages = snap.val() ||
+                    {}; const msgs = Object.values(messages).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                msgArea.innerHTML =
+                    `<div class="admin-section-title">Conversation with ${userId.substring(0,12)}...</div>` + msgs
+                    .map(m =>
+                        `<div class="support-msg ${m.from==='admin'?'admin':'user'}">${escapeHTML(m.text || '')}<div class="msg-time">${m.timestamp?new Date(m.timestamp).toLocaleTimeString():'--:--'}</div></div>`
+                        ).join('') +
                     `<div style="display:flex;gap:6px;margin-top:8px;">
-                <input type="text" id="adminReplyInput" placeholder="Reply as admin..." style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:6px 12px;color:#ddd;font-size:0.7rem;">
+                <input type="text" id="adminReplyInput" placeholder="Reply as admin..." style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:6px 12px;color:#ddd;font-size:0.7rem;" onkeypress="if(event.key==='Enter')sendAdminReplyFromInput('${userId}')">
                 <button class="admin-btn admin-btn-primary" onclick="sendAdminReplyFromInput('${userId}')">Send</button>
               </div>`;
                 msgArea.scrollTop = msgArea.scrollHeight;
-                // Mark messages as read
-                Object.keys(messages).forEach(key => {
-                    if (messages[key].from === 'user' && !messages[key].read) {
-                        window.db.ref('supportChats/' + userId + '/messages/' + key + '/read').set(true);
-                    }
-                });
-            });
-            // Listen for typing
-            window.db.ref('supportChats/' + userId + '/typing/user').on('value', snap => {
-                const typing = snap.val();
-                const indicator = document.getElementById('adminTypingIndicator');
-                if (typing) {
-                    if (!indicator) {
-                        const div = document.createElement('div');
+                Object.keys(messages).forEach(key => { if (messages[key].from === 'user' && !messages[key].read) {
+                        window.db.ref('supportChats/' + safeUserId + '/messages/' + key + '/read').set(true); } }); });
+            window.db.ref('supportChats/' + safeUserId + '/typing/user').on('value', snap => { const typing = snap.val();
+                const indicator = document.getElementById('adminTypingIndicator'); if (typing) { if (!indicator) { const
+                        div = document.createElement('div');
                         div.id = 'adminTypingIndicator';
                         div.className = 'typing-indicator';
                         div.textContent = 'User is typing...';
-                        msgArea.appendChild(div);
-                    }
-                } else {
-                    if (indicator) indicator.remove();
-                }
-            });
-        }
+                        msgArea.appendChild(div); } } else { if (indicator) indicator.remove(); } }); }
 
-        function deleteSupportChat(userId) {
-            if (!confirm('Delete this entire support conversation?')) return;
-            window.db.ref('supportChats/' + userId).remove().then(() => { showToast('Chat deleted'); });
-        }
+        function deleteSupportChat(userId) { if (!confirm('Delete this entire support conversation?')) return;
+            const safeUserId = sanitizeFirebaseKey(userId);
+            window.db.ref('supportChats/' + safeUserId).remove().then(() => { showToast('Chat deleted'); }); }
 
-        function sendAdminReplyFromInput(userId) {
-            const input = document.getElementById('adminReplyInput');
-            if (!input || !input.value.trim()) return;
+        function sendAdminReplyFromInput(userId) { const input = document.getElementById('adminReplyInput'); if (!input || !
+                input.value.trim()) return;
             sendAdminReply(userId, input.value);
-            input.value = '';
-        }
-
-        // ───────────────────────────────────────
-        // TYPING INDICATOR
-        // ───────────────────────────────────────
-        const supportInput = document.getElementById('supportInput');
-        supportInput?.addEventListener('input', () => {
-            if (!window.FIREBASE_READY || !window.db || !window.currentUserUid) return;
-            const typingRef = window.db.ref('supportChats/' + window.currentUserUid + '/typing/user');
+            input.value = ''; }
+        const supportInputEl = document.getElementById('supportInput');
+        supportInputEl?.addEventListener('input', () => { if (!window.FIREBASE_READY || !window.db || !window
+                .currentUserUid) return;
+            const safeUid = sanitizeFirebaseKey(window.currentUserUid);
+            const typingRef = window.db.ref('supportChats/' + safeUid + '/typing/user');
             typingRef.set(true);
             clearTimeout(typingTimeout);
-            typingTimeout = setTimeout(() => {
-                typingRef.set(false);
-            }, 2000);
-        });
-
-        // ───────────────────────────────────────
-        // EVENT LISTENERS
-        // ───────────────────────────────────────
+            typingTimeout = setTimeout(() => { typingRef.set(false); }, 2000); });
         document.getElementById('adminCloseBtn')?.addEventListener('click', closeAdminPanel);
         document.getElementById('adminPanelOverlay')?.addEventListener('click', closeAdminPanel);
-        document.getElementById('footerAdminLink')?.addEventListener('click', () => {
-            if (window.isAdmin || window.adminUnlocked) openAdminPanel();
-            else showAdminLoginModal();
-        });
-        document.getElementById('profileAdminPanel')?.addEventListener('click', () => {
-            document.getElementById('navProfileDropdown').classList.remove('open');
-            openAdminPanel();
-        });
-        document.getElementById('profileLoginBtn')?.addEventListener('click', () => {
-            document.getElementById('navProfileDropdown').classList.remove('open');
-            signInWithGoogle();
-        });
-        document.getElementById('profileLogoutBtn')?.addEventListener('click', () => {
-            document.getElementById('navProfileDropdown').classList.remove('open');
-            signOut();
-        });
+        document.getElementById('footerAdminLink')?.addEventListener('click', () => { if (window.isAdmin || window
+                .adminUnlocked) openAdminPanel();
+            else showAdminLoginModal(); });
+        document.getElementById('profileAdminPanel')?.addEventListener('click', () => { document.getElementById(
+                'navProfileDropdown').classList.remove('open');
+            openAdminPanel(); });
+        document.getElementById('profileLoginBtn')?.addEventListener('click', () => { document.getElementById(
+                'navProfileDropdown').classList.remove('open');
+            signInWithGoogle(); });
+        document.getElementById('profileLogoutBtn')?.addEventListener('click', () => { document.getElementById(
+                'navProfileDropdown').classList.remove('open');
+            signOut(); });
         document.getElementById('authBannerLoginBtn')?.addEventListener('click', signInWithGoogle);
-        document.getElementById('authBannerClose')?.addEventListener('click', () => {
-            document.getElementById('authBanner').style.display = 'none';
-        });
-        document.getElementById('adminLoginConfirm')?.addEventListener('click', () => {
-            const pin = document.getElementById('adminLoginInput').value.trim();
-            if (pin) verifyAdminPin(pin);
-        });
+        document.getElementById('authBannerClose')?.addEventListener('click', () => { document.getElementById('authBanner')
+                .style.display = 'none'; });
+        document.getElementById('adminLoginConfirm')?.addEventListener('click', () => { const pin = document.getElementById(
+                'adminLoginInput').value.trim(); if (pin) verifyAdminPin(pin); });
         document.getElementById('adminLoginCancel')?.addEventListener('click', hideAdminLoginModal);
-        document.getElementById('adminLoginModalOverlay')?.addEventListener('click', (e) => {
-            if (e.target === document.getElementById('adminLoginModalOverlay')) hideAdminLoginModal();
-        });
+        document.getElementById('adminLoginModalOverlay')?.addEventListener('click', (e) => { if (e.target === document
+                .getElementById('adminLoginModalOverlay')) hideAdminLoginModal(); });
         document.getElementById('adminProjSaveBtn')?.addEventListener('click', saveAdminProject);
         document.getElementById('adminProjCancelEdit')?.addEventListener('click', resetAdminProjectForm);
         document.getElementById('adminSettingsSaveBtn')?.addEventListener('click', saveAdminSettings);
-
-        document.querySelectorAll('.admin-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.admin-tab').forEach(tab => { tab.addEventListener('click', function() { document
+                .querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
                 const tn = this.dataset.tab;
-                ['projects','users','support','settings'].forEach(t => {
-                    const el = document.getElementById('adminTab' + t.charAt(0).toUpperCase() + t.slice(1));
-                    if (el) el.style.display = t === tn ? '' : 'none';
-                });
-                if (tn === 'users') loadAdminUsers();
-                if (tn === 'settings') loadAdminSettings();
-                if (tn === 'support') loadAdminSupport();
-            });
-        });
-
-        document.getElementById('navProfileIcon')?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            document.getElementById('navProfileDropdown').classList.toggle('open');
-        });
-        document.getElementById('profileEditUsername')?.addEventListener('click', () => {
-            document.getElementById('navProfileDropdown').classList.remove('open');
+                ['projects', 'users', 'support', 'settings'].forEach(t => { const el = document.getElementById(
+                        'adminTab' + t.charAt(0).toUpperCase() + t.slice(1)); if (el) el.style.display = t ===
+                    tn ? '' : 'none'; }); if (tn === 'users') loadAdminUsers(); if (tn === 'settings')
+                loadAdminSettings(); if (tn === 'support') loadAdminSupport(); }); });
+        document.getElementById('navProfileIcon')?.addEventListener('click', (e) => { e.stopPropagation();
+            document.getElementById('navProfileDropdown').classList.toggle('open'); });
+        document.getElementById('profileEditUsername')?.addEventListener('click', () => { document.getElementById(
+                'navProfileDropdown').classList.remove('open');
             document.getElementById('usernameModalOverlay').classList.add('active');
             document.getElementById('usernameModalInput').value = document.getElementById('navProfileName').textContent || '';
-            document.getElementById('usernameModalInput').focus();
-        });
-        document.getElementById('usernameModalSave')?.addEventListener('click', () => {
-            const newName = document.getElementById('usernameModalInput').value.trim();
-            if (!newName) { showToast('Username cannot be empty', true); return; }
-            if (window.FIREBASE_READY && window.db && window.currentUserUid) {
-                window.db.ref('users/' + window.currentUserUid).update({ username: newName }).then(() => {
-                    updateProfileUI(newName, window.isAdmin);
-                    showToast('Username updated!');
-                }).catch(() => showToast('Update failed', true));
-            } else {
+            document.getElementById('usernameModalInput').focus(); });
+        document.getElementById('usernameModalSave')?.addEventListener('click', () => { const newName = document
+                .getElementById('usernameModalInput').value.trim(); if (!newName) { showToast(
+                    'Username cannot be empty', true); return; } if (window.FIREBASE_READY && window.db && window
+                .currentUserUid) { const safeUid = sanitizeFirebaseKey(window.currentUserUid);
+                window.db.ref('users/' + safeUid).update({ username: newName }).then(() => { updateProfileUI(newName,
+                    window.isAdmin);
+                    showToast('Username updated!'); }).catch(() => showToast('Update failed', true)); } else {
                 updateProfileUI(newName, window.isAdmin);
-                showToast('Username updated (offline)');
-            }
-            document.getElementById('usernameModalOverlay').classList.remove('active');
-        });
-        document.getElementById('usernameModalCancel')?.addEventListener('click', () => {
-            document.getElementById('usernameModalOverlay').classList.remove('active');
-        });
-        document.getElementById('usernameModalOverlay')?.addEventListener('click', (e) => {
-            if (e.target === document.getElementById('usernameModalOverlay'))
-                document.getElementById('usernameModalOverlay').classList.remove('active');
-        });
-
-        document.addEventListener('click', () => {
-            document.getElementById('navProfileDropdown')?.classList.remove('open');
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
-                e.preventDefault();
-                if (window.isAdmin || window.adminUnlocked) openAdminPanel();
-                else showAdminLoginModal();
-            }
-            if (e.key === 'Escape') {
-                if (adminPanelOpen) closeAdminPanel();
+                showToast('Username updated (offline)'); }
+            document.getElementById('usernameModalOverlay').classList.remove('active'); });
+        document.getElementById('usernameModalCancel')?.addEventListener('click', () => { document.getElementById(
+            'usernameModalOverlay').classList.remove('active'); });
+        document.getElementById('usernameModalOverlay')?.addEventListener('click', (e) => { if (e.target === document
+                .getElementById('usernameModalOverlay'))
+                document.getElementById('usernameModalOverlay').classList.remove('active'); });
+        document.addEventListener('click', () => { document.getElementById('navProfileDropdown')?.classList.remove(
+            'open'); });
+        document.addEventListener('keydown', (e) => { if (e.ctrlKey && e.shiftKey && e.key === 'A') { e.preventDefault(); if (
+                    window.isAdmin || window.adminUnlocked) openAdminPanel();
+                else showAdminLoginModal(); } if (e.key === 'Escape') { if (adminPanelOpen) closeAdminPanel();
                 hideAdminLoginModal();
                 document.getElementById('usernameModalOverlay')?.classList.remove('active');
-                document.getElementById('secretPasswordModal')?.classList.remove('active');
-            }
-        });
-
-        // ───────────────────────────────────────
-        // SUPPORT WIDGET UI
-        // ───────────────────────────────────────
+                document.getElementById('secretPasswordModal')?.classList.remove('active'); } });
         const supportFloatBtn = document.getElementById('supportFloatBtn');
         const supportWidget = document.getElementById('supportWidget');
         const supportCloseBtn = document.getElementById('supportCloseBtn');
         const supportSendBtn = document.getElementById('supportSendBtn');
-
-        supportFloatBtn?.addEventListener('click', () => {
-            supportWidget.classList.toggle('open');
-            if (supportWidget.classList.contains('open')) initSupportSystem();
-        });
+        supportFloatBtn?.addEventListener('click', () => { supportWidget.classList.toggle('open'); if (supportWidget.classList
+                .contains('open')) initSupportSystem(); });
         supportCloseBtn?.addEventListener('click', () => supportWidget.classList.remove('open'));
-        supportSendBtn?.addEventListener('click', () => {
-            const text = supportInput?.value.trim();
-            if (text) sendSupportMessage(text);
-        });
-        supportInput?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') { supportSendBtn?.click(); }
-        });
-
-        // ───────────────────────────────────────
-        // GLOBAL FUNCTIONS
-        // ───────────────────────────────────────
-        window.editAdminProject = function(id) {
-            if (!window.FIREBASE_READY || !window.db) return;
-            window.db.ref('projects/' + id).once('value').then(snap => {
-                const p = snap.val();
-                if (!p) return;
+        supportSendBtn?.addEventListener('click', () => { const text = supportInputEl?.value.trim(); if (text)
+                sendSupportMessage(text); });
+        supportInputEl?.addEventListener('keypress', (e) => { if (e.key === 'Enter') { supportSendBtn?.click(); } });
+        window.editAdminProject = function(id) { if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('projects/' + id).once('value').then(snap => { const p = snap.val(); if (!p) return;
                 document.getElementById('adminProjTitle').value = p.title || '';
                 document.getElementById('adminProjCat').value = p.category || 'Robotics';
                 document.getElementById('adminProjDesc').value = p.description || '';
@@ -3220,24 +3350,18 @@
                 document.getElementById('adminProjEditId').value = id;
                 document.getElementById('adminProjSaveBtn').textContent = '✏ Update Project';
                 document.getElementById('adminProjCancelEdit').style.display = 'inline-block';
-                document.getElementById('adminContent').scrollTop = 0;
-            });
-        };
-        window.deleteAdminProject = function(id) {
-            if (!window.FIREBASE_READY || !window.db) return;
-            if (!confirm('Delete this project permanently?')) return;
-            window.db.ref('projects/' + id).remove().then(() => { showToast('Project deleted'); }).catch(() => showToast('Delete failed', true));
-        };
-        window.editAdminUsername = function(uid) {
-            const newName = prompt('Enter new username:');
-            if (!newName || !newName.trim()) return;
-            if (!window.FIREBASE_READY || !window.db) return;
-            window.db.ref('users/' + uid).update({ username: newName.trim() }).then(() => { showToast('Username updated'); }).catch(() => showToast('Update failed', true));
-        };
-        window.toggleAdminUser = function(uid, makeAdmin) {
-            if (!window.FIREBASE_READY || !window.db) return;
-            window.db.ref('users/' + uid).update({ isAdmin: makeAdmin }).then(() => { showToast(makeAdmin ? 'Admin granted' : 'Admin revoked'); }).catch(() => showToast('Toggle failed', true));
-        };
+                document.getElementById('adminContent').scrollTop = 0; }); };
+        window.deleteAdminProject = function(id) { if (!window.FIREBASE_READY || !window.db) return; if (!confirm(
+                'Delete this project permanently?')) return;
+            window.db.ref('projects/' + id).remove().then(() => { showToast('Project deleted'); }).catch(() => showToast(
+                'Delete failed', true)); };
+        window.editAdminUsername = function(uid) { const newName = prompt('Enter new username:'); if (!newName || !newName
+                .trim()) return; if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('users/' + uid).update({ username: newName.trim() }).then(() => { showToast(
+                'Username updated'); }).catch(() => showToast('Update failed', true)); };
+        window.toggleAdminUser = function(uid, makeAdmin) { if (!window.FIREBASE_READY || !window.db) return;
+            window.db.ref('users/' + uid).update({ isAdmin: makeAdmin }).then(() => { showToast(makeAdmin ?
+                'Admin granted' : 'Admin revoked'); }).catch(() => showToast('Toggle failed', true)); };
         window.openAdminPanel = openAdminPanel;
         window.closeAdminPanel = closeAdminPanel;
         window.loadAdminSupport = loadAdminSupport;
@@ -3247,53 +3371,47 @@
         window.sendSupportMessage = sendSupportMessage;
         window.signInWithGoogle = signInWithGoogle;
         window.signOut = signOut;
-
-        // Initialize Firebase on load
         initFirebase();
 
-        // Main site scripts (called after intro)
-        function initMainSiteScripts() {
-            if (window._mainSiteScriptsInitialized) return;
+        function initMainSiteScripts() { if (window._mainSiteScriptsInitialized) return;
             window._mainSiteScriptsInitialized = true;
-
             window.toggleNav = function() { document.getElementById('navLinks')?.classList.toggle('open'); };
-            document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document.getElementById('navLinks')?.classList.remove('open')));
-
+            document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => document.getElementById(
+                'navLinks')?.classList.remove('open')));
             const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => { if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 30); });
+            window.addEventListener('scroll', () => { if (navbar) navbar.classList.toggle('scrolled', window.scrollY >
+                30); });
+            const cursorTrail = document.getElementById('cursorTrail'); if (window.innerWidth > 768 && cursorTrail) { let
+                    trailX = -200,
+                    trailY = -200,
+                    curX = -200,
+                    curY = -200;
+                document.addEventListener('mousemove', e => { curX = e.clientX;
+                    curY = e.clientY; });
 
-            const cursorTrail = document.getElementById('cursorTrail');
-            if (window.innerWidth > 768 && cursorTrail) {
-                let trailX = -200, trailY = -200, curX = -200, curY = -200;
-                document.addEventListener('mousemove', e => { curX = e.clientX; curY = e.clientY; });
-                function updateTrail() { trailX += (curX - trailX) * 0.06; trailY += (curY - trailY) * 0.06; cursorTrail.style.left = trailX + 'px'; cursorTrail.style.top = trailY + 'px'; requestAnimationFrame(updateTrail); }
+                function updateTrail() { trailX += (curX - trailX) * 0.06;
+                    trailY += (curY - trailY) * 0.06;
+                    cursorTrail.style.left = trailX + 'px';
+                    cursorTrail.style.top = trailY + 'px';
+                    requestAnimationFrame(updateTrail); }
                 cursorTrail.classList.add('active');
-                updateTrail();
-            }
-
-            const sectionObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+                updateTrail(); }
+            const sectionObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
+                    .classList.add('visible'); }), { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
             document.querySelectorAll('.reveal-section').forEach(s => sectionObserver.observe(s));
-            const cardObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
+            const cardObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
+                    .classList.add('visible'); }), { threshold: 0.05, rootMargin: '0px 0px -25px 0px' });
             document.querySelectorAll('.reveal-card').forEach(c => cardObserver.observe(c));
-            const heroObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.3 });
+            const heroObserver = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target
+                    .classList.add('visible'); }), { threshold: 0.3 });
             document.querySelectorAll('.hero-reveal').forEach(el => heroObserver.observe(el));
-
-            window.filterSci = function(type, btn) {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                if (btn) btn.classList.add('active');
-                document.querySelectorAll('.sci-card').forEach(card => {
-                    const cat = card.dataset.cat || '';
+            window.filterSci = function(type, btn) { document.querySelectorAll('.filter-btn').forEach(b => b.classList
+                    .remove('active')); if (btn) btn.classList.add('active');
+                document.querySelectorAll('.sci-card').forEach(card => { const cat = card.dataset.cat || '';
                     card.style.display = (type === 'all' || cat === type) ? '' : 'none';
-                    card.dataset.hidden = (type === 'all' || cat === type) ? 'false' : 'true';
-                });
-            };
-        }
-        window.initMainSiteScripts = initMainSiteScripts;
-
-        // If intro already skipped or main site visible, init immediately
-        if (document.getElementById('main-site')?.classList.contains('visible')) {
-            initMainSiteScripts();
-        }
+                    card.dataset.hidden = (type === 'all' || cat === type) ? 'false' : 'true'; }); }; }
+        window.initMainSiteScripts = initMainSiteScripts; if (document.getElementById('main-site')?.classList.contains(
+                'visible')) { initMainSiteScripts(); }
     </script>
 </body>
 </html>
