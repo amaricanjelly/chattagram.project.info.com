@@ -22,7 +22,7 @@
             --intro-font-mono: 'Share Tech Mono', 'JetBrains Mono', 'Courier New', monospace;
             --intro-font-hud: 'Orbitron', 'JetBrains Mono', monospace;
         }
-        /* ===== INTRO OVERLAY (video only, no UI controls) ===== */
+        /* ===== INTRO OVERLAY (video only, no UI) ===== */
         #intro-overlay {
             position: fixed;
             inset: 0;
@@ -1357,7 +1357,7 @@
 </head>
 <body>
 
-    <!-- ===== INTRO OVERLAY (video only, NO controls) ===== -->
+    <!-- ===== INTRO OVERLAY (video only, no UI) ===== -->
     <div id="intro-overlay">
         <div id="intro-video-wrap">
             <video id="intro-video" playsinline preload="auto" autoplay poster="">
@@ -1608,7 +1608,6 @@
 
             let introComplete = false;
 
-            // ---------- Glitch + fade-out transition (kept from original design) ----------
             function triggerHeavyGlitch() {
                 glitchFlash.classList.add('active');
                 scanlines.classList.add('intensify');
@@ -1646,7 +1645,6 @@
                     crtCurve.classList.remove('active');
                     cinematicOverlay.classList.remove('active');
                     document.body.style.overflow = '';
-                    document.body.style.cursor = '';
                     mainSite.classList.add('visible');
                 }, 80);
 
@@ -1660,51 +1658,47 @@
                 }, 650);
             }
 
-            // ---------- Autoplay logic (no UI) ----------
-            // 1) Try to play WITH sound (works if the browser allows it,
-            //    e.g. when the site was already interacted with in this session,
-            //    or when the browser's autoplay policy permits it).
-            // 2) If unmuted autoplay is blocked, fall back to muted autoplay so the
-            //    visual intro still plays without any button. The original audio is
-            //    NOT removed; the video element keeps its own audio track and
-            //    `video.muted` is toggled back to false as soon as the browser
-            //    permits it (e.g. after any user gesture anywhere on the page).
+            // ---------- Automatic playback (no UI, no interaction) ----------
+            // Try unmuted autoplay first. If the browser blocks it (common on
+            // Chrome / Safari / Firefox for unmuted autoplay), fall back to muted
+            // autoplay so the visual intro still runs with ZERO controls. As soon
+            // as any passive user gesture happens (scroll, tap, key, click)
+            // anywhere on the page, we silently unmute the video. The original
+            // audio track of the MP4 is never removed or replaced.
             function attemptAutoPlay() {
                 video.muted = false;
                 video.volume = 1;
-
                 const p = video.play();
                 if (p && typeof p.then === 'function') {
                     p.catch(() => {
                         // Unmuted autoplay blocked → fall back to muted autoplay
-                        // so the visual intro still runs with no UI.
                         video.muted = true;
-                        video.play().catch(() => {
-                            // If even muted autoplay fails, just skip the intro.
-                            transitionToMainSite();
-                        });
+                        const p2 = video.play();
+                        if (p2 && typeof p2.then === 'function') {
+                            p2.catch(() => {
+                                // If even muted autoplay fails, skip intro quietly
+                                transitionToMainSite();
+                            });
+                        }
                     });
                 }
             }
 
-            // If the browser allows unmuting later (after any user gesture),
-            // restore the audio without any UI prompt.
             function tryUnmute() {
-                if (!introComplete && video.muted) {
+                if (introComplete) return;
+                if (video.muted) {
                     video.muted = false;
-                    // If unmuting paused playback (some browsers do), resume.
+                    video.volume = 1;
                     if (video.paused && !introComplete) {
                         video.play().catch(() => {});
                     }
                 }
             }
-            // Any user gesture anywhere on the page unlocks audio.
             window.addEventListener('click',      tryUnmute, { passive: true });
             window.addEventListener('touchstart', tryUnmute, { passive: true });
             window.addEventListener('keydown',    tryUnmute, { passive: true });
             window.addEventListener('scroll',     tryUnmute, { passive: true });
 
-            // ---------- Event wiring ----------
             // When the video finishes naturally → continue to main site
             video.addEventListener('ended', () => {
                 if (!introComplete) transitionToMainSite();
@@ -1712,14 +1706,13 @@
 
             // If the video fails to load, transition after a short delay
             video.addEventListener('error', () => {
-                console.warn('Intro video could not be loaded. Falling back to main site.');
                 transitionToMainSite();
             });
 
             // Prevent body scrolling during intro
             document.body.style.overflow = 'hidden';
 
-            // Kick off autoplay as soon as possible
+            // Kick off autoplay immediately
             attemptAutoPlay();
 
         })();
