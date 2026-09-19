@@ -63,6 +63,48 @@
             background: #000;
             pointer-events: none;
         }
+        /* Subtle unmute button (appears only if autoplay with sound is blocked) */
+        #intro-unmute-btn {
+            position: absolute;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100030;
+            display: none; /* toggled by JS */
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: rgba(6, 10, 20, 0.75);
+            border: 1.5px solid rgba(0, 212, 255, 0.4);
+            color: #00ffcc;
+            font-family: var(--intro-font-hud);
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            pointer-events: auto;
+            opacity: 0;
+        }
+        #intro-unmute-btn.visible {
+            display: inline-flex;
+            opacity: 1;
+        }
+        #intro-unmute-btn:hover {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: rgba(0, 212, 255, 0.7);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+        #intro-unmute-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #00ffcc;
+        }
         /* Existing overlay effects — kept intact */
         .intro-scanlines {
             position: fixed;
@@ -1384,6 +1426,12 @@
             </video>
         </div>
 
+        <!-- Unmute button: appears only if autoplay with sound is blocked -->
+        <div id="intro-unmute-btn" role="button" tabindex="0" aria-label="Unmute intro video">
+            <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            TAP TO UNMUTE
+        </div>
+
         <div class="intro-scanlines" id="introScanlines"></div>
         <div class="intro-crt-curve active" id="introCrt"></div>
         <div class="intro-glitch-flash" id="introGlitchFlash"></div>
@@ -1613,7 +1661,7 @@
         <footer class="footer"><div class="container">&copy; 2026 <span>The Debug Point</span> &nbsp;&middot;&nbsp; Coding &amp; Robotics Solution &nbsp;&middot;&nbsp; চট্টগ্রাম, বাংলাদেশ</div></footer>
     </div>
 
-    <!-- ===== INTRO SCRIPT (video-based) — auto-play, no start/skip ===== -->
+    <!-- ===== INTRO SCRIPT (video-based) — auto-play with sound, unmute fallback ===== -->
     <script>
         (function() {
             const overlay        = document.getElementById('intro-overlay');
@@ -1623,10 +1671,12 @@
             const glitchFlash    = document.getElementById('introGlitchFlash');
             const cinematicOverlay = document.getElementById('introCinematic');
             const video          = document.getElementById('intro-video');
+            const unmuteBtn      = document.getElementById('intro-unmute-btn');
 
             let introComplete   = false;
+            let soundEnabled    = false;
 
-            // ---------- Glitch + fade-out transition (kept from original design) ----------
+            // ---------- Glitch + fade-out transition ----------
             function triggerHeavyGlitch() {
                 glitchFlash.classList.add('active');
                 scanlines.classList.add('intensify');
@@ -1664,6 +1714,7 @@
                     scanlines.style.opacity = '0';
                     crtCurve.classList.remove('active');
                     cinematicOverlay.classList.remove('active');
+                    if (unmuteBtn) unmuteBtn.style.display = 'none';
                     document.body.style.overflow = '';
                     document.body.style.cursor = '';
                     mainSite.classList.add('visible');
@@ -1675,25 +1726,65 @@
                     crtCurve.style.display = 'none';
                     glitchFlash.style.display = 'none';
                     cinematicOverlay.style.display = 'none';
+                    if (unmuteBtn) unmuteBtn.style.display = 'none';
                     initMainSiteScripts();
                 }, 650);
             }
 
-            // ---------- Auto-play the video muted (browsers allow muted autoplay) ----------
-            // After the video ends, transition to main site.
-            // If muted autoplay is blocked, fall back to muted play attempt via a small trick.
+            // ---------- Enable sound (called on user gesture or successful autoplay) ----------
+            function enableSound() {
+                if (soundEnabled) return;
+                soundEnabled = true;
+                video.muted = false;
+                video.volume = 1;
+                if (unmuteBtn) {
+                    unmuteBtn.classList.remove('visible');
+                    unmuteBtn.style.display = 'none';
+                }
+            }
+
+            // ---------- Attempt autoplay with sound ----------
+            // Modern browsers allow unmuted autoplay only after user interaction or if
+            // the site has high media engagement. We try unmuted first, then fall back
+            // to muted + show a subtle unmute button.
             function autoStartIntro() {
-                // Ensure muted for autoplay
-                video.muted = true;
-                video.volume = 0;
+                // First, try to play UNMUTED (works if the user has interacted with the site before
+                // or on some desktop browsers with permissive policies)
+                video.muted = false;
+                video.volume = 1;
 
                 const playPromise = video.play();
+
                 if (playPromise && typeof playPromise.then === 'function') {
-                    playPromise.catch(() => {
-                        // If autoplay is fully blocked, we go straight to main site.
-                        // No button to ask the user — just skip.
-                        transitionToMainSite();
-                    });
+                    playPromise
+                        .then(() => {
+                            // Unmuted autoplay worked!
+                            soundEnabled = true;
+                            if (unmuteBtn) unmuteBtn.style.display = 'none';
+                        })
+                        .catch(() => {
+                            // Unmuted autoplay blocked. Try muted autoplay + show unmute button.
+                            video.muted = true;
+                            video.volume = 0;
+                            const mutedPlay = video.play();
+                            if (mutedPlay && typeof mutedPlay.then === 'function') {
+                                mutedPlay
+                                    .then(() => {
+                                        // Muted autoplay works. Show the unmute button.
+                                        if (unmuteBtn) unmuteBtn.classList.add('visible');
+                                    })
+                                    .catch(() => {
+                                        // Even muted autoplay is blocked. Skip intro.
+                                        transitionToMainSite();
+                                    });
+                            } else {
+                                // Fallback for very old browsers
+                                if (unmuteBtn) unmuteBtn.classList.add('visible');
+                            }
+                        });
+                } else {
+                    // Older browser without play() promise — just show unmute button
+                    if (unmuteBtn) unmuteBtn.classList.add('visible');
                 }
 
                 // When the video finishes, continue to main site
@@ -1706,6 +1797,33 @@
                     if (!introComplete) transitionToMainSite();
                 });
             }
+
+            // ---------- Unmute button interaction ----------
+            function handleUnmute() {
+                enableSound();
+                // If the video was paused or something, play it
+                if (video.paused) {
+                    video.play().catch(() => {});
+                }
+            }
+
+            if (unmuteBtn) {
+                unmuteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    handleUnmute();
+                });
+                unmuteBtn.addEventListener('touchstart', (e) => {
+                    e.stopPropagation();
+                    handleUnmute();
+                }, { passive: true });
+            }
+
+            // Also allow tapping anywhere on the intro overlay to unmute (if button is visible)
+            overlay.addEventListener('click', (e) => {
+                if (unmuteBtn && unmuteBtn.classList.contains('visible') && !soundEnabled) {
+                    handleUnmute();
+                }
+            });
 
             // Kick off the auto intro
             autoStartIntro();
