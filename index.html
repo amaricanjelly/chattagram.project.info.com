@@ -1631,7 +1631,7 @@
         <footer class="footer"><div class="container">&copy; 2026 <span>The Debug Point</span> &nbsp;&middot;&nbsp; Coding &amp; Robotics Solution &nbsp;&middot;&nbsp; চট্টগ্রাম, বাংলাদেশ</div></footer>
     </div>
 
-    <!-- ===== INTRO SCRIPT (video-based) ===== -->
+    <!-- ===== INTRO SCRIPT (video-based, auto-play with sound + smart fallback) ===== -->
     <script>
         (function() {
             const overlay        = document.getElementById('intro-overlay');
@@ -1647,6 +1647,7 @@
             let introStarted    = false;
             let skipRequested   = false;
             let fallbackTimer   = null;
+            let resumeOnInteract = false; // flips true when autoplay with sound was blocked
 
             // ---------- Glitch + fade-out transition (kept from original design) ----------
             function triggerHeavyGlitch() {
@@ -1710,61 +1711,76 @@
                 transitionToMainSite();
             }
 
-            // ---------- Start the video (now without start button) ----------
-            function startIntro() {
+            // ---------- Auto-play intro (with sound first, muted fallback) ----------
+            function attemptAutoplayWithSound() {
                 if (introStarted || introComplete) return;
                 introStarted = true;
 
-                // Try to play with sound first
+                // Configure for sound
                 video.muted = false;
                 video.volume = 1;
 
                 const playPromise = video.play();
-                if (playPromise && typeof playPromise.then === 'function') {
-                    playPromise.catch((err) => {
-                        // If autoplay with sound fails, fall back to muted autoplay
-                        console.warn('Intro video autoplay with sound failed, retrying muted:', err);
-                        video.muted = true;
-                        video.play().catch(() => {
-                            // Absolute fallback: just go to main site
-                            transitionToMainSite();
-                        });
-                    });
-                }
 
-                // Show the skip hint once the video is playing
-                skipHint.classList.add('visible');
+                if (playPromise && typeof playPromise.then === 'function') {
+                    playPromise
+                        .then(() => {
+                            // Success: playing with sound
+                            resumeOnInteract = false;
+                            skipHint.classList.add('visible');
+                        })
+                        .catch((err) => {
+                            // Sound autoplay blocked → try muted autoplay (allowed by policy)
+                            console.warn('Autoplay with sound blocked, falling back to muted autoplay:', err);
+                            video.muted = true;
+                            video.volume = 1;
+                            resumeOnInteract = true; // will unmute on first user gesture
+
+                            const mutedPlay = video.play();
+                            if (mutedPlay && typeof mutedPlay.then === 'function') {
+                                mutedPlay
+                                    .then(() => {
+                                        skipHint.classList.add('visible');
+                                    })
+                                    .catch((err2) => {
+                                        // Muted autoplay also blocked (rare) → just go to main site
+                                        console.warn('Muted autoplay also failed:', err2);
+                                        transitionToMainSite();
+                                    });
+                            }
+                        });
+                } else {
+                    // Older browsers: no promise returned
+                    skipHint.classList.add('visible');
+                }
+            }
+
+            // ---------- Resume/unmute on first user interaction ----------
+            function handleFirstInteraction() {
+                if (introComplete) return;
+                if (resumeOnInteract && video.muted) {
+                    video.muted = false;
+                    video.volume = 1;
+                    // Ensure it's still playing
+                    if (video.paused) {
+                        video.play().catch(() => {});
+                    }
+                    resumeOnInteract = false;
+                }
             }
 
             // ---------- Event wiring ----------
-            // Since the start button is removed, we attempt to start automatically.
-            // Browsers may block autoplay with sound; we fall back to muted autoplay.
-            // If all autoplay attempts fail, we transition to main site.
-            // We also keep a "click anywhere to start" fallback to ensure sound plays.
-            const autoStart = () => {
-                startIntro();
-            };
-
-            // Try to start as soon as possible (after DOM ready)
+            // Try autoplay as soon as DOM is ready
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', autoStart);
+                document.addEventListener('DOMContentLoaded', attemptAutoplayWithSound, { once: true });
             } else {
-                autoStart();
+                attemptAutoplayWithSound();
             }
 
-            // If autoplay was blocked and we started muted, a user interaction can unmute.
-            document.addEventListener('click', () => {
-                if (introStarted && video.muted && !introComplete) {
-                    video.muted = false;
-                    video.volume = 1;
-                }
-            }, { once: true });
-            document.addEventListener('touchstart', () => {
-                if (introStarted && video.muted && !introComplete) {
-                    video.muted = false;
-                    video.volume = 1;
-                }
-            }, { once: true, passive: true });
+            // First user interaction → unmute if needed (no click-to-play UI shown)
+            document.addEventListener('click', handleFirstInteraction, { once: false, capture: true });
+            document.addEventListener('touchstart', handleFirstInteraction, { once: false, capture: true, passive: true });
+            document.addEventListener('keydown', handleFirstInteraction, { once: false, capture: true });
 
             // Skip on any key
             document.addEventListener('keydown', function(e) {
@@ -1779,7 +1795,7 @@
                 requestSkip();
             });
 
-            // When the video finishes → continue to main site (same as old intro behavior)
+            // When the video finishes → continue to main site
             video.addEventListener('ended', () => {
                 if (!introComplete) transitionToMainSite();
             });
@@ -1794,7 +1810,6 @@
             // Safety fallback: if the video never plays and no error fires, allow skip after 6s
             fallbackTimer = setTimeout(() => {
                 if (!introStarted && !introComplete) {
-                    // If still not started, enable skip so user is never stuck
                     skipHint.classList.add('visible');
                 }
             }, 6000);
